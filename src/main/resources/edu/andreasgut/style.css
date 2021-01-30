@@ -1,0 +1,39 @@
+.root{
+    -fx-background-color: #383838;
+    -fx-font-size: 15;
+}
+
+.menu-bar .label {
+    -fx-text-fill: black;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #383838;
+}
+
+.table-row-cell:empty {
+    -fx-background-color: #383838;
+}
+.table-view {
+    -fx-alignment: center;
+}
+
+
+
+.table-row-cell:empty .table-cell {
+    -fx-border-width: 0px;
+}
+
+
+
+.label{
+    -fx-text-fill: #e8e8e8;
+}
+
+.button{
+    -fx-background-color: lightblue;
+}
+
+.combo-box{
+    -fx-background-color: lightblue;
+}
