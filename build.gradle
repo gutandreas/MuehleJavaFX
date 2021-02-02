@@ -23,7 +23,7 @@ test {
 }
 
 javafx{
-    modules = [ 'javafx.controls' , 'javafx.fxml']
+    modules = [ 'javafx.controls' , 'javafx.fxml', 'javafx.media']
     version = '15.0.1'
 }
 

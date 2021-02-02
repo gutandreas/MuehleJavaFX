@@ -9,10 +9,11 @@ public class FieldView extends AnchorPane {
     private ImageView imageView;
     private Image image;
     private final int FIELDDIMENSION = 600;
+    private ViewManager viewManager;
 
 
-    public FieldView() {
-
+    public FieldView(ViewManager viewManager) {
+        this.viewManager = viewManager;
         imageView = new ImageView();
         image = new Image("edu/andreasgut/Images/Spielfeld.png");
         imageView.setFitHeight(FIELDDIMENSION);

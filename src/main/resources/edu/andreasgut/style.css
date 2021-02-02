@@ -1,7 +1,11 @@
 .root{
     -fx-background-color: #383838;
     -fx-font-size: 15;
+    -fx-text-fill: black;
 }
+
+.ScoreView .label {
+-fx-background-color: black}
 
 
 
@@ -32,10 +36,6 @@
     -fx-text-fill: #e8e8e8;
 }
 
-
-.vbox .label{
-    -fx-text-fill: green;
-}
 
 .button{
     -fx-background-color: lightblue;

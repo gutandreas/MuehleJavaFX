@@ -13,12 +13,14 @@ import javafx.stage.Stage;
 
 public class MainMenuBar extends MenuBar {
 
-    Menu datei, bearbeiten, hilfe;
-    MenuItem neuStarten = new MenuItem("Neu starten");
-    MenuItem spielBeenden = new MenuItem("Spiel beenden");
-    MenuItem ueberDiesesSpiel = new MenuItem("Über dieses Spiel");
+    private Menu datei, bearbeiten, hilfe;
+    private MenuItem neuStarten = new MenuItem("Neu starten");
+    private MenuItem spielBeenden = new MenuItem("Spiel beenden");
+    private MenuItem ueberDiesesSpiel = new MenuItem("Über dieses Spiel");
+    private ViewManager viewManager;
 
-    public MainMenuBar() {
+    public MainMenuBar(ViewManager viewManager) {
+        this.viewManager = viewManager;
         datei = new Menu("Datei");
         bearbeiten = new Menu("Bearbeiten");
         hilfe = new Menu("Hilfe");

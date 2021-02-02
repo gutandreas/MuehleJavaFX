@@ -8,8 +8,10 @@ public class ScoreView extends VBox {
 
     private Label player0, player1;
     private final int SCOREDIMENSION = 300;
+    private ViewManager viewManager;
 
-    public ScoreView() {
+    public ScoreView(ViewManager viewManager) {
+        this.viewManager = viewManager;
         this.setPrefWidth(SCOREDIMENSION);
         this.setAlignment(Pos.CENTER);
         player0 = new Label("Spieler 1:");
