@@ -33,6 +33,9 @@ public class ViewManager {
         mainScene.getStylesheets().add("edu/andreasgut/style.css");
 
         soundManager = new SoundManager(this);
+    }
+
+    public void setGameScene(){
 
 
     }
