@@ -11,7 +11,6 @@ public class FieldView extends AnchorPane {
     private final int FIELDDIMENSION = 600;
     private ViewManager viewManager;
 
-
     public FieldView(ViewManager viewManager) {
         this.viewManager = viewManager;
         imageView = new ImageView();
@@ -20,7 +19,5 @@ public class FieldView extends AnchorPane {
         imageView.setFitWidth(FIELDDIMENSION);
         imageView.setImage(image);
         this.getChildren().add(imageView);
-
-
     }
 }

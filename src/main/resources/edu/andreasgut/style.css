@@ -2,11 +2,20 @@
     -fx-background-color: #383838;
     -fx-font-size: 15;
     -fx-text-fill: black;
+
+}
+
+
+.text-field{
+    -fx-max-width: 200;
 }
 
 .ScoreView .label {
--fx-background-color: black}
+    -fx-background-color: black}
 
+.radio-button{
+    -fx-text-fill: white;
+}
 
 
 .menu-bar .label {
