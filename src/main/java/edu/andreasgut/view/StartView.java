@@ -55,9 +55,7 @@ public class StartView extends VBox {
                     namePlayer1Textfield.getText().length()>0)
                     || (radioButtonGroup.getSelectedToggle().equals(twoPlayersRadioButton) &&
                     namePlayer1Textfield.getText().length()>0 && namePlayer2Textfield.getText().length()>0)){
-            viewManager.getMainPane().setLeft(new ScoreView(viewManager));
-            viewManager.getMainPane().getLeft().setVisible(true);
-            viewManager.getMainPane().setCenter(new FieldView(viewManager));}
+            viewManager.setGameScene();}
 
                 else {informationLabel.setText("Es fehlen Eingaben, um das Spiel zu starten");}});
 
