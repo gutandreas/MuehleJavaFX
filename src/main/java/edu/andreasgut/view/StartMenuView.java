@@ -5,7 +5,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class StartView extends VBox {
+public class StartMenuView extends VBox {
 
     private final int STARTDIMENSION = 600;
     ViewManager viewManager;
@@ -18,11 +18,12 @@ public class StartView extends VBox {
     Button startButton;
 
 
-    public StartView(ViewManager viewManager) {
+    public StartMenuView(ViewManager viewManager) {
         this.setPrefWidth(STARTDIMENSION);
         vBox = new VBox();
         hBoxRadioButtons = new HBox();
         informationLabel = new Label();
+        informationLabel.getStyleClass().add("labelWarning");
         radioButtonGroup = new ToggleGroup();
         onePlayerRadioButton = new RadioButton("Ein Spieler");
         onePlayerRadioButton.setToggleGroup(radioButtonGroup);
@@ -55,8 +56,15 @@ public class StartView extends VBox {
                     namePlayer1Textfield.getText().length()>0)
                     || (radioButtonGroup.getSelectedToggle().equals(twoPlayersRadioButton) &&
                     namePlayer1Textfield.getText().length()>0 && namePlayer2Textfield.getText().length()>0)){
-            viewManager.setGameScene();}
-
-                else {informationLabel.setText("Es fehlen Eingaben, um das Spiel zu starten");}});
+            viewManager.changeToGameScene();
+            viewManager.getScoreView().getPlayer1Label().setText("Spieler 1: " + namePlayer1Textfield.getText().toUpperCase());
+                if (twoPlayersRadioButton.isSelected()){
+                    viewManager.getScoreView().getPlayer2Label().setText("Spieler 2: " + namePlayer2Textfield.getText().toUpperCase());
+                }
+                else {
+                    viewManager.getScoreView().getPlayer2Label().setText("Spieler 2: Computer");
+                }
+            }
+            else {informationLabel.setText("Es fehlen Eingaben, um das Spiel zu starten");}});
 
 }}

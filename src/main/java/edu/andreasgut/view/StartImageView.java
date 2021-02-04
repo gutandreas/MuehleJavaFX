@@ -9,12 +9,17 @@ public class StartImageView extends ImageView {
 
     Image image;
     ViewManager viewManager;
-    private final int IMAGEWIDTH = 300;
 
-    public StartImageView(ViewManager viewManager) {
+    public StartImageView(ViewManager viewManager, int bildnummer) {
         this.viewManager = viewManager;
-        image = new Image("edu/andreasgut/Images/StartImage.png");
-        this.setFitWidth(IMAGEWIDTH);
+        switch (bildnummer){
+            case 1:
+                image = new Image("edu/andreasgut/Images/StartImage1.png");
+                break;
+            case 2:
+                image = new Image("edu/andreasgut/Images/StartImage2.png");
+                break;
+        }
         this.setImage(image);
     }
 }

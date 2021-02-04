@@ -2,19 +2,33 @@
     -fx-background-color: #383838;
     -fx-font-size: 15;
     -fx-text-fill: black;
-
 }
 
 
-.text-field{
-    -fx-max-width: 200;
+
+.startMenuView{
+    -fx-padding: 20;
 }
 
-.ScoreView .label {
-    -fx-background-color: black}
+.startImageView{
+    -fx-pref-width: 300;
+}
+
+.optionsView{
+    -fx-padding: 20;
+}
+
+.scoreview{
+    -fx-padding: 20;
+}
+
+.smoothImage{
+    -fx-border-radius: 20;
+}
 
 .radio-button{
     -fx-text-fill: white;
+    -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.3) , 5, 0.0 , 0 , 1 );
 }
 
 
@@ -22,32 +36,33 @@
     -fx-text-fill: black;
 }
 
-.table-view .column-header .label {
-    -fx-text-fill: #383838;
-}
-
-.table-row-cell:empty {
-    -fx-background-color: #383838;
-}
-.table-view {
-    -fx-alignment: center;
-}
-
-
-
-.table-row-cell:empty .table-cell {
-    -fx-border-width: 0px;
-}
-
-
-
 .label{
     -fx-text-fill: #e8e8e8;
 }
 
+.labelWarning{
+    -fx-text-fill: #ee6060;
+}
+
+.scoreview{
+    -fx-alignment: center-left;
+    -fx-pref-width: 300;
+}
+
+.biglabel{
+    -fx-font-size: 20;
+}
+
 
 .button{
-    -fx-background-color: lightblue;
+    -fx-background-color: #c2eafc;
+    -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.3) , 5, 0.0 , 0 , 1 );
+}
+
+.toggle-button{
+    -fx-background-color: #c2eafc;
+    -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.3) , 5, 0.0 , 0 , 1 );
+
 }
 
 .combo-box{
