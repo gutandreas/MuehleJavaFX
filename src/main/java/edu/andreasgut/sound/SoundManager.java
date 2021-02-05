@@ -7,13 +7,8 @@ import java.net.URL;
 
 public class SoundManager {
 
-    private AudioClip audioclipMENU;
-    private AudioClip audioclipPLAY;
-    private AudioClip audioclipGAMEOVER;
-    private AudioClip currentAudioclip;
-    private URL menuSoundPath;
-    private URL playSoundPath;
-    private URL gameoverSoundPath;
+    private AudioClip audioclipMENU, audioclipPLAY, audioclipGAMEOVER, currentAudioclip;
+    private URL menuSoundPath, playSoundPath, gameoverSoundPath;
     private ViewManager viewManager;
 
 

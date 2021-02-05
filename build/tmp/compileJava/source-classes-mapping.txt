@@ -1,3 +1,9 @@
+edu/andreasgut/Launcher.java
+ edu.andreasgut.Launcher
+edu/andreasgut/Main.java
+ edu.andreasgut.Main
+edu/andreasgut/sound/AUDIO.java
+ edu.andreasgut.sound.AUDIO
 edu/andreasgut/view/StartMenuView.java
  edu.andreasgut.view.StartMenuView
 edu/andreasgut/view/OptionsView.java
@@ -7,8 +13,6 @@ edu/andreasgut/sound/SoundManager.java
  edu.andreasgut.sound.SoundManager$1
 edu/andreasgut/view/ViewManager.java
  edu.andreasgut.view.ViewManager
-edu/andreasgut/sound/AUDIO.java
- edu.andreasgut.sound.AUDIO
 edu/andreasgut/view/FieldView.java
  edu.andreasgut.view.FieldView
 edu/andreasgut/view/ScoreView.java
@@ -18,9 +22,5 @@ edu/andreasgut/view/MainMenuBar.java
  edu.andreasgut.view.MainMenuBar$1
  edu.andreasgut.view.MainMenuBar$2
  edu.andreasgut.view.MainMenuBar$3
-edu/andreasgut/Launcher.java
- edu.andreasgut.Launcher
-edu/andreasgut/Main.java
- edu.andreasgut.Main
 edu/andreasgut/view/StartImageView.java
  edu.andreasgut.view.StartImageView

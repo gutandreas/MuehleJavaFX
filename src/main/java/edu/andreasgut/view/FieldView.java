@@ -20,4 +20,6 @@ public class FieldView extends AnchorPane {
         imageView.setImage(image);
         this.getChildren().add(imageView);
     }
+
+
 }

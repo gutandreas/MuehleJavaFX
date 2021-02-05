@@ -1,5 +1,6 @@
 package edu.andreasgut.view;
 
+import edu.andreasgut.sound.AUDIO;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
@@ -14,7 +15,7 @@ public class StartMenuView extends VBox {
     ToggleGroup radioButtonGroup;
     RadioButton onePlayerRadioButton, twoPlayersRadioButton;
     TextField namePlayer1Textfield, namePlayer2Textfield;
-    Label informationLabel;
+    Label informationLabel, titleLabel;
     Button startButton;
 
 
@@ -22,6 +23,8 @@ public class StartMenuView extends VBox {
         this.setPrefWidth(STARTDIMENSION);
         vBox = new VBox();
         hBoxRadioButtons = new HBox();
+        titleLabel = new Label("Neues Spiel starten");
+        titleLabel.getStyleClass().add("labelTitle");
         informationLabel = new Label();
         informationLabel.getStyleClass().add("labelWarning");
         radioButtonGroup = new ToggleGroup();
@@ -38,7 +41,7 @@ public class StartMenuView extends VBox {
         namePlayer2Textfield = new TextField();
         namePlayer2Textfield.setPromptText("Name Spieler 2");
         namePlayer2Textfield.setDisable(true);
-        vBox.getChildren().addAll(informationLabel, hBoxRadioButtons, namePlayer1Textfield,
+        vBox.getChildren().addAll(titleLabel, informationLabel, hBoxRadioButtons, namePlayer1Textfield,
                 namePlayer2Textfield, startButton);
         vBox.setSpacing(20);
         this.getChildren().addAll(vBox);
@@ -58,6 +61,7 @@ public class StartMenuView extends VBox {
                     namePlayer1Textfield.getText().length()>0 && namePlayer2Textfield.getText().length()>0)){
             viewManager.changeToGameScene();
             viewManager.getScoreView().getPlayer1Label().setText("Spieler 1: " + namePlayer1Textfield.getText().toUpperCase());
+            viewManager.getSoundManager().chooseSound(AUDIO.PLAY_SOUND);
                 if (twoPlayersRadioButton.isSelected()){
                     viewManager.getScoreView().getPlayer2Label().setText("Spieler 2: " + namePlayer2Textfield.getText().toUpperCase());
                 }

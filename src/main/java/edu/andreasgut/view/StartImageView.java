@@ -21,5 +21,6 @@ public class StartImageView extends ImageView {
                 break;
         }
         this.setImage(image);
+        this.getStyleClass().add("smoothImage");
     }
 }
