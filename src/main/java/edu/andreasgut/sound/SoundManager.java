@@ -23,7 +23,7 @@ public class SoundManager {
         audioclipGAMEOVER = new AudioClip(gameoverSoundPath.toString());
 
         audioclipMENU.setRate(1);
-        audioclipMENU.setCycleCount(200);
+        audioclipMENU.setCycleCount(AudioClip.INDEFINITE);
         audioclipMENU.play();
         currentAudioclip = audioclipMENU;
     }

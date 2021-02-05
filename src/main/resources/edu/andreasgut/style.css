@@ -1,8 +1,10 @@
 .root{
-    -fx-background-color: #383838;
+    -fx-background-color: linear-gradient(to bottom, #383838, #303030);
     -fx-font-size: 15;
     -fx-text-fill: black;
 }
+
+
 
 
 
@@ -15,7 +17,9 @@
 }
 
 .optionsView{
+    -fx-alignment: Center;
     -fx-padding: 20;
+    -fx-pref-height: 200;
 }
 
 .scoreview{
@@ -61,12 +65,12 @@
     -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.3) , 5, 0.0 , 0 , 1 );
 }
 
-.toggle-button{
-    -fx-background-color: #c2eafc;
+.toggleButtonOff{
+    -fx-background-color: #ffaaaa;
     -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.3) , 5, 0.0 , 0 , 1 );
-
 }
 
-.combo-box{
-    -fx-background-color: lightblue;
+.toggleButtonOn{
+    -fx-background-color: #aaffaa;
+    -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.3) , 5, 0.0 , 0 , 1 );
 }
