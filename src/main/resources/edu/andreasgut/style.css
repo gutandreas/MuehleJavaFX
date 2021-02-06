@@ -4,10 +4,6 @@
     -fx-text-fill: black;
 }
 
-
-
-
-
 .startMenuView{
     -fx-padding: 20;
 }
@@ -54,6 +50,12 @@
     -fx-alignment: center-left;
     -fx-pref-width: 300;
 }
+
+.fieldview{
+    -fx-alignment: center;
+    -fx-pref-width: 600;
+}
+
 
 .biglabel{
     -fx-font-size: 20;

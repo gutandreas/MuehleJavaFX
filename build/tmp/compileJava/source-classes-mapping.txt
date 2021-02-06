@@ -1,9 +1,9 @@
-edu/andreasgut/Launcher.java
- edu.andreasgut.Launcher
 edu/andreasgut/sound/AUDIO.java
  edu.andreasgut.sound.AUDIO
 edu/andreasgut/Main.java
  edu.andreasgut.Main
+edu/andreasgut/Launcher.java
+ edu.andreasgut.Launcher
 edu/andreasgut/view/StartMenuView.java
  edu.andreasgut.view.StartMenuView
 edu/andreasgut/view/OptionsView.java
