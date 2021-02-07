@@ -26,6 +26,9 @@ public class SoundManager {
         audioclipMENU.setCycleCount(AudioClip.INDEFINITE);
         audioclipMENU.play();
         currentAudioclip = audioclipMENU;
+
+        audioclipPLAY.setCycleCount(AudioClip.INDEFINITE);
+        audioclipGAMEOVER.setCycleCount(AudioClip.INDEFINITE);
     }
 
     public void chooseSound(AUDIO audioEnum){

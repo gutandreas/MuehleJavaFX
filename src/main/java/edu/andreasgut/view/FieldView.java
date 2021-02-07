@@ -82,7 +82,10 @@ public class FieldView extends AnchorPane {
             }
 
         });}
+    }
 
+    public void putComputerStone(int ring, int field){
+        ((ImageView) fieldGridPane.getChildren().get(0)).setImage(currentStoneImage);
     }
 
     private void updateViewMode(){

@@ -2,6 +2,7 @@ package edu.andreasgut.game;
 
 public class Computer extends Player {
 
+
     public Computer(String name) {
         super(name);
     }
@@ -9,7 +10,6 @@ public class Computer extends Player {
     //Besetzt den nächsten freien Stein
     public int[] compPutStone(Field3 field) {
         int[] RingAndField = new int[2];
-
         int i;
         int j;
 
@@ -18,7 +18,6 @@ public class Computer extends Player {
                 if (field.getArray()[i][j] == 9) {
                     RingAndField[0] = i;
                     RingAndField[1] = j;
-
                     return RingAndField;
                 }
             }

@@ -39,7 +39,7 @@ public class Game {
     public Game(ViewManager viewManager, Player player0) {
         this.viewManager = viewManager;
         this.player0 = player0;
-        this.player1 = new Computer("Computer");
+        this.player1 = new Computer( "Computer");
         playerArrayList.add(0, player0);
         playerArrayList.add(1, player1);
         round = 0;
@@ -87,6 +87,10 @@ public class Game {
 
     public Player getPlayer1() {
         return player1;
+    }
+
+    public ViewManager getViewManager() {
+        return viewManager;
     }
 
     public void setOldField(Field3 oldField) {
