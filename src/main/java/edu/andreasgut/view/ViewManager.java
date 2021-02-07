@@ -1,6 +1,7 @@
 package edu.andreasgut.view;
 
 
+import edu.andreasgut.game.Game;
 import edu.andreasgut.sound.SoundManager;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -20,6 +21,7 @@ public class ViewManager {
     private MainMenuBar mainMenuBar;
     private FieldView fieldView;
     private ScoreView scoreView;
+    private Game game;
 
 
     public ViewManager() {
@@ -120,6 +122,14 @@ public class ViewManager {
 
     public ScoreView getScoreView() {
         return scoreView;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 }
 

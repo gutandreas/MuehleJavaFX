@@ -1,5 +1,8 @@
 package edu.andreasgut.view;
 
+import edu.andreasgut.game.Game;
+import edu.andreasgut.game.InvalidFieldException;
+import edu.andreasgut.game.Player;
 import edu.andreasgut.sound.AUDIO;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -60,14 +63,29 @@ public class StartMenuView extends VBox {
                     || (radioButtonGroup.getSelectedToggle().equals(twoPlayersRadioButton) &&
                     namePlayer1Textfield.getText().length()>0 && namePlayer2Textfield.getText().length()>0)){
             viewManager.changeToGameScene();
-            viewManager.getScoreView().getPlayer1Label().setText("Spieler 1: " + namePlayer1Textfield.getText().toUpperCase());
+
             viewManager.getSoundManager().chooseSound(AUDIO.PLAY_SOUND);
+
+
                 if (twoPlayersRadioButton.isSelected()){
-                    viewManager.getScoreView().getPlayer2Label().setText("Spieler 2: " + namePlayer2Textfield.getText().toUpperCase());
+                    viewManager.setGame(new Game(viewManager,
+                            new Player(namePlayer1Textfield.getText().toUpperCase()),
+                            new Player(namePlayer2Textfield.getText().toUpperCase())));
                 }
                 else {
-                    viewManager.getScoreView().getPlayer2Label().setText("Spieler 2: Computer");
+                    viewManager.setGame(new Game(viewManager,
+                            new Player(namePlayer1Textfield.getText().toUpperCase())));
                 }
+
+            viewManager.getScoreView().updatePlayerNames(viewManager.getGame().getPlayer0(),
+                        viewManager.getGame().getPlayer1());
+
+            try {
+                viewManager.getGame().play();
+            } catch (InvalidFieldException e) {
+                e.printStackTrace();
+            }
+
             }
             else {informationLabel.setText("Es fehlen Eingaben, um das Spiel zu starten");}});
 
