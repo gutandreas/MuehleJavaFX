@@ -100,7 +100,7 @@ public class Game {
     public void play() throws InvalidFieldException {
 
             oldField = (Field3) getField().clone();
-            field.checkTriple(oldField);
+
 
             if (phase2==true && getField().numberOfStonesCurrentPlayer() <= 2){
                 gameOver = true;
@@ -115,15 +115,13 @@ public class Game {
 
             putOrMove();
 
+    }
 
-            field.printField();
-
-            if (field.checkTriple(oldField) && field.isThereStoneToKill()){
-                kill();
-            }
-
-
-
+    public void askForTriples(){
+        field.printField();
+        if (field.checkTriple(oldField) && field.isThereStoneToKill()){
+            kill();
+        }
     }
 
     private void setGamesPhaseBooleans(){

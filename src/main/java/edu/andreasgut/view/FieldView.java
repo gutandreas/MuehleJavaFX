@@ -71,9 +71,11 @@ public class FieldView extends AnchorPane {
 
             ((ImageView)n).setImage(currentStoneImage);
 
+            viewManager.getGame().askForTriples();
             viewManager.getGame().increaseRound();
             viewManager.getGame().updateCurrentPlayer();
             viewManager.getScoreView().updateRound(viewManager.getGame().getRound());
+
 
             try {
                 viewManager.getGame().play();
