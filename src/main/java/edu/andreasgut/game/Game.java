@@ -142,7 +142,7 @@ public class Game {
         if(!(getCurrentPlayer() instanceof Computer)){
 
             if (phase1){
-                viewManager.getFieldView().avtivatePutMode();
+                viewManager.getFieldView().humanGraphicPut();
 
 
             }
@@ -172,6 +172,7 @@ public class Game {
             if (phase1){
                 int[] temp = ((Computer) player1).compPutStone(field);
                 field.putStone(temp[0], temp[1]);
+                viewManager.getFieldView().computerGraphicPut(temp[0], temp[1]);
             }
         }
     }
