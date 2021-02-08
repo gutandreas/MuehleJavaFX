@@ -1,6 +1,5 @@
 package edu.andreasgut.view;
 
-import edu.andreasgut.game.Game;
 import edu.andreasgut.game.Player;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
