@@ -1,7 +1,6 @@
 package edu.andreasgut.view;
 
 import edu.andreasgut.game.Computer;
-import edu.andreasgut.game.InvalidFieldException;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
@@ -16,7 +15,7 @@ public class FieldView extends AnchorPane {
     private ImageView imageView;
     private Image image;
     private ViewManager viewManager;
-    private Image blackStoneImage, whiteStoneImage, currentStoneImage;
+    private Image blackStoneImage, whiteStoneImage, player1StoneImage, player2StoneImage, emptyField;
     private GridPane fieldGridPane;
     private CoordinatesInRepresentation[][] translationArrayGraphicToRepresentation;
     private int[][] translationArrayRepresentationToIndex;
@@ -33,7 +32,9 @@ public class FieldView extends AnchorPane {
         imageView.setImage(image);
         blackStoneImage = new Image("edu/andreasgut/Images/SpielsteinSchwarz.png",85,85,true,true);
         whiteStoneImage = new Image("edu/andreasgut/Images/SpielsteinWeiss.png",85,85,true,true);
-        currentStoneImage = blackStoneImage;
+        player1StoneImage = blackStoneImage;
+        player2StoneImage = whiteStoneImage;
+        emptyField = new Image("edu/andreasgut/Images/FullyTransparent.png");
 
 
         fieldGridPane = new GridPane();
@@ -49,7 +50,7 @@ public class FieldView extends AnchorPane {
 
         for (int row = 0; row < 7; row++) {
             for (int column = 0; column < 7; column++) {
-                ImageView tempImageView = new ImageView(new Image("edu/andreasgut/Images/GreenTransparent.png"));
+                ImageView tempImageView = new ImageView(emptyField);
                 fieldGridPane.add(tempImageView,row,column);}}
 
         this.getChildren().addAll(imageView,fieldGridPane);
@@ -61,49 +62,40 @@ public class FieldView extends AnchorPane {
 
         for (Node n : fieldGridPane.getChildren()){
         n.setOnMouseClicked(click ->{
-            int ring = translationArrayGraphicToRepresentation[GridPane.getRowIndex(n)][GridPane.getColumnIndex(n)].getRing();
-            int field = translationArrayGraphicToRepresentation[GridPane.getRowIndex(n)][GridPane.getColumnIndex(n)].getField();
+            int ring = translateToRing(n);
+            int field = translateToField(n);
+
             System.out.println("Feld in Repräsentationsarray: " + ring + "/" + field);
             System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
-            try {
-                viewManager.getGame().getField().putStone(ring, field);
-            } catch (InvalidFieldException e) {
-                e.printStackTrace();
+
+
+            switch (viewManager.getGame().getCurrentPlayerIndex()){
+                case 0:
+                    ((ImageView)n).setImage(player1StoneImage);
+                    break;
+                case 1:
+                    ((ImageView)n).setImage(player2StoneImage);
+                    break;
             }
-
-            ((ImageView)n).setImage(currentStoneImage);
-
-            viewManager.getGame().askForTriples();
-            viewManager.getGame().increaseRound();
-            viewManager.getGame().updateCurrentPlayer();
-            viewManager.getScoreView().updateRound(viewManager.getGame().getRound());
-
-
-            try {
-                viewManager.getGame().play();
-            } catch (InvalidFieldException e) {
-                e.printStackTrace();
-            }
-
         });}
     }
 
+    public void humanGraphicKill(){
+        for (Node n : fieldGridPane.getChildren()){
+            n.setOnMouseClicked(click ->{
+                int ring = translateToRing(n);
+                int field = translateToField(n);
+
+                System.out.println("Feld in Repräsentationsarray: " + ring + "/" + field);
+                System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
+
+                ((ImageView) n).setImage(emptyField);
+            });}
+    }
+
     public void computerGraphicPut(int ring, int field){
-           // fieldGridPane.getChildren().get()
 
-
-        ((ImageView) fieldGridPane.getChildren().get(translationArrayRepresentationToIndex[ring][field])).setImage(currentStoneImage);
-        viewManager.getGame().askForTriples();
-        viewManager.getGame().increaseRound();
-        viewManager.getGame().updateCurrentPlayer();
-        viewManager.getScoreView().updateRound(viewManager.getGame().getRound());
-
-        try {
-            viewManager.getGame().play();
-        } catch (InvalidFieldException e) {
-            e.printStackTrace();
-        }
-
+        ((ImageView) fieldGridPane.getChildren().get(translateToIndex(ring, field))).setImage(player2StoneImage);
     }
 
     private void updateViewMode(){
@@ -111,14 +103,14 @@ public class FieldView extends AnchorPane {
             fieldGridPane.setOnMouseMoved(move ->{
                 switch (viewManager.getGame().getCurrentPlayerIndex()){
                     case 0:
-                        currentStoneImage = blackStoneImage;
+                        player1StoneImage = blackStoneImage;
                         if (phase1){
                             imageView.getScene().setCursor(new ImageCursor(blackStoneImage,
                                     blackStoneImage.getWidth()/2, blackStoneImage.getHeight()/2));
                         }
                         break;
                     case 1:
-                        currentStoneImage = whiteStoneImage;
+                        player2StoneImage = whiteStoneImage;
                         if (phase1){
                             imageView.getScene().setCursor(new ImageCursor(whiteStoneImage,
                                     whiteStoneImage.getWidth()/2, whiteStoneImage.getHeight()/2));
@@ -130,10 +122,20 @@ public class FieldView extends AnchorPane {
             });
         }
 
-        if(viewManager.getGame().getRound()<18 && (viewManager.getGame().getCurrentPlayer() instanceof Computer)){
-            imageView.getScene().setCursor(Cursor.DEFAULT);
-        }
     }
+
+    private int translateToRing(Node node){
+        return translationArrayGraphicToRepresentation[GridPane.getRowIndex(node)][GridPane.getColumnIndex(node)].getRing();
+    }
+
+    private int translateToField(Node node){
+        return translationArrayGraphicToRepresentation[GridPane.getRowIndex(node)][GridPane.getColumnIndex(node)].getField();
+    }
+
+    private int translateToIndex(int ring, int field){
+        return translationArrayRepresentationToIndex[ring][field];
+    }
+
 
     private void initializeTranslationArray(){
         translationArrayGraphicToRepresentation = new CoordinatesInRepresentation[7][7];

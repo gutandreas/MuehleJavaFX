@@ -69,6 +69,7 @@ public class Game {
         return oldField;
     }
 
+
     public int getRound() {
         return round;
     }
@@ -115,14 +116,9 @@ public class Game {
 
             putOrMove();
 
+
     }
 
-    public void askForTriples(){
-        field.printField();
-        if (field.checkTriple(oldField) && field.isThereStoneToKill()){
-            kill();
-        }
-    }
 
     private void setGamesPhaseBooleans(){
         if (round == NUMBEROFSTONES*2){
@@ -180,18 +176,7 @@ public class Game {
     private void kill(){
         //STEIN ENTFERNEN: Menschlicher Spieler
         if(!(getCurrentPlayer() instanceof Computer)){
-            System.out.println(currentPlayer.getName() + " hat eine 3er-Reihe!");
-            System.out.println("Welchen Stein möchtest du entfernen?");
-            System.out.println("Reihe");
-            int ringKill = scanner.nextInt();
-            System.out.println("Feld");
-            int fieldKill = scanner.nextInt();
-            try {
-                field.killStone(ringKill,fieldKill);
-            } catch (InvalidKillException | IndexOutOfBoundsException e) {
-                System.out.println(e.getMessage());
-                kill();
-            }}
+            viewManager.getFieldView().humanGraphicKill();}
 
         //STEIN ENTFERNEN: Computerspieler
         if(getCurrentPlayer() instanceof Computer){
