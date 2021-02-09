@@ -1,6 +1,9 @@
 package edu.andreasgut.view;
 
+import com.sun.javafx.scene.paint.GradientUtils;
 import edu.andreasgut.game.Computer;
+import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
@@ -9,6 +12,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class FieldView extends AnchorPane {
 
@@ -22,6 +28,7 @@ public class FieldView extends AnchorPane {
 
     private int player=0;
     private boolean phase1=true;
+    private boolean running;
 
     public FieldView(ViewManager viewManager) {
         this.viewManager = viewManager;
@@ -56,28 +63,41 @@ public class FieldView extends AnchorPane {
         this.getChildren().addAll(imageView,fieldGridPane);
     }
 
-    public void humanGraphicPut() {
-
+    public CoordinatesInRepresentation humanGraphicPut() {
+        Object loopObject = new Object();
         updateViewMode();
+        final Integer[] ring = new Integer[1];
+        final int[] field = new int[1];
+
 
         for (Node n : fieldGridPane.getChildren()){
-        n.setOnMouseClicked(click ->{
-            int ring = translateToRing(n);
-            int field = translateToField(n);
+            n.setOnMouseClicked(click ->{
+                ring[0] = translateToRing(n);
+                field[0] = translateToField(n);
 
-            System.out.println("Feld in Repräsentationsarray: " + ring + "/" + field);
-            System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
+                System.out.println("Feld in Repräsentationsarray: " + ring[0] + "/" + field[0]);
+                System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
 
 
-            switch (viewManager.getGame().getCurrentPlayerIndex()){
-                case 0:
-                    ((ImageView)n).setImage(player1StoneImage);
-                    break;
-                case 1:
-                    ((ImageView)n).setImage(player2StoneImage);
-                    break;
-            }
-        });}
+                switch (viewManager.getGame().getCurrentPlayerIndex()){
+                    case 0:
+                        ((ImageView)n).setImage(player1StoneImage);
+                        break;
+                    case 1:
+                        ((ImageView)n).setImage(player2StoneImage);
+                        break;
+                }
+
+                Platform.exitNestedEventLoop(loopObject, null);
+
+            });}
+
+        Platform.enterNestedEventLoop(loopObject);
+        return new CoordinatesInRepresentation(ring[0], field[0]);
+
+
+
+
     }
 
     public void humanGraphicKill(){

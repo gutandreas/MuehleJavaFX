@@ -1,5 +1,6 @@
 package edu.andreasgut.game;
 
+import edu.andreasgut.view.CoordinatesInRepresentation;
 import edu.andreasgut.view.ViewManager;
 
 import java.util.ArrayList;
@@ -100,6 +101,10 @@ public class Game {
 
     public void play() throws InvalidFieldException {
 
+        while (true){
+
+            updateCurrentPlayer();
+
             oldField = (Field3) getField().clone();
 
 
@@ -114,7 +119,18 @@ public class Game {
 
             System.out.println(getCurrentPlayer().getName() + " ist an der Reihe!");
 
+
+
             putOrMove();
+            field.printField();
+            if (field.checkTriple(oldField) && field.isThereStoneToKill()){
+                //TODO:kill-methode anpassen
+                System.out.println("Ein Stein wird gekillt");
+            };
+
+
+
+            increaseRound();}
 
 
     }
@@ -138,7 +154,8 @@ public class Game {
         if(!(getCurrentPlayer() instanceof Computer)){
 
             if (phase1){
-                viewManager.getFieldView().humanGraphicPut();
+                CoordinatesInRepresentation tempCoords = viewManager.getFieldView().humanGraphicPut();
+                field.putStone(tempCoords.getRing(), tempCoords.getField());
 
 
             }
