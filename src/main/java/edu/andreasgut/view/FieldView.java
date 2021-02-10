@@ -1,6 +1,7 @@
 package edu.andreasgut.view;
 
 import edu.andreasgut.game.Computer;
+import edu.andreasgut.sound.SOUNDEFFECT;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
@@ -97,6 +98,7 @@ public class FieldView extends AnchorPane {
             });}
 
         Platform.enterNestedEventLoop(loopObject);
+        viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
         return new CoordinatesInRepresentation(ring[0], field[0]);
     }
 
@@ -125,6 +127,7 @@ public class FieldView extends AnchorPane {
 
         ((ImageView) fieldGridPane.getChildren().get(translateToIndex(ring, field))).setImage(player2StoneImage);
         viewManager.getFieldView().getScene().setCursor(Cursor.NONE);
+        viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
     }
 
     public void computerGraphicKill(int ring, int field){

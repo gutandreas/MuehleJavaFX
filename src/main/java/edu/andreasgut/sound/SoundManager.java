@@ -8,19 +8,27 @@ import java.net.URL;
 public class SoundManager {
 
     private AudioClip audioclipMENU, audioclipPLAY, audioclipGAMEOVER, currentAudioclip;
+    private AudioClip audioclipPUTSTONE;
     private URL menuSoundPath, playSoundPath, gameoverSoundPath;
+    private URL putStonePath;
     private ViewManager viewManager;
 
 
     public SoundManager(ViewManager viewManager) {
         this.viewManager = viewManager;
-        menuSoundPath = getClass().getResource(AUDIO.MENU_SOUND.getPath());
-        playSoundPath = getClass().getResource(AUDIO.PLAY_SOUND.getPath());
-        gameoverSoundPath = getClass().getResource(AUDIO.GAMEOVER_SOUND.getPath());
+        menuSoundPath = getClass().getResource(MUSIC.MENU_SOUND.getPath());
+        playSoundPath = getClass().getResource(MUSIC.PLAY_SOUND.getPath());
+        gameoverSoundPath = getClass().getResource(MUSIC.GAMEOVER_SOUND.getPath());
+
+        putStonePath = getClass().getResource(SOUNDEFFECT.PUT_STONE.getPath());
+
+
 
         audioclipMENU = new AudioClip(menuSoundPath.toString());
         audioclipPLAY = new AudioClip(playSoundPath.toString());
         audioclipGAMEOVER = new AudioClip(gameoverSoundPath.toString());
+
+        audioclipPUTSTONE = new AudioClip(putStonePath.toString());
 
         audioclipMENU.setRate(1);
         audioclipMENU.setCycleCount(AudioClip.INDEFINITE);
@@ -31,9 +39,9 @@ public class SoundManager {
         audioclipGAMEOVER.setCycleCount(AudioClip.INDEFINITE);
     }
 
-    public void chooseSound(AUDIO audioEnum){
+    public void chooseSound(MUSIC musicEnum){
         stopMusic();
-        switch (audioEnum){
+        switch (musicEnum){
             case MENU_SOUND:
                 currentAudioclip = audioclipMENU;
                 audioclipMENU.play();
@@ -53,6 +61,14 @@ public class SoundManager {
         audioclipMENU.stop();
         audioclipPLAY.stop();
         audioclipGAMEOVER.stop();
+    }
+
+    public void playSoundEffect(SOUNDEFFECT effectEnum){
+        switch (effectEnum) {
+            case PUT_STONE:
+                audioclipPUTSTONE.play();
+                break;
+        }
     }
 
     public AudioClip getCurrentAudioclip() {

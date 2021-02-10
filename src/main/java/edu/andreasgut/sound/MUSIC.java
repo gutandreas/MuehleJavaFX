@@ -1,6 +1,6 @@
 package edu.andreasgut.sound;
 
-public enum AUDIO {
+public enum MUSIC {
 
     MENU_SOUND("MENU_SOUND.mp3"),
     PLAY_SOUND("PLAY_SOUND.mp3"),
@@ -8,7 +8,7 @@ public enum AUDIO {
 
     private String path;
 
-    AUDIO(String path){
+    MUSIC(String path){
         this.path = path;
     }
 

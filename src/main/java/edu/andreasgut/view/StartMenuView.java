@@ -3,7 +3,7 @@ package edu.andreasgut.view;
 import edu.andreasgut.game.Game;
 import edu.andreasgut.game.InvalidFieldException;
 import edu.andreasgut.game.Player;
-import edu.andreasgut.sound.AUDIO;
+import edu.andreasgut.sound.MUSIC;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
@@ -64,7 +64,7 @@ public class StartMenuView extends VBox {
                     namePlayer1Textfield.getText().length()>0 && namePlayer2Textfield.getText().length()>0)){
             viewManager.changeToGameScene();
 
-            viewManager.getSoundManager().chooseSound(AUDIO.PLAY_SOUND);
+            viewManager.getSoundManager().chooseSound(MUSIC.PLAY_SOUND);
 
 
                 if (twoPlayersRadioButton.isSelected()){
