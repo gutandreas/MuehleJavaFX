@@ -81,6 +81,7 @@ public class Game {
 
     public void increaseRound(){
         round++;
+        viewManager.getScoreView().increaseRound();
     }
 
     public Player getPlayer0() {
@@ -123,6 +124,7 @@ public class Game {
             }
 
             increaseRound();
+
             updateCurrentPlayer();
             }
 

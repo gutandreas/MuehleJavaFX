@@ -8,9 +8,9 @@ import java.net.URL;
 public class SoundManager {
 
     private AudioClip audioclipMENU, audioclipPLAY, audioclipGAMEOVER, currentAudioclip;
-    private AudioClip audioclipPUTSTONE;
+    private AudioClip audioclipPUTSTONE, audioclipKILLSTONE;
     private URL menuSoundPath, playSoundPath, gameoverSoundPath;
-    private URL putStonePath;
+    private URL putStonePath, killStonePath;
     private ViewManager viewManager;
 
 
@@ -21,7 +21,7 @@ public class SoundManager {
         gameoverSoundPath = getClass().getResource(MUSIC.GAMEOVER_SOUND.getPath());
 
         putStonePath = getClass().getResource(SOUNDEFFECT.PUT_STONE.getPath());
-
+        killStonePath = getClass().getResource(SOUNDEFFECT.KILL_STONE.getPath());
 
 
         audioclipMENU = new AudioClip(menuSoundPath.toString());
@@ -29,6 +29,7 @@ public class SoundManager {
         audioclipGAMEOVER = new AudioClip(gameoverSoundPath.toString());
 
         audioclipPUTSTONE = new AudioClip(putStonePath.toString());
+        audioclipKILLSTONE = new AudioClip(killStonePath.toString());
 
         audioclipMENU.setRate(1);
         audioclipMENU.setCycleCount(AudioClip.INDEFINITE);
@@ -67,6 +68,9 @@ public class SoundManager {
         switch (effectEnum) {
             case PUT_STONE:
                 audioclipPUTSTONE.play();
+                break;
+            case KILL_STONE:
+                audioclipKILLSTONE.play();
                 break;
         }
     }

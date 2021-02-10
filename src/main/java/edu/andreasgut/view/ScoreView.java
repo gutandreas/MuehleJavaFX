@@ -6,7 +6,8 @@ import javafx.scene.layout.VBox;
 
 public class ScoreView extends VBox {
 
-    private Label titleLabel, player1Label, player2Label, stonesPlayer1Label, stonesPlayer2Label, roundLabel;
+    private Label titleLabel, player1Label, player2Label, stonesPlayer1Label, stonesPlayer2Label, roundNameLabel,
+    roundNumberLabel;
     private ViewManager viewManager;
 
     public ScoreView(ViewManager viewManager) {
@@ -14,7 +15,9 @@ public class ScoreView extends VBox {
         this.getStyleClass().add("scoreview");
         titleLabel = new Label("Spielstand");
         titleLabel.getStyleClass().add("labelTitle");
-        roundLabel = new Label("Spielzug: 0");
+        roundNameLabel = new Label("Spielzug:");
+        roundNameLabel.getStyleClass().add("biglabel");
+        roundNumberLabel = new Label("0");
         player1Label = new Label("");
         player1Label.getStyleClass().add("biglabel");
         stonesPlayer1Label = new Label("0");
@@ -23,7 +26,8 @@ public class ScoreView extends VBox {
         player2Label.getStyleClass().add("biglabel");
 
 
-        this.getChildren().addAll(titleLabel, roundLabel, player1Label, stonesPlayer1Label, player2Label, stonesPlayer2Label);
+        this.getChildren().addAll(titleLabel, roundNameLabel, roundNumberLabel, player1Label, stonesPlayer1Label,
+                player2Label, stonesPlayer2Label);
     }
 
     public void updatePlayerNames(Player player1, Player player2){
@@ -31,8 +35,9 @@ public class ScoreView extends VBox {
         player2Label.setText("Player 2: " + player2.getName());
     }
 
-    public void updateRound(int round){
-        roundLabel.setText("Spielzug: " + round);
+    public void increaseRound(){
+        int round = Integer.parseInt(roundNumberLabel.getText());
+        roundNumberLabel.setText(Integer.toString(++round));
     }
 
     public Label getPlayer1Label() {

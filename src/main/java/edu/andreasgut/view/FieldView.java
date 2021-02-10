@@ -1,6 +1,6 @@
 package edu.andreasgut.view;
 
-import edu.andreasgut.game.Computer;
+
 import edu.andreasgut.sound.SOUNDEFFECT;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -11,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.robot.Robot;
 
 public class FieldView extends AnchorPane {
 
@@ -32,10 +33,13 @@ public class FieldView extends AnchorPane {
         this.getStyleClass().add("fieldview");
         initializeTranslationArray();
         imageView = new ImageView();
-        image = new Image("edu/andreasgut/Images/Spielfeld.png", 600, 600, true, true);
+        image = new Image("edu/andreasgut/Images/Spielfeld.png",
+                600, 600, true, true);
         imageView.setImage(image);
-        blackStoneImage = new Image("edu/andreasgut/Images/SpielsteinSchwarz.png",85,85,true,true);
-        whiteStoneImage = new Image("edu/andreasgut/Images/SpielsteinWeiss.png",85,85,true,true);
+        blackStoneImage = new Image("edu/andreasgut/Images/SpielsteinSchwarz.png",
+                85,85,true,true);
+        whiteStoneImage = new Image("edu/andreasgut/Images/SpielsteinWeiss.png",
+                85,85,true,true);
         player1StoneImage = blackStoneImage;
         player2StoneImage = whiteStoneImage;
         emptyField = new Image("edu/andreasgut/Images/FullyTransparent.png");
@@ -51,6 +55,9 @@ public class FieldView extends AnchorPane {
 
         fieldGridPane = new GridPane();
         fieldGridPane.setPadding(new Insets(3));
+        fieldGridPane.setOnMouseExited (action ->{
+            imageView.getScene().setCursor(Cursor.DEFAULT);
+        });
 
         fieldGridPane.setGridLinesVisible(false);
         for (int row = 0; row < 7; row++){
@@ -99,6 +106,7 @@ public class FieldView extends AnchorPane {
 
         Platform.enterNestedEventLoop(loopObject);
         viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
+        moveMouseposition(20, 20);
         return new CoordinatesInRepresentation(ring[0], field[0]);
     }
 
@@ -120,6 +128,8 @@ public class FieldView extends AnchorPane {
                 Platform.exitNestedEventLoop(loopObject, null);
             });}
         Platform.enterNestedEventLoop(loopObject);
+        viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.KILL_STONE);
+        moveMouseposition(20, 20);
         return new CoordinatesInRepresentation(ring[0], field[0]);
     }
 
@@ -133,31 +143,40 @@ public class FieldView extends AnchorPane {
     public void computerGraphicKill(int ring, int field){
 
         ((ImageView) fieldGridPane.getChildren().get(translateToIndex(ring, field))).setImage(emptyField);
+        viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.KILL_STONE);
+    }
+
+    private void moveMouseposition(int dx, int dy){
+        Robot robot = new Robot();
+        robot.mouseMove(robot.getMouseX()+dx, robot.getMouseY()+dy);
     }
 
     private void setPutCursor(){
-        fieldGridPane.setOnMouseMoved(move ->{
-            switch (viewManager.getGame().getCurrentPlayerIndex()){
-                case 0:
-                    player1StoneImage = blackStoneImage;
-                    if (phase1){
-                        imageView.getScene().setCursor(blackStoneCursor);
-                    }
-                    break;
-                case 1:
-                    player2StoneImage = whiteStoneImage;
-                    if (phase1){
-                        imageView.getScene().setCursor(whiteStoneCursor);
-                    }
-                    break;
-            }});
-        fieldGridPane.setOnMouseExited (action ->{
-            imageView.getScene().setCursor(Cursor.DEFAULT);
+        choosePutCursor();
+        fieldGridPane.setOnMouseEntered(enter ->{
+            choosePutCursor();
         });
     }
 
+    private void choosePutCursor() {
+        switch (viewManager.getGame().getCurrentPlayerIndex()){
+            case 0:
+                player1StoneImage = blackStoneImage;
+                if (phase1){
+                    imageView.getScene().setCursor(blackStoneCursor);
+                }
+                break;
+            case 1:
+                player2StoneImage = whiteStoneImage;
+                if (phase1){
+                    imageView.getScene().setCursor(whiteStoneCursor);
+                }
+                break;}
+    }
+
     private void setKillCursor(){
-        fieldGridPane.setOnMouseMoved(move ->{
+        imageView.getScene().setCursor(killCursor);
+        fieldGridPane.setOnMouseEntered(enter ->{
             imageView.getScene().setCursor(killCursor);
         });
     }
