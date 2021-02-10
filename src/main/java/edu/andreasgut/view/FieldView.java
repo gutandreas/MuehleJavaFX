@@ -1,9 +1,7 @@
 package edu.andreasgut.view;
 
-import com.sun.javafx.scene.paint.GradientUtils;
 import edu.andreasgut.game.Computer;
 import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
@@ -13,15 +11,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 public class FieldView extends AnchorPane {
 
     private ImageView imageView;
     private Image image;
     private ViewManager viewManager;
     private Image blackStoneImage, whiteStoneImage, player1StoneImage, player2StoneImage, emptyField;
+    private ImageCursor blackStoneCursor, whiteStoneCursor, killCursor;
     private GridPane fieldGridPane;
     private CoordinatesInRepresentation[][] translationArrayGraphicToRepresentation;
     private int[][] translationArrayRepresentationToIndex;
@@ -42,6 +38,14 @@ public class FieldView extends AnchorPane {
         player1StoneImage = blackStoneImage;
         player2StoneImage = whiteStoneImage;
         emptyField = new Image("edu/andreasgut/Images/FullyTransparent.png");
+        killCursor = new ImageCursor(new Image("edu/andreasgut/Images/KillCursor.png",
+                85,85,true,true));
+        whiteStoneCursor = new ImageCursor(new Image("edu/andreasgut/Images/SpielsteinWeiss.png",
+                85,85,true,true),
+                whiteStoneImage.getWidth()/2, whiteStoneImage.getHeight()/2);
+        blackStoneCursor = new ImageCursor(new Image("edu/andreasgut/Images/SpielsteinSchwarz.png",
+                85, 85, true, true),
+                blackStoneImage.getWidth()/2, blackStoneImage.getHeight()/2);
 
 
         fieldGridPane = new GridPane();
@@ -65,7 +69,7 @@ public class FieldView extends AnchorPane {
 
     public CoordinatesInRepresentation humanGraphicPut() {
         Object loopObject = new Object();
-        updateViewMode();
+        setPutCursor();
         final Integer[] ring = new Integer[1];
         final int[] field = new int[1];
 
@@ -94,54 +98,65 @@ public class FieldView extends AnchorPane {
 
         Platform.enterNestedEventLoop(loopObject);
         return new CoordinatesInRepresentation(ring[0], field[0]);
-
-
-
-
     }
 
-    public void humanGraphicKill(){
+    public CoordinatesInRepresentation humanGraphicKill(){
+        Object loopObject = new Object();
+        setPutCursor();
+        final Integer[] ring = new Integer[1];
+        final int[] field = new int[1];
+        setKillCursor();
         for (Node n : fieldGridPane.getChildren()){
             n.setOnMouseClicked(click ->{
-                int ring = translateToRing(n);
-                int field = translateToField(n);
+                ring[0] = translateToRing(n);
+                field[0] = translateToField(n);
 
                 System.out.println("Feld in Repräsentationsarray: " + ring + "/" + field);
                 System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
 
                 ((ImageView) n).setImage(emptyField);
+                Platform.exitNestedEventLoop(loopObject, null);
             });}
+        Platform.enterNestedEventLoop(loopObject);
+        return new CoordinatesInRepresentation(ring[0], field[0]);
     }
 
     public void computerGraphicPut(int ring, int field){
 
         ((ImageView) fieldGridPane.getChildren().get(translateToIndex(ring, field))).setImage(player2StoneImage);
+        viewManager.getFieldView().getScene().setCursor(Cursor.NONE);
     }
 
-    private void updateViewMode(){
-        if(viewManager.getGame().getRound()<18 && !(viewManager.getGame().getCurrentPlayer() instanceof Computer)){
-            fieldGridPane.setOnMouseMoved(move ->{
-                switch (viewManager.getGame().getCurrentPlayerIndex()){
-                    case 0:
-                        player1StoneImage = blackStoneImage;
-                        if (phase1){
-                            imageView.getScene().setCursor(new ImageCursor(blackStoneImage,
-                                    blackStoneImage.getWidth()/2, blackStoneImage.getHeight()/2));
-                        }
-                        break;
-                    case 1:
-                        player2StoneImage = whiteStoneImage;
-                        if (phase1){
-                            imageView.getScene().setCursor(new ImageCursor(whiteStoneImage,
-                                    whiteStoneImage.getWidth()/2, whiteStoneImage.getHeight()/2));
-                        }
-                        break;
-                }});
-            fieldGridPane.setOnMouseExited (action ->{
-                imageView.getScene().setCursor(Cursor.DEFAULT);
-            });
-        }
+    public void computerGraphicKill(int ring, int field){
 
+        ((ImageView) fieldGridPane.getChildren().get(translateToIndex(ring, field))).setImage(emptyField);
+    }
+
+    private void setPutCursor(){
+        fieldGridPane.setOnMouseMoved(move ->{
+            switch (viewManager.getGame().getCurrentPlayerIndex()){
+                case 0:
+                    player1StoneImage = blackStoneImage;
+                    if (phase1){
+                        imageView.getScene().setCursor(blackStoneCursor);
+                    }
+                    break;
+                case 1:
+                    player2StoneImage = whiteStoneImage;
+                    if (phase1){
+                        imageView.getScene().setCursor(whiteStoneCursor);
+                    }
+                    break;
+            }});
+        fieldGridPane.setOnMouseExited (action ->{
+            imageView.getScene().setCursor(Cursor.DEFAULT);
+        });
+    }
+
+    private void setKillCursor(){
+        fieldGridPane.setOnMouseMoved(move ->{
+            imageView.getScene().setCursor(killCursor);
+        });
     }
 
     private int translateToRing(Node node){

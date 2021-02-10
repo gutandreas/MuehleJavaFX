@@ -103,10 +103,9 @@ public class Game {
 
         while (true){
 
-            updateCurrentPlayer();
-
             oldField = (Field3) getField().clone();
-
+            field.printField();
+            System.out.println(getCurrentPlayer().getName() + " ist an der Reihe!");
 
             if (phase2==true && getField().numberOfStonesCurrentPlayer() <= 2){
                 gameOver = true;
@@ -117,20 +116,15 @@ public class Game {
             setGamesPhaseBooleans();
             setCurrentPlayersJumpBoolean();
 
-            System.out.println(getCurrentPlayer().getName() + " ist an der Reihe!");
-
-
-
             putOrMove();
-            field.printField();
+
             if (field.checkTriple(oldField) && field.isThereStoneToKill()){
-                //TODO:kill-methode anpassen
-                System.out.println("Ein Stein wird gekillt");
-            };
+                kill();
+            }
 
-
-
-            increaseRound();}
+            increaseRound();
+            updateCurrentPlayer();
+            }
 
 
     }
@@ -193,7 +187,13 @@ public class Game {
     private void kill(){
         //STEIN ENTFERNEN: Menschlicher Spieler
         if(!(getCurrentPlayer() instanceof Computer)){
-            viewManager.getFieldView().humanGraphicKill();}
+            CoordinatesInRepresentation tempCoords = viewManager.getFieldView().humanGraphicKill();
+            try {
+                field.killStone(tempCoords.getRing(), tempCoords.getField());
+            } catch (InvalidKillException e) {
+                e.printStackTrace();
+            }
+        }
 
         //STEIN ENTFERNEN: Computerspieler
         if(getCurrentPlayer() instanceof Computer){
@@ -204,6 +204,7 @@ public class Game {
                 System.out.println(e.getMessage());
                 kill();
             }
+            viewManager.getFieldView().computerGraphicKill(temp[0], temp[1]);
         }
     }
 }
