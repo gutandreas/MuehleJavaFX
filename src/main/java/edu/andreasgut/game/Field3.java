@@ -34,17 +34,25 @@ public class Field3 implements Cloneable{
             throw new InvalidMoveException("Kein bzw. nicht dein Stein");
         }
 
-        if (jump){
+        if (checkIfJump()){
             putStone(ringDest,fieldDest);
             array[ringNow][fieldNow] = 9;
         }
         else {
-            if ((fieldNow%2==1 && fieldNow==fieldDest && Math.abs(ringNow-ringDest)==1)
-                    || (ringNow-ringDest==0 && Math.abs((fieldNow)-(fieldDest))==1)
-                    || (ringNow-ringDest==0 && Math.abs((fieldNow)-(fieldDest))==7)){
+            if (checkDestination(ringNow, fieldNow, ringDest, fieldDest)){
                 putStone(ringDest,fieldDest);
                 array[ringNow][fieldNow] = 9;}
             else throw new InvalidMoveException("Kein möglicher Zielort");}
+    }
+
+    public boolean checkIfJump(){
+        return game.getCurrentPlayer().isAllowedToJump();
+    }
+
+    public boolean checkDestination(int ringNow, int fieldNow, int ringDest, int fieldDest){
+        return ((fieldNow%2==1 && fieldNow==fieldDest && Math.abs(ringNow-ringDest)==1)
+                || (ringNow-ringDest==0 && Math.abs((fieldNow)-(fieldDest))==1)
+                || (ringNow-ringDest==0 && Math.abs((fieldNow)-(fieldDest))==7));
     }
 
     public boolean checkTriple(Field3 oldField){

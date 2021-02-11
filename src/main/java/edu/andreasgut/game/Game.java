@@ -12,7 +12,7 @@ public class Game {
     private Player player1;
     private Player winner;
     private int round;
-    private final int NUMBEROFSTONES = 9;
+    private final int NUMBEROFSTONES = 4;
     private Player currentPlayer;
     private Field3 field;
     private Field3 oldField;
@@ -157,21 +157,7 @@ public class Game {
             }
 
             if(phase2){
-                System.out.println("Ring Start:");
-                int ringNow = scanner.nextInt();
-                System.out.println("Feld Start:");
-                int fieldNow = scanner.nextInt();
-                System.out.println("Ring Ziel:");
-                int ringDest= scanner.nextInt();
-                System.out.println("Feld Ziel:");
-                int fieldDest = scanner.nextInt();
-                try {
-                    field.move(ringNow,fieldNow,ringDest,fieldDest,getCurrentPlayer().isAllowedToJump());
-                }
-                catch (InvalidMoveException | InvalidFieldException | IndexOutOfBoundsException e){
-                    System.out.println(e.getMessage());
-                    putOrMove();
-                }
+                CoordinatesInRepresentation tempCoords = viewManager.getFieldView().humanGraphicMove();
             }
         }
 
@@ -183,6 +169,8 @@ public class Game {
                 field.putStone(temp[0], temp[1]);
                 viewManager.getFieldView().computerGraphicPut(temp[0], temp[1]);
             }
+
+
         }
 
         viewManager.getScoreView().increaseStonesPut();

@@ -21,8 +21,8 @@ public class FieldView extends AnchorPane {
     private ImageView imageView;
     private Image image;
     private ViewManager viewManager;
-    private Image blackStoneImage, whiteStoneImage, player1StoneImage, player2StoneImage, emptyField, forbiddenField;
-    private ImageCursor blackStoneCursor, whiteStoneCursor, killCursor;
+    private Image blackStoneImage, whiteStoneImage, player1StoneImage, player2StoneImage, emptyField, forbiddenField, allowedField;
+    private ImageCursor blackStoneCursor, whiteStoneCursor, killCursor, handCursor;
     private GridPane fieldGridPane;
     private CoordinatesInRepresentation[][] translationArrayGraphicToRepresentation;
     private int[][] translationArrayRepresentationToIndex;
@@ -45,6 +45,7 @@ public class FieldView extends AnchorPane {
         player1StoneImage = blackStoneImage;
         player2StoneImage = whiteStoneImage;
         emptyField = new Image("edu/andreasgut/Images/FullyTransparent.png");
+        allowedField = new Image("edu/andreasgut/Images/GreenTransparent.png");
         forbiddenField = new Image("edu/andreasgut/Images/FullyTransparent.png");
         killCursor = new ImageCursor(new Image("edu/andreasgut/Images/KillCursor.png",
                 85,85,true,true));
@@ -54,6 +55,8 @@ public class FieldView extends AnchorPane {
         blackStoneCursor = new ImageCursor(new Image("edu/andreasgut/Images/SpielsteinSchwarz.png",
                 85, 85, true, true),
                 blackStoneImage.getWidth()/2, blackStoneImage.getHeight()/2);
+        handCursor = new ImageCursor(new Image("edu/andreasgut/Images/HandCursor.png",
+                85, 85, true, true));
 
         fieldGridPane = new GridPane();
         fieldGridPane.setPadding(new Insets(3));
@@ -84,7 +87,7 @@ public class FieldView extends AnchorPane {
     public CoordinatesInRepresentation humanGraphicPut() {
         Object loopObject = new Object();
         setPutCursor();
-        final Integer[] ring = new Integer[1];
+        final int[] ring = new int[1];
         final int[] field = new int[1];
 
         for (Node n : fieldGridPane.getChildren()){
@@ -118,10 +121,9 @@ public class FieldView extends AnchorPane {
 
     public CoordinatesInRepresentation humanGraphicKill(){
         Object loopObject = new Object();
-        setPutCursor();
-        final Integer[] ring = new Integer[1];
-        final int[] field = new int[1];
         setKillCursor();
+        final int[] ring = new int[1];
+        final int[] field = new int[1];
 
         for (Node n : fieldGridPane.getChildren()){
             n.setOnMouseClicked(click -> {/* clear old function*/});
@@ -131,7 +133,7 @@ public class FieldView extends AnchorPane {
                 ring[0] = translateToRing(n);
                 field[0] = translateToField(n);
 
-                System.out.println("Feld in Repräsentationsarray: " + ring + "/" + field);
+                System.out.println("Feld in Repräsentationsarray: " + ring[0] + "/" + field[0]);
                 System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
 
                 ((ImageView) n).setImage(emptyField);
@@ -140,6 +142,54 @@ public class FieldView extends AnchorPane {
         Platform.enterNestedEventLoop(loopObject);
         viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.KILL_STONE);
         moveMouseposition(20, 20);
+        return new CoordinatesInRepresentation(ring[0], field[0]);
+    }
+
+    //TODO: PutCursor setzen, wenn Stein angeklickt, prüfen ob überhaupt Zug möglich (in Game!)
+    public CoordinatesInRepresentation humanGraphicMove(){
+        Object loopObject1 = new Object();
+        Object loopObject2 = new Object();
+        setMoveCursor();
+        final int[] ring = new int[2];
+        final int[] field = new int[2];
+
+        for (Node n : fieldGridPane.getChildren()){
+            n.setOnMouseClicked(click -> {/* clear old function*/});
+            if(((ImageView) n).getImage().equals(getOwnStoneImage())){
+                n.setOnMouseClicked(click ->{
+                    ring[0] = translateToRing(n);
+                    field[0] = translateToField(n);
+
+                    System.out.println("Feld in Repräsentationsarray: " + ring[0] + "/" + field[0]);
+                    System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
+
+                    ((ImageView) n).setImage(emptyField);
+                    Platform.exitNestedEventLoop(loopObject1, null);
+
+                });}}
+        Platform.enterNestedEventLoop(loopObject1);
+
+
+
+        for (Node n : fieldGridPane.getChildren()){
+            n.setOnMouseClicked(click -> {/* clear old function*/});
+            if(((ImageView) n).getImage().equals(emptyField) &&
+                    (viewManager.getGame().getField().checkDestination(ring[0], field[0], translateToRing(n), translateToField(n)))
+                    || viewManager.getGame().getField().checkIfJump()){
+                n.setOnMouseClicked(click ->{
+                    ring[0] = translateToRing(n);
+                    field[0] = translateToField(n);
+
+                    System.out.println("Feld in Repräsentationsarray: " + ring[1] + "/" + field[1]);
+                    System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
+
+                    ((ImageView) n).setImage(getOwnStoneImage());
+                    Platform.exitNestedEventLoop(loopObject2, null);
+                });}}
+        Platform.enterNestedEventLoop(loopObject2);
+
+
+
         return new CoordinatesInRepresentation(ring[0], field[0]);
     }
 
@@ -175,6 +225,10 @@ public class FieldView extends AnchorPane {
         return viewManager.getGame().getCurrentPlayerIndex()==0 ? player2StoneImage : player1StoneImage;
     }
 
+    private Image getOwnStoneImage(){
+        return viewManager.getGame().getCurrentPlayerIndex()==0 ? player1StoneImage : player2StoneImage;
+    }
+
     private void setPutCursor(){
         choosePutCursor();
         fieldGridPane.setOnMouseEntered(enter ->{
@@ -202,6 +256,13 @@ public class FieldView extends AnchorPane {
         imageView.getScene().setCursor(killCursor);
         fieldGridPane.setOnMouseEntered(enter ->{
             imageView.getScene().setCursor(killCursor);
+        });
+    }
+
+    private void setMoveCursor(){
+        imageView.getScene().setCursor(handCursor);
+        fieldGridPane.setOnMouseEntered(enter ->{
+            imageView.getScene().setCursor(handCursor);
         });
     }
 
