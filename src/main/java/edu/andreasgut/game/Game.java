@@ -124,10 +124,8 @@ public class Game {
             }
 
             increaseRound();
-
             updateCurrentPlayer();
             }
-
 
     }
 
@@ -152,8 +150,6 @@ public class Game {
             if (phase1){
                 CoordinatesInRepresentation tempCoords = viewManager.getFieldView().humanGraphicPut();
                 field.putStone(tempCoords.getRing(), tempCoords.getField());
-
-
             }
 
             if(phase2){

@@ -1,6 +1,5 @@
 package edu.andreasgut.view;
 
-
 import edu.andreasgut.sound.SOUNDEFFECT;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -18,7 +17,7 @@ public class FieldView extends AnchorPane {
     private ImageView imageView;
     private Image image;
     private ViewManager viewManager;
-    private Image blackStoneImage, whiteStoneImage, player1StoneImage, player2StoneImage, emptyField;
+    private Image blackStoneImage, whiteStoneImage, player1StoneImage, player2StoneImage, emptyField, forbiddenField;
     private ImageCursor blackStoneCursor, whiteStoneCursor, killCursor;
     private GridPane fieldGridPane;
     private CoordinatesInRepresentation[][] translationArrayGraphicToRepresentation;
@@ -43,6 +42,7 @@ public class FieldView extends AnchorPane {
         player1StoneImage = blackStoneImage;
         player2StoneImage = whiteStoneImage;
         emptyField = new Image("edu/andreasgut/Images/FullyTransparent.png");
+        forbiddenField = new Image("edu/andreasgut/Images/FullyTransparent.png");
         killCursor = new ImageCursor(new Image("edu/andreasgut/Images/KillCursor.png",
                 85,85,true,true));
         whiteStoneCursor = new ImageCursor(new Image("edu/andreasgut/Images/SpielsteinWeiss.png",
@@ -51,7 +51,6 @@ public class FieldView extends AnchorPane {
         blackStoneCursor = new ImageCursor(new Image("edu/andreasgut/Images/SpielsteinSchwarz.png",
                 85, 85, true, true),
                 blackStoneImage.getWidth()/2, blackStoneImage.getHeight()/2);
-
 
         fieldGridPane = new GridPane();
         fieldGridPane.setPadding(new Insets(3));
@@ -67,10 +66,14 @@ public class FieldView extends AnchorPane {
             fieldGridPane.addRow(column);
         }
 
+        //Füllt Felder mit emptyField wenn in Repräsentation vorhanden, sonst mit forbiddenField
         for (int row = 0; row < 7; row++) {
             for (int column = 0; column < 7; column++) {
+                if (translationArrayGraphicToRepresentation[row][column].getRing()!=-1){
                 ImageView tempImageView = new ImageView(emptyField);
-                fieldGridPane.add(tempImageView,row,column);}}
+                fieldGridPane.add(tempImageView,row,column);}
+            else {ImageView tempImageView = new ImageView(forbiddenField);
+                    fieldGridPane.add(tempImageView,row,column);}}}
 
         this.getChildren().addAll(imageView,fieldGridPane);
     }
@@ -81,15 +84,15 @@ public class FieldView extends AnchorPane {
         final Integer[] ring = new Integer[1];
         final int[] field = new int[1];
 
-
         for (Node n : fieldGridPane.getChildren()){
+            n.setOnMouseClicked(click -> {/* clear old function*/});
+            if(((ImageView) n).getImage().equals(emptyField)){
             n.setOnMouseClicked(click ->{
                 ring[0] = translateToRing(n);
                 field[0] = translateToField(n);
 
                 System.out.println("Feld in Repräsentationsarray: " + ring[0] + "/" + field[0]);
                 System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
-
 
                 switch (viewManager.getGame().getCurrentPlayerIndex()){
                     case 0:
@@ -102,7 +105,7 @@ public class FieldView extends AnchorPane {
 
                 Platform.exitNestedEventLoop(loopObject, null);
 
-            });}
+            });}}
 
         Platform.enterNestedEventLoop(loopObject);
         viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
@@ -116,7 +119,10 @@ public class FieldView extends AnchorPane {
         final Integer[] ring = new Integer[1];
         final int[] field = new int[1];
         setKillCursor();
+
         for (Node n : fieldGridPane.getChildren()){
+            n.setOnMouseClicked(click -> {/* clear old function*/});
+            if(((ImageView) n).getImage().equals(getEnemysStoneImage())){
             n.setOnMouseClicked(click ->{
                 ring[0] = translateToRing(n);
                 field[0] = translateToField(n);
@@ -126,7 +132,7 @@ public class FieldView extends AnchorPane {
 
                 ((ImageView) n).setImage(emptyField);
                 Platform.exitNestedEventLoop(loopObject, null);
-            });}
+            });}}
         Platform.enterNestedEventLoop(loopObject);
         viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.KILL_STONE);
         moveMouseposition(20, 20);
@@ -149,6 +155,10 @@ public class FieldView extends AnchorPane {
     private void moveMouseposition(int dx, int dy){
         Robot robot = new Robot();
         robot.mouseMove(robot.getMouseX()+dx, robot.getMouseY()+dy);
+    }
+
+    private Image getEnemysStoneImage(){
+        return viewManager.getGame().getCurrentPlayerIndex()==0 ? player2StoneImage : player1StoneImage;
     }
 
     private void setPutCursor(){
@@ -193,9 +203,17 @@ public class FieldView extends AnchorPane {
         return translationArrayRepresentationToIndex[ring][field];
     }
 
-
     private void initializeTranslationArray(){
         translationArrayGraphicToRepresentation = new CoordinatesInRepresentation[7][7];
+
+        //Koordinaten -1/-1 bedeuten, dass Feld in FieldArray nicht repräsentiert wird!
+        //Führt bei Feldinitialisierung zu einem forbiddenField
+        for (int i = 0; i < 7; i++){
+            for (int j = 0; j < 7; j++){
+                translationArrayGraphicToRepresentation[i][j] = new CoordinatesInRepresentation(-1,-1);
+            }
+        }
+
         translationArrayGraphicToRepresentation[0][0] = new CoordinatesInRepresentation(0,0);
         translationArrayGraphicToRepresentation[0][3] = new CoordinatesInRepresentation(0,1);
         translationArrayGraphicToRepresentation[0][6] = new CoordinatesInRepresentation(0,2);
