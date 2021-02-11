@@ -1,6 +1,9 @@
 package edu.andreasgut.view;
 
 import edu.andreasgut.sound.SOUNDEFFECT;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
@@ -11,6 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.robot.Robot;
+import javafx.util.Duration;
 
 public class FieldView extends AnchorPane {
 
@@ -22,10 +26,9 @@ public class FieldView extends AnchorPane {
     private GridPane fieldGridPane;
     private CoordinatesInRepresentation[][] translationArrayGraphicToRepresentation;
     private int[][] translationArrayRepresentationToIndex;
+    private final int COMPREACTIONTIME = 500;
 
-    private int player=0;
-    private boolean phase1=true;
-    private boolean running;
+
 
     public FieldView(ViewManager viewManager) {
         this.viewManager = viewManager;
@@ -141,16 +144,22 @@ public class FieldView extends AnchorPane {
     }
 
     public void computerGraphicPut(int ring, int field){
+        Timeline timeline = new Timeline(new KeyFrame(
+                Duration.millis(COMPREACTIONTIME),
+                put -> {((ImageView) fieldGridPane.getChildren().get(translateToIndex(ring, field))).setImage(player2StoneImage);
+                    viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);}));
+        timeline.setCycleCount(1);
+        timeline.play();
 
-        ((ImageView) fieldGridPane.getChildren().get(translateToIndex(ring, field))).setImage(player2StoneImage);
-        viewManager.getFieldView().getScene().setCursor(Cursor.NONE);
-        viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
     }
 
     public void computerGraphicKill(int ring, int field){
-
-        ((ImageView) fieldGridPane.getChildren().get(translateToIndex(ring, field))).setImage(emptyField);
-        viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.KILL_STONE);
+        Timeline timeline = new Timeline(new KeyFrame(
+                Duration.millis(COMPREACTIONTIME*2),
+                kill -> {((ImageView) fieldGridPane.getChildren().get(translateToIndex(ring, field))).setImage(emptyField);
+        viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.KILL_STONE);}));
+        timeline.setCycleCount(1);
+        timeline.play();
     }
 
     private void moveMouseposition(int dx, int dy){
@@ -173,13 +182,13 @@ public class FieldView extends AnchorPane {
         switch (viewManager.getGame().getCurrentPlayerIndex()){
             case 0:
                 player1StoneImage = blackStoneImage;
-                if (phase1){
+                if (viewManager.getGame().isPhase1()){
                     imageView.getScene().setCursor(blackStoneCursor);
                 }
                 break;
             case 1:
                 player2StoneImage = whiteStoneImage;
-                if (phase1){
+                if (viewManager.getGame().isPhase1()){
                     imageView.getScene().setCursor(whiteStoneCursor);
                 }
                 break;}

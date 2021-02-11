@@ -71,12 +71,12 @@ public class Game {
     }
 
 
-    public int getRound() {
-        return round;
+    public boolean isPhase1() {
+        return phase1;
     }
 
-    public void setRound(int round) {
-        this.round = round;
+    public boolean isPhase2() {
+        return phase2;
     }
 
     public void increaseRound(){
@@ -128,6 +128,7 @@ public class Game {
 
             increaseRound();
             updateCurrentPlayer();
+
             }
 
     }

@@ -54,7 +54,7 @@ public class Field3 implements Cloneable{
 
 
     private boolean checkBetweenRings(Field3 oldField){
-        for (int field = 1; field <7;){
+        for (int field = 1; field <8;){
             for (int player = 0; player < 2; player++){
                 if (array[0][field]==player && array[1][field]==player
                         && array[2][field]==player){
