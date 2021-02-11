@@ -104,6 +104,9 @@ public class Game {
 
         while (true){
 
+            if (round == NUMBEROFSTONES*2){
+                viewManager.getScoreView().updatePhase("Steine verschieben");
+            }
             oldField = (Field3) getField().clone();
             field.printField();
             System.out.println(getCurrentPlayer().getName() + " ist an der Reihe!");
@@ -180,6 +183,8 @@ public class Game {
                 viewManager.getFieldView().computerGraphicPut(temp[0], temp[1]);
             }
         }
+
+        viewManager.getScoreView().increaseStonesPut();
     }
 
     private void kill(){
@@ -204,6 +209,8 @@ public class Game {
             }
             viewManager.getFieldView().computerGraphicKill(temp[0], temp[1]);
         }
+
+        viewManager.getScoreView().increaseStonesLost();
     }
 }
 
