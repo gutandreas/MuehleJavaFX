@@ -3,11 +3,12 @@ package edu.andreasgut.view;
 import edu.andreasgut.game.Player;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 public class ScoreView extends VBox {
 
     private Label titleLabel, player1Label, player2Label, stonesPutPlayer1Label, stonesPutPlayer2Label, roundLabel,
-            phaseLabel, stonesLostPlayer1Label, stonesLostPlayer2Label;
+            phaseLabel, stonesLostPlayer1Label, stonesLostPlayer2Label, winnerLabel;
     private ViewManager viewManager;
     private int round = 0;
     private int stonesPut1 = 0;
@@ -35,9 +36,13 @@ public class ScoreView extends VBox {
         stonesPutPlayer2Label = new Label("Steine gesetzt: " + stonesPut2);
         stonesLostPlayer2Label = new Label( "Steine verloren: " + stonesLost2);
 
+        winnerLabel = new Label("");
+        winnerLabel.getStyleClass().add("biglabel");
+
+
 
         this.getChildren().addAll(titleLabel, phaseLabel, roundLabel, player1Label, stonesPutPlayer1Label,
-                stonesLostPlayer1Label, player2Label, stonesPutPlayer2Label, stonesLostPlayer2Label);
+                stonesLostPlayer1Label, player2Label, stonesPutPlayer2Label, stonesLostPlayer2Label, winnerLabel);
     }
 
     public void updatePlayerNames(Player player1, Player player2){
@@ -81,6 +86,10 @@ public class ScoreView extends VBox {
 
     public Label getPlayer2Label() {
         return player2Label;
+    }
+
+    public void setWinnerlabel(){
+        winnerLabel.setText(viewManager.getGame().getWinner().getName() + " hat das Spiel gewonnen!");
     }
 
 }

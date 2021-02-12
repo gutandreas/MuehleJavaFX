@@ -79,6 +79,10 @@ public class Game {
         return phase2;
     }
 
+    public Player getWinner() {
+        return winner;
+    }
+
     public void increaseRound(){
         round++;
         viewManager.getScoreView().increaseRound();
@@ -114,6 +118,8 @@ public class Game {
             if (phase2==true && getField().numberOfStonesCurrentPlayer() <= 2){
                 gameOver = true;
                 winner = playerArrayList.get((getCurrentPlayerIndex()+1)%2);
+                viewManager.getScoreView().setWinnerlabel();
+                viewManager.getFieldView().setDisable(true);
                 System.out.println(winner.getName() + " hat das Spiel gewonnen!");
             }
 
