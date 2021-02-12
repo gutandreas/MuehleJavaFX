@@ -8,7 +8,8 @@
     -fx-padding: 20;
 }
 
-.startImageView{
+
+.startImageView {
     -fx-pref-width: 300;
 }
 
@@ -26,13 +27,15 @@
 }
 
 
-.menu-bar .label {
-    -fx-text-fill: black;
-}
-
 .label{
     -fx-text-fill: #e8e8e8;
     -fx-effect: innershadow( three-pass-box , rgba(200,200,220,0.7) , 5, 0.0 , 0 , 1 );
+    -fx-effect: dropshadow( three-pass-box , rgba(20,20,20,0.5) , 5, 0.0 , 0 , 1 );
+}
+
+.menu-bar .label {
+    -fx-text-fill: black;
+    -fx-effect: none;
 }
 
 .labelWarning{
@@ -58,14 +61,14 @@
 }
 
 .scoreview{
-    -fx-alignment: center-left;
+    -fx-alignment: top;
     -fx-pref-width: 300;
     -fx-padding: 20;
-    -fx-spacing: 30;
+    -fx-spacing: 50;
 }
 
 .logview{
-    -fx-alignment: center-left;
+    -fx-alignment: top;
     -fx-pref-width: 300;
     -fx-padding: 20;
     -fx-spacing: 30;

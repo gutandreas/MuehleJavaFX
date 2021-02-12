@@ -12,7 +12,7 @@ public class Game {
     private Player player1;
     private Player winner;
     private int round;
-    private final int NUMBEROFSTONES = 5;
+    private final int NUMBEROFSTONES = 9;
     private Player currentPlayer;
     private Field3 field;
     private Field3 oldField;

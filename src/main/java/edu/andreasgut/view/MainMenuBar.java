@@ -1,15 +1,16 @@
 package edu.andreasgut.view;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+
+import java.util.Optional;
 
 public class MainMenuBar extends MenuBar {
 
@@ -29,11 +30,19 @@ public class MainMenuBar extends MenuBar {
         hilfe.getItems().addAll(ueberDiesesSpiel);
         neuStarten.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                System.out.println("Spiel wird neu gestartet");
+              System.out.println("Spiel neu starten");
             }});
         spielBeenden.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                System.out.println("Spiel wird beendet");
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                        "Wollen Sie das Spiel wirklich beenden?", ButtonType.CANCEL, ButtonType.YES);
+                alert.setAlertType(Alert.AlertType.NONE);
+                alert.setTitle("Spiel beenden");
+                Optional<ButtonType> result = alert.showAndWait();
+                if(!result.isPresent()){}
+                    else if(result.get() == ButtonType.YES){
+                                        Platform.exit();}
+                    else if(result.get() == ButtonType.CANCEL) {}
             }});
         ueberDiesesSpiel.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
