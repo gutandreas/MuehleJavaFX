@@ -227,6 +227,7 @@ public class Game {
         }
 
         viewManager.getScoreView().increaseStonesLost();
+        viewManager.getScoreView().increaseStonesKilled();
     }
 }
 
