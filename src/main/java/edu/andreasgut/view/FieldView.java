@@ -22,7 +22,7 @@ public class FieldView extends AnchorPane {
     private Image image;
     private ViewManager viewManager;
     private Image blackStoneImage, whiteStoneImage, player1StoneImage, player2StoneImage, emptyField, forbiddenField, allowedField;
-    private ImageCursor blackStoneCursor, whiteStoneCursor, killCursor, handCursor;
+    private ImageCursor blackStoneCursor, whiteStoneCursor, killCursor, handCursor, blackStoneCursorTest;
     private GridPane fieldGridPane;
     private CoordinatesInRepresentation[][] translationArrayGraphicToRepresentation;
     private int[][] translationArrayRepresentationToIndex;
@@ -53,6 +53,9 @@ public class FieldView extends AnchorPane {
                 85,85,true,true),
                 whiteStoneImage.getWidth()/2, whiteStoneImage.getHeight()/2);
         blackStoneCursor = new ImageCursor(new Image("edu/andreasgut/Images/SpielsteinSchwarz.png",
+                85, 85, true, true),
+                blackStoneImage.getWidth()/2, blackStoneImage.getHeight()/2);
+        blackStoneCursorTest = new ImageCursor(new Image("edu/andreasgut/Images/HandCursorBlackStone.png",
                 85, 85, true, true),
                 blackStoneImage.getWidth()/2, blackStoneImage.getHeight()/2);
         handCursor = new ImageCursor(new Image("edu/andreasgut/Images/HandCursor.png",
@@ -142,11 +145,13 @@ public class FieldView extends AnchorPane {
         Platform.enterNestedEventLoop(loopObject);
         viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.KILL_STONE);
         moveMouseposition(20, 20);
+
         return new CoordinatesInRepresentation(ring[0], field[0]);
     }
 
-    //TODO: PutCursor setzen, wenn Stein angeklickt, prüfen ob überhaupt Zug möglich (in Game!)
-    public CoordinatesInRepresentation humanGraphicMove(){
+    //TODO: Prüfen ob überhaupt Zug möglich (in Game!)
+    public CoordinatesInRepresentation[] humanGraphicMove(){
+        CoordinatesInRepresentation[] coordsArray = new CoordinatesInRepresentation[2];
         Object loopObject1 = new Object();
         Object loopObject2 = new Object();
         setMoveCursor();
@@ -165,11 +170,12 @@ public class FieldView extends AnchorPane {
 
                     ((ImageView) n).setImage(emptyField);
                     Platform.exitNestedEventLoop(loopObject1, null);
-
                 });}}
         Platform.enterNestedEventLoop(loopObject1);
 
+        coordsArray[0] = new CoordinatesInRepresentation(ring[0],field[0]);
 
+        setPutCursor();
 
         for (Node n : fieldGridPane.getChildren()){
             n.setOnMouseClicked(click -> {/* clear old function*/});
@@ -177,8 +183,8 @@ public class FieldView extends AnchorPane {
                     (viewManager.getGame().getField().checkDestination(ring[0], field[0], translateToRing(n), translateToField(n)))
                     || viewManager.getGame().getField().checkIfJump()){
                 n.setOnMouseClicked(click ->{
-                    ring[0] = translateToRing(n);
-                    field[0] = translateToField(n);
+                    ring[1] = translateToRing(n);
+                    field[1] = translateToField(n);
 
                     System.out.println("Feld in Repräsentationsarray: " + ring[1] + "/" + field[1]);
                     System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
@@ -188,9 +194,9 @@ public class FieldView extends AnchorPane {
                 });}}
         Platform.enterNestedEventLoop(loopObject2);
 
+        coordsArray[1] = new CoordinatesInRepresentation(ring[1],field[1]);
 
-
-        return new CoordinatesInRepresentation(ring[0], field[0]);
+        return coordsArray;
     }
 
     public void computerGraphicPut(int ring, int field){
@@ -240,17 +246,15 @@ public class FieldView extends AnchorPane {
         switch (viewManager.getGame().getCurrentPlayerIndex()){
             case 0:
                 player1StoneImage = blackStoneImage;
-                if (viewManager.getGame().isPhase1()){
-                    imageView.getScene().setCursor(blackStoneCursor);
-                }
+                imageView.getScene().setCursor(blackStoneCursor);
                 break;
             case 1:
                 player2StoneImage = whiteStoneImage;
-                if (viewManager.getGame().isPhase1()){
-                    imageView.getScene().setCursor(whiteStoneCursor);
-                }
+                imageView.getScene().setCursor(whiteStoneCursor);
                 break;}
     }
+
+
 
     private void setKillCursor(){
         imageView.getScene().setCursor(killCursor);

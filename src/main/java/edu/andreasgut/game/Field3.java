@@ -29,7 +29,7 @@ public class Field3 implements Cloneable{
         array[row][field] =  game.getCurrentPlayerIndex();
     }
 
-    public void move(int ringNow, int fieldNow, int ringDest, int fieldDest, boolean jump) throws InvalidMoveException, InvalidFieldException {
+    public void move(int ringNow, int fieldNow, int ringDest, int fieldDest) throws InvalidMoveException, InvalidFieldException {
         if (array[ringNow][fieldNow]!= game.getCurrentPlayerIndex()){
             throw new InvalidMoveException("Kein bzw. nicht dein Stein");
         }
