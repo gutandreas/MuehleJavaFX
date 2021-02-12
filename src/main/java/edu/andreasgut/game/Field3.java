@@ -95,7 +95,8 @@ public class Field3 implements Cloneable{
     }
 
     public void killStone(int ring, int field) throws InvalidKillException {
-        if (array[ring][field] == (game.getCurrentPlayerIndex()+1)%2 && checkKill(ring, field)){
+        if (array[ring][field] == (game.getCurrentPlayerIndex()+1)%2 &&
+                (checkKill(ring, field) || game.getOtherPlayer().isAllowedToJump())){
             array[ring][field] = 9;
             printField();
         }

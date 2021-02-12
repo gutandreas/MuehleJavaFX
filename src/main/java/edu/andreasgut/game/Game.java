@@ -12,7 +12,7 @@ public class Game {
     private Player player1;
     private Player winner;
     private int round;
-    private final int NUMBEROFSTONES = 4;
+    private final int NUMBEROFSTONES = 5;
     private Player currentPlayer;
     private Field3 field;
     private Field3 oldField;
@@ -52,6 +52,10 @@ public class Game {
 
     public Player getCurrentPlayer() {
         return currentPlayer;
+    }
+
+    public Player getOtherPlayer() {
+        return playerArrayList.get((getCurrentPlayerIndex()+1)%2);
     }
 
     public void updateCurrentPlayer(){
@@ -111,24 +115,23 @@ public class Game {
             if (round == NUMBEROFSTONES*2){
                 viewManager.getScoreView().updatePhase("Steine verschieben");
             }
+
             oldField = (Field3) getField().clone();
             field.printField();
-            System.out.println(getCurrentPlayer().getName() + " ist an der Reihe!");
 
             if (phase2==true && getField().numberOfStonesCurrentPlayer() <= 2){
-                gameOver = true;
-                winner = playerArrayList.get((getCurrentPlayerIndex()+1)%2);
-                viewManager.getScoreView().setWinnerlabel();
-                viewManager.getFieldView().setDisable(true);
-                System.out.println(winner.getName() + " hat das Spiel gewonnen!");
+                winGame();
             }
+
+            System.out.println(getCurrentPlayer().getName() + " ist an der Reihe!");
 
             setGamesPhaseBooleans();
             setCurrentPlayersJumpBoolean();
 
             putOrMove();
 
-            if (field.checkTriple(oldField) && field.isThereStoneToKill()){
+            if (field.checkTriple(oldField) && (field.isThereStoneToKill()
+                    || playerArrayList.get((getCurrentPlayerIndex()+1)%2).isAllowedToJump())){
                 kill();
             }
 
@@ -150,6 +153,13 @@ public class Game {
         if (round >= NUMBEROFSTONES*2 && getField().numberOfStonesCurrentPlayer()<=3){
             getCurrentPlayer().setAllowedToJump(true);
         }
+    }
+
+    private void winGame(){
+        winner = playerArrayList.get((getCurrentPlayerIndex()+1)%2);
+        viewManager.getScoreView().setWinnerlabel();
+        viewManager.getFieldView().setDisable(true);
+        System.out.println(winner.getName() + " hat das Spiel gewonnen!");
     }
 
     private void putOrMove() throws InvalidFieldException {

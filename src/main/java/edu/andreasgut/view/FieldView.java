@@ -131,7 +131,8 @@ public class FieldView extends AnchorPane {
         for (Node n : fieldGridPane.getChildren()){
             n.setOnMouseClicked(click -> {/* clear old function*/});
             if(((ImageView) n).getImage().equals(getEnemysStoneImage()) &&
-                viewManager.getGame().getField().checkKill(translateToRing(n),translateToField(n))){
+                    (viewManager.getGame().getField().checkKill(translateToRing(n),translateToField(n)))
+                    || viewManager.getGame().getOtherPlayer().isAllowedToJump()){
             n.setOnMouseClicked(click ->{
                 ring[0] = translateToRing(n);
                 field[0] = translateToField(n);
