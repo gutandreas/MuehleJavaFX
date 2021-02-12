@@ -98,7 +98,6 @@ public class Field3 implements Cloneable{
         if (array[ring][field] == (game.getCurrentPlayerIndex()+1)%2 &&
                 (checkKill(ring, field) || game.getOtherPlayer().isAllowedToJump())){
             array[ring][field] = 9;
-            printField();
         }
         else throw new InvalidKillException(
                 "Auf diesem Feld befindet sich kein gegnerischer Stein oder er liegt in einer Mühle (3er-Reihe)");

@@ -19,6 +19,7 @@ public class ViewManager {
     private StartMenuView startMenuView;
     private OptionsView optionsView;
     private MainMenuBar mainMenuBar;
+    private LogView logView;
     private FieldView fieldView;
     private ScoreView scoreView;
     private Game game;
@@ -67,6 +68,9 @@ public class ViewManager {
         fieldView = new FieldView(this);
         scoreView = new ScoreView(this);
         scoreView.getStyleClass().add("scoreview");
+        logView = new LogView(this);
+        logView.getStyleClass().add("logview");
+
 
         gamePane = new BorderPane();
         gameScene = new Scene(gamePane, WIDTH, HEIGHT);
@@ -78,6 +82,7 @@ public class ViewManager {
         gamePane.setTop(mainMenuBar);
         gamePane.setCenter(fieldView);
         gamePane.setLeft(scoreView);
+        gamePane.setRight(logView);
         gamePane.setBottom(optionsView);
         mainStage.setScene(gameScene);
     }
@@ -123,6 +128,8 @@ public class ViewManager {
     public ScoreView getScoreView() {
         return scoreView;
     }
+
+    public LogView getLogView() { return logView; }
 
     public Game getGame() {
         return game;

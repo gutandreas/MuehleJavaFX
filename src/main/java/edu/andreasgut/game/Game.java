@@ -121,9 +121,11 @@ public class Game {
 
             if (phase2==true && getField().numberOfStonesCurrentPlayer() <= 2){
                 winGame();
+                break;
             }
 
             System.out.println(getCurrentPlayer().getName() + " ist an der Reihe!");
+            viewManager.getLogView().setStatusLabel(getCurrentPlayer().getName() + " ist an der Reihe!");
 
             setGamesPhaseBooleans();
             setCurrentPlayersJumpBoolean();
@@ -132,6 +134,9 @@ public class Game {
 
             if (field.checkTriple(oldField) && (field.isThereStoneToKill()
                     || playerArrayList.get((getCurrentPlayerIndex()+1)%2).isAllowedToJump())){
+                System.out.println(currentPlayer.getName() + " darf einen gegnerischen Stein entfernen");
+                viewManager.getLogView().setStatusLabel(currentPlayer.getName() +
+                        " darf einen gegnerischen Stein entfernen. Wähle den Stein, der entfernt werden soll");
                 kill();
             }
 
@@ -157,7 +162,7 @@ public class Game {
 
     private void winGame(){
         winner = playerArrayList.get((getCurrentPlayerIndex()+1)%2);
-        viewManager.getScoreView().setWinnerlabel();
+        viewManager.getLogView().setStatusLabel(winner.getName() + " hat das Spiel gewonnen");
         viewManager.getFieldView().setDisable(true);
         System.out.println(winner.getName() + " hat das Spiel gewonnen!");
     }
@@ -170,6 +175,7 @@ public class Game {
             if (phase1){
                 CoordinatesInRepresentation tempCoords = viewManager.getFieldView().humanGraphicPut();
                 field.putStone(tempCoords.getRing(), tempCoords.getField());
+                viewManager.getScoreView().increaseStonesPut();
             }
 
             if(phase2){
@@ -190,12 +196,11 @@ public class Game {
                 int[] temp = ((Computer) player1).compPutStone(field);
                 field.putStone(temp[0], temp[1]);
                 viewManager.getFieldView().computerGraphicPut(temp[0], temp[1]);
+                viewManager.getScoreView().increaseStonesPut();
             }
-
-
         }
 
-        viewManager.getScoreView().increaseStonesPut();
+
     }
 
     private void kill(){
