@@ -65,6 +65,9 @@ public class StartMenuView extends VBox {
             viewManager.changeToGameScene();
 
             viewManager.getSoundManager().chooseSound(MUSIC.PLAY_SOUND);
+            if (!viewManager.getOptionsView().isMusicOn()){
+                viewManager.getSoundManager().stopMusic();
+            }
 
 
                 if (twoPlayersRadioButton.isSelected()){

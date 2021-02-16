@@ -29,7 +29,7 @@ public class ScoreView extends VBox {
 
         titleLabel = new Label("Spielstand");
         titleLabel.getStyleClass().add("labelTitle");
-        phaseLabel = new Label("Spielphase: Steine setzen");
+        phaseLabel = new Label("Phase: Steine setzen");
         phaseLabel.getStyleClass().add("biglabel");
         roundLabel = new Label("Spielzug: " + round);
         roundLabel.getStyleClass().add("biglabel");
@@ -67,7 +67,7 @@ public class ScoreView extends VBox {
     }
 
     public void updatePhase(String phase){
-        phaseLabel.setText("Spielphase: " + phase);
+        phaseLabel.setText("Phase: " + phase);
     }
 
     public void increaseStonesPut(){

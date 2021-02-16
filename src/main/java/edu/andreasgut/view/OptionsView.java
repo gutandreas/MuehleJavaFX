@@ -7,6 +7,7 @@ public class OptionsView extends HBox {
 
     private ToggleButton audioStartStopToggleButton;
     private ViewManager viewManager;
+    private boolean musicOn = true;
 
     public OptionsView(ViewManager viewManager) {
         this.viewManager = viewManager;
@@ -23,6 +24,7 @@ public class OptionsView extends HBox {
                 audioStartStopToggleButton.setText("Musik Aus");
                 audioStartStopToggleButton.getStyleClass().removeAll("toggleButtonOn");
                 audioStartStopToggleButton.getStyleClass().add("toggleButtonOff");
+                musicOn = false;
                 }
                 else {
                     viewManager.getSoundManager().getCurrentAudioclip().play();
@@ -30,11 +32,12 @@ public class OptionsView extends HBox {
                     audioStartStopToggleButton.setText("Musik Ein");
                     audioStartStopToggleButton.getStyleClass().removeAll("toggleButtonOff");
                     audioStartStopToggleButton.getStyleClass().add("toggleButtonOn");
+                    musicOn = true;
                 }
             });
     }
 
-
-
-
+    public boolean isMusicOn() {
+        return musicOn;
+    }
 }

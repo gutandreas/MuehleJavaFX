@@ -1,7 +1,6 @@
 package edu.andreasgut.view;
 
 import edu.andreasgut.sound.SOUNDEFFECT;
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
