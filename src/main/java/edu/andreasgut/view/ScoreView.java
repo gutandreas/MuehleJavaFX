@@ -107,6 +107,34 @@ public class ScoreView extends VBox {
         roundLabel.setText("Spielzug: " + ++round);
     }
 
+
+    public void setPlayerLabelEffects(){
+        switch (viewManager.getGame().getCurrentPlayerIndex()){
+            case 0:
+                viewManager.getScoreView().getPlayer1Label().getStyleClass().add("labelCurrentPlayer");
+                viewManager.getScoreView().getStonesKilledPlayer1Label().getStyleClass().add("labelCurrentPlayer");
+                viewManager.getScoreView().getStonesLostPlayer1Label().getStyleClass().add("labelCurrentPlayer");
+                viewManager.getScoreView().getStonesPutPlayer1Label().getStyleClass().add("labelCurrentPlayer");
+
+                viewManager.getScoreView().getPlayer2Label().getStyleClass().add("labelOtherPlayer");
+                viewManager.getScoreView().getStonesKilledPlayer2Label().getStyleClass().add("labelOtherPlayer");
+                viewManager.getScoreView().getStonesLostPlayer2Label().getStyleClass().add("labelOtherPlayer");
+                viewManager.getScoreView().getStonesPutPlayer2Label().getStyleClass().add("labelOtherPlayer");
+                break;
+            case 1:
+                viewManager.getScoreView().getPlayer2Label().getStyleClass().add("labelCurrentPlayer");
+                viewManager.getScoreView().getStonesKilledPlayer2Label().getStyleClass().add("labelCurrentPlayer");
+                viewManager.getScoreView().getStonesLostPlayer2Label().getStyleClass().add("labelCurrentPlayer");
+                viewManager.getScoreView().getStonesPutPlayer2Label().getStyleClass().add("labelCurrentPlayer");
+
+                viewManager.getScoreView().getPlayer1Label().getStyleClass().add("labelOtherPlayer");
+                viewManager.getScoreView().getStonesKilledPlayer1Label().getStyleClass().add("labelOtherPlayer");
+                viewManager.getScoreView().getStonesLostPlayer1Label().getStyleClass().add("labelOtherPlayer");
+                viewManager.getScoreView().getStonesPutPlayer1Label().getStyleClass().add("labelOtherPlayer");
+                break;
+        }
+    }
+
     public Label getPlayer1Label() {
         return player1Label;
     }
@@ -115,5 +143,27 @@ public class ScoreView extends VBox {
         return player2Label;
     }
 
+    public Label getStonesPutPlayer1Label() {
+        return stonesPutPlayer1Label;
+    }
 
+    public Label getStonesPutPlayer2Label() {
+        return stonesPutPlayer2Label;
+    }
+
+    public Label getStonesLostPlayer1Label() {
+        return stonesLostPlayer1Label;
+    }
+
+    public Label getStonesLostPlayer2Label() {
+        return stonesLostPlayer2Label;
+    }
+
+    public Label getStonesKilledPlayer1Label() {
+        return stonesKilledPlayer1Label;
+    }
+
+    public Label getStonesKilledPlayer2Label() {
+        return stonesKilledPlayer2Label;
+    }
 }

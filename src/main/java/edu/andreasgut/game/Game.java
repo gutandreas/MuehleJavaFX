@@ -2,6 +2,8 @@ package edu.andreasgut.game;
 
 import edu.andreasgut.view.CoordinatesInRepresentation;
 import edu.andreasgut.view.ViewManager;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -116,6 +118,8 @@ public class Game {
                 viewManager.getScoreView().updatePhase("Steine verschieben");
             }
 
+            //viewManager.getScoreView().setPlayerLabelEffects(); // funktioniert noch nicht wie gewünscht
+
             oldField = (Field3) getField().clone();
             field.printField();
 
@@ -146,6 +150,8 @@ public class Game {
             }
 
     }
+
+
 
 
     private void setGamesPhaseBooleans(){

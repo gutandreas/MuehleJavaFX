@@ -34,12 +34,20 @@
 }
 
 .menu-bar .label {
-    -fx-text-fill: black;
+   -fx-font-weight: 900;
     -fx-effect: none;
 }
 
 .labelWarning{
     -fx-text-fill: #ee6060;
+}
+
+.labelCurrentPlayer{
+    -fx-effect: innershadow( three-pass-box , rgba(200,200,220,0.7) , 5, 0.0 , 0 , 1 );
+}
+
+.labelOtherPlayer{
+    -fx-effect: innershadow( three-pass-box , rgba(0,0,0,1) , 5, 0.0 , 0 , 1 );
 }
 
 .labelPut{

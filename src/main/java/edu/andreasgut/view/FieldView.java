@@ -21,7 +21,8 @@ public class FieldView extends AnchorPane {
     private Image image;
     private ViewManager viewManager;
     private Image blackStoneImage, whiteStoneImage, player1StoneImage, player2StoneImage, emptyField, forbiddenField, allowedField;
-    private ImageCursor blackStoneCursor, whiteStoneCursor, killCursor, handCursor, blackStoneCursorTest;
+    private ImageCursor blackStoneCursor, whiteStoneCursor, handCursorWhite, handCursorBlack,
+            killCursorWhite, killCursorBlack;
     private GridPane fieldGridPane;
     private CoordinatesInRepresentation[][] translationArrayGraphicToRepresentation;
     private int[][] translationArrayRepresentationToIndex;
@@ -46,18 +47,20 @@ public class FieldView extends AnchorPane {
         emptyField = new Image("edu/andreasgut/Images/FullyTransparent.png");
         allowedField = new Image("edu/andreasgut/Images/GreenTransparent.png");
         forbiddenField = new Image("edu/andreasgut/Images/FullyTransparent.png");
-        killCursor = new ImageCursor(new Image("edu/andreasgut/Images/KillCursor.png",
-                85,85,true,true));
+
         whiteStoneCursor = new ImageCursor(new Image("edu/andreasgut/Images/SpielsteinWeiss.png",
                 85,85,true,true),
                 whiteStoneImage.getWidth()/2, whiteStoneImage.getHeight()/2);
         blackStoneCursor = new ImageCursor(new Image("edu/andreasgut/Images/SpielsteinSchwarz.png",
                 85, 85, true, true),
                 blackStoneImage.getWidth()/2, blackStoneImage.getHeight()/2);
-        blackStoneCursorTest = new ImageCursor(new Image("edu/andreasgut/Images/HandCursorBlackStone.png",
-                85, 85, true, true),
-                blackStoneImage.getWidth()/2, blackStoneImage.getHeight()/2);
-        handCursor = new ImageCursor(new Image("edu/andreasgut/Images/HandCursor.png",
+        handCursorWhite = new ImageCursor(new Image("edu/andreasgut/Images/HandCursorWhite.png",
+                85, 85, true, true));
+        handCursorBlack = new ImageCursor(new Image("edu/andreasgut/Images/HandCursorBlack.png",
+                85, 85, true, true));
+        killCursorWhite = new ImageCursor(new Image("edu/andreasgut/Images/KillCursorWhite.png",
+                85, 85, true, true));
+        killCursorBlack = new ImageCursor(new Image("edu/andreasgut/Images/KillCursorBlack.png",
                 85, 85, true, true));
 
         fieldGridPane = new GridPane();
@@ -257,17 +260,37 @@ public class FieldView extends AnchorPane {
 
 
     private void setKillCursor(){
-        imageView.getScene().setCursor(killCursor);
+       chooseKillCursor();
         fieldGridPane.setOnMouseEntered(enter ->{
-            imageView.getScene().setCursor(killCursor);
+            chooseKillCursor();
         });
     }
 
+    private void chooseKillCursor() {
+        switch (viewManager.getGame().getCurrentPlayerIndex()){
+            case 0:
+                imageView.getScene().setCursor(killCursorBlack);
+                break;
+            case 1:
+                imageView.getScene().setCursor(killCursorWhite);
+                break;}
+    }
+
     private void setMoveCursor(){
-        imageView.getScene().setCursor(handCursor);
+        chooseMoveCursor();
         fieldGridPane.setOnMouseEntered(enter ->{
-            imageView.getScene().setCursor(handCursor);
+            chooseMoveCursor();
         });
+    }
+
+    private void chooseMoveCursor(){
+        switch (viewManager.getGame().getCurrentPlayerIndex()){
+            case 0:
+                imageView.getScene().setCursor(handCursorBlack);
+                break;
+            case 1:
+                imageView.getScene().setCursor(handCursorWhite);
+                break;}
     }
 
     private int translateToRing(Node node){
