@@ -16,6 +16,10 @@ edu/andreasgut/game/InvalidKillException.java
  edu.andreasgut.game.InvalidKillException
 edu/andreasgut/sound/SOUNDEFFECT.java
  edu.andreasgut.sound.SOUNDEFFECT
+edu/andreasgut/game/Field3.java
+ edu.andreasgut.game.Field3
+edu/andreasgut/game/Computer.java
+ edu.andreasgut.game.Computer
 edu/andreasgut/view/StartMenuView.java
  edu.andreasgut.view.StartMenuView
 edu/andreasgut/view/OptionsView.java
@@ -25,8 +29,6 @@ edu/andreasgut/sound/SoundManager.java
  edu.andreasgut.sound.SoundManager$1
 edu/andreasgut/view/ViewManager.java
  edu.andreasgut.view.ViewManager
-edu/andreasgut/game/Computer.java
- edu.andreasgut.game.Computer
 edu/andreasgut/view/FieldView.java
  edu.andreasgut.view.FieldView
 edu/andreasgut/view/ScoreView.java
@@ -38,8 +40,6 @@ edu/andreasgut/view/MainMenuBar.java
  edu.andreasgut.view.MainMenuBar$3
 edu/andreasgut/game/Game.java
  edu.andreasgut.game.Game
-edu/andreasgut/game/Field3.java
- edu.andreasgut.game.Field3
 edu/andreasgut/view/StartImageView.java
  edu.andreasgut.view.StartImageView
 edu/andreasgut/view/LogView.java
