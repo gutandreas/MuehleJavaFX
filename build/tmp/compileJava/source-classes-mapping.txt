@@ -1,25 +1,25 @@
-edu/andreasgut/sound/MUSIC.java
- edu.andreasgut.sound.MUSIC
 edu/andreasgut/game/Player.java
  edu.andreasgut.game.Player
-edu/andreasgut/view/CoordinatesInRepresentation.java
- edu.andreasgut.view.CoordinatesInRepresentation
+edu/andreasgut/view/fxElements/SelectColorButton.java
+ edu.andreasgut.view.fxElements.SelectColorButton
 edu/andreasgut/Main.java
  edu.andreasgut.Main
-edu/andreasgut/sound/SOUNDEFFECT.java
- edu.andreasgut.sound.SOUNDEFFECT
-edu/andreasgut/game/InvalidFieldException.java
- edu.andreasgut.game.InvalidFieldException
+edu/andreasgut/view/CoordinatesInRepresentation.java
+ edu.andreasgut.view.CoordinatesInRepresentation
 edu/andreasgut/game/InvalidMoveException.java
  edu.andreasgut.game.InvalidMoveException
-edu/andreasgut/game/InvalidKillException.java
- edu.andreasgut.game.InvalidKillException
+edu/andreasgut/sound/MUSIC.java
+ edu.andreasgut.sound.MUSIC
+edu/andreasgut/game/InvalidFieldException.java
+ edu.andreasgut.game.InvalidFieldException
 edu/andreasgut/Launcher.java
  edu.andreasgut.Launcher
 edu/andreasgut/view/fxElements/STONECOLOR.java
  edu.andreasgut.view.fxElements.STONECOLOR
-edu/andreasgut/view/fxElements/SelectColorButton.java
- edu.andreasgut.view.fxElements.SelectColorButton
+edu/andreasgut/game/InvalidKillException.java
+ edu.andreasgut.game.InvalidKillException
+edu/andreasgut/sound/SOUNDEFFECT.java
+ edu.andreasgut.sound.SOUNDEFFECT
 edu/andreasgut/view/StartMenuView.java
  edu.andreasgut.view.StartMenuView
 edu/andreasgut/view/OptionsView.java

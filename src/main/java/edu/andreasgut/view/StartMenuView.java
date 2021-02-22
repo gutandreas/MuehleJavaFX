@@ -110,6 +110,22 @@ public class StartMenuView extends VBox {
 
         });
 
+        stonesBlackButton2.setOnAction(click -> {
+            stonesBlackButton2.setSelected(true);
+            stonesBlackButton2.getStyleClass().removeAll("selectColorButtonOff");
+            stonesBlackButton2.getStyleClass().add("selectColorButtonOn");
+            stonesWhiteButton2.setSelected(false);
+            stonesWhiteButton2.getStyleClass().removeAll("selectColorButtonOn");
+            stonesWhiteButton2.getStyleClass().add("selectColorButtonOff");
+            stonesBlackButton1.setSelected(false);
+            stonesBlackButton1.getStyleClass().removeAll("selectColorButtonOn");
+            stonesBlackButton1.getStyleClass().add("selectColorButtonOff");
+            stonesWhiteButton1.setSelected(true);
+            stonesWhiteButton1.getStyleClass().removeAll("selectColorButtonOff");
+            stonesWhiteButton1.getStyleClass().add("selectColorButtonOn");
+
+        });
+
         stonesWhiteButton1.setOnAction(click -> {
             stonesWhiteButton1.setSelected(true);
             stonesWhiteButton1.getStyleClass().removeAll("selectColorButtonOff");
@@ -123,6 +139,21 @@ public class StartMenuView extends VBox {
             stonesWhiteButton2.setSelected(false);
             stonesWhiteButton2.getStyleClass().removeAll("selectColorButtonOn");
             stonesWhiteButton2.getStyleClass().add("selectColorButtonOff");
+        });
+
+        stonesWhiteButton2.setOnAction(click -> {
+            stonesWhiteButton2.setSelected(true);
+            stonesWhiteButton2.getStyleClass().removeAll("selectColorButtonOff");
+            stonesWhiteButton2.getStyleClass().add("selectColorButtonOn");
+            stonesBlackButton2.setSelected(false);
+            stonesBlackButton2.getStyleClass().removeAll("selectColorButtonOn");
+            stonesBlackButton2.getStyleClass().add("selectColorButtonOff");
+            stonesBlackButton1.setSelected(true);
+            stonesBlackButton1.getStyleClass().removeAll("selectColorButtonOff");
+            stonesBlackButton1.getStyleClass().add("selectColorButtonOn");
+            stonesWhiteButton1.setSelected(false);
+            stonesWhiteButton1.getStyleClass().removeAll("selectColorButtonOn");
+            stonesWhiteButton1.getStyleClass().add("selectColorButtonOff");
         });
     }
 
