@@ -17,7 +17,7 @@ public class StartMenuView extends VBox {
     ViewManager viewManager;
     VBox vBox;
     HBox hBoxRadioButtons, player1HBox, player2HBox;
-    ToggleGroup radioButtonGroup, colorButtonGroup1, colorButtonGroup2;
+    ToggleGroup radioButtonGroup;
     RadioButton onePlayerRadioButton, twoPlayersRadioButton;
     TextField namePlayer1Textfield, namePlayer2Textfield;
     Label informationLabel, titleLabel, stonesColorLabel1, stonesColorLabel2;
@@ -27,13 +27,34 @@ public class StartMenuView extends VBox {
 
 
     public StartMenuView(ViewManager viewManager) {
+        this.viewManager = viewManager;
         this.setPrefWidth(STARTDIMENSION);
         vBox = new VBox();
-        hBoxRadioButtons = new HBox();
+        startButton = new Button("Start");
+
+        setupTitleAndWarning();
+        setupRadioButtons();
+        setupPlayerInformations();
+
+        vBox.getChildren().addAll(titleLabel, informationLabel, hBoxRadioButtons, player1HBox, player2HBox, startButton);
+        vBox.setSpacing(20);
+        this.getChildren().addAll(vBox);
+        this.setAlignment(Pos.CENTER);
+
+        setupRadioButtonAction();
+        setupColorButtonAction();
+        setupStartButtonAction();
+    }
+
+    private void setupTitleAndWarning(){
         titleLabel = new Label("Neues Spiel starten");
         titleLabel.getStyleClass().add("labelTitle");
         informationLabel = new Label();
         informationLabel.getStyleClass().add("labelWarning");
+    }
+
+    private void setupRadioButtons(){
+        hBoxRadioButtons = new HBox();
         radioButtonGroup = new ToggleGroup();
         onePlayerRadioButton = new RadioButton("Ein Spieler");
         onePlayerRadioButton.setToggleGroup(radioButtonGroup);
@@ -42,8 +63,9 @@ public class StartMenuView extends VBox {
         hBoxRadioButtons.getChildren().addAll(onePlayerRadioButton, twoPlayersRadioButton);
         hBoxRadioButtons.setSpacing(20);
         radioButtonGroup.selectToggle(onePlayerRadioButton);
-        startButton = new Button("Start");
+    }
 
+    private void setupPlayerInformations(){
         namePlayer1Textfield = new TextField();
         namePlayer1Textfield.setPromptText("Name Spieler 1");
         stonesColorLabel1 = new Label("Steinfarbe: ");
@@ -69,7 +91,9 @@ public class StartMenuView extends VBox {
         player2HBox.getChildren().addAll(namePlayer2Textfield, stonesColorLabel2, stonesBlackButton2, stonesWhiteButton2);
         player2HBox.setSpacing(20);
         player2HBox.setAlignment(Pos.CENTER_LEFT);
+    }
 
+    private void setupColorButtonAction(){
         stonesBlackButton1.setOnAction(click -> {
             stonesBlackButton1.setSelected(true);
             stonesBlackButton1.getStyleClass().removeAll("selectColorButtonOff");
@@ -99,45 +123,38 @@ public class StartMenuView extends VBox {
             stonesWhiteButton2.setSelected(false);
             stonesWhiteButton2.getStyleClass().removeAll("selectColorButtonOn");
             stonesWhiteButton2.getStyleClass().add("selectColorButtonOff");
-            });
+        });
+    }
 
-
-
-
-
-        vBox.getChildren().addAll(titleLabel, informationLabel, hBoxRadioButtons, player1HBox, player2HBox, startButton);
-        vBox.setSpacing(20);
-        this.getChildren().addAll(vBox);
-        this.setAlignment(Pos.CENTER);
-
-
+    private void setupRadioButtonAction(){
         onePlayerRadioButton.setOnAction(action -> {
-                namePlayer2Textfield.setVisible(false);
-                namePlayer2Textfield.clear();
-                stonesColorLabel2.setVisible(false);
-                stonesBlackButton2.setVisible(false);
-                stonesWhiteButton2.setVisible(false);
-                });
+            namePlayer2Textfield.setVisible(false);
+            namePlayer2Textfield.clear();
+            stonesColorLabel2.setVisible(false);
+            stonesBlackButton2.setVisible(false);
+            stonesWhiteButton2.setVisible(false);
+        });
         twoPlayersRadioButton.setOnAction(action -> {
-                namePlayer2Textfield.setVisible(true);
-                stonesColorLabel2.setVisible(true);
-                stonesBlackButton2.setVisible(true);
-                stonesWhiteButton2.setVisible(true);
-                });
+            namePlayer2Textfield.setVisible(true);
+            stonesColorLabel2.setVisible(true);
+            stonesBlackButton2.setVisible(true);
+            stonesWhiteButton2.setVisible(true);
+        });
+    }
 
+    private void setupStartButtonAction(){
         startButton.setOnAction( action -> {
 
             if ((radioButtonGroup.getSelectedToggle().equals(onePlayerRadioButton) &&
                     namePlayer1Textfield.getText().length()>0)
                     || (radioButtonGroup.getSelectedToggle().equals(twoPlayersRadioButton) &&
                     namePlayer1Textfield.getText().length()>0 && namePlayer2Textfield.getText().length()>0)){
-            viewManager.changeToGameScene();
+                viewManager.changeToGameScene();
 
-            viewManager.getSoundManager().chooseSound(MUSIC.PLAY_SOUND);
-            if (!viewManager.getOptionsView().isMusicOn()){
-                viewManager.getSoundManager().stopMusic();
-            }
-
+                viewManager.getSoundManager().chooseSound(MUSIC.PLAY_SOUND);
+                if (!viewManager.getOptionsView().isMusicOn()){
+                    viewManager.getSoundManager().stopMusic();
+                }
 
                 if (twoPlayersRadioButton.isSelected()){
                     viewManager.setGame(new Game(viewManager,
@@ -149,16 +166,16 @@ public class StartMenuView extends VBox {
                             new Player(namePlayer1Textfield.getText().toUpperCase())));
                 }
 
-            viewManager.getScoreView().updatePlayerNames(viewManager.getGame().getPlayer0(),
+                viewManager.getScoreView().updatePlayerNames(viewManager.getGame().getPlayer0(),
                         viewManager.getGame().getPlayer1());
 
-            try {
-                viewManager.getGame().play();
-            } catch (InvalidFieldException e) {
-                e.printStackTrace();
-            }
+                try {
+                    viewManager.getGame().play();
+                } catch (InvalidFieldException e) {
+                    e.printStackTrace();
+                }
 
             }
             else {informationLabel.setText("Es fehlen Eingaben, um das Spiel zu starten");}});
-
-}}
+    }
+}
