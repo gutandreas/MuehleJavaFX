@@ -1,3 +1,4 @@
+
 .root{
     -fx-background-color: linear-gradient(to bottom, #383838, #303030);
     -fx-font-size: 15;
@@ -10,6 +11,8 @@
 .startMenuView{
     -fx-padding: 20;
 }
+
+
 
 
 .startImageView {
@@ -51,7 +54,7 @@
 }
 
 .menu-bar .label {
-   -fx-font-weight: 900;
+    -fx-text-fill: black;
     -fx-effect: none;
 }
 
@@ -111,5 +114,13 @@
 .radio-button{
     -fx-text-fill: white;
     -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.15) , 5, 0.0 , 0 , 1 );
+}
+
+.selectColorButtonOn{
+    -fx-background-color: #c2eafc;
+}
+
+.selectColorButtonOff{
+    -fx-background-color: transparent;
 }
 

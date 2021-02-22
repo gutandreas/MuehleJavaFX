@@ -38,9 +38,9 @@ public class FieldView extends AnchorPane {
         image = new Image("edu/andreasgut/Images/Spielfeld.png",
                 600, 600, true, true);
         imageView.setImage(image);
-        blackStoneImage = new Image("edu/andreasgut/Images/SpielsteinSchwarz.png",
+        blackStoneImage = new Image("edu/andreasgut/Images/StoneBlack.png",
                 85,85,true,true);
-        whiteStoneImage = new Image("edu/andreasgut/Images/SpielsteinWeiss.png",
+        whiteStoneImage = new Image("edu/andreasgut/Images/StoneWhite.png",
                 85,85,true,true);
         player1StoneImage = blackStoneImage;
         player2StoneImage = whiteStoneImage;
@@ -48,10 +48,10 @@ public class FieldView extends AnchorPane {
         allowedField = new Image("edu/andreasgut/Images/GreenTransparent.png");
         forbiddenField = new Image("edu/andreasgut/Images/FullyTransparent.png");
 
-        whiteStoneCursor = new ImageCursor(new Image("edu/andreasgut/Images/SpielsteinWeiss.png",
+        whiteStoneCursor = new ImageCursor(new Image("edu/andreasgut/Images/StoneWhite.png",
                 85,85,true,true),
                 whiteStoneImage.getWidth()/2, whiteStoneImage.getHeight()/2);
-        blackStoneCursor = new ImageCursor(new Image("edu/andreasgut/Images/SpielsteinSchwarz.png",
+        blackStoneCursor = new ImageCursor(new Image("edu/andreasgut/Images/StoneBlack.png",
                 85, 85, true, true),
                 blackStoneImage.getWidth()/2, blackStoneImage.getHeight()/2);
         handCursorWhite = new ImageCursor(new Image("edu/andreasgut/Images/HandCursorWhite.png",

@@ -4,7 +4,8 @@ import edu.andreasgut.game.Game;
 import edu.andreasgut.game.InvalidFieldException;
 import edu.andreasgut.game.Player;
 import edu.andreasgut.sound.MUSIC;
-import edu.andreasgut.view.fxElements.ToggleSwitch;
+import edu.andreasgut.view.fxElements.STONECOLOR;
+import edu.andreasgut.view.fxElements.SelectColorButton;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
@@ -16,12 +17,13 @@ public class StartMenuView extends VBox {
     ViewManager viewManager;
     VBox vBox;
     HBox hBoxRadioButtons, player1HBox, player2HBox;
-    ToggleGroup radioButtonGroup;
+    ToggleGroup radioButtonGroup, colorButtonGroup1, colorButtonGroup2;
     RadioButton onePlayerRadioButton, twoPlayersRadioButton;
     TextField namePlayer1Textfield, namePlayer2Textfield;
     Label informationLabel, titleLabel, stonesColorLabel1, stonesColorLabel2;
-    Button startButton, blackWhiteButton1, blackWhiteButton2;
-    ToggleSwitch whiteBlackToggleSwitch1, whiteBlackToggleSwitch2;
+    Button startButton;
+    SelectColorButton stonesBlackButton1, stonesWhiteButton1, stonesBlackButton2, stonesWhiteButton2;
+
 
 
     public StartMenuView(ViewManager viewManager) {
@@ -44,41 +46,84 @@ public class StartMenuView extends VBox {
 
         namePlayer1Textfield = new TextField();
         namePlayer1Textfield.setPromptText("Name Spieler 1");
-        whiteBlackToggleSwitch1 = new ToggleSwitch();
         stonesColorLabel1 = new Label("Steinfarbe: ");
+        stonesBlackButton1 = new SelectColorButton(null, STONECOLOR.BLACK, true);
+        stonesWhiteButton1 = new SelectColorButton(null, STONECOLOR.WHITE, false);
+
         player1HBox = new HBox();
-        player1HBox.getChildren().addAll(namePlayer1Textfield, stonesColorLabel1, whiteBlackToggleSwitch1);
+        player1HBox.getChildren().addAll(namePlayer1Textfield, stonesColorLabel1, stonesBlackButton1, stonesWhiteButton1);
         player1HBox.setSpacing(20);
         player1HBox.setAlignment(Pos.CENTER_LEFT);
 
         namePlayer2Textfield = new TextField();
         namePlayer2Textfield.setPromptText("Name Spieler 2");
-        namePlayer2Textfield.setDisable(true);
-        whiteBlackToggleSwitch2 = new ToggleSwitch();
-        whiteBlackToggleSwitch2.setSwitchedOn(true);
-        whiteBlackToggleSwitch2.setDisable(true);
+        namePlayer2Textfield.setVisible(false);
         stonesColorLabel2 = new Label("Steinfarbe: ");
+        stonesColorLabel2.setVisible(false);
+        stonesBlackButton2 = new SelectColorButton(null, STONECOLOR.BLACK, false);
+        stonesBlackButton2.setVisible(false);
+        stonesWhiteButton2 = new SelectColorButton(null, STONECOLOR.WHITE, true);
+        stonesWhiteButton2.setVisible(false);
+
         player2HBox = new HBox();
-        player2HBox.getChildren().addAll(namePlayer2Textfield, stonesColorLabel2, whiteBlackToggleSwitch2);
+        player2HBox.getChildren().addAll(namePlayer2Textfield, stonesColorLabel2, stonesBlackButton2, stonesWhiteButton2);
         player2HBox.setSpacing(20);
         player2HBox.setAlignment(Pos.CENTER_LEFT);
-        stonesColorLabel2 = new Label("Steinfarbe: ");
+
+        stonesBlackButton1.setOnAction(click -> {
+            stonesBlackButton1.setSelected(true);
+            stonesBlackButton1.getStyleClass().removeAll("selectColorButtonOff");
+            stonesBlackButton1.getStyleClass().add("selectColorButtonOn");
+            stonesWhiteButton1.setSelected(false);
+            stonesWhiteButton1.getStyleClass().removeAll("selectColorButtonOn");
+            stonesWhiteButton1.getStyleClass().add("selectColorButtonOff");
+            stonesBlackButton2.setSelected(false);
+            stonesBlackButton2.getStyleClass().removeAll("selectColorButtonOn");
+            stonesBlackButton2.getStyleClass().add("selectColorButtonOff");
+            stonesWhiteButton2.setSelected(true);
+            stonesWhiteButton2.getStyleClass().removeAll("selectColorButtonOff");
+            stonesWhiteButton2.getStyleClass().add("selectColorButtonOn");
+
+        });
+
+        stonesWhiteButton1.setOnAction(click -> {
+            stonesWhiteButton1.setSelected(true);
+            stonesWhiteButton1.getStyleClass().removeAll("selectColorButtonOff");
+            stonesWhiteButton1.getStyleClass().add("selectColorButtonOn");
+            stonesBlackButton1.setSelected(false);
+            stonesBlackButton1.getStyleClass().removeAll("selectColorButtonOn");
+            stonesBlackButton1.getStyleClass().add("selectColorButtonOff");
+            stonesBlackButton2.setSelected(true);
+            stonesBlackButton2.getStyleClass().removeAll("selectColorButtonOff");
+            stonesBlackButton2.getStyleClass().add("selectColorButtonOn");
+            stonesWhiteButton2.setSelected(false);
+            stonesWhiteButton2.getStyleClass().removeAll("selectColorButtonOn");
+            stonesWhiteButton2.getStyleClass().add("selectColorButtonOff");
+            });
+
+
+
+
 
         vBox.getChildren().addAll(titleLabel, informationLabel, hBoxRadioButtons, player1HBox, player2HBox, startButton);
         vBox.setSpacing(20);
         this.getChildren().addAll(vBox);
         this.setAlignment(Pos.CENTER);
 
-        whiteBlackToggleSwitch1.setSwitchedOn(whiteBlackToggleSwitch2.isSwitchedOn());
 
         onePlayerRadioButton.setOnAction(action -> {
-                namePlayer2Textfield.setDisable(true);
+                namePlayer2Textfield.setVisible(false);
                 namePlayer2Textfield.clear();
-                whiteBlackToggleSwitch2.setDisable(true);});
+                stonesColorLabel2.setVisible(false);
+                stonesBlackButton2.setVisible(false);
+                stonesWhiteButton2.setVisible(false);
+                });
         twoPlayersRadioButton.setOnAction(action -> {
-                startButton.setDisable(false);
-                namePlayer2Textfield.setDisable(false);
-                whiteBlackToggleSwitch2.setDisable(false);});
+                namePlayer2Textfield.setVisible(true);
+                stonesColorLabel2.setVisible(true);
+                stonesBlackButton2.setVisible(true);
+                stonesWhiteButton2.setVisible(true);
+                });
 
         startButton.setOnAction( action -> {
 
