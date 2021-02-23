@@ -26,6 +26,7 @@ public class StartMenuView extends VBox {
     Button startButton;
     SelectColorButton stonesBlackButton1, stonesWhiteButton1, stonesBlackButton2, stonesWhiteButton2;
     ImageView player1StonesImageView, player2StonesImageView;
+    STONECOLOR player1Color, player2Color;
 
 
 
@@ -74,7 +75,7 @@ public class StartMenuView extends VBox {
         stonesColorLabel1 = new Label("Steinfarbe: ");
         stonesBlackButton1 = new SelectColorButton(null, STONECOLOR.BLACK, true);
         stonesWhiteButton1 = new SelectColorButton(null, STONECOLOR.WHITE, false);
-        player1StonesImageView = new ImageView(new Image(STONECOLOR.BLACK.getPath()));
+        player1Color = STONECOLOR.BLACK;
 
         player1HBox = new HBox();
         player1HBox.getChildren().addAll(namePlayer1Textfield, stonesColorLabel1, stonesBlackButton1, stonesWhiteButton1);
@@ -90,7 +91,7 @@ public class StartMenuView extends VBox {
         stonesBlackButton2.setVisible(false);
         stonesWhiteButton2 = new SelectColorButton(null, STONECOLOR.WHITE, true);
         stonesWhiteButton2.setVisible(false);
-        player2StonesImageView = new ImageView(new Image(STONECOLOR.WHITE.getPath()));
+        player2Color = STONECOLOR.WHITE;
 
         player2HBox = new HBox();
         player2HBox.getChildren().addAll(namePlayer2Textfield, stonesColorLabel2, stonesBlackButton2, stonesWhiteButton2);
@@ -112,8 +113,8 @@ public class StartMenuView extends VBox {
             stonesWhiteButton2.setSelected(true);
             stonesWhiteButton2.getStyleClass().removeAll("selectColorButtonOff");
             stonesWhiteButton2.getStyleClass().add("selectColorButtonOn");
-            player1StonesImageView.setImage(new Image(STONECOLOR.BLACK.getPath()));
-            player2StonesImageView.setImage(new Image(STONECOLOR.WHITE.getPath()));
+            player1Color = STONECOLOR.BLACK;
+            player2Color = STONECOLOR.WHITE;
 
         });
 
@@ -130,8 +131,8 @@ public class StartMenuView extends VBox {
             stonesWhiteButton1.setSelected(true);
             stonesWhiteButton1.getStyleClass().removeAll("selectColorButtonOff");
             stonesWhiteButton1.getStyleClass().add("selectColorButtonOn");
-            player2StonesImageView.setImage(new Image(STONECOLOR.BLACK.getPath()));
-            player1StonesImageView.setImage(new Image(STONECOLOR.WHITE.getPath()));
+            player2Color = STONECOLOR.BLACK;
+            player1Color = STONECOLOR.WHITE;
 
         });
 
@@ -148,8 +149,8 @@ public class StartMenuView extends VBox {
             stonesWhiteButton2.setSelected(false);
             stonesWhiteButton2.getStyleClass().removeAll("selectColorButtonOn");
             stonesWhiteButton2.getStyleClass().add("selectColorButtonOff");
-            player1StonesImageView.setImage(new Image(STONECOLOR.WHITE.getPath()));
-            player2StonesImageView.setImage(new Image(STONECOLOR.BLACK.getPath()));
+            player1Color = STONECOLOR.WHITE;
+            player2Color = STONECOLOR.BLACK;
         });
 
         stonesWhiteButton2.setOnAction(click -> {
@@ -165,8 +166,8 @@ public class StartMenuView extends VBox {
             stonesWhiteButton1.setSelected(false);
             stonesWhiteButton1.getStyleClass().removeAll("selectColorButtonOn");
             stonesWhiteButton1.getStyleClass().add("selectColorButtonOff");
-            player2StonesImageView.setImage(new Image(STONECOLOR.WHITE.getPath()));
-            player1StonesImageView.setImage(new Image(STONECOLOR.BLACK.getPath()));
+            player2Color = STONECOLOR.WHITE;
+            player1Color = STONECOLOR.BLACK;
         });
     }
 
@@ -209,8 +210,8 @@ public class StartMenuView extends VBox {
                             new Player(namePlayer1Textfield.getText().toUpperCase())));
                 }
 
-                viewManager.createGameScene(new FieldView(viewManager),
-                        new ScoreView(viewManager, player1StonesImageView, player2StonesImageView),
+                viewManager.createGameScene(new FieldView(viewManager, player1Color, player2Color),
+                        new ScoreView(viewManager, player1Color, player2Color),
                         new LogView(viewManager));
 
                 /*viewManager.getScoreView().updatePlayerNames(viewManager.getGame().getPlayer0(),

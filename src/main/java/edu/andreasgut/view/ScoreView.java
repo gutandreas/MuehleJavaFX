@@ -1,7 +1,7 @@
 package edu.andreasgut.view;
 
 import edu.andreasgut.game.Player;
-import javafx.geometry.Pos;
+import edu.andreasgut.view.fxElements.STONECOLOR;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -26,7 +26,7 @@ public class ScoreView extends VBox {
     private int stonesKilled2 = 0;
 
 
-    public ScoreView(ViewManager viewManager, ImageView player1ImageView, ImageView player2ImageView) {
+    public ScoreView(ViewManager viewManager, STONECOLOR player1Color, STONECOLOR player2Color) {
         this.viewManager = viewManager;
         this.getStyleClass().add("scoreview");
 
@@ -51,9 +51,9 @@ public class ScoreView extends VBox {
         stonesKilledPlayer1Label.getStyleClass().add("labelKilled");
         player1LabelsVBox = new VBox();
         player1LabelsVBox.getChildren().addAll(stonesPutPlayer1Label, stonesLostPlayer1Label, stonesKilledPlayer1Label);
-        player1StonesImageView = player1ImageView;
-        player1ImageView.setFitWidth(58);
-        player1ImageView.setFitHeight(58);
+        player1StonesImageView = new ImageView(new Image(player1Color.getPathStone()));
+        player1StonesImageView.setFitWidth(58);
+        player1StonesImageView.setFitHeight(58);
         player1HBox = new HBox();
         player1HBox.getChildren().addAll(player1StonesImageView, player1LabelsVBox);
 
@@ -70,9 +70,9 @@ public class ScoreView extends VBox {
         stonesKilledPlayer2Label.getStyleClass().add("labelKilled");
         player2LabelsVBox = new VBox();
         player2LabelsVBox.getChildren().addAll(stonesPutPlayer2Label, stonesLostPlayer2Label, stonesKilledPlayer2Label);
-        player2StonesImageView = player2ImageView;
-        player2ImageView.setFitWidth(58);
-        player2ImageView.setFitHeight(58);
+        player2StonesImageView = new ImageView(new Image(player2Color.getPathStone()));
+        player2StonesImageView.setFitWidth(58);
+        player2StonesImageView.setFitHeight(58);
         player2HBox = new HBox();
         player2HBox.getChildren().addAll(player2StonesImageView, player2LabelsVBox);
 

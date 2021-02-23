@@ -1,6 +1,7 @@
 package edu.andreasgut.view;
 
 import edu.andreasgut.sound.SOUNDEFFECT;
+import edu.andreasgut.view.fxElements.STONECOLOR;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -15,14 +16,15 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.robot.Robot;
 import javafx.util.Duration;
 
+
 public class FieldView extends AnchorPane {
 
     private ImageView imageView;
     private Image image;
     private ViewManager viewManager;
     private Image blackStoneImage, whiteStoneImage, player1StoneImage, player2StoneImage, emptyField, forbiddenField, allowedField;
-    private ImageCursor blackStoneCursor, whiteStoneCursor, handCursorWhite, handCursorBlack,
-            killCursorWhite, killCursorBlack;
+    private ImageCursor player1StoneCursor, player2StoneCursor, player2HandCursor, player1HandCursor,
+            player2killCursor, player1killCursor;
     private GridPane fieldGridPane;
     private CoordinatesInRepresentation[][] translationArrayGraphicToRepresentation;
     private int[][] translationArrayRepresentationToIndex;
@@ -30,7 +32,7 @@ public class FieldView extends AnchorPane {
 
 
 
-    public FieldView(ViewManager viewManager) {
+    public FieldView(ViewManager viewManager, STONECOLOR player1Color, STONECOLOR player2Color) {
         this.viewManager = viewManager;
         this.getStyleClass().add("fieldview");
         initializeTranslationArray();
@@ -38,30 +40,23 @@ public class FieldView extends AnchorPane {
         image = new Image("edu/andreasgut/Images/Spielfeld.png",
                 600, 600, true, true);
         imageView.setImage(image);
-        blackStoneImage = new Image("edu/andreasgut/Images/StoneBlack.png",
-                85,85,true,true);
-        whiteStoneImage = new Image("edu/andreasgut/Images/StoneWhite.png",
-                85,85,true,true);
-        player1StoneImage = blackStoneImage;
-        player2StoneImage = whiteStoneImage;
+
+
+        player1StoneImage = new Image(player1Color.getPathStone(), 85, 85, true, true);
+        player2StoneImage = new Image(player2Color.getPathStone(), 85, 85, true, true);
         emptyField = new Image("edu/andreasgut/Images/FullyTransparent.png");
         allowedField = new Image("edu/andreasgut/Images/GreenTransparent.png");
         forbiddenField = new Image("edu/andreasgut/Images/FullyTransparent.png");
 
-        whiteStoneCursor = new ImageCursor(new Image("edu/andreasgut/Images/StoneWhite.png",
-                85,85,true,true),
-                whiteStoneImage.getWidth()/2, whiteStoneImage.getHeight()/2);
-        blackStoneCursor = new ImageCursor(new Image("edu/andreasgut/Images/StoneBlack.png",
-                85, 85, true, true),
-                blackStoneImage.getWidth()/2, blackStoneImage.getHeight()/2);
-        handCursorWhite = new ImageCursor(new Image("edu/andreasgut/Images/HandCursorWhite.png",
-                85, 85, true, true));
-        handCursorBlack = new ImageCursor(new Image("edu/andreasgut/Images/HandCursorBlack.png",
-                85, 85, true, true));
-        killCursorWhite = new ImageCursor(new Image("edu/andreasgut/Images/KillCursorWhite.png",
-                85, 85, true, true));
-        killCursorBlack = new ImageCursor(new Image("edu/andreasgut/Images/KillCursorBlack.png",
-                85, 85, true, true));
+        player1StoneCursor = new ImageCursor(new Image(player1Color.getPathStone(), 85, 85, true, true),42,42);
+        player2StoneCursor = new ImageCursor(new Image(player2Color.getPathStone(), 85, 85, true, true), 42,42);
+
+        player1HandCursor = new ImageCursor(new Image(player1Color.getPathMoveCursor(), 85, 85, true, true));
+        player2HandCursor = new ImageCursor(new Image(player2Color.getPathMoveCursor(), 85, 85, true, true));
+
+        player1killCursor = new ImageCursor(new Image(player1Color.getPathKillCursor(), 85, 85, true, true));
+        player2killCursor = new ImageCursor(new Image(player2Color.getPathKillCursor(), 85, 85, true, true));
+
 
         fieldGridPane = new GridPane();
         fieldGridPane.setPadding(new Insets(3));
@@ -248,12 +243,10 @@ public class FieldView extends AnchorPane {
     private void choosePutCursor() {
         switch (viewManager.getGame().getCurrentPlayerIndex()){
             case 0:
-                player1StoneImage = blackStoneImage;
-                imageView.getScene().setCursor(blackStoneCursor);
+                imageView.getScene().setCursor(player1StoneCursor);
                 break;
             case 1:
-                player2StoneImage = whiteStoneImage;
-                imageView.getScene().setCursor(whiteStoneCursor);
+                imageView.getScene().setCursor(player2StoneCursor);
                 break;}
     }
 
@@ -269,10 +262,10 @@ public class FieldView extends AnchorPane {
     private void chooseKillCursor() {
         switch (viewManager.getGame().getCurrentPlayerIndex()){
             case 0:
-                imageView.getScene().setCursor(killCursorBlack);
+                imageView.getScene().setCursor(player1killCursor);
                 break;
             case 1:
-                imageView.getScene().setCursor(killCursorWhite);
+                imageView.getScene().setCursor(player2killCursor);
                 break;}
     }
 
@@ -286,10 +279,10 @@ public class FieldView extends AnchorPane {
     private void chooseMoveCursor(){
         switch (viewManager.getGame().getCurrentPlayerIndex()){
             case 0:
-                imageView.getScene().setCursor(handCursorBlack);
+                imageView.getScene().setCursor(player1HandCursor);
                 break;
             case 1:
-                imageView.getScene().setCursor(handCursorWhite);
+                imageView.getScene().setCursor(player2HandCursor);
                 break;}
     }
 

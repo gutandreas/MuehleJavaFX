@@ -2,17 +2,31 @@ package edu.andreasgut.view.fxElements;
 
 public enum STONECOLOR {
 
-    BLACK("edu/andreasgut/Images/StoneBlack.png"),
-    WHITE( "edu/andreasgut/Images/StoneWhite.png");
+    BLACK("edu/andreasgut/Images/StoneBlack.png",
+            "edu/andreasgut/Images/HandCursorBlack.png",
+            "edu/andreasgut/Images/KillCursorBlack.png"),
+    WHITE( "edu/andreasgut/Images/StoneWhite.png",
+            "edu/andreasgut/Images/HandCursorWhite.png",
+            "edu/andreasgut/Images/KillCursorWhite.png"),
+    ;
 
-    private String path;
+    private String pathStone, pathMoveCursor, pathKillCursor;
 
-    STONECOLOR(String path){
-        this.path = path;
+    STONECOLOR(String pathStone, String pathMoveCursor, String pathKillCursor){
+        this.pathStone = pathStone;
+        this.pathMoveCursor = pathMoveCursor;
+        this.pathKillCursor = pathKillCursor;
     }
 
-    public String getPath() {
-        return path;
+    public String getPathStone() {
+        return pathStone;
     }
 
+    public String getPathMoveCursor() {
+        return pathMoveCursor;
+    }
+
+    public String getPathKillCursor() {
+        return pathKillCursor;
+    }
 }
