@@ -1,7 +1,6 @@
 package edu.andreasgut.view;
 
 import edu.andreasgut.sound.SOUNDEFFECT;
-import edu.andreasgut.view.fxElements.STONECOLOR;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -22,7 +21,7 @@ public class FieldView extends AnchorPane {
     private ImageView imageView;
     private Image image;
     private ViewManager viewManager;
-    private Image blackStoneImage, whiteStoneImage, player1StoneImage, player2StoneImage, emptyField, forbiddenField, allowedField;
+    private Image player1StoneImage, player2StoneImage, emptyField, forbiddenField, allowedField;
     private ImageCursor player1StoneCursor, player2StoneCursor, player2HandCursor, player1HandCursor,
             player2killCursor, player1killCursor;
     private GridPane fieldGridPane;
@@ -41,7 +40,20 @@ public class FieldView extends AnchorPane {
                 600, 600, true, true);
         imageView.setImage(image);
 
+        fieldGridPane = new GridPane();
+        fieldGridPane.setPadding(new Insets(3));
+        fieldGridPane.setOnMouseExited (action ->{
+            imageView.getScene().setCursor(Cursor.DEFAULT);
+        });
 
+        setupPlayerImagesAndCursors(player1Color, player2Color);
+        setupFields();
+
+        this.getChildren().addAll(imageView,fieldGridPane);
+
+    }
+
+    private void setupPlayerImagesAndCursors(STONECOLOR player1Color, STONECOLOR player2Color){
         player1StoneImage = new Image(player1Color.getPathStone(), 85, 85, true, true);
         player2StoneImage = new Image(player2Color.getPathStone(), 85, 85, true, true);
         emptyField = new Image("edu/andreasgut/Images/FullyTransparent.png");
@@ -56,13 +68,9 @@ public class FieldView extends AnchorPane {
 
         player1killCursor = new ImageCursor(new Image(player1Color.getPathKillCursor(), 85, 85, true, true));
         player2killCursor = new ImageCursor(new Image(player2Color.getPathKillCursor(), 85, 85, true, true));
+    }
 
-
-        fieldGridPane = new GridPane();
-        fieldGridPane.setPadding(new Insets(3));
-        fieldGridPane.setOnMouseExited (action ->{
-            imageView.getScene().setCursor(Cursor.DEFAULT);
-        });
+    private void setupFields(){
 
         fieldGridPane.setGridLinesVisible(false);
         for (int row = 0; row < 7; row++){
@@ -76,12 +84,10 @@ public class FieldView extends AnchorPane {
         for (int row = 0; row < 7; row++) {
             for (int column = 0; column < 7; column++) {
                 if (translationArrayGraphicToRepresentation[row][column].getRing()!=-1){
-                ImageView tempImageView = new ImageView(emptyField);
-                fieldGridPane.add(tempImageView,row,column);}
-            else {ImageView tempImageView = new ImageView(forbiddenField);
+                    ImageView tempImageView = new ImageView(emptyField);
+                    fieldGridPane.add(tempImageView,row,column);}
+                else {ImageView tempImageView = new ImageView(forbiddenField);
                     fieldGridPane.add(tempImageView,row,column);}}}
-
-        this.getChildren().addAll(imageView,fieldGridPane);
     }
 
     public CoordinatesInRepresentation humanGraphicPut() {

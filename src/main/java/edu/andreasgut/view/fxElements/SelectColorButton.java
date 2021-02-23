@@ -1,5 +1,6 @@
 package edu.andreasgut.view.fxElements;
 
+import edu.andreasgut.view.STONECOLOR;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

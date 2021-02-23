@@ -1,7 +1,6 @@
 package edu.andreasgut.view;
 
 import edu.andreasgut.game.Player;
-import edu.andreasgut.view.fxElements.STONECOLOR;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -30,9 +29,6 @@ public class ScoreView extends VBox {
         this.viewManager = viewManager;
         this.getStyleClass().add("scoreview");
 
-        player1VBox = new VBox();
-        player2VBox = new VBox();
-
         titleLabel = new Label("Spielstand");
         titleLabel.getStyleClass().add("labelTitle");
         phaseLabel = new Label("Phase: Steine setzen");
@@ -40,7 +36,13 @@ public class ScoreView extends VBox {
         roundLabel = new Label("Spielzug: " + round);
         roundLabel.getStyleClass().add("biglabel");
 
+        setupPlayer1andPlayer2(player1Color, player2Color);
 
+        this.getChildren().addAll(titleLabel, phaseLabel, roundLabel, player1VBox, player2VBox);
+    }
+
+    private void setupPlayer1andPlayer2(STONECOLOR player1Color, STONECOLOR player2Color){
+        player1VBox = new VBox();
         player1Label = new Label("");
         player1Label.getStyleClass().add("biglabel");
         stonesPutPlayer1Label = new Label("Steine gesetzt: " + stonesPut1);
@@ -56,10 +58,9 @@ public class ScoreView extends VBox {
         player1StonesImageView.setFitHeight(58);
         player1HBox = new HBox();
         player1HBox.getChildren().addAll(player1StonesImageView, player1LabelsVBox);
-
         player1VBox.getChildren().addAll(player1Label, player1HBox);
 
-
+        player2VBox = new VBox();
         player2Label = new Label("");
         player2Label.getStyleClass().add("biglabel");
         stonesPutPlayer2Label = new Label("Steine gesetzt: " + stonesPut2);
@@ -75,12 +76,7 @@ public class ScoreView extends VBox {
         player2StonesImageView.setFitHeight(58);
         player2HBox = new HBox();
         player2HBox.getChildren().addAll(player2StonesImageView, player2LabelsVBox);
-
         player2VBox.getChildren().addAll(player2Label, player2HBox);
-
-
-
-        this.getChildren().addAll(titleLabel, phaseLabel, roundLabel, player1VBox, player2VBox);
     }
 
     public void updatePlayerNames(Player player1, Player player2){

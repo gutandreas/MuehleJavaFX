@@ -1,8 +1,6 @@
 package edu.andreasgut.view;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -28,12 +26,11 @@ public class MainMenuBar extends MenuBar {
         this.getMenus().addAll(datei,bearbeiten,hilfe);
         datei.getItems().addAll(neuStarten, spielBeenden);
         hilfe.getItems().addAll(ueberDiesesSpiel);
-        neuStarten.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
-              System.out.println("Spiel neu starten");
-            }});
-        spielBeenden.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
+
+        neuStarten.setOnAction(click ->  {
+              System.out.println("Spiel neu starten");});
+
+        spielBeenden.setOnAction(click ->{
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
                         "Wollen Sie das Spiel wirklich beenden?", ButtonType.CANCEL, ButtonType.YES);
                 alert.setAlertType(Alert.AlertType.NONE);
@@ -42,10 +39,9 @@ public class MainMenuBar extends MenuBar {
                 if(!result.isPresent()){}
                     else if(result.get() == ButtonType.YES){
                                         Platform.exit();}
-                    else if(result.get() == ButtonType.CANCEL) {}
-            }});
-        ueberDiesesSpiel.setOnAction(new EventHandler<ActionEvent>() {
-            @Override public void handle(ActionEvent e) {
+                    else if(result.get() == ButtonType.CANCEL) {} });
+
+        ueberDiesesSpiel.setOnAction(click ->{
                 Stage stage = new Stage();
                 AnchorPane anchorPane = new AnchorPane();
                 Scene scene = new Scene(anchorPane, 400, 300);
@@ -55,8 +51,7 @@ public class MainMenuBar extends MenuBar {
                 imageView.setFitWidth(400);
                 imageView.setFitHeight(300);
                 anchorPane.getChildren().add(imageView);
-                stage.show();
-            }});
+                stage.show();});
 
 
 }}

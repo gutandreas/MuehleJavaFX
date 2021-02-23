@@ -16,7 +16,6 @@ public class LogView extends VBox {
         statusLabel = new Label("");
         statusLabel.setWrapText(true);
 
-
         this.getChildren().addAll(titleLabel, statusLabel);
     }
 

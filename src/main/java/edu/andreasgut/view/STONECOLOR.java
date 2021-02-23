@@ -1,4 +1,4 @@
-package edu.andreasgut.view.fxElements;
+package edu.andreasgut.view;
 
 public enum STONECOLOR {
 
