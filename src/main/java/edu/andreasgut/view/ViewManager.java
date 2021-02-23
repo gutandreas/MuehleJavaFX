@@ -2,7 +2,7 @@ package edu.andreasgut.view;
 
 
 import edu.andreasgut.game.Game;
-import edu.andreasgut.sound.SoundManager;
+import edu.andreasgut.sound.AudioPlayer;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -14,7 +14,7 @@ public class ViewManager {
     private BorderPane gamePane, startPane;
     private Scene gameScene, startScene;
     private Stage mainStage;
-    private SoundManager soundManager;
+    private AudioPlayer audioPlayer;
     private StartImageView startImageViewRight, startImageViewLeft;
     private StartMenuView startMenuView;
     private OptionsView optionsView;
@@ -27,10 +27,10 @@ public class ViewManager {
 
     public ViewManager() {
 
-        soundManager = new SoundManager(this);
+        audioPlayer = new AudioPlayer(this);
 
         createStartScene();
-        createGameScene();
+        //createGameScene();
 
         mainStage = new Stage();
         changeToStartScene();
@@ -63,12 +63,12 @@ public class ViewManager {
         mainStage.setScene(startScene);
     }
 
-    public void createGameScene(){
+    public void createGameScene(FieldView fieldView, ScoreView scoreView, LogView logView){
 
-        fieldView = new FieldView(this);
-        scoreView = new ScoreView(this);
+        this.fieldView = fieldView;
+        this.scoreView = scoreView;
         scoreView.getStyleClass().add("scoreview");
-        logView = new LogView(this);
+        this.logView = logView;
         logView.getStyleClass().add("logview");
 
 
@@ -97,8 +97,8 @@ public class ViewManager {
         return gamePane;
     }
 
-    public SoundManager getSoundManager() {
-        return soundManager;
+    public AudioPlayer getSoundManager() {
+        return audioPlayer;
     }
 
     public StartImageView getStartImageViewRight() {
@@ -137,6 +137,22 @@ public class ViewManager {
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    public void setOptionsView(OptionsView optionsView) {
+        this.optionsView = optionsView;
+    }
+
+    public void setLogView(LogView logView) {
+        this.logView = logView;
+    }
+
+    public void setFieldView(FieldView fieldView) {
+        this.fieldView = fieldView;
+    }
+
+    public void setScoreView(ScoreView scoreView) {
+        this.scoreView = scoreView;
     }
 }
 

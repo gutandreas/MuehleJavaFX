@@ -1,16 +1,22 @@
 package edu.andreasgut.view;
 
 import edu.andreasgut.game.Player;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
+
 
 public class ScoreView extends VBox {
 
     private Label titleLabel, player1Label, player2Label, stonesPutPlayer1Label, stonesPutPlayer2Label, roundLabel,
             phaseLabel, stonesLostPlayer1Label, stonesLostPlayer2Label, stonesKilledPlayer1Label, stonesKilledPlayer2Label;
     private ViewManager viewManager;
-    private VBox player1VBox, player2VBox;
+    private VBox player1VBox, player2VBox, player1LabelsVBox, player2LabelsVBox;
+    private HBox player1HBox, player2HBox;
+    private ImageView player1StonesImageView, player2StonesImageView;
     private int round = 0;
     private int stonesPut1 = 0;
     private int stonesPut2 = 0;
@@ -20,7 +26,7 @@ public class ScoreView extends VBox {
     private int stonesKilled2 = 0;
 
 
-    public ScoreView(ViewManager viewManager) {
+    public ScoreView(ViewManager viewManager, ImageView player1ImageView, ImageView player2ImageView) {
         this.viewManager = viewManager;
         this.getStyleClass().add("scoreview");
 
@@ -34,6 +40,7 @@ public class ScoreView extends VBox {
         roundLabel = new Label("Spielzug: " + round);
         roundLabel.getStyleClass().add("biglabel");
 
+
         player1Label = new Label("");
         player1Label.getStyleClass().add("biglabel");
         stonesPutPlayer1Label = new Label("Steine gesetzt: " + stonesPut1);
@@ -42,7 +49,15 @@ public class ScoreView extends VBox {
         stonesLostPlayer1Label.getStyleClass().add("labelLost");
         stonesKilledPlayer1Label = new Label("Steine gewonnen: " + stonesKilled1);
         stonesKilledPlayer1Label.getStyleClass().add("labelKilled");
-        player1VBox.getChildren().addAll(player1Label,stonesPutPlayer1Label,stonesLostPlayer1Label, stonesKilledPlayer1Label);
+        player1LabelsVBox = new VBox();
+        player1LabelsVBox.getChildren().addAll(stonesPutPlayer1Label, stonesLostPlayer1Label, stonesKilledPlayer1Label);
+        player1StonesImageView = player1ImageView;
+        player1ImageView.setFitWidth(58);
+        player1ImageView.setFitHeight(58);
+        player1HBox = new HBox();
+        player1HBox.getChildren().addAll(player1StonesImageView, player1LabelsVBox);
+
+        player1VBox.getChildren().addAll(player1Label, player1HBox);
 
 
         player2Label = new Label("");
@@ -53,8 +68,15 @@ public class ScoreView extends VBox {
         stonesLostPlayer2Label.getStyleClass().add("labelLost");
         stonesKilledPlayer2Label = new Label("Steine gewonnen: " + stonesKilled2);
         stonesKilledPlayer2Label.getStyleClass().add("labelKilled");
-        player2VBox.getChildren().addAll(player2Label,stonesPutPlayer2Label,stonesLostPlayer2Label, stonesKilledPlayer2Label);
+        player2LabelsVBox = new VBox();
+        player2LabelsVBox.getChildren().addAll(stonesPutPlayer2Label, stonesLostPlayer2Label, stonesKilledPlayer2Label);
+        player2StonesImageView = player2ImageView;
+        player2ImageView.setFitWidth(58);
+        player2ImageView.setFitHeight(58);
+        player2HBox = new HBox();
+        player2HBox.getChildren().addAll(player2StonesImageView, player2LabelsVBox);
 
+        player2VBox.getChildren().addAll(player2Label, player2HBox);
 
 
 

@@ -5,7 +5,7 @@ import javafx.scene.media.AudioClip;
 
 import java.net.URL;
 
-public class SoundManager {
+public class AudioPlayer {
 
     private AudioClip audioclipMENU, audioclipPLAY, audioclipGAMEOVER, currentAudioclip;
     private AudioClip audioclipPUTSTONE, audioclipKILLSTONE;
@@ -14,7 +14,7 @@ public class SoundManager {
     private ViewManager viewManager;
 
 
-    public SoundManager(ViewManager viewManager) {
+    public AudioPlayer(ViewManager viewManager) {
         this.viewManager = viewManager;
         menuSoundPath = getClass().getResource(MUSIC.MENU_SOUND.getPath());
         playSoundPath = getClass().getResource(MUSIC.PLAY_SOUND.getPath());

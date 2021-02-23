@@ -8,6 +8,8 @@ import edu.andreasgut.view.fxElements.STONECOLOR;
 import edu.andreasgut.view.fxElements.SelectColorButton;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -23,6 +25,7 @@ public class StartMenuView extends VBox {
     Label informationLabel, titleLabel, stonesColorLabel1, stonesColorLabel2;
     Button startButton;
     SelectColorButton stonesBlackButton1, stonesWhiteButton1, stonesBlackButton2, stonesWhiteButton2;
+    ImageView player1StonesImageView, player2StonesImageView;
 
 
 
@@ -71,6 +74,7 @@ public class StartMenuView extends VBox {
         stonesColorLabel1 = new Label("Steinfarbe: ");
         stonesBlackButton1 = new SelectColorButton(null, STONECOLOR.BLACK, true);
         stonesWhiteButton1 = new SelectColorButton(null, STONECOLOR.WHITE, false);
+        player1StonesImageView = new ImageView(new Image(STONECOLOR.BLACK.getPath()));
 
         player1HBox = new HBox();
         player1HBox.getChildren().addAll(namePlayer1Textfield, stonesColorLabel1, stonesBlackButton1, stonesWhiteButton1);
@@ -86,6 +90,7 @@ public class StartMenuView extends VBox {
         stonesBlackButton2.setVisible(false);
         stonesWhiteButton2 = new SelectColorButton(null, STONECOLOR.WHITE, true);
         stonesWhiteButton2.setVisible(false);
+        player2StonesImageView = new ImageView(new Image(STONECOLOR.WHITE.getPath()));
 
         player2HBox = new HBox();
         player2HBox.getChildren().addAll(namePlayer2Textfield, stonesColorLabel2, stonesBlackButton2, stonesWhiteButton2);
@@ -107,6 +112,8 @@ public class StartMenuView extends VBox {
             stonesWhiteButton2.setSelected(true);
             stonesWhiteButton2.getStyleClass().removeAll("selectColorButtonOff");
             stonesWhiteButton2.getStyleClass().add("selectColorButtonOn");
+            player1StonesImageView.setImage(new Image(STONECOLOR.BLACK.getPath()));
+            player2StonesImageView.setImage(new Image(STONECOLOR.WHITE.getPath()));
 
         });
 
@@ -123,6 +130,8 @@ public class StartMenuView extends VBox {
             stonesWhiteButton1.setSelected(true);
             stonesWhiteButton1.getStyleClass().removeAll("selectColorButtonOff");
             stonesWhiteButton1.getStyleClass().add("selectColorButtonOn");
+            player2StonesImageView.setImage(new Image(STONECOLOR.BLACK.getPath()));
+            player1StonesImageView.setImage(new Image(STONECOLOR.WHITE.getPath()));
 
         });
 
@@ -139,6 +148,8 @@ public class StartMenuView extends VBox {
             stonesWhiteButton2.setSelected(false);
             stonesWhiteButton2.getStyleClass().removeAll("selectColorButtonOn");
             stonesWhiteButton2.getStyleClass().add("selectColorButtonOff");
+            player1StonesImageView.setImage(new Image(STONECOLOR.WHITE.getPath()));
+            player2StonesImageView.setImage(new Image(STONECOLOR.BLACK.getPath()));
         });
 
         stonesWhiteButton2.setOnAction(click -> {
@@ -154,6 +165,8 @@ public class StartMenuView extends VBox {
             stonesWhiteButton1.setSelected(false);
             stonesWhiteButton1.getStyleClass().removeAll("selectColorButtonOn");
             stonesWhiteButton1.getStyleClass().add("selectColorButtonOff");
+            player2StonesImageView.setImage(new Image(STONECOLOR.WHITE.getPath()));
+            player1StonesImageView.setImage(new Image(STONECOLOR.BLACK.getPath()));
         });
     }
 
@@ -180,7 +193,6 @@ public class StartMenuView extends VBox {
                     namePlayer1Textfield.getText().length()>0)
                     || (radioButtonGroup.getSelectedToggle().equals(twoPlayersRadioButton) &&
                     namePlayer1Textfield.getText().length()>0 && namePlayer2Textfield.getText().length()>0)){
-                viewManager.changeToGameScene();
 
                 viewManager.getSoundManager().chooseSound(MUSIC.PLAY_SOUND);
                 if (!viewManager.getOptionsView().isMusicOn()){
@@ -197,14 +209,22 @@ public class StartMenuView extends VBox {
                             new Player(namePlayer1Textfield.getText().toUpperCase())));
                 }
 
-                viewManager.getScoreView().updatePlayerNames(viewManager.getGame().getPlayer0(),
-                        viewManager.getGame().getPlayer1());
+                viewManager.createGameScene(new FieldView(viewManager),
+                        new ScoreView(viewManager, player1StonesImageView, player2StonesImageView),
+                        new LogView(viewManager));
+
+                /*viewManager.getScoreView().updatePlayerNames(viewManager.getGame().getPlayer0(),
+                        viewManager.getGame().getPlayer1());*/
+
+                viewManager.changeToGameScene();
 
                 try {
                     viewManager.getGame().play();
                 } catch (InvalidFieldException e) {
                     e.printStackTrace();
                 }
+
+
 
             }
             else {informationLabel.setText("Es fehlen Eingaben, um das Spiel zu starten");}});
