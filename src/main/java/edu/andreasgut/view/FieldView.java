@@ -15,8 +15,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.robot.Robot;
 import javafx.util.Duration;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 
 public class FieldView extends AnchorPane {
 
@@ -99,7 +97,6 @@ public class FieldView extends AnchorPane {
         final int[] field = new int[1];
 
         for (Node n : fieldGridPane.getChildren()){
-            n.setOnMouseClicked(click -> {/* clear old function*/});
             if(((ImageView) n).getImage().equals(emptyField)){
             n.setOnMouseClicked(click ->{
                 ring[0] = translateToRing(n);
@@ -122,6 +119,7 @@ public class FieldView extends AnchorPane {
             });}}
 
         Platform.enterNestedEventLoop(loopObject);
+        clearAllFieldFunctions();
         viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
         moveMouseposition(20, 20);
         return new CoordinatesInRepresentation(ring[0], field[0]);
@@ -134,7 +132,6 @@ public class FieldView extends AnchorPane {
         final int[] field = new int[1];
 
         for (Node n : fieldGridPane.getChildren()){
-            n.setOnMouseClicked(click -> {/* clear old function*/});
             if(((ImageView) n).getImage().equals(getEnemysStoneImage()) &&
                     (viewManager.getGame().getField().checkKill(translateToRing(n),translateToField(n)))
                     || viewManager.getGame().getOtherPlayer().isAllowedToJump()){
@@ -149,6 +146,7 @@ public class FieldView extends AnchorPane {
                 Platform.exitNestedEventLoop(loopObject, null);
             });}}
         Platform.enterNestedEventLoop(loopObject);
+        clearAllFieldFunctions();
         viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.KILL_STONE);
         moveMouseposition(20, 20);
 
@@ -164,7 +162,6 @@ public class FieldView extends AnchorPane {
         final int[] field = new int[2];
 
         for (Node n : fieldGridPane.getChildren()){
-            n.setOnMouseClicked(click -> {/* clear old function*/});
             if(((ImageView) n).getImage().equals(getOwnStoneImage())){
                 n.setOnMouseClicked(click ->{
                     ring[0] = translateToRing(n);
@@ -177,13 +174,13 @@ public class FieldView extends AnchorPane {
                     Platform.exitNestedEventLoop(loopObject1, null);
                 });}}
         Platform.enterNestedEventLoop(loopObject1);
+        clearAllFieldFunctions();
 
         coordsArray[0] = new CoordinatesInRepresentation(ring[0],field[0]);
 
         setPutCursor();
 
         for (Node n : fieldGridPane.getChildren()){
-            n.setOnMouseClicked(click -> {/* clear old function*/});
             if(((ImageView) n).getImage().equals(emptyField) &&
                     (viewManager.getGame().getField().checkDestination(ring[0], field[0], translateToRing(n), translateToField(n)))
                     || viewManager.getGame().getField().checkIfJump()){
@@ -198,6 +195,7 @@ public class FieldView extends AnchorPane {
                     Platform.exitNestedEventLoop(loopObject2, null);
                 });}}
         Platform.enterNestedEventLoop(loopObject2);
+        clearAllFieldFunctions();
 
         coordsArray[1] = new CoordinatesInRepresentation(ring[1],field[1]);
 
@@ -291,6 +289,11 @@ public class FieldView extends AnchorPane {
             case 1:
                 imageView.getScene().setCursor(player2HandCursor);
                 break;}
+    }
+
+    private void clearAllFieldFunctions(){
+        for (Node n : fieldGridPane.getChildren()){
+            n.setOnMouseClicked(click -> {/* clear old function*/});}
     }
 
     private int translateToRing(Node node){

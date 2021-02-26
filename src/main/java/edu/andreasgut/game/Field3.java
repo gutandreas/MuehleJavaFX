@@ -120,6 +120,7 @@ public class Field3 implements Cloneable{
         return false;
     }
 
+
     private boolean checkMovePossibilityInRing(){
         for (int ring = 0; ring < 3; ring++){
             for (int field = 0; field < 8; field++){
