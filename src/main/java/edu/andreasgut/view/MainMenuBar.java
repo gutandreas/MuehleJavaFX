@@ -1,6 +1,7 @@
 package edu.andreasgut.view;
 
 import javafx.application.Platform;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -51,6 +52,7 @@ public class MainMenuBar extends MenuBar {
                 imageView.setFitWidth(400);
                 imageView.setFitHeight(300);
                 anchorPane.getChildren().add(imageView);
+                stage.setResizable(false);
                 stage.show();});
 
 

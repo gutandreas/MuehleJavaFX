@@ -206,7 +206,7 @@ public class FieldView extends AnchorPane {
     public void computerGraphicPut(int ring, int field){
         Object loopObject = new Object();
         Timeline timeline = new Timeline(new KeyFrame(
-                Duration.millis(COMPREACTIONTIME*1),
+                Duration.millis(COMPREACTIONTIME),
                 put -> {((ImageView) fieldGridPane.getChildren().get(translateToIndex(ring, field))).setImage(player2StoneImage);
                         viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
                         Platform.exitNestedEventLoop(loopObject, null);}));
@@ -218,7 +218,7 @@ public class FieldView extends AnchorPane {
     public void computerGraphicKill(int ring, int field){
         Object loopObject = new Object();
         Timeline timeline = new Timeline(new KeyFrame(
-                Duration.millis(COMPREACTIONTIME*2),
+                Duration.millis(COMPREACTIONTIME*1.5),
                 kill -> {((ImageView) fieldGridPane.getChildren().get(translateToIndex(ring, field))).setImage(emptyField);
                         viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.KILL_STONE);
                         Platform.exitNestedEventLoop(loopObject, null);}));

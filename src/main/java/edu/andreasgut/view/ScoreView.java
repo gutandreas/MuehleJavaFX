@@ -43,7 +43,7 @@ public class ScoreView extends VBox {
 
     private void setupPlayer1andPlayer2(STONECOLOR player1Color, STONECOLOR player2Color){
         player1VBox = new VBox();
-        player1Label = new Label("");
+        player1Label = new Label("Player 1: " + viewManager.getGame().getCurrentPlayer().getName());
         player1Label.getStyleClass().add("biglabel");
         stonesPutPlayer1Label = new Label("Steine gesetzt: " + stonesPut1);
         stonesPutPlayer1Label.getStyleClass().add("labelPut");
@@ -61,7 +61,7 @@ public class ScoreView extends VBox {
         player1VBox.getChildren().addAll(player1Label, player1HBox);
 
         player2VBox = new VBox();
-        player2Label = new Label("");
+        player2Label = new Label("Player 2: " + viewManager.getGame().getOtherPlayer().getName());
         player2Label.getStyleClass().add("biglabel");
         stonesPutPlayer2Label = new Label("Steine gesetzt: " + stonesPut2);
         stonesPutPlayer2Label.getStyleClass().add("labelPut");

@@ -123,7 +123,7 @@ public class Game {
             oldField = (Field3) getField().clone();
             field.printField();
 
-            if (phase2==true && getField().numberOfStonesCurrentPlayer() <= 2){
+            if (phase2==true && (field.numberOfStonesCurrentPlayer() <= 2 || !field.checkIfAbleToMove())){
                 winGame();
                 break;
             }

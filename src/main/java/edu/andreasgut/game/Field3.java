@@ -94,6 +94,44 @@ public class Field3 implements Cloneable{
         return false;
     }
 
+    public boolean checkIfAbleToMove(){
+        return checkMovePossibilityInRing() || checkMovePossibilityBetweenRings()
+                || game.getCurrentPlayer().isAllowedToJump();
+    }
+
+    private boolean checkMovePossibilityBetweenRings(){
+        for (int ring = 0; ring < 3; ring++){
+            for (int field = 1; field < 8;){
+                if (array[ring][field] == game.getCurrentPlayerIndex()){
+                    switch (ring){
+                        case 0:
+                            if (array[ring+1][field] == 9) return true;
+                            break;
+                        case 1:
+                            if (array[ring-1][field] == 9 || array[ring+1][field] == 9) return true;
+                            break;
+                        case 2:
+                            if (array[ring-1][field] == 9) return true;
+                    }
+                }
+                field+=2;
+            }
+            }
+        return false;
+    }
+
+    private boolean checkMovePossibilityInRing(){
+        for (int ring = 0; ring < 3; ring++){
+            for (int field = 0; field < 8; field++){
+                if (array[ring][field] == game.getCurrentPlayerIndex()
+                        && (array[ring][(field+1)%8] == 9 || array[ring][(field+7)%8] == 9)){
+                    return true;
+                }
+                }
+            }
+        return false;
+    }
+
     public void killStone(int ring, int field) throws InvalidKillException {
         if (array[ring][field] == (game.getCurrentPlayerIndex()+1)%2 &&
                 (checkKill(ring, field) || game.getOtherPlayer().isAllowedToJump())){
@@ -106,7 +144,7 @@ public class Field3 implements Cloneable{
     public boolean isThereStoneToKill(){
         int stone = (game.getCurrentPlayerIndex()+1)%2;
         for (int ring = 0; ring < 3; ring++){
-            for (int field = 0; field < 7; field++){
+            for (int field = 0; field < 8; field++){
                 if (array[ring][field] == stone && !isStoneInTriple(ring,field,stone)){
                     return true;
                 }

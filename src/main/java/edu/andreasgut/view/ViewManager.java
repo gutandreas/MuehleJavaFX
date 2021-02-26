@@ -30,7 +30,6 @@ public class ViewManager {
         audioPlayer = new AudioPlayer(this);
 
         createStartScene();
-        //createGameScene();
 
         mainStage = new Stage();
         changeToStartScene();
