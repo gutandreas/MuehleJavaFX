@@ -32,6 +32,7 @@ public class ViewManager {
         createStartScene();
 
         mainStage = new Stage();
+        mainStage.setResizable(false);
         changeToStartScene();
         mainStage.show();
     }

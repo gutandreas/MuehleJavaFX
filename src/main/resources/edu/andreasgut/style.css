@@ -22,6 +22,7 @@
 .optionsView{
     -fx-alignment: Center;
     -fx-padding: 20;
+    -fx-spacing: 50;
     -fx-pref-height: 200;
 }
 
@@ -122,5 +123,9 @@
 
 .selectColorButtonOff{
     -fx-background-color: transparent;
+}
+
+.exitButton{
+    -fx-background-color: #ffaaaa;
 }
 

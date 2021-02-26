@@ -15,6 +15,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.robot.Robot;
 import javafx.util.Duration;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 
 public class FieldView extends AnchorPane {
 
@@ -153,7 +155,6 @@ public class FieldView extends AnchorPane {
         return new CoordinatesInRepresentation(ring[0], field[0]);
     }
 
-    //TODO: Prüfen ob überhaupt Zug möglich (in Game!)
     public CoordinatesInRepresentation[] humanGraphicMove(){
         CoordinatesInRepresentation[] coordsArray = new CoordinatesInRepresentation[2];
         Object loopObject1 = new Object();
