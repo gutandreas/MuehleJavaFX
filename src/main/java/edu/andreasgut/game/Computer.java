@@ -8,7 +8,7 @@ public class Computer extends Player {
     }
 
     //Besetzt den nächsten freien Stein
-    public int[] compPutStone(Field3 field) {
+    public int[] compPutStone(PlayingField field) {
         int[] RingAndField = new int[2];
         int i;
         int j;
@@ -26,7 +26,7 @@ public class Computer extends Player {
     }
 
     //Entfernt den nächsten gegnerischen Stein
-    public int[] compKillStone(Field3 field) {
+    public int[] compKillStone(PlayingField field) {
         int[] RingAndField = new int[2];
         int i;
         int j;

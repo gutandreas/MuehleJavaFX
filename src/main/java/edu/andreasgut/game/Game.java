@@ -15,8 +15,8 @@ public class Game {
     private int round;
     private final int NUMBEROFSTONES = 9;
     private Player currentPlayer;
-    private Field3 field;
-    private Field3 oldField;
+    private PlayingField field;
+    private PlayingField oldField;
     boolean phase1 = true;
     boolean phase2 = false;
     private Scanner scanner = new Scanner(System.in);
@@ -33,7 +33,7 @@ public class Game {
         playerArrayList.add(1, player1);
         round = 0;
         currentPlayer=playerArrayList.get(0);
-        field = new Field3(this);
+        field = new PlayingField(this);
         modus = 1;
     }
 
@@ -45,7 +45,7 @@ public class Game {
         playerArrayList.add(1, player1);
         round = 0;
         currentPlayer=playerArrayList.get(0);
-        field = new Field3(this);
+        field = new PlayingField(this);
         modus = 2;
     }
 
@@ -66,11 +66,11 @@ public class Game {
         return currentPlayer.equals(playerArrayList.get(0)) ? 0 : 1;
     }
 
-    public Field3 getField() {
+    public PlayingField getField() {
         return field;
     }
 
-    public Field3 getOldField() {
+    public PlayingField getOldField() {
         return oldField;
     }
 
@@ -104,7 +104,7 @@ public class Game {
         return viewManager;
     }
 
-    public void setOldField(Field3 oldField) {
+    public void setOldField(PlayingField oldField) {
         this.oldField = oldField;
     }
 
@@ -118,7 +118,7 @@ public class Game {
 
             //viewManager.getScoreView().setPlayerLabelEffects(); // funktioniert noch nicht wie gewünscht
 
-            oldField = (Field3) getField().clone();
+            oldField = (PlayingField) getField().clone();
             field.printField();
 
             if (phase2==true && (field.numberOfStonesCurrentPlayer() <= 2 || !field.checkIfAbleToMove())){

@@ -1,11 +1,11 @@
 package edu.andreasgut.game;
 
-public class Field3 implements Cloneable{
+public class PlayingField implements Cloneable{
 
     private int[][] array = new int[3][8];
     private final Game game;
 
-    public Field3(Game game) {
+    public PlayingField(Game game) {
         for (int i = 0; i < 3; i++){
             for (int j = 0; j < 8; j++){
                 array[i][j] = 9;}
@@ -13,7 +13,7 @@ public class Field3 implements Cloneable{
         this.game = game;
     }
 
-    public Field3(Field3 field){
+    public PlayingField(PlayingField field){
         this.array = field.array;
         this.game = field.game;
     }
@@ -55,13 +55,13 @@ public class Field3 implements Cloneable{
                 || (ringNow-ringDest==0 && Math.abs((fieldNow)-(fieldDest))==7));
     }
 
-    public boolean checkTriple(Field3 oldField){
+    public boolean checkTriple(PlayingField oldField){
         return checkBetweenRings(oldField) || checkInRing(oldField);
     }
 
 
 
-    private boolean checkBetweenRings(Field3 oldField){
+    private boolean checkBetweenRings(PlayingField oldField){
         for (int field = 1; field <8;){
             for (int player = 0; player < 2; player++){
                 if (array[0][field]==player && array[1][field]==player
@@ -77,7 +77,7 @@ public class Field3 implements Cloneable{
     }
 
 
-    private boolean checkInRing(Field3 oldField){
+    private boolean checkInRing(PlayingField oldField){
 
         for (int ring = 0; ring < 3; ring++){
             for (int field = 0; field <4; field++){
@@ -300,7 +300,7 @@ public class Field3 implements Cloneable{
 
     @Override
     public Object clone(){
-        Field3 field = new Field3(this);
+        PlayingField field = new PlayingField(this);
         int[][] tempArray = new int[3][8];
 
         for (int i = 0; i < field.array.length; i++) {
