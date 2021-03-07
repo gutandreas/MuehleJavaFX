@@ -1,5 +1,6 @@
 package edu.andreasgut.view;
 
+import edu.andreasgut.game.InvalidMoveException;
 import edu.andreasgut.sound.SOUNDEFFECT;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -128,8 +129,8 @@ public class FieldView extends AnchorPane {
     public CoordinatesInRepresentation humanGraphicKill(){
         Object loopObject = new Object();
         setKillCursor();
-        final int[] ring = new int[1];
-        final int[] field = new int[1];
+        final int[] ring = new int[2];
+        final int[] field = new int[2];
 
         for (Node n : fieldGridPane.getChildren()){
             if(((ImageView) n).getImage().equals(getEnemysStoneImage()) &&
@@ -139,6 +140,7 @@ public class FieldView extends AnchorPane {
                 ring[0] = translateToRing(n);
                 field[0] = translateToField(n);
 
+                System.out.println("Stein wurde gesetzt.");
                 System.out.println("Feld in Repräsentationsarray: " + ring[0] + "/" + field[0]);
                 System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
 
@@ -153,13 +155,32 @@ public class FieldView extends AnchorPane {
         return new CoordinatesInRepresentation(ring[0], field[0]);
     }
 
-    public CoordinatesInRepresentation[] humanGraphicMove(){
+    public CoordinatesInRepresentation[] humanGraphicMove() {
         CoordinatesInRepresentation[] coordsArray = new CoordinatesInRepresentation[2];
-        Object loopObject1 = new Object();
-        Object loopObject2 = new Object();
-        setMoveCursor();
-        final int[] ring = new int[2];
-        final int[] field = new int[2];
+        final int[] ringArray = new int[2];
+        final int[] fieldArray = new int[2];
+        boolean releasedOnAnotherField = false;
+
+        while (!releasedOnAnotherField){
+
+            setMoveCursor();
+
+            final ImageView clickedField = humanGraphicMoveTakeStep(ringArray, fieldArray)[0];
+            coordsArray[0] = new CoordinatesInRepresentation(ringArray[0],fieldArray[0]);
+            clearAllFieldFunctions();
+
+            setPutCursor();
+
+            releasedOnAnotherField = humanGraphicMoveReleaseStep(ringArray, fieldArray, clickedField);
+            coordsArray[1] = new CoordinatesInRepresentation(ringArray[1],fieldArray[1]);
+            clearAllFieldFunctions();}
+
+        return coordsArray;
+    }
+
+    private ImageView[] humanGraphicMoveTakeStep(int[] ring, int[] field){
+        Object loopObject = new Object();
+        final ImageView[] clickedField = new ImageView[1];
 
         for (Node n : fieldGridPane.getChildren()){
             if(((ImageView) n).getImage().equals(getOwnStoneImage())){
@@ -167,19 +188,21 @@ public class FieldView extends AnchorPane {
                     ring[0] = translateToRing(n);
                     field[0] = translateToField(n);
 
+                    System.out.println("Stein wurde genommen.");
                     System.out.println("Feld in Repräsentationsarray: " + ring[0] + "/" + field[0]);
                     System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
 
                     ((ImageView) n).setImage(emptyField);
-                    Platform.exitNestedEventLoop(loopObject1, null);
+                    Platform.exitNestedEventLoop(loopObject, null);
+                    clickedField[0] = (ImageView) click.getSource();
                 });}}
-        Platform.enterNestedEventLoop(loopObject1);
-        clearAllFieldFunctions();
+        Platform.enterNestedEventLoop(loopObject);
+        return clickedField;
+    }
 
-        coordsArray[0] = new CoordinatesInRepresentation(ring[0],field[0]);
-
-        setPutCursor();
-
+    private boolean humanGraphicMoveReleaseStep(int[] ring, int[] field, ImageView clickedField){
+        Object loopObject = new Object();
+        final boolean[] releasedOnAnotherfield = {false};
         for (Node n : fieldGridPane.getChildren()){
             if(((ImageView) n).getImage().equals(emptyField) &&
                     (viewManager.getGame().getField().checkDestination(ring[0], field[0], translateToRing(n), translateToField(n)))
@@ -188,18 +211,24 @@ public class FieldView extends AnchorPane {
                     ring[1] = translateToRing(n);
                     field[1] = translateToField(n);
 
+                    System.out.println("Stein wurde hingelegt.");
                     System.out.println("Feld in Repräsentationsarray: " + ring[1] + "/" + field[1]);
                     System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
 
                     ((ImageView) n).setImage(getOwnStoneImage());
-                    Platform.exitNestedEventLoop(loopObject2, null);
-                });}}
-        Platform.enterNestedEventLoop(loopObject2);
-        clearAllFieldFunctions();
-
-        coordsArray[1] = new CoordinatesInRepresentation(ring[1],field[1]);
-
-        return coordsArray;
+                    releasedOnAnotherfield[0] = true;
+                    Platform.exitNestedEventLoop(loopObject, null);
+                });}
+            if (n == clickedField){
+                n.setOnMouseClicked(click ->{
+                    ((ImageView) n).setImage(getOwnStoneImage());
+                    releasedOnAnotherfield[0] = false;
+                    Platform.exitNestedEventLoop(loopObject, null);
+                });
+            }
+        }
+        Platform.enterNestedEventLoop(loopObject);
+        return releasedOnAnotherfield[0];
     }
 
     public void computerGraphicPut(int ring, int field){

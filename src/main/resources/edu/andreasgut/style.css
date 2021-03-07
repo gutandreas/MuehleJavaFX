@@ -27,14 +27,12 @@
 }
 
 .scoreview{
-    -fx-alignment: top;
     -fx-pref-width: 300;
     -fx-padding: 20;
     -fx-spacing: 50;
 }
 
 .logview{
-    -fx-alignment: top;
     -fx-pref-width: 300;
     -fx-padding: 20;
     -fx-spacing: 30;

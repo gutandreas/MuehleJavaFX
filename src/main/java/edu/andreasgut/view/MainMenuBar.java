@@ -39,7 +39,8 @@ public class MainMenuBar extends MenuBar {
                 Optional<ButtonType> result = alert.showAndWait();
                 if(!result.isPresent()){}
                     else if(result.get() == ButtonType.YES){
-                                        Platform.exit();}
+                        viewManager.getSoundManager().stopMusic();
+                        Platform.exit();}
                     else if(result.get() == ButtonType.CANCEL) {} });
 
         ueberDiesesSpiel.setOnAction(click ->{

@@ -65,6 +65,7 @@ public class OptionsView extends HBox {
             Optional<ButtonType> result = alert.showAndWait();
             if(!result.isPresent()){}
             else if(result.get() == ButtonType.YES){
+                viewManager.getSoundManager().stopMusic();
                 Platform.exit();}
             else if(result.get() == ButtonType.CANCEL) {} });
 

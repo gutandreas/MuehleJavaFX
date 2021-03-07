@@ -183,12 +183,13 @@ public class Game {
             }
 
             if(phase2){
-                CoordinatesInRepresentation[] tempCoordsArray = viewManager.getFieldView().humanGraphicMove();
                 try {
+                    CoordinatesInRepresentation[] tempCoordsArray = viewManager.getFieldView().humanGraphicMove();
                     field.move(tempCoordsArray[0].getRing(), tempCoordsArray[0].getField(),
                             tempCoordsArray[1].getRing(), tempCoordsArray[1].getField());
                 } catch (InvalidMoveException e) {
                     e.printStackTrace();
+                    putOrMove();
                 }
             }
         }
