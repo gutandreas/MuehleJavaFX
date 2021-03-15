@@ -13,8 +13,6 @@
 }
 
 
-
-
 .startImageView {
     -fx-pref-width: 300;
 }
@@ -126,4 +124,3 @@
 .exitButton{
     -fx-background-color: #ffaaaa;
 }
-
