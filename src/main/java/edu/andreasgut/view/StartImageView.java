@@ -14,10 +14,10 @@ public class StartImageView extends ImageView {
         this.viewManager = viewManager;
         switch (bildnummer){
             case 1:
-                image = new Image("edu/andreasgut/Images/StartImage1.png");
+                image = new Image("edu/andreasgut/images/StartImage1.png");
                 break;
             case 2:
-                image = new Image("edu/andreasgut/Images/StartImage2.png");
+                image = new Image("edu/andreasgut/images/StartImage2.png");
                 break;
         }
         this.setImage(image);
