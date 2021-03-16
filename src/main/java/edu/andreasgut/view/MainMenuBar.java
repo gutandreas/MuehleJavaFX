@@ -48,7 +48,7 @@ public class MainMenuBar extends MenuBar {
                 AnchorPane anchorPane = new AnchorPane();
                 Scene scene = new Scene(anchorPane, 400, 300);
                 stage.setScene(scene);
-                Image image = new Image("edu/andreasgut/images/About.png");
+                Image image = new Image("edu/andreasgut/Images/About.png");
                 ImageView imageView = new ImageView(image);
                 imageView.setFitWidth(400);
                 imageView.setFitHeight(300);
