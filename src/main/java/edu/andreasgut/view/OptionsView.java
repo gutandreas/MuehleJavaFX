@@ -31,7 +31,7 @@ public class OptionsView extends HBox {
         audioStartStopToggleButton.setMinHeight(50);
 
         exitButton = new Button();
-        exitButton.setGraphic(new ImageView(new Image("edu/andreasgut/Images/ExitButton.png", 50, 25, true, true)));
+        exitButton.setGraphic(new ImageView(new Image("edu/andreasgut/images/ExitButton.png", 50, 25, true, true)));
         exitButton.setMinWidth(100);
         exitButton.setMinHeight(50);
         exitButton.getStyleClass().add("exitButton");
