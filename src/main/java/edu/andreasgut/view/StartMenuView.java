@@ -194,7 +194,7 @@ public class StartMenuView extends VBox {
                     namePlayer1Textfield.getText().length()>0 && namePlayer2Textfield.getText().length()>0)){
 
                 viewManager.getSoundManager().chooseSound(MUSIC.PLAY_SOUND);
-                if (!viewManager.getOptionsView().isMusicOn()){
+                if (!viewManager.getOptionsView().getAudioOnOffSwitchButton().getState()){
                     viewManager.getSoundManager().stopMusic();
                 }
 

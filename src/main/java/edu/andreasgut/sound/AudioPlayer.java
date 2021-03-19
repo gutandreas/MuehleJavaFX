@@ -58,6 +58,10 @@ public class AudioPlayer {
         }
     }
 
+    public void continueMusic(){
+        currentAudioclip.play();
+    }
+
     public void stopMusic(){
         audioclipMENU.stop();
         audioclipPLAY.stop();
