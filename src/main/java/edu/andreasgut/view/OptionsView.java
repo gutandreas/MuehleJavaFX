@@ -1,6 +1,6 @@
 package edu.andreasgut.view;
 
-import edu.andreasgut.view.internet.MusicSwitchButton;
+import edu.andreasgut.view.fxElements.MusicSwitchButton;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
