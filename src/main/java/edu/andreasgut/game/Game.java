@@ -40,7 +40,7 @@ public class Game {
     public Game(ViewManager viewManager, Player player0) {
         this.viewManager = viewManager;
         this.player0 = player0;
-        this.player1 = new Computer( "Computer");
+        this.player1 = new Computer( "COMPUTER");
         playerArrayList.add(0, player0);
         playerArrayList.add(1, player1);
         round = 0;
