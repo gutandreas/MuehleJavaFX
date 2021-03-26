@@ -1,6 +1,6 @@
 package edu.andreasgut.view;
 
-import edu.andreasgut.game.InvalidMoveException;
+import edu.andreasgut.game.Position;
 import edu.andreasgut.sound.SOUNDEFFECT;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -26,7 +26,7 @@ public class FieldView extends AnchorPane {
     private ImageCursor player1StoneCursor, player2StoneCursor, player2HandCursor, player1HandCursor,
             player2killCursor, player1killCursor;
     private GridPane fieldGridPane;
-    private CoordinatesInRepresentation[][] translationArrayGraphicToRepresentation;
+    private Position[][] translationArrayGraphicToRepresentation;
     private int[][] translationArrayRepresentationToIndex;
     private final int COMPREACTIONTIME = 500;
 
@@ -91,17 +91,18 @@ public class FieldView extends AnchorPane {
                     fieldGridPane.add(tempImageView,row,column);}}}
     }
 
-    public CoordinatesInRepresentation humanGraphicPut() {
+    public Position humanGraphicPut() {
         Object loopObject = new Object();
         setPutCursor();
+        final Position position = new Position();
         final int[] ring = new int[1];
         final int[] field = new int[1];
 
         for (Node n : fieldGridPane.getChildren()){
             if(((ImageView) n).getImage().equals(emptyField)){
             n.setOnMouseClicked(click ->{
-                ring[0] = translateToRing(n);
-                field[0] = translateToField(n);
+                position.setRing(translateToRing(n));
+                position.setField(translateToField(n));
 
                 System.out.println("Feld in Repräsentationsarray: " + ring[0] + "/" + field[0]);
                 System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
@@ -123,25 +124,25 @@ public class FieldView extends AnchorPane {
         clearAllFieldFunctions();
         viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
         moveMouseposition(20, 20);
-        return new CoordinatesInRepresentation(ring[0], field[0]);
+        return position;
     }
 
-    public CoordinatesInRepresentation humanGraphicKill(){
+    public Position humanGraphicKill(){
         Object loopObject = new Object();
         setKillCursor();
-        final int[] ring = new int[2];
-        final int[] field = new int[2];
+
+        final Position position = new Position();
 
         for (Node n : fieldGridPane.getChildren()){
             if(((ImageView) n).getImage().equals(getEnemysStoneImage()) &&
-                    (viewManager.getGame().getField().checkKill(translateToRing(n),translateToField(n)))
+                    (viewManager.getGame().getBoard().checkKill(new Position(translateToRing(n),translateToField(n))))
                     || viewManager.getGame().getOtherPlayer().isAllowedToJump()){
             n.setOnMouseClicked(click ->{
-                ring[0] = translateToRing(n);
-                field[0] = translateToField(n);
+                position.setRing(translateToRing(n));
+                position.setField(translateToField(n));
 
                 System.out.println("Stein wurde gesetzt.");
-                System.out.println("Feld in Repräsentationsarray: " + ring[0] + "/" + field[0]);
+                System.out.println("Feld in Repräsentationsarray: " + position.getRing() + "/" + position.getField());
                 System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
 
                 ((ImageView) n).setImage(emptyField);
@@ -152,44 +153,40 @@ public class FieldView extends AnchorPane {
         viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.KILL_STONE);
         moveMouseposition(20, 20);
 
-        return new CoordinatesInRepresentation(ring[0], field[0]);
+        return position;
     }
 
-    public CoordinatesInRepresentation[] humanGraphicMove() {
-        CoordinatesInRepresentation[] coordsArray = new CoordinatesInRepresentation[2];
-        final int[] ringArray = new int[2];
-        final int[] fieldArray = new int[2];
+    public Position[] humanGraphicMove() {
+
+        Position[] positions = new Position[2];
         boolean releasedOnAnotherField = false;
 
         while (!releasedOnAnotherField){
 
             setMoveCursor();
 
-            final ImageView clickedField = humanGraphicMoveTakeStep(ringArray, fieldArray)[0];
-            coordsArray[0] = new CoordinatesInRepresentation(ringArray[0],fieldArray[0]);
+            final ImageView clickedField = humanGraphicMoveTakeStep(positions)[0];
             clearAllFieldFunctions();
 
             setPutCursor();
 
-            releasedOnAnotherField = humanGraphicMoveReleaseStep(ringArray, fieldArray, clickedField);
-            coordsArray[1] = new CoordinatesInRepresentation(ringArray[1],fieldArray[1]);
+            releasedOnAnotherField = humanGraphicMoveReleaseStep(positions, clickedField);
             clearAllFieldFunctions();}
 
-        return coordsArray;
+        return positions;
     }
 
-    private ImageView[] humanGraphicMoveTakeStep(int[] ring, int[] field){
+    private ImageView[] humanGraphicMoveTakeStep(Position[] positions){
         Object loopObject = new Object();
         final ImageView[] clickedField = new ImageView[1];
 
         for (Node n : fieldGridPane.getChildren()){
             if(((ImageView) n).getImage().equals(getOwnStoneImage())){
                 n.setOnMouseClicked(click ->{
-                    ring[0] = translateToRing(n);
-                    field[0] = translateToField(n);
+                    positions[0] = new Position(translateToRing(n), translateToField(n));
 
                     System.out.println("Stein wurde genommen.");
-                    System.out.println("Feld in Repräsentationsarray: " + ring[0] + "/" + field[0]);
+                    System.out.println("Feld in Repräsentationsarray: " + positions[0].getRing() + "/" + positions[0].getField());
                     System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
 
                     ((ImageView) n).setImage(emptyField);
@@ -200,19 +197,18 @@ public class FieldView extends AnchorPane {
         return clickedField;
     }
 
-    private boolean humanGraphicMoveReleaseStep(int[] ring, int[] field, ImageView clickedField){
+    private boolean humanGraphicMoveReleaseStep(Position[] positions, ImageView clickedField){
         Object loopObject = new Object();
         final boolean[] releasedOnAnotherfield = {false};
         for (Node n : fieldGridPane.getChildren()){
             if(((ImageView) n).getImage().equals(emptyField) &&
-                    (viewManager.getGame().getField().checkDestination(ring[0], field[0], translateToRing(n), translateToField(n)))
-                    || viewManager.getGame().getField().checkIfJump()){
+                    (viewManager.getGame().getBoard().checkDestination(positions[0], new Position(translateToRing(n), translateToField(n))))
+                    || viewManager.getGame().getBoard().checkIfJump(viewManager.getGame().getCurrentPlayerIndex())){
                 n.setOnMouseClicked(click ->{
-                    ring[1] = translateToRing(n);
-                    field[1] = translateToField(n);
+                    positions[1] = new Position(translateToRing(n), translateToField(n));
 
                     System.out.println("Stein wurde hingelegt.");
-                    System.out.println("Feld in Repräsentationsarray: " + ring[1] + "/" + field[1]);
+                    System.out.println("Feld in Repräsentationsarray: " + positions[1].getRing() + "/" + positions[1].getField());
                     System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
 
                     ((ImageView) n).setImage(getOwnStoneImage());
@@ -231,11 +227,11 @@ public class FieldView extends AnchorPane {
         return releasedOnAnotherfield[0];
     }
 
-    public void computerGraphicPut(int ring, int field){
+    public void computerGraphicPut(Position position){
         Object loopObject = new Object();
         Timeline timeline = new Timeline(new KeyFrame(
                 Duration.millis(COMPREACTIONTIME),
-                put -> {((ImageView) fieldGridPane.getChildren().get(translateToIndex(ring, field))).setImage(player2StoneImage);
+                put -> {((ImageView) fieldGridPane.getChildren().get(translateToIndex(position.getRing(), position.getField()))).setImage(player2StoneImage);
                         viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
                         Platform.exitNestedEventLoop(loopObject, null);}));
         timeline.play();
@@ -243,11 +239,11 @@ public class FieldView extends AnchorPane {
 
     }
 
-    public void computerGraphicKill(int ring, int field){
+    public void computerGraphicKill(Position position){
         Object loopObject = new Object();
         Timeline timeline = new Timeline(new KeyFrame(
                 Duration.millis(COMPREACTIONTIME*1.5),
-                kill -> {((ImageView) fieldGridPane.getChildren().get(translateToIndex(ring, field))).setImage(emptyField);
+                kill -> {((ImageView) fieldGridPane.getChildren().get(translateToIndex(position.getRing(), position.getField()))).setImage(emptyField);
                         viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.KILL_STONE);
                         Platform.exitNestedEventLoop(loopObject, null);}));
         timeline.play();
@@ -338,40 +334,40 @@ public class FieldView extends AnchorPane {
     }
 
     private void initializeTranslationArray(){
-        translationArrayGraphicToRepresentation = new CoordinatesInRepresentation[7][7];
+        translationArrayGraphicToRepresentation = new Position[7][7];
 
         //Koordinaten -1/-1 bedeuten, dass Feld in FieldArray nicht repräsentiert wird!
         //Führt bei Feldinitialisierung zu einem forbiddenField
         for (int i = 0; i < 7; i++){
             for (int j = 0; j < 7; j++){
-                translationArrayGraphicToRepresentation[i][j] = new CoordinatesInRepresentation(-1,-1);
+                translationArrayGraphicToRepresentation[i][j] = new Position(-1,-1);
             }
         }
 
-        translationArrayGraphicToRepresentation[0][0] = new CoordinatesInRepresentation(0,0);
-        translationArrayGraphicToRepresentation[0][3] = new CoordinatesInRepresentation(0,1);
-        translationArrayGraphicToRepresentation[0][6] = new CoordinatesInRepresentation(0,2);
-        translationArrayGraphicToRepresentation[3][6] = new CoordinatesInRepresentation(0,3);
-        translationArrayGraphicToRepresentation[6][6] = new CoordinatesInRepresentation(0,4);
-        translationArrayGraphicToRepresentation[6][3] = new CoordinatesInRepresentation(0,5);
-        translationArrayGraphicToRepresentation[6][0] = new CoordinatesInRepresentation(0,6);
-        translationArrayGraphicToRepresentation[3][0] = new CoordinatesInRepresentation(0,7);
-        translationArrayGraphicToRepresentation[1][1] = new CoordinatesInRepresentation(1,0);
-        translationArrayGraphicToRepresentation[1][3] = new CoordinatesInRepresentation(1,1);
-        translationArrayGraphicToRepresentation[1][5] = new CoordinatesInRepresentation(1,2);
-        translationArrayGraphicToRepresentation[3][5] = new CoordinatesInRepresentation(1,3);
-        translationArrayGraphicToRepresentation[5][5] = new CoordinatesInRepresentation(1,4);
-        translationArrayGraphicToRepresentation[5][3] = new CoordinatesInRepresentation(1,5);
-        translationArrayGraphicToRepresentation[5][1] = new CoordinatesInRepresentation(1,6);
-        translationArrayGraphicToRepresentation[3][1] = new CoordinatesInRepresentation(1,7);
-        translationArrayGraphicToRepresentation[2][2] = new CoordinatesInRepresentation(2,0);
-        translationArrayGraphicToRepresentation[2][3] = new CoordinatesInRepresentation(2,1);
-        translationArrayGraphicToRepresentation[2][4] = new CoordinatesInRepresentation(2,2);
-        translationArrayGraphicToRepresentation[3][4] = new CoordinatesInRepresentation(2,3);
-        translationArrayGraphicToRepresentation[4][4] = new CoordinatesInRepresentation(2,4);
-        translationArrayGraphicToRepresentation[4][3] = new CoordinatesInRepresentation(2,5);
-        translationArrayGraphicToRepresentation[4][2] = new CoordinatesInRepresentation(2,6);
-        translationArrayGraphicToRepresentation[3][2] = new CoordinatesInRepresentation(2,7);
+        translationArrayGraphicToRepresentation[0][0] = new Position(0,0);
+        translationArrayGraphicToRepresentation[0][3] = new Position(0,1);
+        translationArrayGraphicToRepresentation[0][6] = new Position(0,2);
+        translationArrayGraphicToRepresentation[3][6] = new Position(0,3);
+        translationArrayGraphicToRepresentation[6][6] = new Position(0,4);
+        translationArrayGraphicToRepresentation[6][3] = new Position(0,5);
+        translationArrayGraphicToRepresentation[6][0] = new Position(0,6);
+        translationArrayGraphicToRepresentation[3][0] = new Position(0,7);
+        translationArrayGraphicToRepresentation[1][1] = new Position(1,0);
+        translationArrayGraphicToRepresentation[1][3] = new Position(1,1);
+        translationArrayGraphicToRepresentation[1][5] = new Position(1,2);
+        translationArrayGraphicToRepresentation[3][5] = new Position(1,3);
+        translationArrayGraphicToRepresentation[5][5] = new Position(1,4);
+        translationArrayGraphicToRepresentation[5][3] = new Position(1,5);
+        translationArrayGraphicToRepresentation[5][1] = new Position(1,6);
+        translationArrayGraphicToRepresentation[3][1] = new Position(1,7);
+        translationArrayGraphicToRepresentation[2][2] = new Position(2,0);
+        translationArrayGraphicToRepresentation[2][3] = new Position(2,1);
+        translationArrayGraphicToRepresentation[2][4] = new Position(2,2);
+        translationArrayGraphicToRepresentation[3][4] = new Position(2,3);
+        translationArrayGraphicToRepresentation[4][4] = new Position(2,4);
+        translationArrayGraphicToRepresentation[4][3] = new Position(2,5);
+        translationArrayGraphicToRepresentation[4][2] = new Position(2,6);
+        translationArrayGraphicToRepresentation[3][2] = new Position(2,7);
 
         translationArrayRepresentationToIndex = new int[3][8];
         translationArrayRepresentationToIndex[0][0] = 0;

@@ -100,7 +100,7 @@ public class ScoreView extends VBox {
     }
 
     public void increaseStonesLost(){
-        switch ((viewManager.getGame().getCurrentPlayerIndex()+1)%2){
+        switch ((viewManager.getGame().getOtherPlayerIndex())){
             case 0:
                 stonesLostPlayer1Label.setText("Steine verloren: " + ++stonesLost1);
                 break;
