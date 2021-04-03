@@ -44,7 +44,7 @@ public class ComputerPlayer extends Player {
     }
 
     @Override
-    void kill(Board board, int playerIndex) throws InvalidKillException {
+    void kill(Board board, int otherPlayerIndex) throws InvalidKillException {
         Position position = new Position();
         int i;
         int j;
@@ -52,11 +52,11 @@ public class ComputerPlayer extends Player {
         loop:{
         for (i = 0; i < 3; i++) {
             for (j = 0; j < 8; j++) {
-                if (board.getArray()[i][j] == 0 && board.checkKill(new Position(i,j))) {
+                if (board.checkKill(new Position(i,j), otherPlayerIndex)) {
                     position.setRing(i);
                     position.setField(j);
 
-                    board.killStone(position, playerIndex);
+                    board.killStone(position, otherPlayerIndex);
 
                     viewManager.getFieldView().computerGraphicKill(position);
 
@@ -71,23 +71,5 @@ public class ComputerPlayer extends Player {
 
 
 
-    //Entfernt den nächsten gegnerischen Stein
-    public Position compKillStone(Board board) {
-        Position position = new Position();
-        int i;
-        int j;
-
-        for (i = 0; i < 3; i++) {
-            for (j = 0; j < 8; j++) {
-                if (board.getArray()[i][j] == 0 && board.checkKill(new Position(i,j))) {
-                    position.setRing(i);
-                    position.setField(j);
-
-                    return position;
-                }
-            }
-        }
-        return position;
-    }
 
 }

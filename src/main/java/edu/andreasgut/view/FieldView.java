@@ -1,6 +1,6 @@
 package edu.andreasgut.view;
 
-import edu.andreasgut.game.Player;
+
 import edu.andreasgut.game.Position;
 import edu.andreasgut.sound.SOUNDEFFECT;
 import javafx.animation.KeyFrame;
@@ -137,8 +137,8 @@ public class FieldView extends AnchorPane {
 
         for (Node n : fieldGridPane.getChildren()){
             if(((ImageView) n).getImage().equals(getEnemysStoneImage()) &&
-                    (viewManager.getGame().getBoard().checkKill(new Position(translateToRing(n),translateToField(n))))
-                    || viewManager.getGame().getBoard().countPlayersStones(viewManager.getGame().getOtherPlayerIndex()) == 3) {
+                    viewManager.getGame().getBoard().checkKill(new Position(translateToRing(n),translateToField(n)),
+                    viewManager.getGame().getOtherPlayerIndex())) {
             n.setOnMouseClicked(click ->{
                 position.setRing(translateToRing(n));
                 position.setField(translateToField(n));
@@ -204,8 +204,8 @@ public class FieldView extends AnchorPane {
         final boolean[] releasedOnAnotherfield = {false};
         for (Node n : fieldGridPane.getChildren()){
             if(((ImageView) n).getImage().equals(emptyField) &&
-                    (viewManager.getGame().getBoard().checkDestination(positions[0], new Position(translateToRing(n), translateToField(n))))
-                    || viewManager.getGame().getBoard().countPlayersStones(viewManager.getGame().getOtherPlayerIndex()) == 3){
+                    (viewManager.getGame().getBoard().checkDestination(positions[0], new Position(translateToRing(n), translateToField(n)),
+                            viewManager.getGame().getBoard().countPlayersStones(viewManager.getGame().getOtherPlayerIndex()) == 3))){
                 n.setOnMouseClicked(click ->{
                     positions[1] = new Position(translateToRing(n), translateToField(n));
 
@@ -233,7 +233,7 @@ public class FieldView extends AnchorPane {
         Object loopObject = new Object();
         Timeline timeline = new Timeline(new KeyFrame(
                 Duration.millis(COMPREACTIONTIME),
-                put -> {((ImageView) fieldGridPane.getChildren().get(translateToIndex(position.getRing(), position.getField()))).setImage(player2StoneImage);
+                put -> {((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(player2StoneImage);
                         viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
                         Platform.exitNestedEventLoop(loopObject, null);}));
         timeline.play();
@@ -245,7 +245,7 @@ public class FieldView extends AnchorPane {
         Object loopObject = new Object();
         Timeline timeline = new Timeline(new KeyFrame(
                 Duration.millis(COMPREACTIONTIME*1.5),
-                kill -> {((ImageView) fieldGridPane.getChildren().get(translateToIndex(position.getRing(), position.getField()))).setImage(emptyField);
+                kill -> {((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(emptyField);
                         viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.KILL_STONE);
                         Platform.exitNestedEventLoop(loopObject, null);}));
         timeline.play();
@@ -331,8 +331,8 @@ public class FieldView extends AnchorPane {
         return translationArrayGraphicToRepresentation[GridPane.getRowIndex(node)][GridPane.getColumnIndex(node)].getField();
     }
 
-    private int translateToIndex(int ring, int field){
-        return translationArrayRepresentationToIndex[ring][field];
+    private int translateToIndex(Position position){
+        return translationArrayRepresentationToIndex[position.getRing()][position.getField()];
     }
 
     private void initializeTranslationArray(){

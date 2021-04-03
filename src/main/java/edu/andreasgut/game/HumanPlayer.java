@@ -26,9 +26,9 @@ public class HumanPlayer extends Player{
     }
 
     @Override
-    void kill(Board board, int playerIndex) throws InvalidKillException {
+    void kill(Board board, int otherPlayerIndex) throws InvalidKillException {
         Position position = viewManager.getFieldView().humanGraphicKill();
-        board.killStone(position, playerIndex);
+        board.killStone(position, otherPlayerIndex);
 
         viewManager.getScoreView().increaseStonesLost();
         viewManager.getScoreView().increaseStonesKilled();

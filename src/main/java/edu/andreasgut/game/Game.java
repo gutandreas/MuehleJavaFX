@@ -118,7 +118,7 @@ public class Game {
             }
 
             if (board.checkMorris(position) && (board.isThereStoneToKill(getOtherPlayerIndex())
-                    || board.countPlayersStones(getOtherPlayerIndex())==3)){
+                    || (board.countPlayersStones(getOtherPlayerIndex())==3) && movePhase)){
                 System.out.println(currentPlayer.getName() + " darf einen gegnerischen Stein entfernen");
                 viewManager.getLogView().setStatusLabel(currentPlayer.getName() +
                         " darf einen gegnerischen Stein entfernen. Wähle den Stein, der entfernt werden soll");
