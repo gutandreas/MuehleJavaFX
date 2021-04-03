@@ -1,6 +1,5 @@
 package edu.andreasgut.game;
 
-import edu.andreasgut.view.CoordinatesInRepresentation;
 import edu.andreasgut.view.ViewManager;
 
 
@@ -40,7 +39,7 @@ public class Game {
     public Game(ViewManager viewManager, Player player0) {
         this.viewManager = viewManager;
         this.player0 = player0;
-        this.player1 = new Computer( "COMPUTER");
+        this.player1 = new ComputerPlayer(viewManager, "COMPUTER");
         playerArrayList.add(0, player0);
         playerArrayList.add(1, player1);
         round = 0;
@@ -54,9 +53,7 @@ public class Game {
         return currentPlayer;
     }
 
-    public Player getOtherPlayer() {
-        return playerArrayList.get((getCurrentPlayerIndex()+1)%2);
-    }
+    public Player getOtherPlayer() { return playerArrayList.get(getOtherPlayerIndex()); }
 
     public int getCurrentPlayerIndex(){
         return currentPlayer.equals(playerArrayList.get(0)) ? 0 : 1;
@@ -70,45 +67,16 @@ public class Game {
         return board;
     }
 
-    public Board getOldField() {
-        return oldField;
-    }
-
-
-    public boolean isPutPhase() {
-        return putPhase;
-    }
-
-    public boolean isMovePhase() {
-        return movePhase;
-    }
-
-    public Player getWinner() {
-        return winner;
-    }
-
     public void increaseRound(){
         round++;
         viewManager.getScoreView().increaseRound();
-    }
-
-    public Player getPlayer0() {
-        return player0;
-    }
-
-    public Player getPlayer1() {
-        return player1;
     }
 
     public ViewManager getViewManager() {
         return viewManager;
     }
 
-    public void setOldField(Board oldField) {
-        this.oldField = oldField;
-    }
-
-    public void play() throws InvalidFieldException {
+    public void play() {
 
         while (true){
 
@@ -118,10 +86,10 @@ public class Game {
 
             //viewManager.getScoreView().setPlayerLabelEffects(); // funktioniert noch nicht wie gewünscht
 
-            oldField = (Board) getBoard().clone();
-            board.printField();
+            System.out.println(board);
 
-            if (movePhase ==true && (board.numberOfStonesCurrentPlayer() <= 2 || !board.checkIfAbleToMove(currentPlayer))){
+            if (movePhase && (board.countPlayersStones(getCurrentPlayerIndex()) <= 2
+                    || !board.checkIfAbleToMove(getCurrentPlayerIndex()))){
                 winGame();
                 break;
             }
@@ -130,16 +98,34 @@ public class Game {
             viewManager.getLogView().setStatusLabel(getCurrentPlayer().getName() + " ist an der Reihe!");
 
             setGamesPhaseBooleans();
-            setCurrentPlayersJumpBoolean();
 
-            putOrMove();
+            Position position = null;
 
-            if (board.checkTriple(oldField) && (board.isThereStoneToKill(getOtherPlayerIndex())
-                    || playerArrayList.get((getCurrentPlayerIndex()+1)%2).isAllowedToJump())){
+            if (putPhase){
+                try { position = currentPlayer.put(board, getCurrentPlayerIndex());}
+                catch (InvalidPutException e){
+                    e.printStackTrace();
+                }
+            }
+
+            if (movePhase){
+                try { position = currentPlayer.move(board, getCurrentPlayerIndex(),
+                        board.countPlayersStones(getCurrentPlayerIndex())==3);}
+                catch (InvalidMoveException | InvalidPutException e){
+                    e.printStackTrace();
+                }
+
+            }
+
+            if (board.checkMorris(position) && (board.isThereStoneToKill(getOtherPlayerIndex())
+                    || board.countPlayersStones(getOtherPlayerIndex())==3)){
                 System.out.println(currentPlayer.getName() + " darf einen gegnerischen Stein entfernen");
                 viewManager.getLogView().setStatusLabel(currentPlayer.getName() +
                         " darf einen gegnerischen Stein entfernen. Wähle den Stein, der entfernt werden soll");
-                kill();
+
+                try { currentPlayer.kill(board, getOtherPlayerIndex()); }
+                catch (InvalidKillException e) {
+                    e.printStackTrace(); }
             }
 
             increaseRound();
@@ -150,88 +136,18 @@ public class Game {
     }
 
 
-
-
     private void setGamesPhaseBooleans(){
         if (round == NUMBEROFSTONES*2){
             putPhase = false;
             movePhase = true;}
     }
 
-    private void setCurrentPlayersJumpBoolean(){
-        if (round >= NUMBEROFSTONES*2 && getBoard().numberOfStonesCurrentPlayer()<=3){
-            getCurrentPlayer().setAllowedToJump(true);
-        }
-    }
 
     private void winGame(){
-        winner = playerArrayList.get((getCurrentPlayerIndex()+1)%2);
+        winner = playerArrayList.get(getOtherPlayerIndex());
         viewManager.getLogView().setStatusLabel(winner.getName() + " hat das Spiel gewonnen");
         viewManager.getFieldView().setDisable(true);
         System.out.println(winner.getName() + " hat das Spiel gewonnen!");
-    }
-
-    private void putOrMove() throws InvalidFieldException {
-
-        //SETZEN UND FAHREN: Menschlicher Spieler
-        if(!(getCurrentPlayer() instanceof Computer)){
-
-            if (putPhase){
-                Position position = viewManager.getFieldView().humanGraphicPut();
-                board.putStone(position, getCurrentPlayerIndex());
-                viewManager.getScoreView().increaseStonesPut();
-            }
-
-            if(movePhase){
-                try {
-                    Position[] positions = viewManager.getFieldView().humanGraphicMove();
-                    board.move(positions[0], positions[1], getCurrentPlayerIndex());
-                } catch (InvalidMoveException e) {
-                    e.printStackTrace();
-                    putOrMove();
-                }
-            }
-        }
-
-        //SETZEN UND FAHREN: Computerspieler
-        if (getCurrentPlayer() instanceof Computer){
-
-            if (putPhase){
-                Position position = ((Computer) player1).compPutStone(board);
-                board.putStone(position, getCurrentPlayerIndex());
-                viewManager.getFieldView().computerGraphicPut(position);
-                viewManager.getScoreView().increaseStonesPut();
-            }
-        }
-
-
-    }
-
-    private void kill(){
-        //STEIN ENTFERNEN: Menschlicher Spieler
-        if(!(getCurrentPlayer() instanceof Computer)){
-            Position position = viewManager.getFieldView().humanGraphicKill();
-            try {
-                board.killStone(position, getOtherPlayerIndex());
-            } catch (InvalidKillException e) {
-                e.printStackTrace();
-            }
-        }
-
-        //STEIN ENTFERNEN: Computerspieler
-        if(getCurrentPlayer() instanceof Computer){
-            Position position = ((Computer) player1).compKillStone(board);
-            try {
-                board.killStone(position, getOtherPlayerIndex());
-            } catch (InvalidKillException e) {
-                System.out.println(e.getMessage());
-                kill();
-            }
-            viewManager.getFieldView().computerGraphicKill(position);
-        }
-
-        viewManager.getScoreView().increaseStonesLost();
-        viewManager.getScoreView().increaseStonesKilled();
     }
 }
 

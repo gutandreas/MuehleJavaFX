@@ -1,8 +1,8 @@
 package edu.andreasgut.view;
 
 import edu.andreasgut.game.Game;
-import edu.andreasgut.game.InvalidFieldException;
-import edu.andreasgut.game.Player;
+import edu.andreasgut.game.HumanPlayer;
+import edu.andreasgut.game.InvalidPutException;
 import edu.andreasgut.sound.MUSIC;
 import edu.andreasgut.view.fxElements.SelectColorButton;
 import javafx.geometry.Pos;
@@ -200,12 +200,12 @@ public class StartMenuView extends VBox {
 
                 if (twoPlayersRadioButton.isSelected()){
                     viewManager.setGame(new Game(viewManager,
-                            new Player(namePlayer1Textfield.getText().toUpperCase()),
-                            new Player(namePlayer2Textfield.getText().toUpperCase())));
+                            new HumanPlayer(viewManager, namePlayer1Textfield.getText().toUpperCase()),
+                            new HumanPlayer(viewManager, namePlayer2Textfield.getText().toUpperCase())));
                 }
                 else {
                     viewManager.setGame(new Game(viewManager,
-                            new Player(namePlayer1Textfield.getText().toUpperCase())));
+                            new HumanPlayer(viewManager, namePlayer1Textfield.getText().toUpperCase())));
                 }
 
                 viewManager.createGameScene(new FieldView(viewManager, player1Color, player2Color),
@@ -217,11 +217,8 @@ public class StartMenuView extends VBox {
 
                 viewManager.changeToGameScene();
 
-                try {
-                    viewManager.getGame().play();
-                } catch (InvalidFieldException e) {
-                    e.printStackTrace();
-                }
+
+                viewManager.getGame().play();
 
 
 

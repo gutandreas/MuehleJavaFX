@@ -1,5 +1,6 @@
 package edu.andreasgut.view;
 
+import edu.andreasgut.game.Player;
 import edu.andreasgut.game.Position;
 import edu.andreasgut.sound.SOUNDEFFECT;
 import javafx.animation.KeyFrame;
@@ -91,6 +92,7 @@ public class FieldView extends AnchorPane {
                     fieldGridPane.add(tempImageView,row,column);}}}
     }
 
+
     public Position humanGraphicPut() {
         Object loopObject = new Object();
         setPutCursor();
@@ -136,7 +138,7 @@ public class FieldView extends AnchorPane {
         for (Node n : fieldGridPane.getChildren()){
             if(((ImageView) n).getImage().equals(getEnemysStoneImage()) &&
                     (viewManager.getGame().getBoard().checkKill(new Position(translateToRing(n),translateToField(n))))
-                    || viewManager.getGame().getOtherPlayer().isAllowedToJump()){
+                    || viewManager.getGame().getBoard().countPlayersStones(viewManager.getGame().getOtherPlayerIndex()) == 3) {
             n.setOnMouseClicked(click ->{
                 position.setRing(translateToRing(n));
                 position.setField(translateToField(n));
@@ -203,7 +205,7 @@ public class FieldView extends AnchorPane {
         for (Node n : fieldGridPane.getChildren()){
             if(((ImageView) n).getImage().equals(emptyField) &&
                     (viewManager.getGame().getBoard().checkDestination(positions[0], new Position(translateToRing(n), translateToField(n))))
-                    || viewManager.getGame().getBoard().checkIfJump(viewManager.getGame().getCurrentPlayerIndex())){
+                    || viewManager.getGame().getBoard().countPlayersStones(viewManager.getGame().getOtherPlayerIndex()) == 3){
                 n.setOnMouseClicked(click ->{
                     positions[1] = new Position(translateToRing(n), translateToField(n));
 
