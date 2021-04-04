@@ -74,7 +74,7 @@ public class StartMenuView extends VBox {
         beginnerHBox = new HBox();
         beginnerSwitchButton = new BeginnerSwitchButton(viewManager);
         beginnerLabel1 = new Label("Spieler 1 beginnt");
-        beginnerLabel2 = new Label("Spieler 2 beginnt");
+        beginnerLabel2 = new Label("Computer beginnt");
         beginnerHBox.getChildren().addAll(beginnerLabel1, beginnerSwitchButton, beginnerLabel2);
         beginnerHBox.setAlignment(Pos.CENTER_LEFT);
         beginnerHBox.setSpacing(10);
@@ -190,12 +190,14 @@ public class StartMenuView extends VBox {
             stonesColorLabel2.setVisible(false);
             stonesBlackButton2.setVisible(false);
             stonesWhiteButton2.setVisible(false);
+            beginnerLabel2.setText("Computer beginnt");
         });
         twoPlayersRadioButton.setOnAction(action -> {
             namePlayer2Textfield.setVisible(true);
             stonesColorLabel2.setVisible(true);
             stonesBlackButton2.setVisible(true);
             stonesWhiteButton2.setVisible(true);
+            beginnerLabel2.setText("Spieler 2 beginnt");
         });
     }
 
