@@ -15,7 +15,6 @@ public class Game {
     private final int NUMBEROFSTONES = 9;
     private Player currentPlayer;
     private Board board;
-    private Board oldField;
     boolean putPhase = true;
     boolean movePhase = false;
     private Scanner scanner = new Scanner(System.in);

@@ -4,6 +4,7 @@ import edu.andreasgut.game.Game;
 import edu.andreasgut.game.HumanPlayer;
 import edu.andreasgut.game.InvalidPutException;
 import edu.andreasgut.sound.MUSIC;
+import edu.andreasgut.view.fxElements.BeginnerSwitchButton;
 import edu.andreasgut.view.fxElements.SelectColorButton;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -16,13 +17,14 @@ public class StartMenuView extends VBox {
     private final int STARTDIMENSION = 600;
     ViewManager viewManager;
     VBox vBox;
-    HBox hBoxRadioButtons, player1HBox, player2HBox;
+    HBox hBoxRadioButtons, player1HBox, player2HBox, beginnerHBox;
     ToggleGroup radioButtonGroup;
     RadioButton onePlayerRadioButton, twoPlayersRadioButton;
     TextField namePlayer1Textfield, namePlayer2Textfield;
-    Label informationLabel, titleLabel, stonesColorLabel1, stonesColorLabel2;
+    Label informationLabel, titleLabel, stonesColorLabel1, stonesColorLabel2, beginnerLabel1, beginnerLabel2;
     Button startButton;
     SelectColorButton stonesBlackButton1, stonesWhiteButton1, stonesBlackButton2, stonesWhiteButton2;
+    BeginnerSwitchButton beginnerSwitchButton;
     ImageView player1StonesImageView, player2StonesImageView;
     STONECOLOR player1Color, player2Color;
 
@@ -36,9 +38,10 @@ public class StartMenuView extends VBox {
 
         setupTitleAndWarning();
         setupRadioButtons();
+        setupBeginnerSwitch();
         setupPlayerInformations();
 
-        vBox.getChildren().addAll(titleLabel, informationLabel, hBoxRadioButtons, player1HBox, player2HBox, startButton);
+        vBox.getChildren().addAll(titleLabel, informationLabel, hBoxRadioButtons, beginnerHBox, player1HBox, player2HBox, startButton);
         vBox.setSpacing(20);
         this.getChildren().addAll(vBox);
         this.setAlignment(Pos.CENTER);
@@ -65,6 +68,17 @@ public class StartMenuView extends VBox {
         hBoxRadioButtons.getChildren().addAll(onePlayerRadioButton, twoPlayersRadioButton);
         hBoxRadioButtons.setSpacing(20);
         radioButtonGroup.selectToggle(onePlayerRadioButton);
+    }
+
+    private void setupBeginnerSwitch(){
+        beginnerHBox = new HBox();
+        beginnerSwitchButton = new BeginnerSwitchButton(viewManager);
+        beginnerLabel1 = new Label("Spieler 1 beginnt");
+        beginnerLabel2 = new Label("Spieler 2 beginnt");
+        beginnerHBox.getChildren().addAll(beginnerLabel1, beginnerSwitchButton, beginnerLabel2);
+        beginnerHBox.setAlignment(Pos.CENTER_LEFT);
+        beginnerHBox.setSpacing(10);
+
     }
 
     private void setupPlayerInformations(){
