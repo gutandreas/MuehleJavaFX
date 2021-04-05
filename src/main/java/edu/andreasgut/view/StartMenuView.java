@@ -41,7 +41,7 @@ public class StartMenuView extends VBox {
         setupBeginnerSwitch();
         setupPlayerInformations();
 
-        vBox.getChildren().addAll(titleLabel, informationLabel, hBoxRadioButtons, beginnerHBox, player1HBox, player2HBox, startButton);
+        vBox.getChildren().addAll(titleLabel, informationLabel, hBoxRadioButtons, player1HBox, beginnerHBox, /*player2HBox,*/ startButton);
         vBox.setSpacing(20);
         this.getChildren().addAll(vBox);
         this.setAlignment(Pos.CENTER);
@@ -78,6 +78,7 @@ public class StartMenuView extends VBox {
         beginnerHBox.getChildren().addAll(beginnerLabel1, beginnerSwitchButton, beginnerLabel2);
         beginnerHBox.setAlignment(Pos.CENTER_LEFT);
         beginnerHBox.setSpacing(10);
+        beginnerHBox.setPrefHeight(70);
 
     }
 
@@ -96,19 +97,17 @@ public class StartMenuView extends VBox {
 
         namePlayer2Textfield = new TextField();
         namePlayer2Textfield.setPromptText("Name Spieler 2");
-        namePlayer2Textfield.setVisible(false);
+        namePlayer2Textfield.setVisible(true);
         stonesColorLabel2 = new Label("Steinfarbe: ");
-        stonesColorLabel2.setVisible(false);
         stonesBlackButton2 = new SelectColorButton(null, STONECOLOR.BLACK, false);
-        stonesBlackButton2.setVisible(false);
         stonesWhiteButton2 = new SelectColorButton(null, STONECOLOR.WHITE, true);
-        stonesWhiteButton2.setVisible(false);
         player2Color = STONECOLOR.WHITE;
 
         player2HBox = new HBox();
         player2HBox.getChildren().addAll(namePlayer2Textfield, stonesColorLabel2, stonesBlackButton2, stonesWhiteButton2);
         player2HBox.setSpacing(20);
         player2HBox.setAlignment(Pos.CENTER_LEFT);
+        player2HBox.setPrefHeight(70);
     }
 
     private void setupColorButtonAction(){
@@ -185,19 +184,14 @@ public class StartMenuView extends VBox {
 
     private void setupRadioButtonAction(){
         onePlayerRadioButton.setOnAction(action -> {
-            namePlayer2Textfield.setVisible(false);
-            namePlayer2Textfield.clear();
-            stonesColorLabel2.setVisible(false);
-            stonesBlackButton2.setVisible(false);
-            stonesWhiteButton2.setVisible(false);
-            beginnerLabel2.setText("Computer beginnt");
+            vBox.getChildren().add(4, beginnerHBox);
+            vBox.getChildren().remove(player2HBox);
+
         });
         twoPlayersRadioButton.setOnAction(action -> {
-            namePlayer2Textfield.setVisible(true);
-            stonesColorLabel2.setVisible(true);
-            stonesBlackButton2.setVisible(true);
-            stonesWhiteButton2.setVisible(true);
-            beginnerLabel2.setText("Spieler 2 beginnt");
+            vBox.getChildren().remove(beginnerHBox);
+            vBox.getChildren().add(4, player2HBox);
+
         });
     }
 
@@ -221,8 +215,10 @@ public class StartMenuView extends VBox {
                 }
                 else {
                     viewManager.setGame(new Game(viewManager,
-                            new HumanPlayer(viewManager, namePlayer1Textfield.getText().toUpperCase())));
+                            new HumanPlayer(viewManager, namePlayer1Textfield.getText().toUpperCase()),
+                            beginnerSwitchButton.getState()));
                 }
+
 
                 viewManager.createGameScene(new FieldView(viewManager, player1Color, player2Color),
                         new ScoreView(viewManager, player1Color, player2Color),

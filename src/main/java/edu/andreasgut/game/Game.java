@@ -18,8 +18,8 @@ public class Game {
     boolean putPhase = true;
     boolean movePhase = false;
     private Scanner scanner = new Scanner(System.in);
-    private int modus;
     private ViewManager viewManager;
+    private boolean player2starts;
 
     ArrayList<Player> playerArrayList = new ArrayList<>();
 
@@ -32,19 +32,21 @@ public class Game {
         round = 0;
         currentPlayer=playerArrayList.get(0);
         board = new Board(this);
-        modus = 1;
     }
 
-    public Game(ViewManager viewManager, Player player0) {
+    public Game(ViewManager viewManager, Player player0, boolean player2starts) {
         this.viewManager = viewManager;
         this.player0 = player0;
         this.player1 = new ComputerPlayer(viewManager, "COMPUTER");
+        this.player2starts = player2starts;
         playerArrayList.add(0, player0);
         playerArrayList.add(1, player1);
         round = 0;
-        currentPlayer=playerArrayList.get(0);
+        if (player2starts){
+            currentPlayer=playerArrayList.get(1);}
+        else {
+            currentPlayer=playerArrayList.get(0);}
         board = new Board(this);
-        modus = 2;
     }
 
 
@@ -54,13 +56,26 @@ public class Game {
 
     public Player getOtherPlayer() { return playerArrayList.get(getOtherPlayerIndex()); }
 
+    public Player getPlayer0() {
+        return player0;
+    }
+
+    public Player getPlayer1() {
+        return player1;
+    }
+
     public int getCurrentPlayerIndex(){
         return currentPlayer.equals(playerArrayList.get(0)) ? 0 : 1;
     }
 
     public int getOtherPlayerIndex(){ return currentPlayer.equals(playerArrayList.get(0)) ? 1 : 0; }
 
-    public void updateCurrentPlayer(){ currentPlayer = playerArrayList.get(round%2);}
+    public void updateCurrentPlayer(){
+        if(player2starts){
+            currentPlayer = playerArrayList.get((round+1)%2);}
+        else {
+            currentPlayer = playerArrayList.get(round%2);
+        }}
 
     public Board getBoard() {
         return board;
