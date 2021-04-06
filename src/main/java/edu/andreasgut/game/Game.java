@@ -5,16 +5,16 @@ import java.util.ArrayList;
 
 public class Game {
 
-    private Player player0;
-    private Player player1;
+    private final Player player0;
+    private final Player player1;
     private Player winner;
     private int round;
     private final int NUMBEROFSTONES = 9;
     private Player currentPlayer;
-    private Board board;
+    private final Board board;
     boolean putPhase = true;
     boolean movePhase = false;
-    private ViewManager viewManager;
+    private final ViewManager viewManager;
     private boolean player2starts;
 
     ArrayList<Player> playerArrayList = new ArrayList<>();
