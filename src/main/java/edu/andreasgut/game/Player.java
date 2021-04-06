@@ -4,8 +4,8 @@ import edu.andreasgut.view.ViewManager;
 
 public abstract class Player {
 
-    private String name;
-    protected ViewManager viewManager;
+    private final String name;
+    protected final ViewManager viewManager;
 
     public Player(ViewManager viewManager, String name) {
         this.viewManager = viewManager;
