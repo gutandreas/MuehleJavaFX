@@ -10,13 +10,34 @@ public class ComputerPlayer extends Player {
     }
 
     @Override
-    Position move(Board board, int playerIndex, boolean allowedToJump) throws InvalidMoveException, InvalidPutException {
+    Position[] move(Board board, int playerIndex, boolean allowedToJump) {
+        Position[] positions = new Position[2];
 
-        return null;
+        loop:{
+        for (int i = 0; i < 3; i++){
+            for(int j = 0; j < 7; j++){
+                if (board.isThisMyStone(new Position(i,j),playerIndex)){
+                    if(board.isFieldFree(new Position(i,(j+1)%8))){
+                        positions[0] = new Position(i, j);
+                        positions[1] = new Position(i, (j+1)%8);
+                        System.out.println(i+" "+j);
+                        break loop;
+                    }
+                    if(board.isFieldFree(new Position(i,(j+7)%8))){
+                        positions[0] = new Position(i, j);
+                        positions[1] = new Position(i, (j+7)%8);
+                        System.out.println(i+" "+j);
+                        break loop;
+                    }
+
+
+                }
+        }}}
+        return positions;
     }
 
     @Override
-    Position put(Board board, int playerIndex) throws InvalidPutException {
+    Position put(Board board, int playerIndex) {
         Position position = new Position();
         int i;
         int j;
@@ -27,24 +48,16 @@ public class ComputerPlayer extends Player {
                     position.setRing(i);
                     position.setField(j);
 
-
-                    board.putStone(position, playerIndex);
-
-                    viewManager.getFieldView().computerGraphicPut(position);
-                    viewManager.getScoreView().increaseStonesPut();
-
                     return position;
                 }
             }
         }
 
-
-
         return position;
     }
 
     @Override
-    void kill(Board board, int otherPlayerIndex) throws InvalidKillException {
+    Position kill(Board board, int otherPlayerIndex) {
         Position position = new Position();
         int i;
         int j;
@@ -56,17 +69,11 @@ public class ComputerPlayer extends Player {
                     position.setRing(i);
                     position.setField(j);
 
-                    board.killStone(position, otherPlayerIndex);
-
-                    viewManager.getFieldView().computerGraphicKill(position);
-
-                    viewManager.getScoreView().increaseStonesKilled();
-                    viewManager.getScoreView().increaseStonesLost();
                     break loop;
-
                 }
             }
         }}
+        return position;
     }
 
 

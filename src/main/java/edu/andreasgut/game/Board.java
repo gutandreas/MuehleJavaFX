@@ -31,29 +31,25 @@ public class Board implements Cloneable{
         return array.clone();
     }
 
-    public void putStone(Position position, int playerIndex) throws InvalidPutException {
-        if (isFieldOccupied(position)){
-            throw new InvalidPutException("Dieses Feld ist besetzt");
-        }
+    public void putStone(Position position, int playerIndex) {
         array[position.getRing()][position.getField()] =  playerIndex;
     }
 
 
-    public void move(Position from, Position to, int playerIndex, boolean allowedToJump) throws InvalidMoveException, InvalidPutException {
-        if (array[from.getRing()][from.getField()]!= playerIndex){
-            throw new InvalidMoveException("Kein bzw. nicht dein Stein");
-        }
-
-        if (checkDestination(from, to, allowedToJump)){
-            putStone(to, playerIndex);
-            clear(from);}
-        else throw new InvalidMoveException("Kein möglicher Zielort");}
+    public void move(Position from, Position to, int playerIndex) {
+        putStone(to, playerIndex);
+        clearStone(from);
+    }
 
 
+    public boolean checkPut(Position position){
+        return isFieldFree(position);
+    }
 
-    public boolean checkDestination(Position from, Position to, boolean allowedToJump){
 
-        boolean destinationFree = !isFieldOccupied(to);
+    public boolean checkMove(Position from, Position to, boolean allowedToJump){
+
+        boolean destinationFree = isFieldFree(to);
 
         boolean destinationInRing = (from.getRing()==to.getRing() && Math.abs(from.getField()-to.getField())==1)
                 || (from.getRing()==to.getRing() && Math.abs(from.getField()-to.getField())==7);
@@ -65,10 +61,10 @@ public class Board implements Cloneable{
     }
 
 
-    private void clear(Position position){
-        array[position.getRing()][position.getField()] = 9;
+    public boolean checkKill(Position position, int otherPlayerIndex){
+        return array[position.getRing()][position.getField()] == otherPlayerIndex &&
+                (!checkMorris(position) || countPlayersStones(otherPlayerIndex)==3);
     }
-
 
 
     public boolean checkMorris(Position position){
@@ -149,13 +145,11 @@ public class Board implements Cloneable{
         return false;
     }
 
-    public void killStone(Position position, int otherPlayerIndex) throws InvalidKillException {
-        if (checkKill(position, otherPlayerIndex)){
-            clear(position);
-        }
-        else throw new InvalidKillException(
-                "Auf diesem Feld befindet sich kein gegnerischer Stein oder er liegt in einer Mühle");
+
+    public void clearStone(Position position) {
+        array[position.getRing()][position.getField()] = 9;
     }
+
 
     public boolean isThereStoneToKill(int otherPlayerIndex){
         for (int ring = 0; ring < 3; ring++){
@@ -166,11 +160,6 @@ public class Board implements Cloneable{
             }
         }
         return false;
-    }
-
-    public boolean checkKill(Position position, int otherPlayerIndex){
-        return array[position.getRing()][position.getField()] == otherPlayerIndex &&
-                (!checkMorris(position) || countPlayersStones(otherPlayerIndex)==3);
     }
 
 
@@ -186,9 +175,21 @@ public class Board implements Cloneable{
         return counter;
     }
 
-    public boolean isFieldOccupied(Position position){
-        return array[position.getRing()][position.getField()] != 9;
+
+    public boolean isFieldFree(Position position) {
+        return array[position.getRing()][position.getField()] == 9;
     }
+
+
+    public boolean isFieldOccupied(Position position){
+        return !isFieldFree(position);
+    }
+
+
+    public boolean isThisMyStone(Position position, int playerIndex){
+        return array[position.getRing()][position.getField()] == playerIndex;
+    }
+
 
     @Override
     public String toString(){
@@ -261,7 +262,6 @@ public class Board implements Cloneable{
         }
 
     return rowString;}
-
 
 
     public Object clone(){

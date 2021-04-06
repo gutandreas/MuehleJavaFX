@@ -9,28 +9,25 @@ public class HumanPlayer extends Player{
     }
 
     @Override
-    Position move(Board board, int playerIndex, boolean allowedToJump) throws InvalidMoveException, InvalidPutException {
+    Position[] move(Board board, int playerIndex, boolean allowedToJump) {
         Position[] positions = viewManager.getFieldView().humanGraphicMove();
-        board.move(positions[0], positions[1], viewManager.getGame().getCurrentPlayerIndex(), allowedToJump);
-        return positions[1];
+        return positions;
     }
 
     @Override
-    Position put(Board board, int playerIndex) throws InvalidPutException {
+    Position put(Board board, int playerIndex) {
         Position position = viewManager.getFieldView().humanGraphicPut();
 
-        board.putStone(position, playerIndex);
-        viewManager.getScoreView().increaseStonesPut();
+
 
         return position;
     }
 
     @Override
-    void kill(Board board, int otherPlayerIndex) throws InvalidKillException {
+    Position kill(Board board, int otherPlayerIndex) {
         Position position = viewManager.getFieldView().humanGraphicKill();
-        board.killStone(position, otherPlayerIndex);
 
-        viewManager.getScoreView().increaseStonesLost();
-        viewManager.getScoreView().increaseStonesKilled();
+
+        return position;
     }
 }

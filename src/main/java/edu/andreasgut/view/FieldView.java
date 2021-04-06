@@ -204,7 +204,7 @@ public class FieldView extends AnchorPane {
         final boolean[] releasedOnAnotherfield = {false};
         for (Node n : fieldGridPane.getChildren()){
             if(((ImageView) n).getImage().equals(emptyField) &&
-                    (viewManager.getGame().getBoard().checkDestination(positions[0], new Position(translateToRing(n), translateToField(n)),
+                    (viewManager.getGame().getBoard().checkMove(positions[0], new Position(translateToRing(n), translateToField(n)),
                             viewManager.getGame().getBoard().countPlayersStones(viewManager.getGame().getOtherPlayerIndex()) == 3))){
                 n.setOnMouseClicked(click ->{
                     positions[1] = new Position(translateToRing(n), translateToField(n));
@@ -239,6 +239,18 @@ public class FieldView extends AnchorPane {
         timeline.play();
         Platform.enterNestedEventLoop(loopObject);
 
+    }
+
+    public void computerGraphicMove(Position[] positions){
+        Object loopObject = new Object();
+        Timeline timeline = new Timeline(new KeyFrame(
+                Duration.millis(COMPREACTIONTIME*1.5),
+                move -> {((ImageView) fieldGridPane.getChildren().get(translateToIndex(positions[0]))).setImage(emptyField);
+                    ((ImageView) fieldGridPane.getChildren().get(translateToIndex(positions[1]))).setImage(player2StoneImage);
+                    viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
+                    Platform.exitNestedEventLoop(loopObject, null);}));
+        timeline.play();
+        Platform.enterNestedEventLoop(loopObject);
     }
 
     public void computerGraphicKill(Position position){
