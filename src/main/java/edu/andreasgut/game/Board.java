@@ -1,6 +1,6 @@
 package edu.andreasgut.game;
 
-public class Board implements Cloneable{
+public class Board {
 
     final private int[][] array;
     private final Game game;
@@ -30,6 +30,7 @@ public class Board implements Cloneable{
     public int[][] getArray() {
         return array.clone();
     }
+
 
     public void putStone(Position position, int playerIndex) {
         array[position.getRing()][position.getField()] =  playerIndex;
@@ -67,6 +68,11 @@ public class Board implements Cloneable{
     }
 
 
+    public void clearStone(Position position) {
+        array[position.getRing()][position.getField()] = 9;
+    }
+
+
     public boolean checkMorris(Position position){
         boolean cornerField = position.getField()%2==0;
         boolean morris;
@@ -83,26 +89,26 @@ public class Board implements Cloneable{
     }
 
 
-    private boolean checkMorrisInRingFromCorner(Position position, int stone){
+    private boolean checkMorrisInRingFromCorner(Position position, int playerIndex){
 
-        boolean morrisUpwards = stone == array[position.getRing()][(position.getField()+1)%8]
-                && stone == array[position.getRing()][(position.getField()+2)%8];
-        boolean morrisDownwards = stone == array[position.getRing()][(position.getField()+6)%8]
-                && stone == array[position.getRing()][(position.getField()+7)%8];
+        boolean morrisUpwards = playerIndex == array[position.getRing()][(position.getField()+1)%8]
+                && playerIndex == array[position.getRing()][(position.getField()+2)%8];
+        boolean morrisDownwards = playerIndex == array[position.getRing()][(position.getField()+6)%8]
+                && playerIndex == array[position.getRing()][(position.getField()+7)%8];
 
         return morrisUpwards || morrisDownwards;
     }
 
 
-    private boolean checkMorrisInRingFromCenter(Position position, int stone){
-        return stone == array[position.getRing()][(position.getField()+1)%8]
-                && stone == array[position.getRing()][(position.getField()+7)%8];
+    private boolean checkMorrisInRingFromCenter(Position position, int playerIndex){
+        return playerIndex == array[position.getRing()][(position.getField()+1)%8]
+                && playerIndex == array[position.getRing()][(position.getField()+7)%8];
     }
 
 
-    private boolean checkMorrisBetweenRings(Position position, int stone){
-        return stone == array[(position.getRing()+1)%3][position.getField()]
-                && stone == array[(position.getRing()+2)%3][position.getField()];
+    private boolean checkMorrisBetweenRings(Position position, int playerIndex){
+        return playerIndex == array[(position.getRing()+1)%3][position.getField()]
+                && playerIndex == array[(position.getRing()+2)%3][position.getField()];
     }
 
 
@@ -146,11 +152,6 @@ public class Board implements Cloneable{
     }
 
 
-    public void clearStone(Position position) {
-        array[position.getRing()][position.getField()] = 9;
-    }
-
-
     public boolean isThereStoneToKill(int otherPlayerIndex){
         for (int ring = 0; ring < 3; ring++){
             for (int field = 0; field < 8; field++){
@@ -186,8 +187,13 @@ public class Board implements Cloneable{
     }
 
 
-    public boolean isThisMyStone(Position position, int playerIndex){
-        return array[position.getRing()][position.getField()] == playerIndex;
+    public boolean isThisMyStone(Position position, int ownPlayerIndex){
+        return array[position.getRing()][position.getField()] == ownPlayerIndex;
+    }
+
+
+    public boolean isThisMyEnemysStone(Position position, int ownPlayerIndex){
+        return isFieldOccupied(position) && !isThisMyStone(position, ownPlayerIndex);
     }
 
 

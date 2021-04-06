@@ -44,12 +44,10 @@ public class BeginnerSwitchButton extends StackPane {
                 if (state) {
                     setAlignment(button, Pos.CENTER_LEFT);
                     state = false;
-                    viewManager.getSoundManager().stopMusic();
 
                 } else {
                     setAlignment(button, Pos.CENTER_RIGHT);
                     state = true;
-                    viewManager.getSoundManager().continueMusic();
                 }
             }
         };

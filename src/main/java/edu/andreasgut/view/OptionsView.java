@@ -25,7 +25,6 @@ public class OptionsView extends HBox {
         this.getStyleClass().add("w3schools/toggleSwitch.css");
 
 
-
         audioOnOffMusicSwitchButton = new MusicSwitchButton(this.viewManager);
         audioOnLabel = new Label("Musik an");
         audioOffLabel = new Label("Musik aus");
@@ -33,7 +32,6 @@ public class OptionsView extends HBox {
         audioHBox.getChildren().addAll(audioOffLabel, audioOnOffMusicSwitchButton, audioOnLabel);
         audioHBox.setAlignment(Pos.CENTER);
         audioHBox.setSpacing(5);
-
 
 
         exitButton = new Button();

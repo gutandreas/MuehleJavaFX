@@ -2,8 +2,6 @@ package edu.andreasgut.game;
 
 import edu.andreasgut.view.ViewManager;
 
-import java.lang.reflect.Field;
-
 public abstract class Player {
 
     private String name;
@@ -17,7 +15,6 @@ public abstract class Player {
     public String getName() {
         return name;
     }
-
 
     abstract Position[] move(Board board, int playerIndex, boolean allowedToJump);
     abstract Position put(Board board, int playerIndex);

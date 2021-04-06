@@ -1,10 +1,7 @@
 package edu.andreasgut.game;
 
 import edu.andreasgut.view.ViewManager;
-
-
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Game {
 
@@ -17,7 +14,6 @@ public class Game {
     private Board board;
     boolean putPhase = true;
     boolean movePhase = false;
-    private Scanner scanner = new Scanner(System.in);
     private ViewManager viewManager;
     private boolean player2starts;
 
@@ -33,6 +29,7 @@ public class Game {
         currentPlayer=playerArrayList.get(0);
         board = new Board(this);
     }
+
 
     public Game(ViewManager viewManager, Player player0, boolean player2starts) {
         this.viewManager = viewManager;
@@ -54,45 +51,62 @@ public class Game {
         return currentPlayer;
     }
 
-    public Player getOtherPlayer() { return playerArrayList.get(getOtherPlayerIndex()); }
+
+    public Player getOtherPlayer() {
+        return playerArrayList.get(getOtherPlayerIndex());
+    }
+
 
     public Player getPlayer0() {
         return player0;
     }
 
+
     public Player getPlayer1() {
         return player1;
     }
+
 
     public int getCurrentPlayerIndex(){
         return currentPlayer.equals(playerArrayList.get(0)) ? 0 : 1;
     }
 
-    public int getOtherPlayerIndex(){ return currentPlayer.equals(playerArrayList.get(0)) ? 1 : 0; }
+
+    public int getOtherPlayerIndex(){
+        return currentPlayer.equals(playerArrayList.get(0)) ? 1 : 0;
+    }
+
 
     public void updateCurrentPlayer(){
         if(player2starts){
             currentPlayer = playerArrayList.get((round+1)%2);}
         else {
             currentPlayer = playerArrayList.get(round%2);
-        }}
+        }
+    }
+
 
     public Board getBoard() {
         return board;
     }
+
 
     public void increaseRound(){
         round++;
         viewManager.getScoreView().increaseRound();
     }
 
+
     public ViewManager getViewManager() {
         return viewManager;
     }
 
+
     public void play() {
 
         while (true){
+
+            System.out.println(board);
 
             if (round == NUMBEROFSTONES*2){
                 viewManager.getScoreView().updatePhase("Steine verschieben");
@@ -100,9 +114,8 @@ public class Game {
 
             //viewManager.getScoreView().setPlayerLabelEffects(); // funktioniert noch nicht wie gewünscht
 
-            System.out.println(board);
-
-            if (movePhase && (board.countPlayersStones(getCurrentPlayerIndex()) <= 2
+            if (movePhase &&
+                    (board.countPlayersStones(getCurrentPlayerIndex()) <= 2
                     || !board.checkIfAbleToMove(getCurrentPlayerIndex()))){
                 winGame();
                 break;
@@ -116,73 +129,93 @@ public class Game {
             Position positionToCheckMorris = null;
 
             if (putPhase){
-                Position putPosition = currentPlayer.put(board, getCurrentPlayerIndex());
-
-                if (board.checkPut(putPosition)){
-                    board.putStone(putPosition, getCurrentPlayerIndex());
-                    positionToCheckMorris = putPosition;
-
-                    if (currentPlayer instanceof ComputerPlayer){
-                        viewManager.getFieldView().computerGraphicPut(putPosition);
-                    }
-
-                    viewManager.getScoreView().increaseStonesPut();
-                }
-                else {
-                    throw new InvalidPutException("Dieses Feld ist nicht frei.");
-                }
+                positionToCheckMorris = put();
             }
 
             if (movePhase && board.checkIfAbleToMove(getCurrentPlayerIndex())){
-                Position[] movePositions = currentPlayer.move(board, getCurrentPlayerIndex(),
-                        board.countPlayersStones(getCurrentPlayerIndex())==3);
-
-                if (board.checkMove(movePositions[0], movePositions[1],
-                        board.countPlayersStones(getCurrentPlayerIndex())==3)){
-                   board.move(movePositions[0], movePositions[1], getCurrentPlayerIndex());
-                   positionToCheckMorris = movePositions[1];
-
-                    if (currentPlayer instanceof ComputerPlayer){
-                        viewManager.getFieldView().computerGraphicMove(movePositions);
-                    }
-                }
-                else {
-                    throw new InvalidMoveException("Das ist ein ungültiger Zug.");
-                }
-
+                positionToCheckMorris = move();
             }
 
-            if (board.checkMorris(positionToCheckMorris) && (board.isThereStoneToKill(getOtherPlayerIndex())
+            if (positionToCheckMorris != null
+                    && board.checkMorris(positionToCheckMorris)
+                    && (board.isThereStoneToKill(getOtherPlayerIndex())
                     || (board.countPlayersStones(getOtherPlayerIndex())==3) && movePhase)){
-
-                System.out.println(currentPlayer.getName() + " darf einen gegnerischen Stein entfernen");
-                viewManager.getLogView().setStatusLabel(currentPlayer.getName() +
-                        " darf einen gegnerischen Stein entfernen. Wähle den Stein, der entfernt werden soll");
-
-                Position killPosition = currentPlayer.kill(board, getOtherPlayerIndex());
-
-                if(board.checkKill(killPosition, getOtherPlayerIndex())){
-                    board.clearStone(killPosition);
-                    viewManager.getScoreView().increaseStonesKilled();
-                    viewManager.getScoreView().increaseStonesLost();
-
-                    if (currentPlayer instanceof ComputerPlayer){
-                        viewManager.getFieldView().computerGraphicKill(killPosition);
-                    }
-                }
-                else {
-                    throw new InvalidKillException("Auf diesem Feld befindet sich kein gegnerischer Stein");
-                }
-
+                kill();
             }
 
             increaseRound();
             updateCurrentPlayer();
 
             }
-
     }
 
+
+    private Position put(){
+        Position putPosition = currentPlayer.put(board, getCurrentPlayerIndex());
+        Position positionToCheckMorris;
+
+        if (board.checkPut(putPosition)){
+            board.putStone(putPosition, getCurrentPlayerIndex());
+
+            if (currentPlayer instanceof ComputerPlayer){
+                viewManager.getFieldView().computerGraphicPut(putPosition);
+            }
+
+            viewManager.getScoreView().increaseStonesPut();
+        }
+        else {
+            throw new InvalidPutException("Dieses Feld ist nicht frei.");
+        }
+
+        positionToCheckMorris = putPosition;
+
+        return positionToCheckMorris;
+    }
+
+
+    private Position move(){
+        Position[] movePositions = currentPlayer.move(board, getCurrentPlayerIndex(),
+                board.countPlayersStones(getCurrentPlayerIndex())==3);
+        Position positionToCheckMorris;
+
+        if (board.checkMove(movePositions[0], movePositions[1],
+                board.countPlayersStones(getCurrentPlayerIndex())==3)){
+            board.move(movePositions[0], movePositions[1], getCurrentPlayerIndex());
+
+            if (currentPlayer instanceof ComputerPlayer){
+                viewManager.getFieldView().computerGraphicMove(movePositions);
+            }
+        }
+        else {
+            throw new InvalidMoveException("Das ist ein ungültiger Zug.");
+        }
+
+        positionToCheckMorris = movePositions[1];
+
+        return positionToCheckMorris;
+    }
+
+
+    private void kill(){
+        System.out.println(currentPlayer.getName() + " darf einen gegnerischen Stein entfernen");
+        viewManager.getLogView().setStatusLabel(currentPlayer.getName() +
+                " darf einen gegnerischen Stein entfernen. Wähle den Stein, der entfernt werden soll");
+
+        Position killPosition = currentPlayer.kill(board, getOtherPlayerIndex());
+
+        if(board.checkKill(killPosition, getOtherPlayerIndex())){
+            board.clearStone(killPosition);
+            viewManager.getScoreView().increaseStonesKilled();
+            viewManager.getScoreView().increaseStonesLost();
+
+            if (currentPlayer instanceof ComputerPlayer){
+                viewManager.getFieldView().computerGraphicKill(killPosition);
+            }
+        }
+        else {
+            throw new InvalidKillException("Auf diesem Feld befindet sich kein gegnerischer Stein");
+        }
+    }
 
 
     private void setGamesPhaseBooleans(){
@@ -193,10 +226,9 @@ public class Game {
 
 
     private void winGame(){
-        winner = playerArrayList.get(getOtherPlayerIndex());
+        winner = getOtherPlayer();
         viewManager.getLogView().setStatusLabel(winner.getName() + " hat das Spiel gewonnen");
         viewManager.getFieldView().setDisable(true);
         System.out.println(winner.getName() + " hat das Spiel gewonnen!");
     }
 }
-

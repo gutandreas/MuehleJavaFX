@@ -41,7 +41,7 @@ public class StartMenuView extends VBox {
         setupBeginnerSwitch();
         setupPlayerInformations();
 
-        vBox.getChildren().addAll(titleLabel, informationLabel, hBoxRadioButtons, player1HBox, beginnerHBox, /*player2HBox,*/ startButton);
+        vBox.getChildren().addAll(titleLabel, informationLabel, hBoxRadioButtons, player1HBox, beginnerHBox, startButton);
         vBox.setSpacing(20);
         this.getChildren().addAll(vBox);
         this.setAlignment(Pos.CENTER);

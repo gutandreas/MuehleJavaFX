@@ -7,8 +7,7 @@ public enum STONECOLOR {
             "edu/andreasgut/Images/KillCursorBlack.png"),
     WHITE( "edu/andreasgut/Images/StoneWhite.png",
             "edu/andreasgut/Images/HandCursorWhite.png",
-            "edu/andreasgut/Images/KillCursorWhite.png"),
-    ;
+            "edu/andreasgut/Images/KillCursorWhite.png"),;
 
     private String pathStone, pathMoveCursor, pathKillCursor;
 

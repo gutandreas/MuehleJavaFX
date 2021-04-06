@@ -9,24 +9,22 @@ public class HumanPlayer extends Player{
     }
 
     @Override
-    Position[] move(Board board, int playerIndex, boolean allowedToJump) {
-        Position[] positions = viewManager.getFieldView().humanGraphicMove();
-        return positions;
-    }
-
-    @Override
     Position put(Board board, int playerIndex) {
         Position position = viewManager.getFieldView().humanGraphicPut();
-
-
 
         return position;
     }
 
     @Override
+    Position[] move(Board board, int playerIndex, boolean allowedToJump) {
+        Position[] positions = viewManager.getFieldView().humanGraphicMove();
+
+        return positions;
+    }
+
+    @Override
     Position kill(Board board, int otherPlayerIndex) {
         Position position = viewManager.getFieldView().humanGraphicKill();
-
 
         return position;
     }

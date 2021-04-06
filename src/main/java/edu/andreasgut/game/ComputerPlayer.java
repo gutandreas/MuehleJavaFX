@@ -10,6 +10,27 @@ public class ComputerPlayer extends Player {
     }
 
     @Override
+    Position put(Board board, int playerIndex) {
+        Position position = new Position();
+        int i;
+        int j;
+
+        for (i = 0; i < 3; i++) {
+            for (j = 0; j < 8; j++) {
+                if (board.getArray()[i][j] == 9) {
+                    position.setRing(i);
+                    position.setField(j);
+
+                    return position;
+                }
+            }
+        }
+
+        return position;
+    }
+
+
+    @Override
     Position[] move(Board board, int playerIndex, boolean allowedToJump) {
         Position[] positions = new Position[2];
 
@@ -36,25 +57,6 @@ public class ComputerPlayer extends Player {
         return positions;
     }
 
-    @Override
-    Position put(Board board, int playerIndex) {
-        Position position = new Position();
-        int i;
-        int j;
-
-        for (i = 0; i < 3; i++) {
-            for (j = 0; j < 8; j++) {
-                if (board.getArray()[i][j] == 9) {
-                    position.setRing(i);
-                    position.setField(j);
-
-                    return position;
-                }
-            }
-        }
-
-        return position;
-    }
 
     @Override
     Position kill(Board board, int otherPlayerIndex) {
@@ -75,8 +77,5 @@ public class ComputerPlayer extends Player {
         }}
         return position;
     }
-
-
-
 
 }
