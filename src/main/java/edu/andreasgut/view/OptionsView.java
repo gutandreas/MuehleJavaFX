@@ -37,7 +37,7 @@ public class OptionsView extends HBox {
 
 
         exitButton = new Button();
-        exitButton.setGraphic(new ImageView(new Image("edu/andreasgut/Images/ExitButton.png", 50, 25, true, true)));
+        exitButton.setGraphic(new ImageView(new Image("edu/andreasgut/images/ExitButton.png", 50, 25, true, true)));
         exitButton.setMinWidth(60);
         exitButton.setMinHeight(30);
         exitButton.getStyleClass().add("exitButton");
