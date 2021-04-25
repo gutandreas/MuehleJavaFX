@@ -9,11 +9,64 @@ public class ComputerPlayer extends Player {
         super(viewManager, name);
     }
 
+
+
     @Override
     Position put(Board board, int playerIndex) {
         Position position = new Position();
         int i;
         int j;
+
+        // bildet Mühle wenn 2 Steine über Ringe hinweg
+        for (int field = 1; field < 8; field+=2) {
+            for (int row = 0; row < 3; row++) {
+                if (board.getArray()[row][field] == viewManager.getGame().getCurrentPlayerIndex()
+                        && board.getArray()[(row+1)%3][field] == viewManager.getGame().getCurrentPlayerIndex()
+                        && board.isFieldFree(new Position((row+2)%3, field))) {
+                    return new Position((row+2)%3, field); }
+            }
+        }
+
+        // blockt wenn 2 Steine innerhalb von Ring nebeneinander
+        for (int row = 0; row < 3; row++) {
+            for (int field = 0; field < 8; field++) {
+                if (board.getArray()[row][field] == viewManager.getGame().getCurrentPlayerIndex()
+                        && board.getArray()[row][(field + 1) % 8] == viewManager.getGame().getCurrentPlayerIndex()) {
+                    if ((field % 2) == 0 && board.isFieldFree(new Position(row ,(field + 2) % 8))) {
+                        return new Position(row, (field + 2) % 8);
+                    }
+                    if ((field % 2) == 1 && board.isFieldFree(new Position(row, (field + 7) % 8 ))) {
+                        return new Position(row, (field + 7) % 8);
+                    }
+                }
+            }
+        }
+
+
+        // blockt wenn 2 Steine über Ringe hinweg
+        for (int field = 1; field < 8; field+=2) {
+            for (int row = 0; row < 3; row++) {
+                if (board.getArray()[row][field] == viewManager.getGame().getOtherPlayerIndex()
+                    && board.getArray()[(row+1)%3][field] == viewManager.getGame().getOtherPlayerIndex()
+                    && board.isFieldFree(new Position((row+2)%3, field))) {
+                        return new Position((row+2)%3, field); }
+            }
+        }
+
+        // blockt wenn 2 Steine innerhalb von Ring nebeneinander
+        for (int row = 0; row < 3; row++) {
+            for (int field = 0; field < 8; field++) {
+                if (board.getArray()[row][field] == viewManager.getGame().getOtherPlayerIndex()
+                        && board.getArray()[row][(field + 1) % 8] == viewManager.getGame().getOtherPlayerIndex()) {
+                    if ((field % 2) == 0 && board.isFieldFree(new Position(row ,(field + 2) % 8))) {
+                        return new Position(row, (field + 2) % 8);
+                    }
+                    if ((field % 2) == 1 && board.isFieldFree(new Position(row, (field + 7) % 8 ))) {
+                        return new Position(row, (field + 7) % 8);
+                    }
+                }
+            }
+        }
 
         for (i = 0; i < 3; i++) {
             for (j = 0; j < 8; j++) {
