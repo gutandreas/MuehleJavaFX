@@ -17,19 +17,28 @@ public class ComputerPlayer extends Player {
     Position put(Board board, int playerIndex) {
 
 
-        // bildet Mühle wenn 2 Steine über Ringe hinweg
+
         for (int field = 1; field < 8; field+=2) {
             for (int row = 0; row < 3; row++) {
+
+                // bildet Mühle wenn 2 Steine über Ringe hinweg
                 if (board.getArray()[row][field] == viewManager.getGame().getCurrentPlayerIndex()
                         && board.getArray()[(row+1)%3][field] == viewManager.getGame().getCurrentPlayerIndex()
+                        && board.isFieldFree(new Position((row+2)%3, field))) {
+                    return new Position((row+2)%3, field); }
+
+                // blockt wenn 2 Steine über Ringe hinweg
+                if (board.getArray()[row][field] == viewManager.getGame().getOtherPlayerIndex()
+                        && board.getArray()[(row+1)%3][field] == viewManager.getGame().getOtherPlayerIndex()
                         && board.isFieldFree(new Position((row+2)%3, field))) {
                     return new Position((row+2)%3, field); }
             }
         }
 
-        // bildet Mühle wenn 2 Steine innerhalb von Ring nebeneinander
+
         for (int row = 0; row < 3; row++) {
             for (int field = 0; field < 8; field++) {
+                // bildet Mühle wenn 2 Steine innerhalb von Ring nebeneinander
                 if (board.getArray()[row][field] == viewManager.getGame().getCurrentPlayerIndex()
                         && board.getArray()[row][(field + 1) % 8] == viewManager.getGame().getCurrentPlayerIndex()) {
                     if ((field % 2) == 0 && board.isFieldFree(new Position(row ,(field + 2) % 8))) {
@@ -39,35 +48,16 @@ public class ComputerPlayer extends Player {
                         return new Position(row, (field + 7) % 8);
                     }
                 }
-            }
-        }
 
-        // bildet Mühle wenn 2 Steine mit Lücke innerhalb von Ring
-        for (int row = 0; row < 3; row++) {
-            for (int field = 0; field < 8; field++) {
+                // bildet Mühle wenn 2 Steine mit Lücke innerhalb von Ring
                 if (board.getArray()[row][field] == viewManager.getGame().getCurrentPlayerIndex()
                         && board.getArray()[row][(field + 2) % 8] == viewManager.getGame().getCurrentPlayerIndex()
                         &&(field % 2) == 0
                         && board.isFieldFree(new Position(row, (field + 1) % 8))) {
                     return new Position(row, (field + 1) % 8);
                 }
-            }
-        }
 
-
-        // blockt wenn 2 Steine über Ringe hinweg
-        for (int field = 1; field < 8; field+=2) {
-            for (int row = 0; row < 3; row++) {
-                if (board.getArray()[row][field] == viewManager.getGame().getOtherPlayerIndex()
-                    && board.getArray()[(row+1)%3][field] == viewManager.getGame().getOtherPlayerIndex()
-                    && board.isFieldFree(new Position((row+2)%3, field))) {
-                        return new Position((row+2)%3, field); }
-            }
-        }
-
-        // blockt wenn 2 Steine innerhalb von Ring nebeneinander
-        for (int row = 0; row < 3; row++) {
-            for (int field = 0; field < 8; field++) {
+                // blockt wenn 2 Steine innerhalb von Ring nebeneinander
                 if (board.getArray()[row][field] == viewManager.getGame().getOtherPlayerIndex()
                         && board.getArray()[row][(field + 1) % 8] == viewManager.getGame().getOtherPlayerIndex()) {
                     if ((field % 2) == 0 && board.isFieldFree(new Position(row ,(field + 2) % 8))) {
@@ -77,20 +67,21 @@ public class ComputerPlayer extends Player {
                         return new Position(row, (field + 7) % 8);
                     }
                 }
-            }
-        }
 
-        // blockt wenn 2 Steine mit Lücke innerhalb von Ring
-        for (int row = 0; row < 3; row++) {
-            for (int field = 0; field < 8; field++) {
+                // blockt wenn 2 Steine mit Lücke innerhalb von Ring
                 if (board.getArray()[row][field] == viewManager.getGame().getOtherPlayerIndex()
                         && board.getArray()[row][(field + 2) % 8] == viewManager.getGame().getOtherPlayerIndex()
                         &&(field % 2) == 0
                         && board.isFieldFree(new Position(row, (field + 1) % 8))) {
                     return new Position(row, (field + 1) % 8);
                 }
+
+
             }
         }
+
+
+
 
         // wählt zufälliges leeres Feld
         while (true){
@@ -100,7 +91,6 @@ public class ComputerPlayer extends Player {
                 return tempPosition;
             }
         }
-
     }
 
 
