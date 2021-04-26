@@ -2,6 +2,8 @@ package edu.andreasgut.game;
 
 import edu.andreasgut.view.ViewManager;
 
+import java.util.Random;
+
 public class ComputerPlayer extends Player {
 
 
@@ -13,9 +15,7 @@ public class ComputerPlayer extends Player {
 
     @Override
     Position put(Board board, int playerIndex) {
-        Position position = new Position();
-        int i;
-        int j;
+
 
         // bildet Mühle wenn 2 Steine über Ringe hinweg
         for (int field = 1; field < 8; field+=2) {
@@ -27,7 +27,7 @@ public class ComputerPlayer extends Player {
             }
         }
 
-        // blockt wenn 2 Steine innerhalb von Ring nebeneinander
+        // bildet Mühle wenn 2 Steine innerhalb von Ring nebeneinander
         for (int row = 0; row < 3; row++) {
             for (int field = 0; field < 8; field++) {
                 if (board.getArray()[row][field] == viewManager.getGame().getCurrentPlayerIndex()
@@ -38,6 +38,18 @@ public class ComputerPlayer extends Player {
                     if ((field % 2) == 1 && board.isFieldFree(new Position(row, (field + 7) % 8 ))) {
                         return new Position(row, (field + 7) % 8);
                     }
+                }
+            }
+        }
+
+        // bildet Mühle wenn 2 Steine mit Lücke innerhalb von Ring
+        for (int row = 0; row < 3; row++) {
+            for (int field = 0; field < 8; field++) {
+                if (board.getArray()[row][field] == viewManager.getGame().getCurrentPlayerIndex()
+                        && board.getArray()[row][(field + 2) % 8] == viewManager.getGame().getCurrentPlayerIndex()
+                        &&(field % 2) == 0
+                        && board.isFieldFree(new Position(row, (field + 1) % 8))) {
+                    return new Position(row, (field + 1) % 8);
                 }
             }
         }
@@ -68,18 +80,27 @@ public class ComputerPlayer extends Player {
             }
         }
 
-        for (i = 0; i < 3; i++) {
-            for (j = 0; j < 8; j++) {
-                if (board.getArray()[i][j] == 9) {
-                    position.setRing(i);
-                    position.setField(j);
-
-                    return position;
+        // blockt wenn 2 Steine mit Lücke innerhalb von Ring
+        for (int row = 0; row < 3; row++) {
+            for (int field = 0; field < 8; field++) {
+                if (board.getArray()[row][field] == viewManager.getGame().getOtherPlayerIndex()
+                        && board.getArray()[row][(field + 2) % 8] == viewManager.getGame().getOtherPlayerIndex()
+                        &&(field % 2) == 0
+                        && board.isFieldFree(new Position(row, (field + 1) % 8))) {
+                    return new Position(row, (field + 1) % 8);
                 }
             }
         }
 
-        return position;
+        // wählt zufälliges leeres Feld
+        while (true){
+            Random random = new Random();
+            Position tempPosition = new Position(random.nextInt(2),  random.nextInt(7));
+            if (board.isFieldFree(tempPosition)){
+                return tempPosition;
+            }
+        }
+
     }
 
 
