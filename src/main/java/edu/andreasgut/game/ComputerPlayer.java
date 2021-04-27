@@ -16,71 +16,103 @@ public class ComputerPlayer extends Player {
     @Override
     Position put(Board board, int playerIndex) {
 
-
-
-        for (int field = 1; field < 8; field+=2) {
-            for (int row = 0; row < 3; row++) {
-
-                // bildet Mühle wenn 2 Steine über Ringe hinweg
-                if (board.getArray()[row][field] == viewManager.getGame().getCurrentPlayerIndex()
-                        && board.getArray()[(row+1)%3][field] == viewManager.getGame().getCurrentPlayerIndex()
-                        && board.isFieldFree(new Position((row+2)%3, field))) {
-                    return new Position((row+2)%3, field); }
-
-                // blockt wenn 2 Steine über Ringe hinweg
-                if (board.getArray()[row][field] == viewManager.getGame().getOtherPlayerIndex()
-                        && board.getArray()[(row+1)%3][field] == viewManager.getGame().getOtherPlayerIndex()
-                        && board.isFieldFree(new Position((row+2)%3, field))) {
-                    return new Position((row+2)%3, field); }
-            }
-        }
-
-
+        // 1. Priorität
         for (int row = 0; row < 3; row++) {
             for (int field = 0; field < 8; field++) {
+
+                // bildet Mühle wenn 2 Steine über Ringe hinweg
+                if (board.isThisMyStone(new Position(row, field), playerIndex)
+                        && field%2==1
+                        && board.isThisMyStone(new Position((row+1)%3, field), playerIndex)
+                        && board.isFieldFree(new Position((row+2)%3, field))) {
+                    System.out.println("Computerstrategie: bildet Mühle wenn 2 Steine über Ringe hinweg");
+                    return new Position((row+2)%3, field); }
+
                 // bildet Mühle wenn 2 Steine innerhalb von Ring nebeneinander
-                if (board.getArray()[row][field] == viewManager.getGame().getCurrentPlayerIndex()
-                        && board.getArray()[row][(field + 1) % 8] == viewManager.getGame().getCurrentPlayerIndex()) {
-                    if ((field % 2) == 0 && board.isFieldFree(new Position(row ,(field + 2) % 8))) {
-                        return new Position(row, (field + 2) % 8);
-                    }
+                if (board.isThisMyStone(new Position(row, field), playerIndex)
+                        && board.isThisMyStone(new Position(row, (field+1)%8), playerIndex)){
+                    // setzt Stein vor der 2er-Reihe sofern frei
                     if ((field % 2) == 1 && board.isFieldFree(new Position(row, (field + 7) % 8 ))) {
+                        System.out.println("Computerstrategie: setzt Stein vor der 2er-Reihe sofern frei");
                         return new Position(row, (field + 7) % 8);
+                    }
+                    // setzt Stein nach der 2er-Reihe sofern frei
+                    if ((field % 2) == 0 && board.isFieldFree(new Position(row ,(field + 2) % 8))) {
+                        System.out.println("Computerstrategie: setzt Stein nach der 2er-Reihe sofern frei");
+                        return new Position(row, (field + 2) % 8);
                     }
                 }
 
                 // bildet Mühle wenn 2 Steine mit Lücke innerhalb von Ring
-                if (board.getArray()[row][field] == viewManager.getGame().getCurrentPlayerIndex()
-                        && board.getArray()[row][(field + 2) % 8] == viewManager.getGame().getCurrentPlayerIndex()
+                if (board.isThisMyStone(new Position(row, field), playerIndex)
+                        && board.isThisMyStone(new Position(row, (field+2)%8), playerIndex)
                         &&(field % 2) == 0
                         && board.isFieldFree(new Position(row, (field + 1) % 8))) {
+                    System.out.println("Computerstrategie: bildet Mühle wenn 2 Steine mit Lücke innerhalb von Ring");
                     return new Position(row, (field + 1) % 8);
                 }
 
+                // blockt wenn 2 Steine über Ringe hinweg
+                if (board.isThisMyEnemysStone(new Position(row, field), playerIndex)
+                        && field%2==1
+                        && board.isThisMyEnemysStone(new Position((row+1)%3, field), playerIndex)
+                        && board.isFieldFree(new Position((row+2)%3, field))) {
+                    System.out.println("Computerstrategie: blockt wenn 2 Steine über Ringe hinweg");
+                    return new Position((row+2)%3, field); }
+
                 // blockt wenn 2 Steine innerhalb von Ring nebeneinander
-                if (board.getArray()[row][field] == viewManager.getGame().getOtherPlayerIndex()
-                        && board.getArray()[row][(field + 1) % 8] == viewManager.getGame().getOtherPlayerIndex()) {
-                    if ((field % 2) == 0 && board.isFieldFree(new Position(row ,(field + 2) % 8))) {
-                        return new Position(row, (field + 2) % 8);
-                    }
+                if (board.isThisMyEnemysStone(new Position(row, field), playerIndex)
+                        && board.isThisMyEnemysStone(new Position(row, (field+1)%8), playerIndex)){
+                    // blockt vor der 2er-Reihe sofern frei
                     if ((field % 2) == 1 && board.isFieldFree(new Position(row, (field + 7) % 8 ))) {
+                        System.out.println("Computerstrategie: blockt wenn 2 Steine innerhalb von Ring nebeneinander");
                         return new Position(row, (field + 7) % 8);
+                    }
+                    // blockt nach der 2er-Reihe sofern frei
+                    if ((field % 2) == 0 && board.isFieldFree(new Position(row ,(field + 2) % 8))) {
+                        System.out.println("Computerstrategie: blockt wenn 2 Steine innerhalb von Ring nebeneinander");
+                        return new Position(row, (field + 2) % 8);
                     }
                 }
 
                 // blockt wenn 2 Steine mit Lücke innerhalb von Ring
-                if (board.getArray()[row][field] == viewManager.getGame().getOtherPlayerIndex()
-                        && board.getArray()[row][(field + 2) % 8] == viewManager.getGame().getOtherPlayerIndex()
+                if (board.isThisMyEnemysStone(new Position(row, field), playerIndex)
+                        && board.isThisMyEnemysStone(new Position(row, (field+2)%8), playerIndex)
                         &&(field % 2) == 0
                         && board.isFieldFree(new Position(row, (field + 1) % 8))) {
+                    System.out.println("Computerstrategie: blockt wenn 2 Steine mit Lücke innerhalb von Ring");
                     return new Position(row, (field + 1) % 8);
                 }
 
 
+
+                }
             }
-        }
 
 
+        // 2. Priorität
+        for (int row = 0; row < 3; row++) {
+            for (int field = 0; field < 8; field++) {
+
+
+                // wählt Ecke einer leeren Linie oder in Linie mit einem eigenen Stein
+                if (board.isFieldFree(new Position(row, field)) && field%2==0) {
+
+                    if (board.isFieldFree(new Position(row, (field + 1) % 8))
+                            && (board.isFieldFree(new Position(row, (field + 2) % 8))
+                            || board.isThisMyStone(new Position(row, (field + 2) % 8), playerIndex))) {
+                        System.out.println("Computerstrategie: wählt Ecke einer leeren Linie oder in Linie mit einem eigenen Stein");
+                        return new Position(row, field);
+                    }
+
+                    if (board.isFieldFree(new Position(row, (field + 7) % 8))
+                            && (board.isFieldFree(new Position(row, (field + 6) % 8))
+                            || board.isThisMyStone(new Position(row, (field + 6) % 8), playerIndex))) {
+                        System.out.println("Computerstrategie: wählt Ecke einer leeren Linie oder in Linie mit einem eigenen Stein");
+                        return new Position(row, field);
+                    }
+                }
+            }}
 
 
         // wählt zufälliges leeres Feld
@@ -88,6 +120,7 @@ public class ComputerPlayer extends Player {
             Random random = new Random();
             Position tempPosition = new Position(random.nextInt(2),  random.nextInt(7));
             if (board.isFieldFree(tempPosition)){
+                System.out.println("Computerstrategie: wählt zufälliges leeres Feld");
                 return tempPosition;
             }
         }
