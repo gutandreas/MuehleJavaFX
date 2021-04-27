@@ -131,6 +131,84 @@ public class ComputerPlayer extends Player {
     Position[] move(Board board, int playerIndex, boolean allowedToJump) {
         Position[] positions = new Position[2];
 
+        Board clonedBoard = (Board) board.clone();
+
+        // 1. Priorität
+        for (int row = 0; row < 3; row++) {
+            for (int field = 0; field < 7; field++) {
+
+                Position from = new Position(row, field);
+                Position to;
+
+                if (board.isThisMyStone(from, playerIndex)) {
+
+                    to = new Position(row, (field + 1) % 8);
+
+                    if (board.isFieldFree(to)) {
+                        clonedBoard.move(from, to, playerIndex);
+                        if (clonedBoard.checkMorris(to)) {
+                            positions[0] = from;
+                            positions[1] = to;
+                            return positions;
+                        } else {
+                            clonedBoard.move(to, from, playerIndex); // setzt Stein zurück
+                        }
+                    }
+
+                    to = new Position(row, (field + 7) % 8);
+
+                    if (board.isFieldFree(to)) {
+                        clonedBoard.move(from, to, playerIndex);
+                        if (clonedBoard.checkMorris(to)) {
+                            positions[0] = from;
+                            positions[1] = to;
+                            return positions;
+                        } else {
+                            clonedBoard.move(to, from, playerIndex); // setzt Stein zurück
+                        }
+                    }
+
+                    if (field % 8 == 1) {
+
+                        if (row == 0 || row == 1) {
+
+                            to = new Position((row + 1) % 3, field);
+
+                            if (board.isFieldFree(to)) {
+                                clonedBoard.move(from, to, playerIndex);
+                                if (clonedBoard.checkMorris(to)) {
+                                    positions[0] = from;
+                                    positions[1] = to;
+                                    return positions;
+                                } else {
+                                    clonedBoard.move(to, from, playerIndex); // setzt Stein zurück
+                                }
+                            }
+                        }
+
+                        if (row == 1 || row == 2) {
+
+                            to = new Position((row + 2) % 3, field);
+
+                            if (board.isFieldFree(to)) {
+                                clonedBoard.move(from, to, playerIndex);
+                                if (clonedBoard.checkMorris(to)) {
+                                    positions[0] = from;
+                                    positions[1] = to;
+                                    return positions;
+                                } else {
+                                    clonedBoard.move(to, from, playerIndex); // setzt Stein zurück
+                                }
+                            }
+                        }
+
+                    }
+                }
+
+            }
+        }
+
+
         loop:{
         for (int i = 0; i < 3; i++){
             for(int j = 0; j < 7; j++){
@@ -153,6 +231,7 @@ public class ComputerPlayer extends Player {
         }}}
         return positions;
     }
+
 
 
     @Override
