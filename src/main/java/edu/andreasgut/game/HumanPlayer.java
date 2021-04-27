@@ -23,7 +23,7 @@ public class HumanPlayer extends Player{
     }
 
     @Override
-    Position kill(Board board, int otherPlayerIndex) {
+    Position kill(Board board, int ownPlayerIndex, int otherPlayerIndex) {
         Position position = viewManager.getFieldView().humanGraphicKill();
 
         return position;

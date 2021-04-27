@@ -18,5 +18,5 @@ public abstract class Player {
 
     abstract Position[] move(Board board, int playerIndex, boolean allowedToJump);
     abstract Position put(Board board, int playerIndex);
-    abstract Position kill(Board board, int otherPlayerIndex);
+    abstract Position kill(Board board, int ownPlayerIndex, int otherPlayerIndex);
 }

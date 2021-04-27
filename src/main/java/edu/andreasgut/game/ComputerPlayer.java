@@ -118,7 +118,7 @@ public class ComputerPlayer extends Player {
         // wählt zufälliges leeres Feld
         while (true){
             Random random = new Random();
-            Position tempPosition = new Position(random.nextInt(2),  random.nextInt(7));
+            Position tempPosition = new Position(random.nextInt(3),  random.nextInt(8));
             if (board.isFieldFree(tempPosition)){
                 System.out.println("Computerstrategie: wählt zufälliges leeres Feld");
                 return tempPosition;
@@ -134,6 +134,7 @@ public class ComputerPlayer extends Player {
         Board clonedBoard = (Board) board.clone();
 
         // 1. Priorität: Versucht Mühlen zu schliessen
+        //TODO: Funktioniert noch nicht wie gewünscht... (gewisse offene Mühlen werden nicht erkannt)
         for (int row = 0; row < 3; row++) {
             for (int field = 0; field < 7; field++) {
 
@@ -144,11 +145,15 @@ public class ComputerPlayer extends Player {
 
                     to = new Position(row, (field + 1) % 8);
 
-                    if (checkIfMoveBuildsMorris(board, playerIndex, positions, clonedBoard, from, to)) return positions;
+                    if (checkIfMoveBuildsMorris(board, playerIndex, positions, clonedBoard, from, to)){
+                        System.out.println("Computerstrategie: Schliesst Mühle");
+                        return positions;}
 
                     to = new Position(row, (field + 7) % 8);
 
-                    if (checkIfMoveBuildsMorris(board, playerIndex, positions, clonedBoard, from, to)) return positions;
+                    if (checkIfMoveBuildsMorris(board, playerIndex, positions, clonedBoard, from, to)) {
+                        System.out.println("Computerstrategie: Schliesst Mühle");
+                        return positions;}
 
                     if (field % 8 == 1) { // Felder mit Verbindung zu mind. 1 anderer Reihe
 
@@ -156,16 +161,18 @@ public class ComputerPlayer extends Player {
 
                             to = new Position(row + 1, field);
 
-                            if (checkIfMoveBuildsMorris(board, playerIndex, positions, clonedBoard, from, to))
-                                return positions;
+                            if (checkIfMoveBuildsMorris(board, playerIndex, positions, clonedBoard, from, to)){
+                                System.out.println("Computerstrategie: Schliesst Mühle");
+                                return positions;}
                         }
 
                         if (row == 1 || row == 2) {
 
                             to = new Position(row - 1, field);
 
-                            if (checkIfMoveBuildsMorris(board, playerIndex, positions, clonedBoard, from, to))
-                                return positions;
+                            if (checkIfMoveBuildsMorris(board, playerIndex, positions, clonedBoard, from, to)){
+                                System.out.println("Computerstrategie: Schliesst Mühle");
+                                return positions;}
                         }
 
                     }
@@ -180,8 +187,8 @@ public class ComputerPlayer extends Player {
         Position to;
 
         while (true){
-            int row = random.nextInt(2);
-            int field= random.nextInt(7);
+            int row = random.nextInt(3);
+            int field= random.nextInt(8);
             from = new Position(row, field);
             if (board.isThisMyStone(from, playerIndex)){
                 if (board.isFieldFree(new Position(row, (field+1)%8))){
@@ -236,23 +243,58 @@ public class ComputerPlayer extends Player {
 
 
     @Override
-    Position kill(Board board, int otherPlayerIndex) {
-        Position position = new Position();
-        int i;
-        int j;
+    Position kill(Board board, int ownPlayerIndex, int otherPlayerIndex) {
+        Position position = null;
 
-        loop:{
-        for (i = 0; i < 3; i++) {
-            for (j = 0; j < 8; j++) {
-                if (board.checkKill(new Position(i,j), otherPlayerIndex)) {
-                    position.setRing(i);
-                    position.setField(j);
+        // 1. Priorität: Killt Stein in 2er-Reihe
+        for (int row = 0; row < 3; row++){
+            for (int field = 0; field < 8; field++){
 
-                    break loop;
+
+                position = new Position(row, field);
+
+                if (board.isThisMyEnemysStone(position, ownPlayerIndex) && board.checkKill(position, otherPlayerIndex)){
+                    // Ungerade Felder in Reihe 0 oder 1
+                    if (field%2 == 1
+                        && (row == 0 || row == 1)){
+                        if (board.isThisMyEnemysStone(new Position(row, (field+1)%8), ownPlayerIndex)
+                            || board.isThisMyEnemysStone(new Position(row, (field+7)%8), ownPlayerIndex)
+                            || board.isThisMyEnemysStone(new Position(row+1, field), ownPlayerIndex)){
+                            System.out.println("Computerstrategie: Stein aus 2er-Reihe entfernt");
+                            return position;
+                        }
+                    }
+                    // Ungerade Felder in Reihe 1 oder 2
+                    if (field%2 == 1
+                            && (row == 1 || row == 2)){
+                        if (board.isThisMyEnemysStone(new Position(row, (field+1)%8), ownPlayerIndex)
+                                || board.isThisMyEnemysStone(new Position(row, (field+7)%8), ownPlayerIndex)
+                                || board.isThisMyEnemysStone(new Position(row-1, field), ownPlayerIndex)){
+                            System.out.println("Computerstrategie: Stein aus 2er-Reihe entfernt");
+                            return position;
+                        }
+                    }
+
+                    if (field%2 == 0
+                            && (board.isThisMyEnemysStone(new Position(row, (field+1)%8), ownPlayerIndex)
+                                || board.isThisMyEnemysStone(new Position(row, (field+7)%8), ownPlayerIndex))){
+                        System.out.println("Computerstrategie: Stein aus 2er-Reihe entfernt");
+                        return position;
                 }
+
             }
         }}
-        return position;
+
+        // 2. Priorität: Killt zufälligen gegnerischen Stein
+
+        while (true){
+            Random random = new Random();
+            position = new Position(random.nextInt(3), random.nextInt(8));
+            if (board.checkKill(position, otherPlayerIndex)){
+                System.out.println("Computerstrategie: Zufälligen Stein entfernt");
+                return position;
+            }
+        }
     }
 
 }

@@ -201,7 +201,7 @@ public class Game {
         viewManager.getLogView().setStatusLabel(currentPlayer.getName() +
                 " darf einen gegnerischen Stein entfernen. Wähle den Stein, der entfernt werden soll");
 
-        Position killPosition = currentPlayer.kill(board, getOtherPlayerIndex());
+        Position killPosition = currentPlayer.kill(board, getCurrentPlayerIndex(), getOtherPlayerIndex());
 
         if(board.checkKill(killPosition, getOtherPlayerIndex())){
             board.clearStone(killPosition);
