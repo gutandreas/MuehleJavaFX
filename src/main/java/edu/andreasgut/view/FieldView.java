@@ -205,7 +205,7 @@ public class FieldView extends AnchorPane {
         for (Node n : fieldGridPane.getChildren()){
             if(((ImageView) n).getImage().equals(emptyField) &&
                     (viewManager.getGame().getBoard().checkMove(positions[0], new Position(translateToRing(n), translateToField(n)),
-                            viewManager.getGame().getBoard().countPlayersStones(viewManager.getGame().getOtherPlayerIndex()) == 3))){
+                            viewManager.getGame().getBoard().countPlayersStones(viewManager.getGame().getCurrentPlayerIndex()) == 3))){
                 n.setOnMouseClicked(click ->{
                     positions[1] = new Position(translateToRing(n), translateToField(n));
 
@@ -226,6 +226,7 @@ public class FieldView extends AnchorPane {
             }
         }
         Platform.enterNestedEventLoop(loopObject);
+        setMoveCursor();
         return releasedOnAnotherfield[0];
     }
 
