@@ -144,29 +144,11 @@ public class ComputerPlayer extends Player {
 
                     to = new Position(row, (field + 1) % 8);
 
-                    if (board.isFieldFree(to)) {
-                        clonedBoard.move(from, to, playerIndex);
-                        if (clonedBoard.checkMorris(to)) {
-                            positions[0] = from;
-                            positions[1] = to;
-                            return positions;
-                        } else {
-                            clonedBoard.move(to, from, playerIndex); // setzt Stein zurück
-                        }
-                    }
+                    if (checkIfMoveBuildsMorris(board, playerIndex, positions, clonedBoard, from, to)) return positions;
 
                     to = new Position(row, (field + 7) % 8);
 
-                    if (board.isFieldFree(to)) {
-                        clonedBoard.move(from, to, playerIndex);
-                        if (clonedBoard.checkMorris(to)) {
-                            positions[0] = from;
-                            positions[1] = to;
-                            return positions;
-                        } else {
-                            clonedBoard.move(to, from, playerIndex); // setzt Stein zurück
-                        }
-                    }
+                    if (checkIfMoveBuildsMorris(board, playerIndex, positions, clonedBoard, from, to)) return positions;
 
                     if (field % 8 == 1) {
 
@@ -174,32 +156,16 @@ public class ComputerPlayer extends Player {
 
                             to = new Position((row + 1) % 3, field);
 
-                            if (board.isFieldFree(to)) {
-                                clonedBoard.move(from, to, playerIndex);
-                                if (clonedBoard.checkMorris(to)) {
-                                    positions[0] = from;
-                                    positions[1] = to;
-                                    return positions;
-                                } else {
-                                    clonedBoard.move(to, from, playerIndex); // setzt Stein zurück
-                                }
-                            }
+                            if (checkIfMoveBuildsMorris(board, playerIndex, positions, clonedBoard, from, to))
+                                return positions;
                         }
 
                         if (row == 1 || row == 2) {
 
                             to = new Position((row + 2) % 3, field);
 
-                            if (board.isFieldFree(to)) {
-                                clonedBoard.move(from, to, playerIndex);
-                                if (clonedBoard.checkMorris(to)) {
-                                    positions[0] = from;
-                                    positions[1] = to;
-                                    return positions;
-                                } else {
-                                    clonedBoard.move(to, from, playerIndex); // setzt Stein zurück
-                                }
-                            }
+                            if (checkIfMoveBuildsMorris(board, playerIndex, positions, clonedBoard, from, to))
+                                return positions;
                         }
 
                     }
@@ -207,6 +173,7 @@ public class ComputerPlayer extends Player {
 
             }
         }
+
 
 
         loop:{
@@ -232,6 +199,19 @@ public class ComputerPlayer extends Player {
         return positions;
     }
 
+    private boolean checkIfMoveBuildsMorris(Board board, int playerIndex, Position[] positions, Board clonedBoard, Position from, Position to) {
+        if (board.isFieldFree(to)) {
+            clonedBoard.move(from, to, playerIndex);
+            if (clonedBoard.checkMorris(to)) {
+                positions[0] = from;
+                positions[1] = to;
+                return true;
+            } else {
+                clonedBoard.move(to, from, playerIndex); // setzt Stein zurück
+            }
+        }
+        return false;
+    }
 
 
     @Override
