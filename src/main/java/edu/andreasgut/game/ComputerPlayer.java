@@ -133,7 +133,7 @@ public class ComputerPlayer extends Player {
 
         Board clonedBoard = (Board) board.clone();
 
-        // 1. Priorität
+        // 1. Priorität: Versucht Mühlen zu schliessen
         for (int row = 0; row < 3; row++) {
             for (int field = 0; field < 7; field++) {
 
@@ -150,11 +150,11 @@ public class ComputerPlayer extends Player {
 
                     if (checkIfMoveBuildsMorris(board, playerIndex, positions, clonedBoard, from, to)) return positions;
 
-                    if (field % 8 == 1) {
+                    if (field % 8 == 1) { // Felder mit Verbindung zu mind. 1 anderer Reihe
 
                         if (row == 0 || row == 1) {
 
-                            to = new Position((row + 1) % 3, field);
+                            to = new Position(row + 1, field);
 
                             if (checkIfMoveBuildsMorris(board, playerIndex, positions, clonedBoard, from, to))
                                 return positions;
@@ -162,7 +162,7 @@ public class ComputerPlayer extends Player {
 
                         if (row == 1 || row == 2) {
 
-                            to = new Position((row + 2) % 3, field);
+                            to = new Position(row - 1, field);
 
                             if (checkIfMoveBuildsMorris(board, playerIndex, positions, clonedBoard, from, to))
                                 return positions;
@@ -174,29 +174,50 @@ public class ComputerPlayer extends Player {
             }
         }
 
+        // 2. Priorität: Wählt zufälligen Stein und fährt in zufällige Richtung
+        Random random = new Random();
+        Position from;
+        Position to;
 
-
-        loop:{
-        for (int i = 0; i < 3; i++){
-            for(int j = 0; j < 7; j++){
-                if (board.isThisMyStone(new Position(i,j),playerIndex)){
-                    if(board.isFieldFree(new Position(i,(j+1)%8))){
-                        positions[0] = new Position(i, j);
-                        positions[1] = new Position(i, (j+1)%8);
-                        System.out.println(i+" "+j);
-                        break loop;
-                    }
-                    if(board.isFieldFree(new Position(i,(j+7)%8))){
-                        positions[0] = new Position(i, j);
-                        positions[1] = new Position(i, (j+7)%8);
-                        System.out.println(i+" "+j);
-                        break loop;
-                    }
-
-
+        while (true){
+            int row = random.nextInt(2);
+            int field= random.nextInt(7);
+            from = new Position(row, field);
+            if (board.isThisMyStone(from, playerIndex)){
+                if (board.isFieldFree(new Position(row, (field+1)%8))){
+                    to = new Position(row, (field+1)%8);
+                    positions[0] = from;
+                    positions[1] = to;
+                    System.out.println("Computerstrategie: Erhöht bei zufälligem Stein das Feld um 1");
+                    return positions;
                 }
-        }}}
-        return positions;
+
+                if (board.isFieldFree(new Position(row, (field+7)%8))){
+                    to = new Position(row, (field+7)%8);
+                    positions[0] = from;
+                    positions[1] = to;
+                    System.out.println("Computerstrategie: Reduziert bei zufälligem Stein das Feld um 1");
+                    return positions;
+                }
+
+                if (field%2 == 1 && (row == 0 || field == 1) && board.isFieldFree(new Position(row+1, field))){
+                    to = new Position(row+1, field);
+                    positions[0] = from;
+                    positions[1] = to;
+                    System.out.println("Computerstrategie: Erhöht bei zufälligem Stein die Reihe um 1");
+                    return positions;
+                }
+
+                if (field%2 == 1 && (row == 1 || field == 2) && board.isFieldFree(new Position(row-1, field))){
+                    to = new Position(row-1, field);
+                    positions[0] = from;
+                    positions[1] = to;
+                    System.out.println("Computerstrategie: Reduziert bei zufälligem Stein die Reihe um 1");
+                    return positions;
+                }
+
+            }
+        }
     }
 
     private boolean checkIfMoveBuildsMorris(Board board, int playerIndex, Position[] positions, Board clonedBoard, Position from, Position to) {
