@@ -187,45 +187,28 @@ public class ComputerPlayer extends Player {
                 Position to;
 
                 if (board.isThisMyStone(from, playerIndex) && board.checkMorris(from)) {
-                    if (field % 2 == 0) { // Gerade Felder
-                        if (board.isFieldFree(new Position(row, (field + 1) % 8))
-                                && !board.isThisMyEnemysStone(new Position(row, (field + 7) % 8), playerIndex)) {
-                            to = new Position(row, (field + 1) % 8);
-                            positions[0] = from;
-                            positions[1] = to;
-                            System.out.println("Computerstrategie: Öffnet Mühle");
-                            return positions;
-                        }
-                        if (board.isFieldFree(new Position(row, (field + 7) % 8))
-                                && !board.isThisMyEnemysStone(new Position(row, (field + 1) % 8), playerIndex)) {
-                            to = new Position(row, (field + 7) % 8);
-                            positions[0] = from;
-                            positions[1] = to;
-                            System.out.println("Computerstrategie: Öffnet Mühle");
-                            return positions;
-                        }
+                    if (board.isFieldFree(new Position(row, (field + 1) % 8))
+                            && !board.isThisMyEnemysStone(new Position(row, (field + 7) % 8), playerIndex)) {
+                        to = new Position(row, (field + 1) % 8);
+                        positions[0] = from;
+                        positions[1] = to;
+                        System.out.println("Computerstrategie: Öffnet Mühle");
+                        return positions;
                     }
+                    if (board.isFieldFree(new Position(row, (field + 7) % 8))
+                            && !board.isThisMyEnemysStone(new Position(row, (field + 1) % 8), playerIndex)) {
+                        to = new Position(row, (field + 7) % 8);
+                        positions[0] = from;
+                        positions[1] = to;
+                        System.out.println("Computerstrategie: Öffnet Mühle");
+                        return positions;
+                    }
+
 
                     if (field % 2 == 1) { // Ungerade Felder
                         if (row == 0) {
                             if (board.isFieldFree(new Position(row + 1, field))) {
                                 to = new Position(row + 1, field);
-                                positions[0] = from;
-                                positions[1] = to;
-                                System.out.println("Computerstrategie: Öffnet Mühle");
-                                return positions;
-                            }
-                            if (board.isFieldFree(new Position(row, (field + 1) % 8))
-                                    && !board.isThisMyEnemysStone(new Position(row, (field + 7) % 8), playerIndex)) {
-                                to = new Position(row, (field + 1) % 8);
-                                positions[0] = from;
-                                positions[1] = to;
-                                System.out.println("Computerstrategie: Öffnet Mühle");
-                                return positions;
-                            }
-                            if (board.isFieldFree(new Position(row, (field + 7) % 8))
-                                    && !board.isThisMyEnemysStone(new Position(row, (field + 1) % 8), playerIndex)) {
-                                to = new Position(row, (field + 7) % 8);
                                 positions[0] = from;
                                 positions[1] = to;
                                 System.out.println("Computerstrategie: Öffnet Mühle");
@@ -250,42 +233,11 @@ public class ComputerPlayer extends Player {
                                 System.out.println("Computerstrategie: Öffnet Mühle");
                                 return positions;
                             }
-                            if (board.isFieldFree(new Position(row, (field + 1) % 8))
-                                    && !board.isThisMyEnemysStone(new Position(row, (field + 7) % 8), playerIndex)) {
-                                to = new Position(row, (field + 1) % 8);
-                                positions[0] = from;
-                                positions[1] = to;
-                                System.out.println("Computerstrategie: Öffnet Mühle");
-                                return positions;
-                            }
-                            if (board.isFieldFree(new Position(row, (field + 7) % 8))
-                                    && !board.isThisMyEnemysStone(new Position(row, (field + 1) % 8), playerIndex)) {
-                                to = new Position(row, (field + 7) % 8);
-                                positions[0] = from;
-                                positions[1] = to;
-                                System.out.println("Computerstrategie: Öffnet Mühle");
-                                return positions;
-                            }
+
                         }
                         if (row == 2) {
                             if (board.isFieldFree(new Position(row - 1, field))) {
                                 to = new Position(row - 1, field);
-                                positions[0] = from;
-                                positions[1] = to;
-                                System.out.println("Computerstrategie: Öffnet Mühle");
-                                return positions;
-                            }
-                            if (board.isFieldFree(new Position(row, (field + 1) % 8))
-                                    && !board.isThisMyEnemysStone(new Position(row, (field + 7) % 8), playerIndex)) {
-                                to = new Position(row, field + 1);
-                                positions[0] = from;
-                                positions[1] = to;
-                                System.out.println("Computerstrategie: Öffnet Mühle");
-                                return positions;
-                            }
-                            if (board.isFieldFree(new Position(row, (field + 7) % 8))
-                                    && !board.isThisMyEnemysStone(new Position(row, (field + 1) % 8), playerIndex)) {
-                                to = new Position(row, (field + 7) % 8);
                                 positions[0] = from;
                                 positions[1] = to;
                                 System.out.println("Computerstrategie: Öffnet Mühle");
