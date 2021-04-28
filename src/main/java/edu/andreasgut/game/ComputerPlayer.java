@@ -16,49 +16,58 @@ public class ComputerPlayer extends Player {
     @Override
     Position put(Board board, int playerIndex) {
 
-        // 1. Priorität
+        // 1. Priorität: Mühlen schliessen
         for (int row = 0; row < 3; row++) {
             for (int field = 0; field < 8; field++) {
 
-                // bildet Mühle wenn 2 Steine über Ringe hinweg
+                // bildet Mühle wenn 2 Steine über Ringe hinweg (egal ob mit oder ohne Lücke)
                 if (board.isThisMyStone(new Position(row, field), playerIndex)
-                        && field%2==1
-                        && board.isThisMyStone(new Position((row+1)%3, field), playerIndex)
-                        && board.isFieldFree(new Position((row+2)%3, field))) {
+                        && field % 2 == 1
+                        && board.isThisMyStone(new Position((row + 1) % 3, field), playerIndex)
+                        && board.isFieldFree(new Position((row + 2) % 3, field))) {
                     System.out.println("Computerstrategie: bildet Mühle wenn 2 Steine über Ringe hinweg");
-                    return new Position((row+2)%3, field); }
+                    return new Position((row + 2) % 3, field);
+                }
 
                 // bildet Mühle wenn 2 Steine innerhalb von Ring nebeneinander
                 if (board.isThisMyStone(new Position(row, field), playerIndex)
-                        && board.isThisMyStone(new Position(row, (field+1)%8), playerIndex)){
+                        && board.isThisMyStone(new Position(row, (field + 1) % 8), playerIndex)) {
+
                     // setzt Stein vor der 2er-Reihe sofern frei
-                    if ((field % 2) == 1 && board.isFieldFree(new Position(row, (field + 7) % 8 ))) {
+                    if ((field % 2) == 1 && board.isFieldFree(new Position(row, (field + 7) % 8))) {
                         System.out.println("Computerstrategie: setzt Stein vor der 2er-Reihe sofern frei");
                         return new Position(row, (field + 7) % 8);
                     }
+
                     // setzt Stein nach der 2er-Reihe sofern frei
-                    if ((field % 2) == 0 && board.isFieldFree(new Position(row ,(field + 2) % 8))) {
+                    if ((field % 2) == 0 && board.isFieldFree(new Position(row, (field + 2) % 8))) {
                         System.out.println("Computerstrategie: setzt Stein nach der 2er-Reihe sofern frei");
                         return new Position(row, (field + 2) % 8);
                     }
-                }
 
-                // bildet Mühle wenn 2 Steine mit Lücke innerhalb von Ring
-                if (board.isThisMyStone(new Position(row, field), playerIndex)
-                        && board.isThisMyStone(new Position(row, (field+2)%8), playerIndex)
-                        &&(field % 2) == 0
-                        && board.isFieldFree(new Position(row, (field + 1) % 8))) {
-                    System.out.println("Computerstrategie: bildet Mühle wenn 2 Steine mit Lücke innerhalb von Ring");
-                    return new Position(row, (field + 1) % 8);
+                    // bildet Mühle wenn 2 Steine mit Lücke innerhalb von Ring
+                    if (board.isThisMyStone(new Position(row, field), playerIndex)
+                            && board.isThisMyStone(new Position(row, (field+2)%8), playerIndex)
+                            &&(field % 2) == 0
+                            && board.isFieldFree(new Position(row, (field + 1) % 8))) {
+                        System.out.println("Computerstrategie: bildet Mühle wenn 2 Steine mit Lücke innerhalb von Ring");
+                        return new Position(row, (field + 1) % 8);
+                    }
                 }
+            }
+        }
 
-                // blockt wenn 2 Steine über Ringe hinweg
+        // 2. Priorität: Mühlen blocken
+        for (int row = 0; row < 3; row++) {
+            for (int field = 0; field < 8; field++) {
+
+                // blockt wenn 2 Steine über Ringe hinweg (egal ob mit oder ohne Lücke)
                 if (board.isThisMyEnemysStone(new Position(row, field), playerIndex)
                         && field%2==1
                         && board.isThisMyEnemysStone(new Position((row+1)%3, field), playerIndex)
                         && board.isFieldFree(new Position((row+2)%3, field))) {
                     System.out.println("Computerstrategie: blockt wenn 2 Steine über Ringe hinweg");
-                    return new Position((row+2)%3, field); }
+                    return new Position((row+2)%3, field);}
 
                 // blockt wenn 2 Steine innerhalb von Ring nebeneinander
                 if (board.isThisMyEnemysStone(new Position(row, field), playerIndex)
@@ -83,19 +92,13 @@ public class ComputerPlayer extends Player {
                     System.out.println("Computerstrategie: blockt wenn 2 Steine mit Lücke innerhalb von Ring");
                     return new Position(row, (field + 1) % 8);
                 }
-
-
-
-                }
             }
+        }
 
-
-        // 2. Priorität
+        // 3. Priorität: Wählt Ecke einer leeren Linie oder in Linie mit einem eigenen Stein
         for (int row = 0; row < 3; row++) {
             for (int field = 0; field < 8; field++) {
 
-
-                // wählt Ecke einer leeren Linie oder in Linie mit einem eigenen Stein
                 if (board.isFieldFree(new Position(row, field)) && field%2==0) {
 
                     if (board.isFieldFree(new Position(row, (field + 1) % 8))
@@ -115,7 +118,7 @@ public class ComputerPlayer extends Player {
             }}
 
 
-        // wählt zufälliges leeres Feld
+        // 4. Priorität: wählt zufälliges leeres Feld
         while (true){
             Random random = new Random();
             Position tempPosition = new Position(random.nextInt(3),  random.nextInt(8));
@@ -133,7 +136,7 @@ public class ComputerPlayer extends Player {
 
         Board clonedBoard = (Board) board.clone();
 
-        // 1. Priorität: Versucht Mühlen zu schliessen
+        // 1. Priorität: Offene Mühlen schliessen
         for (int row = 0; row < 3; row++) {
             for (int field = 0; field < 7; field++) {
 
@@ -154,7 +157,7 @@ public class ComputerPlayer extends Player {
                         System.out.println("Computerstrategie: Schliesst Mühle");
                         return positions;}
 
-                    if (field % 2 == 1) { // Felder mit Verbindung zu mind. 1 anderer Reihe
+                    if (field % 2 == 1) { // Ungerade Felder
 
                         if (row == 0 || row == 1) {
 
@@ -173,12 +176,11 @@ public class ComputerPlayer extends Player {
                                 System.out.println("Computerstrategie: Schliesst Mühle");
                                 return positions;}
                         }
-
                     }
                 }
-
             }
         }
+
         // 2. Prioriät: Öffnet bestehende Mühle, falls keine Bedrohung vorhanden
         for (int row = 0; row < 3; row++) {
             for (int field = 0; field < 7; field++) {
@@ -250,7 +252,7 @@ public class ComputerPlayer extends Player {
         }
 
 
-        // 3. Priorität: Wählt zufälligen Stein und fährt in zufällige Richtung
+        // 3. Priorität: Wählt zufälligen Stein und fährt in erste mögliche Richtung
         Random random = new Random();
         Position from;
         Position to;
@@ -319,10 +321,10 @@ public class ComputerPlayer extends Player {
         for (int row = 0; row < 3; row++){
             for (int field = 0; field < 8; field++){
 
-
                 position = new Position(row, field);
 
                 if (board.isThisMyEnemysStone(position, ownPlayerIndex) && board.checkKill(position, otherPlayerIndex)){
+
                     // Ungerade Felder in Reihe 0 oder 1
                     if (field%2 == 1
                         && (row == 0 || row == 1)){
@@ -333,6 +335,7 @@ public class ComputerPlayer extends Player {
                             return position;
                         }
                     }
+
                     // Ungerade Felder in Reihe 1 oder 2
                     if (field%2 == 1
                             && (row == 1 || row == 2)){
@@ -344,18 +347,18 @@ public class ComputerPlayer extends Player {
                         }
                     }
 
+                    // Gerade Felder
                     if (field%2 == 0
                             && (board.isThisMyEnemysStone(new Position(row, (field+1)%8), ownPlayerIndex)
                                 || board.isThisMyEnemysStone(new Position(row, (field+7)%8), ownPlayerIndex))){
                         System.out.println("Computerstrategie: Stein aus 2er-Reihe entfernt");
                         return position;
+                    }
                 }
-
             }
-        }}
+        }
 
         // 2. Priorität: Killt zufälligen gegnerischen Stein
-
         while (true){
             Random random = new Random();
             position = new Position(random.nextInt(3), random.nextInt(8));
@@ -365,5 +368,4 @@ public class ComputerPlayer extends Player {
             }
         }
     }
-
 }
