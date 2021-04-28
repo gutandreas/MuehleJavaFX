@@ -155,7 +155,7 @@ public class ComputerPlayer extends Player {
                         System.out.println("Computerstrategie: Schliesst Mühle");
                         return positions;}
 
-                    if (field % 8 == 1) { // Felder mit Verbindung zu mind. 1 anderer Reihe
+                    if (field % 2 == 1) { // Felder mit Verbindung zu mind. 1 anderer Reihe
 
                         if (row == 0 || row == 1) {
 
@@ -230,6 +230,7 @@ public class ComputerPlayer extends Player {
     private boolean checkIfMoveBuildsMorris(Board board, int playerIndex, Position[] positions, Board clonedBoard, Position from, Position to) {
         if (board.isFieldFree(to)) {
             clonedBoard.move(from, to, playerIndex);
+            System.out.println(clonedBoard);
             if (clonedBoard.checkMorris(to)) {
                 positions[0] = from;
                 positions[1] = to;
