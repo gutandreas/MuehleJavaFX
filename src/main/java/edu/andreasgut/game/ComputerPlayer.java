@@ -134,7 +134,6 @@ public class ComputerPlayer extends Player {
         Board clonedBoard = (Board) board.clone();
 
         // 1. Priorität: Versucht Mühlen zu schliessen
-        //TODO: Funktioniert noch nicht wie gewünscht... (gewisse offene Mühlen werden nicht erkannt)
         for (int row = 0; row < 3; row++) {
             for (int field = 0; field < 7; field++) {
 
@@ -180,8 +179,126 @@ public class ComputerPlayer extends Player {
 
             }
         }
+        // 2. Prioriät: Öffnet bestehende Mühle, falls keine Bedrohung vorhanden
+        for (int row = 0; row < 3; row++) {
+            for (int field = 0; field < 7; field++) {
 
-        // 2. Priorität: Wählt zufälligen Stein und fährt in zufällige Richtung
+                Position from = new Position(row, field);
+                Position to;
+
+                if (board.isThisMyStone(from, playerIndex) && board.checkMorris(from)) {
+                    if (field % 2 == 0) { // Gerade Felder
+                        if (board.isFieldFree(new Position(row, (field + 1) % 8))
+                                && !board.isThisMyEnemysStone(new Position(row, (field + 7) % 8), playerIndex)) {
+                            to = new Position(row, (field + 1) % 8);
+                            positions[0] = from;
+                            positions[1] = to;
+                            System.out.println("Computerstrategie: Öffnet Mühle");
+                            return positions;
+                        }
+                        if (board.isFieldFree(new Position(row, (field + 7) % 8))
+                                && !board.isThisMyEnemysStone(new Position(row, (field + 1) % 8), playerIndex)) {
+                            to = new Position(row, (field + 7) % 8);
+                            positions[0] = from;
+                            positions[1] = to;
+                            System.out.println("Computerstrategie: Öffnet Mühle");
+                            return positions;
+                        }
+                    }
+
+                    if (field % 2 == 1) { // Ungerade Felder
+                        if (row == 0) {
+                            if (board.isFieldFree(new Position(row + 1, field))) {
+                                to = new Position(row + 1, field);
+                                positions[0] = from;
+                                positions[1] = to;
+                                System.out.println("Computerstrategie: Öffnet Mühle");
+                                return positions;
+                            }
+                            if (board.isFieldFree(new Position(row, (field + 1) % 8))
+                                    && !board.isThisMyEnemysStone(new Position(row, (field + 7) % 8), playerIndex)) {
+                                to = new Position(row, (field + 1) % 8);
+                                positions[0] = from;
+                                positions[1] = to;
+                                System.out.println("Computerstrategie: Öffnet Mühle");
+                                return positions;
+                            }
+                            if (board.isFieldFree(new Position(row, (field + 7) % 8))
+                                    && !board.isThisMyEnemysStone(new Position(row, (field + 1) % 8), playerIndex)) {
+                                to = new Position(row, (field + 7) % 8);
+                                positions[0] = from;
+                                positions[1] = to;
+                                System.out.println("Computerstrategie: Öffnet Mühle");
+                                return positions;
+                            }
+                        }
+
+                        if (row == 1) {
+                            if (board.isFieldFree(new Position(row + 1, field))
+                                    && !board.isThisMyEnemysStone(new Position(row - 1, field), playerIndex)) {
+                                to = new Position(row + 1, field);
+                                positions[0] = from;
+                                positions[1] = to;
+                                System.out.println("Computerstrategie: Öffnet Mühle");
+                                return positions;
+                            }
+                            if (board.isFieldFree(new Position(row - 1, field))
+                                    && !board.isThisMyEnemysStone(new Position(row + 1, field), playerIndex)) {
+                                to = new Position(row - 1, field);
+                                positions[0] = from;
+                                positions[1] = to;
+                                System.out.println("Computerstrategie: Öffnet Mühle");
+                                return positions;
+                            }
+                            if (board.isFieldFree(new Position(row, (field + 1) % 8))
+                                    && !board.isThisMyEnemysStone(new Position(row, (field + 7) % 8), playerIndex)) {
+                                to = new Position(row, (field + 1) % 8);
+                                positions[0] = from;
+                                positions[1] = to;
+                                System.out.println("Computerstrategie: Öffnet Mühle");
+                                return positions;
+                            }
+                            if (board.isFieldFree(new Position(row, (field + 7) % 8))
+                                    && !board.isThisMyEnemysStone(new Position(row, (field + 1) % 8), playerIndex)) {
+                                to = new Position(row, (field + 7) % 8);
+                                positions[0] = from;
+                                positions[1] = to;
+                                System.out.println("Computerstrategie: Öffnet Mühle");
+                                return positions;
+                            }
+                        }
+                        if (row == 2) {
+                            if (board.isFieldFree(new Position(row - 1, field))) {
+                                to = new Position(row - 1, field);
+                                positions[0] = from;
+                                positions[1] = to;
+                                System.out.println("Computerstrategie: Öffnet Mühle");
+                                return positions;
+                            }
+                            if (board.isFieldFree(new Position(row, (field + 1) % 8))
+                                    && !board.isThisMyEnemysStone(new Position(row, (field + 7) % 8), playerIndex)) {
+                                to = new Position(row, field + 1);
+                                positions[0] = from;
+                                positions[1] = to;
+                                System.out.println("Computerstrategie: Öffnet Mühle");
+                                return positions;
+                            }
+                            if (board.isFieldFree(new Position(row, (field + 7) % 8))
+                                    && !board.isThisMyEnemysStone(new Position(row, (field + 1) % 8), playerIndex)) {
+                                to = new Position(row, (field + 7) % 8);
+                                positions[0] = from;
+                                positions[1] = to;
+                                System.out.println("Computerstrategie: Öffnet Mühle");
+                                return positions;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+        // 3. Priorität: Wählt zufälligen Stein, der nicht in Mühle ist und fährt in zufällige Richtung
         Random random = new Random();
         Position from;
         Position to;
@@ -190,7 +307,7 @@ public class ComputerPlayer extends Player {
             int row = random.nextInt(3);
             int field= random.nextInt(8);
             from = new Position(row, field);
-            if (board.isThisMyStone(from, playerIndex)){
+            if (board.isThisMyStone(from, playerIndex) && !board.checkMorris(from)){
                 if (board.isFieldFree(new Position(row, (field+1)%8))){
                     to = new Position(row, (field+1)%8);
                     positions[0] = from;
@@ -230,7 +347,6 @@ public class ComputerPlayer extends Player {
     private boolean checkIfMoveBuildsMorris(Board board, int playerIndex, Position[] positions, Board clonedBoard, Position from, Position to) {
         if (board.isFieldFree(to)) {
             clonedBoard.move(from, to, playerIndex);
-            System.out.println(clonedBoard);
             if (clonedBoard.checkMorris(to)) {
                 positions[0] = from;
                 positions[1] = to;
