@@ -250,7 +250,7 @@ public class ComputerPlayer extends Player {
         }
 
 
-        // 3. Priorität: Wählt zufälligen Stein, der nicht in Mühle ist und fährt in zufällige Richtung
+        // 3. Priorität: Wählt zufälligen Stein und fährt in zufällige Richtung
         Random random = new Random();
         Position from;
         Position to;
@@ -259,7 +259,7 @@ public class ComputerPlayer extends Player {
             int row = random.nextInt(3);
             int field= random.nextInt(8);
             from = new Position(row, field);
-            if (board.isThisMyStone(from, playerIndex) && !board.checkMorris(from)){
+            if (board.isThisMyStone(from, playerIndex)){
                 if (board.isFieldFree(new Position(row, (field+1)%8))){
                     to = new Position(row, (field+1)%8);
                     positions[0] = from;
