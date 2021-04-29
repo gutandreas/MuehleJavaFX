@@ -16,6 +16,8 @@ public class ComputerPlayer extends Player {
     @Override
     Position put(Board board, int playerIndex) {
 
+        board.getMyEnemysOpenMorrisList(playerIndex);
+
         // 1. Priorität: Mühlen schliessen
         for (int row = 0; row < 3; row++) {
             for (int field = 0; field < 8; field++) {
@@ -135,6 +137,8 @@ public class ComputerPlayer extends Player {
         Position[] positions = new Position[2];
 
         Board clonedBoard = (Board) board.clone();
+
+        board.getMyEnemysOpenMorrisList(playerIndex);
 
         // 1. Priorität: Offene Mühlen schliessen
         for (int row = 0; row < 3; row++) {

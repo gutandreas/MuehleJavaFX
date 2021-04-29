@@ -1,5 +1,8 @@
 package edu.andreasgut.game;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class Board {
 
     final private int[][] array;
@@ -194,6 +197,91 @@ public class Board {
 
     public boolean isThisMyEnemysStone(Position position, int ownPlayerIndex){
         return isFieldOccupied(position) && !isThisMyStone(position, ownPlayerIndex);
+    }
+
+    public LinkedList<Position> getMyEnemysOpenMorrisList(int ownPlayerIndex){
+
+        LinkedList<Position> positionList = new LinkedList<>();
+        for (int quarter = 0; quarter < 4; quarter++) {
+
+            //Powerpoint rot
+            for (int startRing = 0; startRing < 2; startRing++) {
+                if (isThisMyEnemysStone(new Position(startRing, quarter * 2), ownPlayerIndex)
+                        && isThisMyEnemysStone(new Position(startRing + 1, (quarter * 2 + 1) % 8), ownPlayerIndex)
+                        && isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 2) % 8), ownPlayerIndex)
+                        && isFieldFree(new Position(startRing, (quarter * 2 + 1) % 8))) {
+
+                    positionList.add(new Position(startRing, (quarter * 2 + 1) % 8));
+                }}
+
+            //Powerpoint blau
+            for (int startRing = 1; startRing < 3; startRing++) {
+                if (isThisMyEnemysStone(new Position(startRing, quarter * 2), ownPlayerIndex)
+                        && isThisMyEnemysStone(new Position(startRing - 1, (quarter * 2 + 1) % 8), ownPlayerIndex)
+                        && isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 2) % 8), ownPlayerIndex)
+                        && isFieldFree(new Position(startRing, (quarter * 2 + 1) % 8))) {
+
+                    positionList.add(new Position(startRing, (quarter * 2 + 1) % 8));
+                }}
+
+            //Powerpoint gelb
+            for (int startRing = 1; startRing < 3; startRing++) {
+                if (isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 7)% 8 ), ownPlayerIndex)
+                        && isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 1)  % 8), ownPlayerIndex)
+                        && isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 2) % 8), ownPlayerIndex)
+                        && isFieldFree(new Position(startRing, (quarter * 2) % 8))) {
+
+                    positionList.add(new Position(startRing, (quarter * 2) % 8));
+                }}
+
+            //Powerpoint pink
+            for (int startRing = 1; startRing < 3; startRing++) {
+                if (isThisMyEnemysStone(new Position(startRing, (quarter * 2)% 8 ), ownPlayerIndex)
+                        && isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 1)  % 8), ownPlayerIndex)
+                        && isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 3) % 8), ownPlayerIndex)
+                        && isFieldFree(new Position(startRing, (quarter * 2 + 2) % 8))) {
+
+                    positionList.add(new Position(startRing, (quarter * 2 + 2) % 8));
+                }}
+
+            //Powerpoint grün
+            for (int startRing = 0; startRing < 3; startRing++) {
+                switch (startRing) {
+                    case 0: {
+                        if ((isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 1) % 8), ownPlayerIndex)
+                                || isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 7) % 8), ownPlayerIndex))
+                            && isThisMyEnemysStone(new Position(startRing, quarter * 2), ownPlayerIndex)
+                            && isThisMyEnemysStone(new Position(quarter * 2, quarter * 2), ownPlayerIndex)
+                            && isFieldFree(new Position(startRing, quarter * 2))) {
+
+                            positionList.add(new Position(startRing, quarter * 2));
+                            break;}}
+                    case 1: {
+                        if (isThisMyEnemysStone(new Position(startRing, quarter * 2), ownPlayerIndex)
+                            && (isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 1) % 8), ownPlayerIndex)
+                                || isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 7) % 8), ownPlayerIndex))
+                            && isThisMyEnemysStone(new Position(startRing, quarter * 2), ownPlayerIndex)
+                            && isFieldFree(new Position(startRing, quarter * 2))) {
+
+                            positionList.add(new Position(startRing, quarter * 2));
+                            break;}}
+                    case 3: {
+                        if (isThisMyEnemysStone(new Position(startRing, quarter * 2), ownPlayerIndex)
+                            && isThisMyEnemysStone(new Position(startRing, quarter * 2), ownPlayerIndex)
+                            && (isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 1) % 8), ownPlayerIndex)
+                                || isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 7) % 8), ownPlayerIndex))
+                            && isFieldFree(new Position(startRing, quarter * 2))) {
+
+                            positionList.add(new Position(startRing, quarter * 2));
+                            break;}}
+                }}}
+
+        for (Position position:positionList) {
+            System.out.println("Offene Mühle mit Lücke in Ring " + position.getRing() +" auf Feld " + position.getField());
+
+        }
+
+        return positionList;
     }
 
 
