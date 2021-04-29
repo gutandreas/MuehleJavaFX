@@ -251,7 +251,7 @@ public class Board {
                         if ((isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 1) % 8), ownPlayerIndex)
                                 || isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 7) % 8), ownPlayerIndex))
                             && isThisMyEnemysStone(new Position(startRing, quarter * 2), ownPlayerIndex)
-                            && isThisMyEnemysStone(new Position(quarter * 2, quarter * 2), ownPlayerIndex)
+                            && isThisMyEnemysStone(new Position(startRing, quarter * 2), ownPlayerIndex)
                             && isFieldFree(new Position(startRing, quarter * 2))) {
 
                             positionList.add(new Position(startRing, quarter * 2));

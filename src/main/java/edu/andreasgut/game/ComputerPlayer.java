@@ -46,15 +46,15 @@ public class ComputerPlayer extends Player {
                         System.out.println("Computerstrategie: setzt Stein nach der 2er-Reihe sofern frei");
                         return new Position(row, (field + 2) % 8);
                     }
+                }
 
-                    // bildet Mühle wenn 2 Steine mit Lücke innerhalb von Ring
-                    if (board.isThisMyStone(new Position(row, field), playerIndex)
-                            && board.isThisMyStone(new Position(row, (field+2)%8), playerIndex)
-                            &&(field % 2) == 0
-                            && board.isFieldFree(new Position(row, (field + 1) % 8))) {
-                        System.out.println("Computerstrategie: bildet Mühle wenn 2 Steine mit Lücke innerhalb von Ring");
-                        return new Position(row, (field + 1) % 8);
-                    }
+                // bildet Mühle wenn 2 Steine mit Lücke innerhalb von Ring
+                if (board.isThisMyStone(new Position(row, field), playerIndex)
+                        && board.isThisMyStone(new Position(row, (field+2)%8), playerIndex)
+                        && (field % 2) == 0
+                        && board.isFieldFree(new Position(row, (field + 1) % 8))) {
+                    System.out.println("Computerstrategie: bildet Mühle wenn 2 Steine mit Lücke innerhalb von Ring");
+                    return new Position(row, (field + 1) % 8);
                 }
             }
         }
