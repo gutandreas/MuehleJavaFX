@@ -16,7 +16,7 @@ public class ComputerPlayer extends Player {
     @Override
     Position put(Board board, int playerIndex) {
 
-        board.getMyEnemysOpenMorrisList(playerIndex);
+        Advisor.getMyEnemysOpenMorrisList(board, playerIndex);
 
         // 1. Priorität: Mühlen schliessen
         for (int row = 0; row < 3; row++) {
@@ -143,7 +143,7 @@ public class ComputerPlayer extends Player {
         if (allowedToJump){
             // 1. Prioriät: In offene Mühle springen
             //TODO: Stein in offener Mühle soll nicht springen
-            if (!board.getMyEnemysOpenMorrisList(playerIndex).isEmpty()){
+            if (!Advisor.getMyEnemysOpenMorrisList(board, playerIndex).isEmpty()){
 
                 Position from = new Position(0,0);
                 Position to;
@@ -152,7 +152,7 @@ public class ComputerPlayer extends Player {
                 while (!board.isThisMyStone(from, playerIndex)){
                     from = new Position(random.nextInt(3), random.nextInt(8));}
                 positions[0] = from;
-                to = board.getMyEnemysOpenMorrisList(playerIndex).get(0);
+                to = Advisor.getMyEnemysOpenMorrisList(board, playerIndex).get(0);
                 positions[1] = to;
                 System.out.println("Computerstrategie: Springt in offene Mühle");
                 return positions;
