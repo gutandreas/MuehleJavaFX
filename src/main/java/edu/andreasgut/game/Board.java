@@ -211,7 +211,8 @@ public class Board {
                         && isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 2) % 8), ownPlayerIndex)
                         && isFieldFree(new Position(startRing, (quarter * 2 + 1) % 8))) {
 
-                    positionList.add(new Position(startRing, (quarter * 2 + 1) % 8));
+                        positionList.add(new Position(startRing, (quarter * 2 + 1) % 8));
+                        System.out.println("Rote offene Mühle erkannt");
                 }}
 
             //Powerpoint blau
@@ -221,7 +222,8 @@ public class Board {
                         && isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 2) % 8), ownPlayerIndex)
                         && isFieldFree(new Position(startRing, (quarter * 2 + 1) % 8))) {
 
-                    positionList.add(new Position(startRing, (quarter * 2 + 1) % 8));
+                        positionList.add(new Position(startRing, (quarter * 2 + 1) % 8));
+                        System.out.println("Blaue offene Mühle erkannt");
                 }}
 
             //Powerpoint gelb
@@ -231,7 +233,8 @@ public class Board {
                         && isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 2) % 8), ownPlayerIndex)
                         && isFieldFree(new Position(startRing, (quarter * 2) % 8))) {
 
-                    positionList.add(new Position(startRing, (quarter * 2) % 8));
+                        positionList.add(new Position(startRing, (quarter * 2) % 8));
+                        System.out.println("Gelbe offene Mühle erkannt");
                 }}
 
             //Powerpoint pink
@@ -241,40 +244,22 @@ public class Board {
                         && isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 3) % 8), ownPlayerIndex)
                         && isFieldFree(new Position(startRing, (quarter * 2 + 2) % 8))) {
 
-                    positionList.add(new Position(startRing, (quarter * 2 + 2) % 8));
+                        positionList.add(new Position(startRing, (quarter * 2 + 2) % 8));
+                        System.out.println("Pinke offene Mühle erkannt");
                 }}
 
             //Powerpoint grün
             for (int startRing = 0; startRing < 3; startRing++) {
-                switch (startRing) {
-                    case 0: {
-                        if ((isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 1) % 8), ownPlayerIndex)
-                                || isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 7) % 8), ownPlayerIndex))
-                            && isThisMyEnemysStone(new Position(startRing, quarter * 2), ownPlayerIndex)
-                            && isThisMyEnemysStone(new Position(startRing, quarter * 2), ownPlayerIndex)
-                            && isFieldFree(new Position(startRing, quarter * 2))) {
+                        if ((isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 2) % 8), ownPlayerIndex)
+                                || isThisMyEnemysStone(new Position(startRing, (quarter * 2) % 8), ownPlayerIndex))
+                            && isThisMyEnemysStone(new Position((startRing + 1) % 3, quarter * 2+1), ownPlayerIndex)
+                            && isThisMyEnemysStone(new Position((startRing + 2) % 3 , quarter * 2+1), ownPlayerIndex)
+                            && isFieldFree(new Position(startRing, quarter * 2 + 1))) {
 
-                            positionList.add(new Position(startRing, quarter * 2));
-                            break;}}
-                    case 1: {
-                        if (isThisMyEnemysStone(new Position(startRing, quarter * 2), ownPlayerIndex)
-                            && (isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 1) % 8), ownPlayerIndex)
-                                || isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 7) % 8), ownPlayerIndex))
-                            && isThisMyEnemysStone(new Position(startRing, quarter * 2), ownPlayerIndex)
-                            && isFieldFree(new Position(startRing, quarter * 2))) {
-
-                            positionList.add(new Position(startRing, quarter * 2));
-                            break;}}
-                    case 3: {
-                        if (isThisMyEnemysStone(new Position(startRing, quarter * 2), ownPlayerIndex)
-                            && isThisMyEnemysStone(new Position(startRing, quarter * 2), ownPlayerIndex)
-                            && (isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 1) % 8), ownPlayerIndex)
-                                || isThisMyEnemysStone(new Position(startRing, (quarter * 2 + 7) % 8), ownPlayerIndex))
-                            && isFieldFree(new Position(startRing, quarter * 2))) {
-
-                            positionList.add(new Position(startRing, quarter * 2));
-                            break;}}
-                }}}
+                            positionList.add(new Position(startRing, quarter * 2 + 1));
+                            System.out.println("Grüne offene Mühle erkannt");
+                }}
+            }
 
         for (Position position:positionList) {
             System.out.println("Offene Mühle mit Lücke in Ring " + position.getRing() +" auf Feld " + position.getField());
