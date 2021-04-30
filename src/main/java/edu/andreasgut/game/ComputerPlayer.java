@@ -138,7 +138,33 @@ public class ComputerPlayer extends Player {
 
         Board clonedBoard = (Board) board.clone();
 
-        board.getMyEnemysOpenMorrisList(playerIndex);
+        //board.getMyEnemysOpenMorrisList(playerIndex);
+
+        if (allowedToJump){
+            // 1. Prioriät: In offene Mühle springen
+            //TODO: Stein in offener Mühle soll nicht springen
+            if (!board.getMyEnemysOpenMorrisList(playerIndex).isEmpty()){
+
+                Position from = new Position(0,0);
+                Position to;
+                Random random = new Random();
+
+                while (!board.isThisMyStone(from, playerIndex)){
+                    from = new Position(random.nextInt(3), random.nextInt(8));}
+                positions[0] = from;
+                to = board.getMyEnemysOpenMorrisList(playerIndex).get(0);
+                positions[1] = to;
+                System.out.println("Computerstrategie: Springt in offene Mühle");
+                return positions;
+            }
+
+            // 2. Priorität: Mühle schliessen
+
+            // 3. Priorität: Neben eigenen Stein in freier Reihe springen
+
+            // 4. Priorität: Mit zufälligem Stein an zufällige freie Stelle springen
+
+        }
 
         // 1. Priorität: Offene Mühlen schliessen
         for (int row = 0; row < 3; row++) {
