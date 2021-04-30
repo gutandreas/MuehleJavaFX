@@ -1,11 +1,14 @@
 package edu.andreasgut.game;
 
-public class Player {
+import edu.andreasgut.view.ViewManager;
 
-    private String name;
-    private boolean allowedToJump = false;
+public abstract class Player {
 
-    public Player(String name) {
+    private final String name;
+    protected final ViewManager viewManager;
+
+    public Player(ViewManager viewManager, String name) {
+        this.viewManager = viewManager;
         this.name = name;
     }
 
@@ -13,11 +16,7 @@ public class Player {
         return name;
     }
 
-    public void setAllowedToJump(boolean allowedToJump) {
-        this.allowedToJump = allowedToJump;
-    }
-
-    public boolean isAllowedToJump() {
-        return allowedToJump;
-    }
+    abstract Position[] move(Board board, int playerIndex, boolean allowedToJump);
+    abstract Position put(Board board, int playerIndex);
+    abstract Position kill(Board board, int ownPlayerIndex, int otherPlayerIndex);
 }

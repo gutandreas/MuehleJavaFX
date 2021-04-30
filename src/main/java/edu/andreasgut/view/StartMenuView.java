@@ -1,9 +1,10 @@
 package edu.andreasgut.view;
 
 import edu.andreasgut.game.Game;
-import edu.andreasgut.game.InvalidFieldException;
-import edu.andreasgut.game.Player;
+import edu.andreasgut.game.HumanPlayer;
+import edu.andreasgut.game.InvalidPutException;
 import edu.andreasgut.sound.MUSIC;
+import edu.andreasgut.view.fxElements.BeginnerSwitchButton;
 import edu.andreasgut.view.fxElements.SelectColorButton;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -16,13 +17,14 @@ public class StartMenuView extends VBox {
     private final int STARTDIMENSION = 600;
     ViewManager viewManager;
     VBox vBox;
-    HBox hBoxRadioButtons, player1HBox, player2HBox;
+    HBox hBoxRadioButtons, player1HBox, player2HBox, beginnerHBox;
     ToggleGroup radioButtonGroup;
     RadioButton onePlayerRadioButton, twoPlayersRadioButton;
     TextField namePlayer1Textfield, namePlayer2Textfield;
-    Label informationLabel, titleLabel, stonesColorLabel1, stonesColorLabel2;
+    Label informationLabel, titleLabel, stonesColorLabel1, stonesColorLabel2, beginnerLabel1, beginnerLabel2;
     Button startButton;
     SelectColorButton stonesBlackButton1, stonesWhiteButton1, stonesBlackButton2, stonesWhiteButton2;
+    BeginnerSwitchButton beginnerSwitchButton;
     ImageView player1StonesImageView, player2StonesImageView;
     STONECOLOR player1Color, player2Color;
 
@@ -36,9 +38,10 @@ public class StartMenuView extends VBox {
 
         setupTitleAndWarning();
         setupRadioButtons();
+        setupBeginnerSwitch();
         setupPlayerInformations();
 
-        vBox.getChildren().addAll(titleLabel, informationLabel, hBoxRadioButtons, player1HBox, player2HBox, startButton);
+        vBox.getChildren().addAll(titleLabel, informationLabel, hBoxRadioButtons, player1HBox, beginnerHBox, startButton);
         vBox.setSpacing(20);
         this.getChildren().addAll(vBox);
         this.setAlignment(Pos.CENTER);
@@ -67,6 +70,18 @@ public class StartMenuView extends VBox {
         radioButtonGroup.selectToggle(onePlayerRadioButton);
     }
 
+    private void setupBeginnerSwitch(){
+        beginnerHBox = new HBox();
+        beginnerSwitchButton = new BeginnerSwitchButton(viewManager);
+        beginnerLabel1 = new Label("Spieler 1 beginnt");
+        beginnerLabel2 = new Label("Computer beginnt");
+        beginnerHBox.getChildren().addAll(beginnerLabel1, beginnerSwitchButton, beginnerLabel2);
+        beginnerHBox.setAlignment(Pos.CENTER_LEFT);
+        beginnerHBox.setSpacing(10);
+        beginnerHBox.setPrefHeight(70);
+
+    }
+
     private void setupPlayerInformations(){
         namePlayer1Textfield = new TextField();
         namePlayer1Textfield.setPromptText("Name Spieler 1");
@@ -82,19 +97,17 @@ public class StartMenuView extends VBox {
 
         namePlayer2Textfield = new TextField();
         namePlayer2Textfield.setPromptText("Name Spieler 2");
-        namePlayer2Textfield.setVisible(false);
+        namePlayer2Textfield.setVisible(true);
         stonesColorLabel2 = new Label("Steinfarbe: ");
-        stonesColorLabel2.setVisible(false);
         stonesBlackButton2 = new SelectColorButton(null, STONECOLOR.BLACK, false);
-        stonesBlackButton2.setVisible(false);
         stonesWhiteButton2 = new SelectColorButton(null, STONECOLOR.WHITE, true);
-        stonesWhiteButton2.setVisible(false);
         player2Color = STONECOLOR.WHITE;
 
         player2HBox = new HBox();
         player2HBox.getChildren().addAll(namePlayer2Textfield, stonesColorLabel2, stonesBlackButton2, stonesWhiteButton2);
         player2HBox.setSpacing(20);
         player2HBox.setAlignment(Pos.CENTER_LEFT);
+        player2HBox.setPrefHeight(70);
     }
 
     private void setupColorButtonAction(){
@@ -171,17 +184,14 @@ public class StartMenuView extends VBox {
 
     private void setupRadioButtonAction(){
         onePlayerRadioButton.setOnAction(action -> {
-            namePlayer2Textfield.setVisible(false);
-            namePlayer2Textfield.clear();
-            stonesColorLabel2.setVisible(false);
-            stonesBlackButton2.setVisible(false);
-            stonesWhiteButton2.setVisible(false);
+            vBox.getChildren().add(4, beginnerHBox);
+            vBox.getChildren().remove(player2HBox);
+
         });
         twoPlayersRadioButton.setOnAction(action -> {
-            namePlayer2Textfield.setVisible(true);
-            stonesColorLabel2.setVisible(true);
-            stonesBlackButton2.setVisible(true);
-            stonesWhiteButton2.setVisible(true);
+            vBox.getChildren().remove(beginnerHBox);
+            vBox.getChildren().add(4, player2HBox);
+
         });
     }
 
@@ -200,13 +210,15 @@ public class StartMenuView extends VBox {
 
                 if (twoPlayersRadioButton.isSelected()){
                     viewManager.setGame(new Game(viewManager,
-                            new Player(namePlayer1Textfield.getText().toUpperCase()),
-                            new Player(namePlayer2Textfield.getText().toUpperCase())));
+                            new HumanPlayer(viewManager, namePlayer1Textfield.getText().toUpperCase()),
+                            new HumanPlayer(viewManager, namePlayer2Textfield.getText().toUpperCase())));
                 }
                 else {
                     viewManager.setGame(new Game(viewManager,
-                            new Player(namePlayer1Textfield.getText().toUpperCase())));
+                            new HumanPlayer(viewManager, namePlayer1Textfield.getText().toUpperCase()),
+                            beginnerSwitchButton.getState()));
                 }
+
 
                 viewManager.createGameScene(new FieldView(viewManager, player1Color, player2Color),
                         new ScoreView(viewManager, player1Color, player2Color),
@@ -217,11 +229,8 @@ public class StartMenuView extends VBox {
 
                 viewManager.changeToGameScene();
 
-                try {
-                    viewManager.getGame().play();
-                } catch (InvalidFieldException e) {
-                    e.printStackTrace();
-                }
+
+                viewManager.getGame().play();
 
 
 
