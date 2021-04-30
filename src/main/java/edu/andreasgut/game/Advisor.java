@@ -4,6 +4,10 @@ import java.util.LinkedList;
 
 public class Advisor {
 
+    static boolean checkEnemyOpenMorris(Board board, int ownPlayerIndex){
+        return !getMyEnemysOpenMorrisList(board, ownPlayerIndex).isEmpty();
+    }
+
 
     static public LinkedList<Position> getMyEnemysOpenMorrisList(Board board, int ownPlayerIndex){
 
