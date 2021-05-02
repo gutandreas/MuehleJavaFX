@@ -17,7 +17,7 @@ public class ComputerPlayer extends Player {
     @Override
     Position put(Board board, int playerIndex) {
 
-        Advisor.getMyEnemysOpenMorrisList(board, playerIndex);
+        printAllInformations(board, playerIndex);
 
         // 1. Priorität: Mühlen schliessen
         for (int row = 0; row < 3; row++) {
@@ -294,6 +294,36 @@ public class ComputerPlayer extends Player {
 
 
 
+    }
+
+    private void printAllInformations(Board board, int ownPlayerIndex){
+
+        System.out.println();
+        System.out.println("Offene Mühlen des Gegners:");
+        for (OpenMorris openMorris : Advisor.getMyEnemysOpenMorrisList(board, ownPlayerIndex)){
+            System.out.println(openMorris);
+        }
+
+        System.out.println();
+        System.out.println("Eigene offene Mühlen:");
+        for (OpenMorris openMorris : Advisor.getMyOpenMorrisList(board, ownPlayerIndex)){
+            System.out.println(openMorris);
+        }
+
+        System.out.println();
+        System.out.println("Freie Linien:");
+        for (Line line : Advisor.getFreeLines(board)){
+            System.out.println(line);
+        }
+
+        System.out.println();
+        System.out.println("Linien ohne gegnerische Steine:");
+        for (Line line : Advisor.getLinesWithoutEnemysStones(board, ownPlayerIndex)){
+            System.out.println(line);
+        }
+
+
+        System.out.println();
     }
 
     private boolean checkIfMoveBuildsMorris(Board board, int playerIndex, Position[] positions, Board clonedBoard, Position from, Position to) {
