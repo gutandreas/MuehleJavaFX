@@ -1,6 +1,6 @@
 package edu.andreasgut.game;
 
-public class Position {
+public class Position implements Comparable {
     int ring;
     int field;
 
@@ -26,5 +26,16 @@ public class Position {
 
     public void setField(int field) {
         this.field = field;
+    }
+
+
+
+    @Override
+    public int compareTo(Object o) {
+        Position position = (Position) o;
+        if (ring == position.getRing() && field == position.getField()) return 0;
+        if (ring == position.getRing() && field > position.getField()) return 1;
+        if (ring > position.getRing()) return 1;
+        return -1;
     }
 }
