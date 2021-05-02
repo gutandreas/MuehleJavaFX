@@ -1,8 +1,8 @@
 package edu.andreasgut.game;
 
 public class Position implements Comparable {
-    int ring;
-    int field;
+
+    private int ring, field;
 
     public Position() {
     }

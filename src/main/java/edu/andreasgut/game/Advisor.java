@@ -6,10 +6,58 @@ import java.util.*;
 
 public class Advisor {
 
-    static boolean checkEnemyOpenMorris(Board board, int ownPlayerIndex) {
+    static boolean checkIfMyEnemyHasOpenMorris(Board board, int ownPlayerIndex) {
         return !getMyEnemysOpenMorrisList(board, ownPlayerIndex).isEmpty();
     }
 
+    static boolean checkIfIHaveOpenMorris(Board board, int ownPlayerIndex) {
+        return !getMyOpenMorrisList(board, ownPlayerIndex).isEmpty();
+    }
+
+    static public int countMyStones(Board board, int playerIndex){
+        return board.countPlayersStones(playerIndex);
+    }
+
+    static public int countMyEnemysStones(Board board, int ownPlayerIndex){
+        int enemysIndex = 1 - ownPlayerIndex;
+        return board.countPlayersStones(enemysIndex);
+    }
+
+    static public LinkedList<Line> getFreeLines(Board board){
+        LinkedList<Line> lines = new LinkedList<>();
+
+        for (int ring = 0; ring < 3; ring++) {
+            for (int field = 0; field < 6; field++) {
+
+                Position position1 = new Position(ring, field);
+                Position position2 = new Position(ring, field+1);
+                Position position3 = new Position(ring, field+2);
+
+                if (board.isFieldFree(position1)
+                        && board.isFieldFree(position2)
+                        && board.isFieldFree(position3)){
+                    lines.add(new Line(position1, position2, position3));
+                }}}
+
+        for (int field = 1; field < 6; field+=2) {
+
+            Position position1 = new Position(0, field);
+            Position position2 = new Position(1, field);
+            Position position3 = new Position(2, field);
+
+            if (board.isFieldFree(position1)
+                    && board.isFieldFree(position2)
+                    && board.isFieldFree(position3)){
+                lines.add(new Line(position1, position2, position3));
+            }}
+
+        return lines;
+    }
+
+    static public LinkedList<OpenMorris> getMyOpenMorrisList(Board board, int ownPlayerIndex) {
+        int enemysIndex = 1-ownPlayerIndex;
+        return getMyEnemysOpenMorrisList(board, enemysIndex);
+    }
 
     static public LinkedList<OpenMorris> getMyEnemysOpenMorrisList(Board board, int ownPlayerIndex) {
 

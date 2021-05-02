@@ -30,4 +30,11 @@ public class ClosedMorris {
     public Position getThirdPosition() {
         return thirdPosition;
     }
+
+    @Override
+    public String toString(){
+        return "Geschlossene Mühle mit den Positionen " + firstPosition.getRing() + "/" + firstPosition.getField() +
+                ", " + secondPosition.getRing() + "/" + secondPosition.getField() +
+                ", " + thirdPosition.getRing() + "/" + thirdPosition.getField();
+    }
 }
