@@ -2,6 +2,7 @@ package edu.andreasgut.game;
 
 import edu.andreasgut.view.ViewManager;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -139,6 +140,15 @@ public class ComputerPlayer extends Player {
 
         ScorePoints scorePoints = new ScorePoints(20,15,1,-20,-15, 20);
         Advisor.getScore(board, scorePoints, playerIndex);
+
+        for (Move move : Advisor.getAllPossibleMoves(board,playerIndex)) {
+            System.out.println(move);
+            Board clonedBoard = (Board) board.clone();
+            clonedBoard.move(move.getFrom(), move.getTo(), playerIndex);
+            System.out.println(clonedBoard);
+            Advisor.getScore(clonedBoard, scorePoints, playerIndex);
+        }
+
 
 
         Board clonedBoard = (Board) board.clone();

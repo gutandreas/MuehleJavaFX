@@ -187,55 +187,49 @@ public class Advisor {
     }
 
 
-    static public LinkedList<Position[]> getAllPossibleMoves(Board board, int playerIndex) {
+    static public LinkedList<Move> getAllPossibleMoves(Board board, int playerIndex) {
 
-        Position from;
-        Position to;
-        LinkedList<Position[]> positionList = new LinkedList<>();
+
+        LinkedList<Move> moveList = new LinkedList<>();
 
         for (int row = 0; row < 3; row++) {
             for (int field = 0; field < 8; field++) {
 
-
-                from = new Position(row, field);
+                Position from = new Position(row, field);
                 if (board.isThisMyStone(from, playerIndex)) {
                     if (board.isFieldFree(new Position(row, (field + 1) % 8))) {
-                        to = new Position(row, (field + 1) % 8);
-                        Position[] positions = new Position[2];
-                        positions[0] = from;
-                        positions[1] = to;
-                        positionList.add(positions);
+                        Move move = new Move();
+                        move.setFrom(from);
+                        move.setTo(new Position(row, (field + 1) % 8));
+                        moveList.add(move);
                     }
 
                     if (board.isFieldFree(new Position(row, (field + 7) % 8))) {
-                        to = new Position(row, (field + 7) % 8);
-                        Position[] positions = new Position[2];
-                        positions[0] = from;
-                        positions[1] = to;
-                        positionList.add(positions);
+                        Move move = new Move();
+                        move.setFrom(from);
+                        move.setTo(new Position(row, (field + 7) % 8));
+                        moveList.add(move);
                     }
 
                     if (field % 2 == 1 && (row == 0 || row == 1) && board.isFieldFree(new Position(row + 1, field))) {
-                        to = new Position(row + 1, field);
-                        Position[] positions = new Position[2];
-                        positions[0] = from;
-                        positions[1] = to;
-                        positionList.add(positions);
+                        Move move = new Move();
+                        move.setFrom(from);
+                        move.setTo(new Position(row + 1, field));
+                        moveList.add(move);
                     }
 
                     if (field % 2 == 1 && (row == 1 || row == 2) && board.isFieldFree(new Position(row - 1, field))) {
-                        to = new Position(row - 1, field);
-                        Position[] positions = new Position[2];
-                        positions[0] = from;
-                        positions[1] = to;
-                        positionList.add(positions);
+                        Move move = new Move();
+                        move.setFrom(from);
+                        move.setTo(new Position(row - 1, field));
+                        moveList.add(move);
                     }
 
                 }
             }
         }
 
-        return positionList;
+        return moveList;
     }
 
     static public int getScore(Board board, ScorePoints scorePoints, int playerIndex){
