@@ -236,6 +236,19 @@ public class Advisor {
         }
 
         return positionList;
+    }
+
+    static public int getScore(Board board, ScorePoints scorePoints, int playerIndex){
+
+        int score = 0;
+
+        score += getMyOpenMorrisList(board, playerIndex).size()*scorePoints.getOwnOpenMillPoints();
+        score += getMyEnemysOpenMorrisList(board, playerIndex).size()*scorePoints.getEnemyOpenMillPoints();
+        score += getAllPossibleMoves(board, playerIndex).size()*scorePoints.getOwnPossibleMovesPoints();
+
+        System.out.println("Score: " + score);
+
+        return score;
 
     }
 

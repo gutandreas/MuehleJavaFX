@@ -137,13 +137,9 @@ public class ComputerPlayer extends Player {
     Position[] move(Board board, int playerIndex, boolean allowedToJump) {
         Position[] positions = new Position[2];
 
-        LinkedList<Position[]> movePositions = Advisor.getAllPossibleMoves(board, playerIndex);
+        ScorePoints scorePoints = new ScorePoints(20,15,1,-20,-15, 20);
+        Advisor.getScore(board, scorePoints, playerIndex);
 
-        System.out.println("Mögliche Züge:");
-        for (Position[] tempPositions : movePositions) {
-                System.out.println("From: " + tempPositions[0].getRing() + "/" +tempPositions[0].getField());
-                System.out.println("To: " + tempPositions[1].getRing() + "/" +tempPositions[1].getField());
-        }
 
         Board clonedBoard = (Board) board.clone();
 
