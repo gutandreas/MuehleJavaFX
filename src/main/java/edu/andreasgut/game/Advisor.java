@@ -259,9 +259,30 @@ public class Advisor {
 
     static public LinkedList<Move> getAllPossibleMoves(Board board, int playerIndex) {
 
-
         LinkedList<Move> moveList = new LinkedList<>();
 
+        //Jump Moves
+        if (Advisor.countMyStones(board, playerIndex) == 3) {
+            for (int row1 = 0; row1 < 3; row1++) {
+                for (int field1 = 0; field1 < 8; field1++) {
+                    Position from = new Position(row1, field1);
+
+                    if (board.isThisMyStone(from, playerIndex)) {
+                        for (int row2 = 0; row2 < 3; row2++) {
+                            for (int field2 = 0; field2 < 8; field2++) {
+                                Position to = new Position(row2, field2);
+                                if (board.isFieldFree(to)){
+                                    moveList.add(new Move(from, to));
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        //Regular Moves
         for (int row = 0; row < 3; row++) {
             for (int field = 0; field < 8; field++) {
 
