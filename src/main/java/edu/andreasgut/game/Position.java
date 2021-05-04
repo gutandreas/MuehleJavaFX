@@ -1,5 +1,7 @@
 package edu.andreasgut.game;
 
+import javafx.geometry.Pos;
+
 public class Position implements Comparable {
 
     private int ring, field;
@@ -28,6 +30,11 @@ public class Position implements Comparable {
         this.field = field;
     }
 
+    @Override
+    public boolean equals(Object o){
+        Position position = (Position) o;
+        return ring == position.getRing() && field == position.getField();
+    }
 
 
     @Override

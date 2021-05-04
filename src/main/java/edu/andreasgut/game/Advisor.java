@@ -215,6 +215,26 @@ public class Advisor {
         return openMorrisLinkedList;
     }
 
+    static public boolean isThisStonePartOfMyEnemysOpenMorris(Board board, Position position, int ownPlayerIndex){
+        int enemysIndex = 1-ownPlayerIndex;
+        return isThisStonePartOfMyOpenMorris(board, position, enemysIndex);
+    }
+
+    static public boolean isThisStonePartOfMyOpenMorris(Board board, Position position, int playerIndex){
+
+        LinkedList<OpenMorris> openMorrisLinkedList = getMyOpenMorrisList(board, playerIndex);
+
+        for (OpenMorris openMorris : openMorrisLinkedList){
+            if (openMorris.getFirstPosition().equals(position)
+                || openMorris.getSecondPosition().equals(position)
+                || openMorris.getThirdPosition().equals(position)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     static private void checkOpenMorris(Board board, int playerIndex, LinkedList<OpenMorris> openMorrisLinkedList,
                                         Position position1, Position position2, Position position3,
                                         Position gapPosition, String morrisColor){
@@ -287,29 +307,44 @@ public class Advisor {
         int myOpenMorrises = getMyOpenMorrisList(board, playerIndex).size();
         int myClosedMorrises = getMyClosedMorrisList(board, playerIndex).size();
         boolean myNewClosedMorris = board.checkMorris(move.getTo());
-
-        int myEnemysOpenMorrises = getMyEnemysOpenMorrisList(board, playerIndex).size();
-        int myEnemysClosedMorrises = getMyEnemysClosedMorrisList(board, playerIndex).size();
+        boolean myNewOpenMorris = Advisor.isThisStonePartOfMyOpenMorris(board, move.getTo(), playerIndex);
         int myPossibleMoves = getAllPossibleMoves(board, playerIndex).size();
 
 
-        int score = myOpenMorrises * scorePoints.getOwnOpenMorrisPoints()
-                    + myClosedMorrises * scorePoints.getOwnClosedMorrisPoints()
-                    + myEnemysOpenMorrises * scorePoints.getEnemyOpenMorrisPoints()
-                    + myEnemysClosedMorrises * scorePoints.getEnemyClosedMorrisPoints()
-                    + myPossibleMoves * scorePoints.getOwnPossibleMovesPoints();
+        int myEnemysOpenMorrises = getMyEnemysOpenMorrisList(board, playerIndex).size();
+        int myEnemysClosedMorrises = getMyEnemysClosedMorrisList(board, playerIndex).size();
+
+
+        int myOpenMorrisesTotal = myOpenMorrises * scorePoints.getOwnOpenMorrisPoints();
+        int myClosedMorrisesTotal = myClosedMorrises * scorePoints.getOwnClosedMorrisPoints();
+        int myEnemysOpenMorrisesTotal = myEnemysOpenMorrises * scorePoints.getEnemyOpenMorrisPoints();
+        int myEnemysClosedMorrisesTotal = myEnemysClosedMorrises * scorePoints.getEnemyClosedMorrisPoints();
+        int myPossibleMovesTotal = myPossibleMoves * scorePoints.getOwnPossibleMovesPoints();
+        int myNewClosedMorrisTotal = 0;
+        int myNewOpenMorrisTotal = 0;
+
+        int score = myOpenMorrisesTotal + myClosedMorrisesTotal
+                + myEnemysOpenMorrisesTotal + myEnemysClosedMorrisesTotal
+                + myPossibleMovesTotal;
 
         if (myNewClosedMorris){
-            score += scorePoints.getOwnNewClosedMorrisPoints();
+            myNewClosedMorrisTotal = scorePoints.getOwnNewClosedMorrisPoints();
+            score += myNewClosedMorrisTotal;
+        }
+
+        if (myNewOpenMorris){
+            myNewOpenMorrisTotal = scorePoints.getOwnNewOpenMorrisPoints();
+            score += myNewOpenMorrisTotal;
         }
 
         if (printScore) {
-            System.out.println("Eigene offene Mühlen: " + myOpenMorrises);
-            System.out.println("Eigene geschlossene Mühlen: " + myClosedMorrises);
-            System.out.println("Neue geschlossene eigene Mühle: " + myNewClosedMorris);
-            System.out.println("Gegnerische offene Mühlen: " + myEnemysOpenMorrises);
-            System.out.println("Gegnerische geschlossene Mühlen: " + myEnemysClosedMorrises);
-            System.out.println("Eigene Zugmöglichkeiten: " + myPossibleMoves);
+            System.out.println("Eigene offene Mühlen: " + myOpenMorrises + " (" + myOpenMorrisesTotal + ")");
+            System.out.println("Eigene geschlossene Mühlen: " + myClosedMorrises + " (" + myClosedMorrisesTotal + ")");
+            System.out.println("Neue geschlossene eigene Mühle: " + myNewClosedMorris + " (" + myNewClosedMorrisTotal + ")");
+            System.out.println("Neue offene eigene Mühle: " + myNewOpenMorris + " (" + myNewClosedMorrisTotal + ")");
+            System.out.println("Gegnerische offene Mühlen: " + myEnemysOpenMorrises + " (" + myEnemysOpenMorrisesTotal + ")");
+            System.out.println("Gegnerische geschlossene Mühlen: " + myEnemysClosedMorrises + " (" + myEnemysClosedMorrisesTotal + ")");
+            System.out.println("Eigene Zugmöglichkeiten: " + myPossibleMoves + " (" + myPossibleMovesTotal + ")");
             System.out.println("Score: " + score);
         }
 
