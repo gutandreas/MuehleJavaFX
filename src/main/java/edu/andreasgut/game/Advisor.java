@@ -84,6 +84,7 @@ public class Advisor {
         return lines;
     }
 
+
     static public LinkedList<OpenMorris> getMyOpenMorrisList(Board board, int ownPlayerIndex) {
         int enemysIndex = 1-ownPlayerIndex;
         return getMyEnemysOpenMorrisList(board, enemysIndex);

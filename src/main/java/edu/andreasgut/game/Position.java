@@ -38,4 +38,9 @@ public class Position implements Comparable {
         if (ring > position.getRing()) return 1;
         return -1;
     }
+
+    @Override
+    public String toString(){
+        return "Position " + getRing() + "/" + getField();
+    }
 }
