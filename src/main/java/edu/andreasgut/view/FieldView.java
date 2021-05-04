@@ -1,6 +1,7 @@
 package edu.andreasgut.view;
 
 
+import edu.andreasgut.game.Move;
 import edu.andreasgut.game.Position;
 import edu.andreasgut.sound.SOUNDEFFECT;
 import javafx.animation.KeyFrame;
@@ -158,37 +159,37 @@ public class FieldView extends AnchorPane {
         return position;
     }
 
-    public Position[] humanGraphicMove() {
+    public Move humanGraphicMove() {
 
-        Position[] positions = new Position[2];
+        Move move = new Move();
         boolean releasedOnAnotherField = false;
 
         while (!releasedOnAnotherField){
 
             setMoveCursor();
 
-            final ImageView clickedField = humanGraphicMoveTakeStep(positions)[0];
+            final ImageView clickedField = humanGraphicMoveTakeStep(move)[0];
             clearAllFieldFunctions();
 
             setPutCursor();
 
-            releasedOnAnotherField = humanGraphicMoveReleaseStep(positions, clickedField);
+            releasedOnAnotherField = humanGraphicMoveReleaseStep(move, clickedField);
             clearAllFieldFunctions();}
 
-        return positions;
+        return move;
     }
 
-    private ImageView[] humanGraphicMoveTakeStep(Position[] positions){
+    private ImageView[] humanGraphicMoveTakeStep(Move move){
         Object loopObject = new Object();
         final ImageView[] clickedField = new ImageView[1];
 
         for (Node n : fieldGridPane.getChildren()){
             if(((ImageView) n).getImage().equals(getOwnStoneImage())){
                 n.setOnMouseClicked(click ->{
-                    positions[0] = new Position(translateToRing(n), translateToField(n));
+                    move.setFrom(new Position(translateToRing(n), translateToField(n)));
 
                     System.out.println("Stein wurde genommen.");
-                    System.out.println("Feld in Repräsentationsarray: " + positions[0].getRing() + "/" + positions[0].getField());
+                    System.out.println("Feld in Repräsentationsarray: " + move.getFrom().getRing() + "/" + move.getFrom().getField());
                     System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
 
                     ((ImageView) n).setImage(emptyField);
@@ -199,18 +200,19 @@ public class FieldView extends AnchorPane {
         return clickedField;
     }
 
-    private boolean humanGraphicMoveReleaseStep(Position[] positions, ImageView clickedField){
+    private boolean humanGraphicMoveReleaseStep(Move move, ImageView clickedField){
         Object loopObject = new Object();
         final boolean[] releasedOnAnotherfield = {false};
         for (Node n : fieldGridPane.getChildren()){
+            move.setTo(new Position(translateToRing(n), translateToField(n)));
             if(((ImageView) n).getImage().equals(emptyField) &&
-                    (viewManager.getGame().getBoard().checkMove(positions[0], new Position(translateToRing(n), translateToField(n)),
+                    (viewManager.getGame().getBoard().checkMove(move,
                             viewManager.getGame().getBoard().countPlayersStones(viewManager.getGame().getCurrentPlayerIndex()) == 3))){
                 n.setOnMouseClicked(click ->{
-                    positions[1] = new Position(translateToRing(n), translateToField(n));
+                    move.setTo(new Position(translateToRing(n), translateToField(n)));
 
                     System.out.println("Stein wurde hingelegt.");
-                    System.out.println("Feld in Repräsentationsarray: " + positions[1].getRing() + "/" + positions[1].getField());
+                    System.out.println("Feld in Repräsentationsarray: " + move.getTo().getRing() + "/" + move.getTo().getField());
                     System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
 
                     ((ImageView) n).setImage(getOwnStoneImage());
@@ -242,12 +244,12 @@ public class FieldView extends AnchorPane {
 
     }
 
-    public void computerGraphicMove(Position[] positions){
+    public void computerGraphicMove(Move move){
         Object loopObject = new Object();
         Timeline timeline = new Timeline(new KeyFrame(
                 Duration.millis(COMPREACTIONTIME*1.5),
-                move -> {((ImageView) fieldGridPane.getChildren().get(translateToIndex(positions[0]))).setImage(emptyField);
-                    ((ImageView) fieldGridPane.getChildren().get(translateToIndex(positions[1]))).setImage(player2StoneImage);
+                moveAction -> {((ImageView) fieldGridPane.getChildren().get(translateToIndex(move.getFrom()))).setImage(emptyField);
+                    ((ImageView) fieldGridPane.getChildren().get(translateToIndex(move.getTo()))).setImage(player2StoneImage);
                     viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
                     Platform.exitNestedEventLoop(loopObject, null);}));
         timeline.play();

@@ -40,9 +40,9 @@ public class Board {
     }
 
 
-    public void move(Position from, Position to, int playerIndex) {
-        putStone(to, playerIndex);
-        clearStone(from);
+    public void move(Move move, int playerIndex) {
+        putStone(move.getTo(), playerIndex);
+        clearStone(move.getFrom());
     }
 
 
@@ -51,15 +51,15 @@ public class Board {
     }
 
 
-    public boolean checkMove(Position from, Position to, boolean allowedToJump){
+    public boolean checkMove(Move move, boolean allowedToJump){
 
-        boolean destinationFree = isFieldFree(to);
+        boolean destinationFree = isFieldFree(move.getTo());
 
-        boolean destinationInRing = (from.getRing()==to.getRing() && Math.abs(from.getField()-to.getField())==1)
-                || (from.getRing()==to.getRing() && Math.abs(from.getField()-to.getField())==7);
+        boolean destinationInRing = (move.getFrom().getRing()==move.getTo().getRing() && Math.abs(move.getFrom().getField()-move.getTo().getField())==1)
+                || (move.getFrom().getRing()==move.getTo().getRing() && Math.abs(move.getFrom().getField()-move.getTo().getField())==7);
 
-        boolean destinationBetweenRings = from.getField()%2==1 && from.getField()==to.getField()
-                && Math.abs(from.getRing()-to.getRing())==1;
+        boolean destinationBetweenRings = move.getFrom().getField()%2==1 && move.getFrom().getField()==move.getTo().getField()
+                && Math.abs(move.getFrom().getRing()-move.getTo().getRing())==1;
 
         return destinationFree && (destinationInRing || destinationBetweenRings || allowedToJump);
     }

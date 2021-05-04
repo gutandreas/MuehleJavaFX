@@ -16,10 +16,10 @@ public class HumanPlayer extends Player{
     }
 
     @Override
-    Position[] move(Board board, int playerIndex, boolean allowedToJump) {
-        Position[] positions = viewManager.getFieldView().humanGraphicMove();
+    Move move(Board board, int playerIndex, boolean allowedToJump) {
+        Move move = viewManager.getFieldView().humanGraphicMove();
 
-        return positions;
+        return move;
     }
 
     @Override

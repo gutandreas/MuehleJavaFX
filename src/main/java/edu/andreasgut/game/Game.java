@@ -174,23 +174,22 @@ public class Game {
 
 
     private Position move(){
-        Position[] movePositions = currentPlayer.move(board, getCurrentPlayerIndex(),
+        Move move = currentPlayer.move(board, getCurrentPlayerIndex(),
                 board.countPlayersStones(getCurrentPlayerIndex())==3);
         Position positionToCheckMorris;
 
-        if (board.checkMove(movePositions[0], movePositions[1],
-                board.countPlayersStones(getCurrentPlayerIndex())==3)){
-            board.move(movePositions[0], movePositions[1], getCurrentPlayerIndex());
+        if (board.checkMove(move, board.countPlayersStones(getCurrentPlayerIndex())==3)){
+            board.move(move, getCurrentPlayerIndex());
 
             if (currentPlayer instanceof ComputerPlayer){
-                viewManager.getFieldView().computerGraphicMove(movePositions);
+                viewManager.getFieldView().computerGraphicMove(move);
             }
         }
         else {
             throw new InvalidMoveException("Das ist ein ungültiger Zug.");
         }
 
-        positionToCheckMorris = movePositions[1];
+        positionToCheckMorris = move.getTo();
 
         return positionToCheckMorris;
     }

@@ -134,7 +134,7 @@ public class ComputerPlayer extends Player {
 
 
     @Override
-    Position[] move(Board board, int playerIndex, boolean allowedToJump) {
+    Move move(Board board, int playerIndex, boolean allowedToJump) {
         Position[] positions = new Position[2];
 
         ScorePoints scorePoints = new ScorePoints(20,15,1,-20,-15, 20);
@@ -147,7 +147,7 @@ public class ComputerPlayer extends Player {
             boardMoveKillScoreSet1.setMove(move);
 
             Board clonedBoard1 = (Board) board.clone();
-            clonedBoard1.move(move.getFrom(), move.getTo(), playerIndex);
+            clonedBoard1.move(move, playerIndex);
             boardMoveKillScoreSet1.setBoard(clonedBoard1);
 
             boardMoveKillScoreSet1.setScore(Advisor.getScore(clonedBoard1, scorePoints, playerIndex));
@@ -178,9 +178,7 @@ public class ComputerPlayer extends Player {
 
 
         System.out.println("Getätigter Zug: " + setList.getFirst().getMove());
-        positions[0] = setList.getFirst().getMove().getFrom();
-        positions[1] = setList.getFirst().getMove().getTo();
-        return positions;
+        return setList.getFirst().getMove();
 
 
 
@@ -368,19 +366,7 @@ public class ComputerPlayer extends Player {
         System.out.println();
     }
 
-    private boolean checkIfMoveBuildsMorris(Board board, int playerIndex, Position[] positions, Board clonedBoard1, Position from, Position to) {
-        if (board.isFieldFree(to)) {
-            clonedBoard1.move(from, to, playerIndex);
-            if (clonedBoard1.checkMorris(to)) {
-                positions[0] = from;
-                positions[1] = to;
-                return true;
-            } else {
-                clonedBoard1.move(to, from, playerIndex); // setzt Stein zurück
-            }
-        }
-        return false;
-    }
+
 
 
     @Override
