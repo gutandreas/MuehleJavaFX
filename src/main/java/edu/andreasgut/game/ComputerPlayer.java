@@ -136,7 +136,7 @@ public class ComputerPlayer extends Player {
     Move move(Board board, int playerIndex, boolean allowedToJump) {
         Position[] positions = new Position[2];
 
-        ScorePoints scorePoints = new ScorePoints(20,100,1,-150,-15, 20);
+        ScorePoints scorePoints = new ScorePoints(20,20, 100,80, 1,-150,-15, 20);
 
         LinkedList<BoardMoveKillScoreSet> setList = new LinkedList<>();
         for (Move move : Advisor.getAllPossibleMoves(board,playerIndex)) {
@@ -148,7 +148,7 @@ public class ComputerPlayer extends Player {
             clonedBoard1.move(move, playerIndex);
             boardMoveKillScoreSet1.setBoard(clonedBoard1);
 
-            boardMoveKillScoreSet1.setScore(Advisor.getScore(clonedBoard1, scorePoints, playerIndex, false));
+            boardMoveKillScoreSet1.setScore(Advisor.getScore(clonedBoard1, move, scorePoints, playerIndex, false));
             setList.add(boardMoveKillScoreSet1);
 
 
@@ -160,7 +160,7 @@ public class ComputerPlayer extends Player {
             System.out.println("Möglicher Zug");
             System.out.println(boardMoveKillScoreSet1.getBoard());
             System.out.println(boardMoveKillScoreSet1.getMove());
-            Advisor.getScore(boardMoveKillScoreSet1.getBoard(), scorePoints, playerIndex, true);
+            Advisor.getScore(boardMoveKillScoreSet1.getBoard(), boardMoveKillScoreSet1.getMove(), scorePoints, playerIndex, true);
             System.out.println();
             System.out.println();
         }

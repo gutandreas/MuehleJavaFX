@@ -2,11 +2,13 @@ package edu.andreasgut.game;
 
 public class ScorePoints {
 
-    private int ownOpenMorrisPoints, ownClosedMorrisPoints, ownPossibleMovesPoints, enemyOpenMorrisPoints, enemyClosedMorrisPoints, enemyBlockOpenMorrisPoints;
+    private int ownOpenMorrisPoints, ownClosedMorrisPoints, ownNewClosedMorrisPoints, ownNewOpenMorrisPoints, ownPossibleMovesPoints, enemyOpenMorrisPoints, enemyClosedMorrisPoints, enemyBlockOpenMorrisPoints;
 
-    public ScorePoints(int ownOpenMorrisPoints, int ownClosedMorrisPoints, int ownPossibleMovesPoints, int enemyOpenMorrisPoints, int enemyClosedMorrisPoints, int enemyBlockOpenMorrisPoints) {
+    public ScorePoints(int ownOpenMorrisPoints, int ownClosedMorrisPoints, int ownNewClosedMorrisPoints, int ownNewOpenMorrisPoints, int ownPossibleMovesPoints, int enemyOpenMorrisPoints, int enemyClosedMorrisPoints, int enemyBlockOpenMorrisPoints) {
         this.ownOpenMorrisPoints = ownOpenMorrisPoints;
         this.ownClosedMorrisPoints = ownClosedMorrisPoints;
+        this.ownNewClosedMorrisPoints = ownNewClosedMorrisPoints;
+        this.ownNewOpenMorrisPoints = ownNewOpenMorrisPoints;
         this.ownPossibleMovesPoints = ownPossibleMovesPoints;
         this.enemyOpenMorrisPoints = enemyOpenMorrisPoints;
         this.enemyClosedMorrisPoints = enemyClosedMorrisPoints;
@@ -60,5 +62,21 @@ public class ScorePoints {
 
     public void setOwnPossibleMovesPoints(int ownPossibleMovesPoints) {
         this.ownPossibleMovesPoints = ownPossibleMovesPoints;
+    }
+
+    public int getOwnNewClosedMorrisPoints() {
+        return ownNewClosedMorrisPoints;
+    }
+
+    public void setOwnNewClosedMorrisPoints(int ownNewClosedMorrisPoints) {
+        this.ownNewClosedMorrisPoints = ownNewClosedMorrisPoints;
+    }
+
+    public int getOwnNewOpenMorrisPoints() {
+        return ownNewOpenMorrisPoints;
+    }
+
+    public void setOwnNewOpenMorrisPoints(int ownNewOpenMorrisPoints) {
+        this.ownNewOpenMorrisPoints = ownNewOpenMorrisPoints;
     }
 }

@@ -282,10 +282,12 @@ public class Advisor {
         return moveList;
     }
 
-    static public int getScore(Board board, ScorePoints scorePoints, int playerIndex, boolean printScore){
+    static public int getScore(Board board, Move move, ScorePoints scorePoints, int playerIndex, boolean printScore){
 
         int myOpenMorrises = getMyOpenMorrisList(board, playerIndex).size();
         int myClosedMorrises = getMyClosedMorrisList(board, playerIndex).size();
+        boolean myNewClosedMorris = board.checkMorris(move.getTo());
+
         int myEnemysOpenMorrises = getMyEnemysOpenMorrisList(board, playerIndex).size();
         int myEnemysClosedMorrises = getMyEnemysClosedMorrisList(board, playerIndex).size();
         int myPossibleMoves = getAllPossibleMoves(board, playerIndex).size();
@@ -297,9 +299,14 @@ public class Advisor {
                     + myEnemysClosedMorrises * scorePoints.getEnemyClosedMorrisPoints()
                     + myPossibleMoves * scorePoints.getOwnPossibleMovesPoints();
 
+        if (myNewClosedMorris){
+            score += scorePoints.getOwnNewClosedMorrisPoints();
+        }
+
         if (printScore) {
             System.out.println("Eigene offene Mühlen: " + myOpenMorrises);
             System.out.println("Eigene geschlossene Mühlen: " + myClosedMorrises);
+            System.out.println("Neue geschlossene eigene Mühle: " + myNewClosedMorris);
             System.out.println("Gegnerische offene Mühlen: " + myEnemysOpenMorrises);
             System.out.println("Gegnerische geschlossene Mühlen: " + myEnemysClosedMorrises);
             System.out.println("Eigene Zugmöglichkeiten: " + myPossibleMoves);
