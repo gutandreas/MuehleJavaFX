@@ -17,7 +17,6 @@ public class ComputerPlayer extends Player {
     @Override
     Position put(Board board, int playerIndex) {
 
-        printAllInformations(board, playerIndex);
 
         // 1. Priorität: Mühlen schliessen
         for (int row = 0; row < 3; row++) {
@@ -137,8 +136,7 @@ public class ComputerPlayer extends Player {
     Move move(Board board, int playerIndex, boolean allowedToJump) {
         Position[] positions = new Position[2];
 
-        ScorePoints scorePoints = new ScorePoints(20,15,1,-20,-15, 20);
-        Advisor.getScore(board, scorePoints, playerIndex);
+        ScorePoints scorePoints = new ScorePoints(20,100,1,-150,-15, 20);
 
         LinkedList<BoardMoveKillScoreSet> setList = new LinkedList<>();
         for (Move move : Advisor.getAllPossibleMoves(board,playerIndex)) {
@@ -150,7 +148,7 @@ public class ComputerPlayer extends Player {
             clonedBoard1.move(move, playerIndex);
             boardMoveKillScoreSet1.setBoard(clonedBoard1);
 
-            boardMoveKillScoreSet1.setScore(Advisor.getScore(clonedBoard1, scorePoints, playerIndex));
+            boardMoveKillScoreSet1.setScore(Advisor.getScore(clonedBoard1, scorePoints, playerIndex, false));
             setList.add(boardMoveKillScoreSet1);
 
 
@@ -162,7 +160,7 @@ public class ComputerPlayer extends Player {
             System.out.println("Möglicher Zug");
             System.out.println(boardMoveKillScoreSet1.getBoard());
             System.out.println(boardMoveKillScoreSet1.getMove());
-            System.out.println(boardMoveKillScoreSet1.getScore());
+            Advisor.getScore(boardMoveKillScoreSet1.getBoard(), scorePoints, playerIndex, true);
             System.out.println();
             System.out.println();
         }
@@ -336,35 +334,7 @@ public class ComputerPlayer extends Player {
 
     }
 
-    private void printAllInformations(Board board, int ownPlayerIndex){
 
-        System.out.println();
-        System.out.println("Offene Mühlen des Gegners:");
-        for (OpenMorris openMorris : Advisor.getMyEnemysOpenMorrisList(board, ownPlayerIndex)){
-            System.out.println(openMorris);
-        }
-
-        System.out.println();
-        System.out.println("Eigene offene Mühlen:");
-        for (OpenMorris openMorris : Advisor.getMyOpenMorrisList(board, ownPlayerIndex)){
-            System.out.println(openMorris);
-        }
-
-        System.out.println();
-        System.out.println("Freie Linien:");
-        for (Line line : Advisor.getFreeLines(board)){
-            System.out.println(line);
-        }
-
-        System.out.println();
-        System.out.println("Linien ohne gegnerische Steine:");
-        for (Line line : Advisor.getLinesWithoutEnemysStones(board, ownPlayerIndex)){
-            System.out.println(line);
-        }
-
-
-        System.out.println();
-    }
 
 
 

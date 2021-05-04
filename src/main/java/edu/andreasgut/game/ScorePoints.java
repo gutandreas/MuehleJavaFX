@@ -2,56 +2,56 @@ package edu.andreasgut.game;
 
 public class ScorePoints {
 
-    private int ownOpenMillPoints, ownClosedMillPoints, ownPossibleMovesPoints, enemyOpenMillPoints, enemyClosedMillPoints, enemyBlockOpenMillPoints;
+    private int ownOpenMorrisPoints, ownClosedMorrisPoints, ownPossibleMovesPoints, enemyOpenMorrisPoints, enemyClosedMorrisPoints, enemyBlockOpenMorrisPoints;
 
-    public ScorePoints(int ownOpenMillPoints, int ownClosedMillPoints, int ownPossibleMovesPoints, int enemyOpenMillPoints, int enemyClosedMillPoints, int enemyBlockOpenMillPoints) {
-        this.ownOpenMillPoints = ownOpenMillPoints;
-        this.ownClosedMillPoints = ownClosedMillPoints;
+    public ScorePoints(int ownOpenMorrisPoints, int ownClosedMorrisPoints, int ownPossibleMovesPoints, int enemyOpenMorrisPoints, int enemyClosedMorrisPoints, int enemyBlockOpenMorrisPoints) {
+        this.ownOpenMorrisPoints = ownOpenMorrisPoints;
+        this.ownClosedMorrisPoints = ownClosedMorrisPoints;
         this.ownPossibleMovesPoints = ownPossibleMovesPoints;
-        this.enemyOpenMillPoints = enemyOpenMillPoints;
-        this.enemyClosedMillPoints = enemyClosedMillPoints;
-        this.enemyBlockOpenMillPoints = enemyBlockOpenMillPoints;
+        this.enemyOpenMorrisPoints = enemyOpenMorrisPoints;
+        this.enemyClosedMorrisPoints = enemyClosedMorrisPoints;
+        this.enemyBlockOpenMorrisPoints = enemyBlockOpenMorrisPoints;
     }
 
 
-    public int getOwnOpenMillPoints() {
-        return ownOpenMillPoints;
+    public int getOwnOpenMorrisPoints() {
+        return ownOpenMorrisPoints;
     }
 
-    public void setOwnOpenMillPoints(int ownOpenMillPoints) {
-        this.ownOpenMillPoints = ownOpenMillPoints;
+    public void setOwnOpenMorrisPoints(int ownOpenMorrisPoints) {
+        this.ownOpenMorrisPoints = ownOpenMorrisPoints;
     }
 
-    public int getOwnClosedMillPoints() {
-        return ownClosedMillPoints;
+    public int getOwnClosedMorrisPoints() {
+        return ownClosedMorrisPoints;
     }
 
-    public void setOwnClosedMillPoints(int ownClosedMillPoints) {
-        this.ownClosedMillPoints = ownClosedMillPoints;
+    public void setOwnClosedMorrisPoints(int ownClosedMorrisPoints) {
+        this.ownClosedMorrisPoints = ownClosedMorrisPoints;
     }
 
-    public int getEnemyBlockOpenMillPoints() {
-        return enemyBlockOpenMillPoints;
+    public int getEnemyBlockOpenMorrisPoints() {
+        return enemyBlockOpenMorrisPoints;
     }
 
-    public void setEnemyBlockOpenMillPoints(int enemyBlockOpenMillPoints) {
-        this.enemyBlockOpenMillPoints = enemyBlockOpenMillPoints;
+    public void setEnemyBlockOpenMorrisPoints(int enemyBlockOpenMorrisPoints) {
+        this.enemyBlockOpenMorrisPoints = enemyBlockOpenMorrisPoints;
     }
 
-    public int getEnemyOpenMillPoints() {
-        return enemyOpenMillPoints;
+    public int getEnemyOpenMorrisPoints() {
+        return enemyOpenMorrisPoints;
     }
 
-    public void setEnemyOpenMillPoints(int enemyOpenMillPoints) {
-        this.enemyOpenMillPoints = enemyOpenMillPoints;
+    public void setEnemyOpenMorrisPoints(int enemyOpenMorrisPoints) {
+        this.enemyOpenMorrisPoints = enemyOpenMorrisPoints;
     }
 
-    public int getEnemyClosedMillPoints() {
-        return enemyClosedMillPoints;
+    public int getEnemyClosedMorrisPoints() {
+        return enemyClosedMorrisPoints;
     }
 
-    public void setEnemyClosedMillPoints(int enemyClosedMillPoints) {
-        this.enemyClosedMillPoints = enemyClosedMillPoints;
+    public void setEnemyClosedMorrisPoints(int enemyClosedMorrisPoints) {
+        this.enemyClosedMorrisPoints = enemyClosedMorrisPoints;
     }
 
     public int getOwnPossibleMovesPoints() {
