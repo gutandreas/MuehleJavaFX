@@ -323,7 +323,7 @@ public class Advisor {
         return moveList;
     }
 
-    static public int getScore(Board board, Move move, ScorePoints scorePoints, int playerIndex, boolean printScore){
+    static public int getScore(Board board, Move move, ScorePoints moveScorePoints, int playerIndex, boolean printScore){
 
         int myOpenMorrises = getMyOpenMorrisList(board, playerIndex).size();
         int myClosedMorrises = getMyClosedMorrisList(board, playerIndex).size();
@@ -336,11 +336,11 @@ public class Advisor {
         int myEnemysClosedMorrises = getMyEnemysClosedMorrisList(board, playerIndex).size();
 
 
-        int myOpenMorrisesTotal = myOpenMorrises * scorePoints.getOwnOpenMorrisPoints();
-        int myClosedMorrisesTotal = myClosedMorrises * scorePoints.getOwnClosedMorrisPoints();
-        int myEnemysOpenMorrisesTotal = myEnemysOpenMorrises * scorePoints.getEnemyOpenMorrisPoints();
-        int myEnemysClosedMorrisesTotal = myEnemysClosedMorrises * scorePoints.getEnemyClosedMorrisPoints();
-        int myPossibleMovesTotal = myPossibleMoves * scorePoints.getOwnPossibleMovesPoints();
+        int myOpenMorrisesTotal = myOpenMorrises * moveScorePoints.getOwnOpenMorrisPoints();
+        int myClosedMorrisesTotal = myClosedMorrises * moveScorePoints.getOwnClosedMorrisPoints();
+        int myEnemysOpenMorrisesTotal = myEnemysOpenMorrises * moveScorePoints.getEnemyOpenMorrisPoints();
+        int myEnemysClosedMorrisesTotal = myEnemysClosedMorrises * moveScorePoints.getEnemyClosedMorrisPoints();
+        int myPossibleMovesTotal = myPossibleMoves * moveScorePoints.getOwnPossibleMovesPoints();
         int myNewClosedMorrisTotal = 0;
         int myNewOpenMorrisTotal = 0;
 
@@ -349,12 +349,12 @@ public class Advisor {
                 + myPossibleMovesTotal;
 
         if (myNewClosedMorris){
-            myNewClosedMorrisTotal = scorePoints.getOwnNewClosedMorrisPoints();
+            myNewClosedMorrisTotal = moveScorePoints.getOwnNewClosedMorrisPoints();
             score += myNewClosedMorrisTotal;
         }
 
         if (myNewOpenMorris){
-            myNewOpenMorrisTotal = scorePoints.getOwnNewOpenMorrisPoints();
+            myNewOpenMorrisTotal = moveScorePoints.getOwnNewOpenMorrisPoints();
             score += myNewOpenMorrisTotal;
         }
 

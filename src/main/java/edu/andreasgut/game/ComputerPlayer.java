@@ -3,7 +3,6 @@ package edu.andreasgut.game;
 import edu.andreasgut.view.ViewManager;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class ComputerPlayer extends Player {
 
@@ -134,9 +133,8 @@ public class ComputerPlayer extends Player {
 
     @Override
     Move move(Board board, int playerIndex, boolean allowedToJump) {
-        Position[] positions = new Position[2];
 
-        ScorePoints scorePoints = new ScorePoints(20,20, 100,80, 1,-150,-15, 20);
+        ScorePoints moveScorePoints = new ScorePoints(100, 70,20, 20, 30,35, 2, -50, -30, -20, -30, -15, -20, -2);
 
         LinkedList<BoardMoveKillScoreSet> setList = new LinkedList<>();
         for (Move move : Advisor.getAllPossibleMoves(board,playerIndex)) {
@@ -148,7 +146,7 @@ public class ComputerPlayer extends Player {
             clonedBoard1.move(move, playerIndex);
             boardMoveKillScoreSet1.setBoard(clonedBoard1);
 
-            boardMoveKillScoreSet1.setScore(Advisor.getScore(clonedBoard1, move, scorePoints, playerIndex, false));
+            boardMoveKillScoreSet1.setScore(Advisor.getScore(clonedBoard1, move, moveScorePoints, playerIndex, false));
             setList.add(boardMoveKillScoreSet1);
         }
 
@@ -156,7 +154,7 @@ public class ComputerPlayer extends Player {
             System.out.println("Möglicher Zug");
             System.out.println(boardMoveKillScoreSet1.getBoard());
             System.out.println(boardMoveKillScoreSet1.getMove());
-            Advisor.getScore(boardMoveKillScoreSet1.getBoard(), boardMoveKillScoreSet1.getMove(), scorePoints, playerIndex, true);
+            Advisor.getScore(boardMoveKillScoreSet1.getBoard(), boardMoveKillScoreSet1.getMove(), moveScorePoints, playerIndex, true);
             System.out.println();
             System.out.println();
         }
