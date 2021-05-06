@@ -147,26 +147,63 @@ public class ComputerPlayer extends Player {
             boardMoveKillScoreSet1.setBoard(clonedBoard1);
 
             boardMoveKillScoreSet1.setScore(Advisor.getScore(clonedBoard1, move, moveScorePoints, playerIndex, false));
-            setList.add(boardMoveKillScoreSet1);
+
+            if (clonedBoard1.checkMorris(move.getTo())){
+                Board clonedBoard2 = (Board) clonedBoard1.clone();
+                Position killPosition = kill(clonedBoard1, playerIndex, 1-playerIndex);
+
+
+                BoardMoveKillScoreSet boardMoveKillScoreSet2 = new BoardMoveKillScoreSet();
+                clonedBoard2.clearStone(killPosition);
+
+                boardMoveKillScoreSet2.setBoard(clonedBoard2);
+                boardMoveKillScoreSet2.setKill(killPosition);
+                boardMoveKillScoreSet2.setScore(Advisor.getScore(clonedBoard1, move, moveScorePoints, playerIndex, false));
+                boardMoveKillScoreSet2.setParent(boardMoveKillScoreSet1);
+                boardMoveKillScoreSet2.setMove(boardMoveKillScoreSet2.getParent().getMove());
+                setList.add(boardMoveKillScoreSet2);
+            }
+            else {
+                setList.add(boardMoveKillScoreSet1);}
         }
 
-        for (BoardMoveKillScoreSet boardMoveKillScoreSet1 : setList) {
+
+
+        for (BoardMoveKillScoreSet boardMoveKillScoreSet : setList) {
+
+            if (boardMoveKillScoreSet.getKill() == null){
             System.out.println("Möglicher Zug");
-            System.out.println(boardMoveKillScoreSet1.getBoard());
-            System.out.println(boardMoveKillScoreSet1.getMove());
-            Advisor.getScore(boardMoveKillScoreSet1.getBoard(), boardMoveKillScoreSet1.getMove(), moveScorePoints, playerIndex, true);
+            System.out.println(boardMoveKillScoreSet.getMove());
+            System.out.println(boardMoveKillScoreSet.getBoard());
+            Advisor.getScore(boardMoveKillScoreSet.getBoard(), boardMoveKillScoreSet.getMove(), moveScorePoints, playerIndex, true);
             System.out.println();
-            System.out.println();
+            System.out.println();}
+            else {
+                System.out.println("Möglicher Zug");
+                System.out.println(boardMoveKillScoreSet.getParent().getBoard());
+                System.out.println(boardMoveKillScoreSet.getParent().getMove());
+                System.out.println("Möglicher Kill");
+                System.out.println(boardMoveKillScoreSet.getBoard());
+                System.out.println(boardMoveKillScoreSet.getKill());
+                Advisor.getScore(boardMoveKillScoreSet.getBoard(), boardMoveKillScoreSet.getParent().getMove(), moveScorePoints, playerIndex, true);
+                System.out.println();
+                System.out.println();
+
+            }
+
+
         }
 
         setList.sort(new Comparator<BoardMoveKillScoreSet>() {
             @Override
             public int compare(BoardMoveKillScoreSet o1, BoardMoveKillScoreSet o2) {
+
                 if (o1.getScore() == o2.getScore()) return 0;
                 if (o1.getScore() > o2.getScore()) return -1;
                 return 1;
             }
         });
+
 
 
         System.out.println("Getätigter Zug: " + setList.getFirst().getMove());

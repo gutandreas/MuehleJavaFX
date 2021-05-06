@@ -1,6 +1,5 @@
 package edu.andreasgut.game;
 
-import java.util.LinkedList;
 
 public class BoardMoveKillScoreSet {
 
@@ -8,7 +7,7 @@ public class BoardMoveKillScoreSet {
     private Move move;
     private Position kill;
     private int score;
-    private LinkedList<BoardMoveKillScoreSet> nextSets = new LinkedList<>();
+    private BoardMoveKillScoreSet parent;
 
     public Board getBoard() {
         return board;
@@ -42,11 +41,11 @@ public class BoardMoveKillScoreSet {
         this.score = score;
     }
 
-    public LinkedList<BoardMoveKillScoreSet> getNextSets() {
-        return nextSets;
+    public BoardMoveKillScoreSet getParent() {
+        return parent;
     }
 
-    public void addNextSet(BoardMoveKillScoreSet boardMoveKillScoreSet){
-        nextSets.add(boardMoveKillScoreSet);
+    public void setParent(BoardMoveKillScoreSet parent) {
+        this.parent = parent;
     }
 }
