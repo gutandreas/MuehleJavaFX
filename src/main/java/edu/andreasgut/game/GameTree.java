@@ -45,7 +45,17 @@ public class GameTree {
 
     }
 
+    public Position getBestPut(){
+        BoardPutMoveKillScoreSet currentSet = getLeafWithBestScore();
 
+        while (currentSet.getParent() != root){
+            currentSet = currentSet.getParent();
+        }
+
+
+        return currentSet.getPut();
+
+    }
 
     public Move getBestMove(){
         BoardPutMoveKillScoreSet currentSet = getLeafWithBestScore();

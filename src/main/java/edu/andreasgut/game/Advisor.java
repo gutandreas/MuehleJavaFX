@@ -52,6 +52,19 @@ public class Advisor {
         return lines;
     }
 
+    static public LinkedList<Position> getAllFreeFields(Board board){
+        LinkedList<Position> freeFields = new LinkedList<>();
+
+        for (int ring = 0; ring < 3; ring++) {
+            for (int field = 0; field < 8; field++) {
+
+                if (board.isFieldFree(new Position(ring, field))){
+                    freeFields.add(new Position(ring, field));
+                }
+            }
+        }
+        return freeFields;}
+
 
     static public LinkedList<Line> getFreeLines(Board board){
         LinkedList<Line> lines = new LinkedList<>();
@@ -352,7 +365,7 @@ public class Advisor {
         return moveList;
     }
 
-    static public int getKillScore(Board board, Position kill, ScorePoints killScorePoints, int playerIndex, boolean printScore){
+    static public int getKillScore(Board board, Position kill, MoveScorePoints killScorePoints, int playerIndex, boolean printScore){
 
         boolean myNewOpenMorris = isThisPositionTheGapOfMyOpenMorris(board, kill, playerIndex);
 
@@ -373,7 +386,7 @@ public class Advisor {
 
         return 5;
     }
-    static public int getMoveScore(Board board, Move move, ScorePoints moveScorePoints, int playerIndex, boolean printScore){
+    static public int getMoveScore(Board board, Move move, MoveScorePoints moveScorePoints, int playerIndex, boolean printScore){
 
         int myOpenMorrises = getMyOpenMorrisList(board, playerIndex).size();
         int myClosedMorrises = getMyClosedMorrisList(board, playerIndex).size();
@@ -417,6 +430,47 @@ public class Advisor {
             System.out.println("Neue offene eigene Mühle: " + myNewOpenMorris + " (" + myNewOpenMorrisTotal + ")");
             System.out.println("Gegnerische offene Mühlen: " + myEnemysOpenMorrises + " (" + myEnemysOpenMorrisesTotal + ")");
             System.out.println("Gegnerische geschlossene Mühlen: " + myEnemysClosedMorrises + " (" + myEnemysClosedMorrisesTotal + ")");
+            System.out.println("Eigene Zugmöglichkeiten: " + myPossibleMoves + " (" + myPossibleMovesTotal + ")");
+            System.out.println("Score: " + score);
+        }
+
+        return score;
+
+    }
+
+    static public int getPutScore(Board board, Position put, MoveScorePoints moveScorePoints, int playerIndex, boolean printScore){
+
+        int myOpenMorrises = getMyOpenMorrisList(board, playerIndex).size();
+        int myClosedMorrises = getMyClosedMorrisList(board, playerIndex).size();
+
+        boolean myNewClosedMorris = board.checkMorris(put);
+        boolean myNewOpenMorris = Advisor.isThisStonePartOfMyOpenMorris(board, put, playerIndex);
+
+        int myPossibleMoves = getAllPossibleMoves(board, playerIndex).size();
+
+        int myOpenMorrisesTotal = myOpenMorrises * moveScorePoints.getOwnOpenMorrisPoints();
+        int myClosedMorrisesTotal = myClosedMorrises * moveScorePoints.getOwnClosedMorrisPoints();
+        int myPossibleMovesTotal = myPossibleMoves * moveScorePoints.getOwnPossibleMovesPoints();
+        int myNewClosedMorrisTotal = 0;
+        int myNewOpenMorrisTotal = 0;
+
+        int score = myOpenMorrisesTotal + myClosedMorrisesTotal + myPossibleMovesTotal;
+
+        if (myNewClosedMorris){
+            myNewClosedMorrisTotal = moveScorePoints.getOwnNewClosedMorrisPoints();
+            score += myNewClosedMorrisTotal;
+        }
+
+        if (myNewOpenMorris){
+            myNewOpenMorrisTotal = moveScorePoints.getOwnNewOpenMorrisPoints();
+            score += myNewOpenMorrisTotal;
+        }
+
+        if (printScore) {
+            System.out.println("Eigene offene Mühlen: " + myOpenMorrises + " (" + myOpenMorrisesTotal + ")");
+            System.out.println("Eigene geschlossene Mühlen: " + myClosedMorrises + " (" + myClosedMorrisesTotal + ")");
+            System.out.println("Neue geschlossene eigene Mühle: " + myNewClosedMorris + " (" + myNewClosedMorrisTotal + ")");
+            System.out.println("Neue offene eigene Mühle: " + myNewOpenMorris + " (" + myNewOpenMorrisTotal + ")");
             System.out.println("Eigene Zugmöglichkeiten: " + myPossibleMoves + " (" + myPossibleMovesTotal + ")");
             System.out.println("Score: " + score);
         }
