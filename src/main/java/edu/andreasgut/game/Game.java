@@ -9,7 +9,7 @@ public class Game {
     private final Player player1;
     private Player winner;
     private int round;
-    private final int NUMBEROFSTONES = 9;
+    private final int NUMBEROFSTONES = 4;
     private Player currentPlayer;
     private final Board board;
     boolean putPhase = true;

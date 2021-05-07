@@ -12,6 +12,7 @@ public class ComputerPlayer extends Player {
     }
 
     private LinkedList<BoardPutMoveKillScoreSet> playTree;
+    GameTree gameTree = new GameTree();
 
 
 
@@ -138,10 +139,49 @@ public class ComputerPlayer extends Player {
 
         ScorePoints moveScorePoints = new ScorePoints(100, 70,20, 20, 30,35, 2, -50, -30, -20, -100, -15, -20, -2);
 
-        buildPlayTree(board, moveScorePoints, playerIndex, allowedToJump);
+        gameTree.clearTree();
 
-        System.out.println("Getätigter Zug: " + playTree.getFirst().getMove());
-        return playTree.getFirst().getMove();
+        for (Move move : Advisor.getAllPossibleMoves(board, playerIndex)){
+
+
+            BoardPutMoveKillScoreSet boardPutMoveKillScoreSet = new BoardPutMoveKillScoreSet();
+            boardPutMoveKillScoreSet.setMove(move);
+            gameTree.addSet(gameTree.root, boardPutMoveKillScoreSet);
+
+            Board clonedBoard = (Board) board.clone();
+            clonedBoard.move(move, playerIndex);
+            boardPutMoveKillScoreSet.setBoard(clonedBoard);
+
+            System.out.println();
+            System.out.println(boardPutMoveKillScoreSet.getMove());
+            System.out.println(boardPutMoveKillScoreSet.getBoard());
+            boardPutMoveKillScoreSet.setScore(boardPutMoveKillScoreSet.getScore() + Advisor.getScore(clonedBoard, null, move, null, moveScorePoints, playerIndex, true));
+            gameTree.addSet(gameTree.getRoot(), boardPutMoveKillScoreSet);
+
+
+
+
+                if (boardPutMoveKillScoreSet.getBoard().checkMorris(boardPutMoveKillScoreSet.getMove().getTo())){
+                    for (Position killPosition : Advisor.getAllPossibleKills(clonedBoard,playerIndex)){
+                        BoardPutMoveKillScoreSet boardPutMoveKillScoreSet2 = new BoardPutMoveKillScoreSet();
+                        Board clonedBoard2 = (Board) clonedBoard.clone();
+                        clonedBoard2.clearStone(killPosition);
+
+                        boardPutMoveKillScoreSet2.setBoard(clonedBoard2);
+                        boardPutMoveKillScoreSet2.setKill(killPosition);
+                        boardPutMoveKillScoreSet2.setScore(1000);
+                        boardPutMoveKillScoreSet2.setScore(Advisor.getScore(clonedBoard2,null, null, killPosition, moveScorePoints, playerIndex, false));
+                        gameTree.addSet(boardPutMoveKillScoreSet, boardPutMoveKillScoreSet2);
+                }
+            }}
+
+
+        for (BoardPutMoveKillScoreSet set : gameTree.getLeaves()){
+
+            System.out.println(set);
+        }
+        System.out.println("Getätigter Zug: " + gameTree.getBestMove());
+        return gameTree.getBestMove();
 
     }
 
@@ -153,7 +193,12 @@ public class ComputerPlayer extends Player {
     @Override
     Position kill(Board board, int ownPlayerIndex, int otherPlayerIndex) {
 
-        BoardPutMoveKillScoreSet currentSet = playTree.getFirst();
+        return gameTree.getKillLeafWithBestScore().getKill();
+
+
+
+
+        /*BoardPutMoveKillScoreSet currentSet = playTree.getFirst();
         System.out.println("Maximaler Score: " + currentSet.getScore());
 
         while (currentSet.getKill() == null){
@@ -162,7 +207,7 @@ public class ComputerPlayer extends Player {
         System.out.println("Gekillte " + currentSet.getKill());
         System.out.println("Erreichter Score: " + currentSet.getScore());
 
-        return currentSet.getKill();
+        return currentSet.getKill();*/
 
         /*
 
@@ -229,7 +274,7 @@ public class ComputerPlayer extends Player {
             clonedBoard1.move(move, playerIndex);
             boardPutMoveKillScoreSet1.setBoard(clonedBoard1);
 
-            boardPutMoveKillScoreSet1.setScore(Advisor.getScore(clonedBoard1, move, scorePoints, playerIndex, false));
+            boardPutMoveKillScoreSet1.setScore(Advisor.getScore(clonedBoard1, null,  move, null, scorePoints, playerIndex, false));
 
             if (clonedBoard1.checkMorris(move.getTo())){
 
@@ -242,9 +287,9 @@ public class ComputerPlayer extends Player {
 
                     boardPutMoveKillScoreSet2.setBoard(clonedBoard2);
                     boardPutMoveKillScoreSet2.setKill(killPosition);
-                    boardPutMoveKillScoreSet2.setScore(Advisor.getScore(clonedBoard1, move, scorePoints, playerIndex, false));
+                    boardPutMoveKillScoreSet2.setScore(Advisor.getScore(clonedBoard1, null,  move, killPosition,  scorePoints, playerIndex, false));
                     boardPutMoveKillScoreSet2.setParent(boardPutMoveKillScoreSet1);
-                    boardPutMoveKillScoreSet2.setMove(boardPutMoveKillScoreSet2.getParent().getMove());
+                    //boardPutMoveKillScoreSet2.setMove(boardPutMoveKillScoreSet2.getParent().getMove());
                     tempPlayTree.add(boardPutMoveKillScoreSet2);}
             }
             else {
@@ -259,7 +304,7 @@ public class ComputerPlayer extends Player {
                 System.out.println("Möglicher Zug");
                 System.out.println(boardPutMoveKillScoreSet.getMove());
                 System.out.println(boardPutMoveKillScoreSet.getBoard());
-                Advisor.getScore(boardPutMoveKillScoreSet.getBoard(), boardPutMoveKillScoreSet.getMove(), scorePoints, playerIndex, true);
+                Advisor.getScore(boardPutMoveKillScoreSet.getBoard(), null,  boardPutMoveKillScoreSet.getMove(), null,  scorePoints, playerIndex, true);
                 System.out.println();
                 System.out.println();}
             else {
@@ -269,7 +314,7 @@ public class ComputerPlayer extends Player {
                 System.out.println("Möglicher Kill");
                 System.out.println(boardPutMoveKillScoreSet.getBoard());
                 System.out.println(boardPutMoveKillScoreSet.getKill());
-                Advisor.getScore(boardPutMoveKillScoreSet.getBoard(), boardPutMoveKillScoreSet.getParent().getMove(), scorePoints, playerIndex, true);
+                Advisor.getScore(boardPutMoveKillScoreSet.getBoard(), null, boardPutMoveKillScoreSet.getParent().getMove(), null, scorePoints, playerIndex, true);
                 System.out.println();
                 System.out.println();
 

@@ -1,6 +1,8 @@
 package edu.andreasgut.game;
 
 
+import java.util.LinkedList;
+
 public class BoardPutMoveKillScoreSet {
 
     private int level;
@@ -10,6 +12,7 @@ public class BoardPutMoveKillScoreSet {
     private Position kill;
     private int score;
     private BoardPutMoveKillScoreSet parent;
+    private LinkedList<BoardPutMoveKillScoreSet> children = new LinkedList<>();
 
     public Board getBoard() {
         return board;
@@ -57,6 +60,22 @@ public class BoardPutMoveKillScoreSet {
 
     public void setParent(BoardPutMoveKillScoreSet parent) {
         this.parent = parent;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public LinkedList<BoardPutMoveKillScoreSet> getChildren() {
+        return children;
+    }
+
+    public void setChildren(LinkedList<BoardPutMoveKillScoreSet> children) {
+        this.children = children;
     }
 
     @Override

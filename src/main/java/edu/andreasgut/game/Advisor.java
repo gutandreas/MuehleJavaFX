@@ -352,14 +352,21 @@ public class Advisor {
         return moveList;
     }
 
-    static public int getScore(Board board, Move move, ScorePoints moveScorePoints, int playerIndex, boolean printScore){
+    static public int getScore(Board board, Position put, Move move, Position kill, ScorePoints moveScorePoints, int playerIndex, boolean printScore){
 
         int myOpenMorrises = getMyOpenMorrisList(board, playerIndex).size();
         int myClosedMorrises = getMyClosedMorrisList(board, playerIndex).size();
-        boolean myNewClosedMorris = board.checkMorris(move.getTo());
-        boolean myNewOpenMorris = Advisor.isThisStonePartOfMyOpenMorris(board, move.getTo(), playerIndex);
-        int myPossibleMoves = getAllPossibleMoves(board, playerIndex).size();
 
+        boolean myNewClosedMorris;
+        if (move != null){
+            myNewClosedMorris = board.checkMorris(move.getTo());}
+        else { myNewClosedMorris = false;}
+
+
+        boolean myNewOpenMorris = checkMyNewOpenMorris(board, put, move, kill, playerIndex);
+
+
+        int myPossibleMoves = getAllPossibleMoves(board, playerIndex).size();
 
         int myEnemysOpenMorrises = getMyEnemysOpenMorrisList(board, playerIndex).size();
         int myEnemysClosedMorrises = getMyEnemysClosedMorrisList(board, playerIndex).size();
@@ -400,6 +407,34 @@ public class Advisor {
 
         return score;
 
+    }
+
+    private static boolean checkMyNewOpenMorris(Board board, Position put, Move move, Position kill, int playerIndex) {
+        boolean putBuildsMyNewOpenMorris;
+        if (put != null){
+            putBuildsMyNewOpenMorris = Advisor.isThisStonePartOfMyOpenMorris(board, put, playerIndex);
+        }
+        else {
+            putBuildsMyNewOpenMorris = false;
+        }
+
+        boolean moveBuildsMyNewOpenMorris;
+        if (move != null){
+            moveBuildsMyNewOpenMorris = Advisor.isThisStonePartOfMyOpenMorris(board, move.getTo(), playerIndex);
+        }
+        else {
+            moveBuildsMyNewOpenMorris = false;
+        }
+
+        boolean killBuildsMyNewOpenMorris;
+        if (kill != null){
+            killBuildsMyNewOpenMorris = Advisor.isThisPositionTheGapOfMyOpenMorris(board, kill, playerIndex);
+        }
+        else {
+            killBuildsMyNewOpenMorris = false;
+        }
+
+        return putBuildsMyNewOpenMorris || moveBuildsMyNewOpenMorris || killBuildsMyNewOpenMorris;
     }
 
 
