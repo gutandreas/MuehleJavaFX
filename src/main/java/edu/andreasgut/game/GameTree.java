@@ -1,6 +1,7 @@
 package edu.andreasgut.game;
 
 import java.util.LinkedList;
+import java.util.Stack;
 
 public class GameTree {
 
@@ -62,7 +63,7 @@ public class GameTree {
 
 
     private void getLeavesRecursive(BoardPutMoveKillScoreSet currentSet, LinkedList<BoardPutMoveKillScoreSet> leaves){
-        if (currentSet.getChildren().isEmpty()) {
+        if (currentSet.getChildren().isEmpty() && !leaves.contains(currentSet)) {
             leaves.add(currentSet);
         } else {
             for (BoardPutMoveKillScoreSet child : currentSet.getChildren()) {
@@ -83,4 +84,16 @@ public class GameTree {
     public void clearTree(){
         root.getChildren().clear();
     }
+
+    public Stack<BoardPutMoveKillScoreSet> getWinningPath(){
+        Stack<BoardPutMoveKillScoreSet> path = new Stack<>();
+        BoardPutMoveKillScoreSet set = getLeafWithBestScore();
+
+        while (set!=root){
+            path.push(set);
+            set = set.getParent();}
+
+        return path;
+    }
+
 }

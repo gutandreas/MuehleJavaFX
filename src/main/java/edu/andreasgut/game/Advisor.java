@@ -352,18 +352,34 @@ public class Advisor {
         return moveList;
     }
 
-    static public int getScore(Board board, Position put, Move move, Position kill, ScorePoints moveScorePoints, int playerIndex, boolean printScore){
+    static public int getKillScore(Board board, Position kill, ScorePoints killScorePoints, int playerIndex, boolean printScore){
+
+        boolean myNewOpenMorris = isThisPositionTheGapOfMyOpenMorris(board, kill, playerIndex);
+
+        int score = 0;
+        int myNewOpenMorrisTotal = 0;
+
+        if (myNewOpenMorris){
+            myNewOpenMorrisTotal = killScorePoints.getOwnNewOpenMorrisPoints();
+            score += myNewOpenMorrisTotal;
+        }
+
+
+
+        if (printScore) {
+            System.out.println("Neue offene eigene Mühle: " + myNewOpenMorris + " (" + myNewOpenMorrisTotal + ")");
+            System.out.println("Score: " + score);
+        }
+
+        return 5;
+    }
+    static public int getMoveScore(Board board, Move move, ScorePoints moveScorePoints, int playerIndex, boolean printScore){
 
         int myOpenMorrises = getMyOpenMorrisList(board, playerIndex).size();
         int myClosedMorrises = getMyClosedMorrisList(board, playerIndex).size();
 
-        boolean myNewClosedMorris;
-        if (move != null){
-            myNewClosedMorris = board.checkMorris(move.getTo());}
-        else { myNewClosedMorris = false;}
-
-
-        boolean myNewOpenMorris = checkMyNewOpenMorris(board, put, move, kill, playerIndex);
+        boolean myNewClosedMorris = board.checkMorris(move.getTo());
+        boolean myNewOpenMorris = Advisor.isThisStonePartOfMyOpenMorris(board, move.getTo(), playerIndex);
 
 
         int myPossibleMoves = getAllPossibleMoves(board, playerIndex).size();
@@ -398,7 +414,7 @@ public class Advisor {
             System.out.println("Eigene offene Mühlen: " + myOpenMorrises + " (" + myOpenMorrisesTotal + ")");
             System.out.println("Eigene geschlossene Mühlen: " + myClosedMorrises + " (" + myClosedMorrisesTotal + ")");
             System.out.println("Neue geschlossene eigene Mühle: " + myNewClosedMorris + " (" + myNewClosedMorrisTotal + ")");
-            System.out.println("Neue offene eigene Mühle: " + myNewOpenMorris + " (" + myNewClosedMorrisTotal + ")");
+            System.out.println("Neue offene eigene Mühle: " + myNewOpenMorris + " (" + myNewOpenMorrisTotal + ")");
             System.out.println("Gegnerische offene Mühlen: " + myEnemysOpenMorrises + " (" + myEnemysOpenMorrisesTotal + ")");
             System.out.println("Gegnerische geschlossene Mühlen: " + myEnemysClosedMorrises + " (" + myEnemysClosedMorrisesTotal + ")");
             System.out.println("Eigene Zugmöglichkeiten: " + myPossibleMoves + " (" + myPossibleMovesTotal + ")");
@@ -409,33 +425,7 @@ public class Advisor {
 
     }
 
-    private static boolean checkMyNewOpenMorris(Board board, Position put, Move move, Position kill, int playerIndex) {
-        boolean putBuildsMyNewOpenMorris;
-        if (put != null){
-            putBuildsMyNewOpenMorris = Advisor.isThisStonePartOfMyOpenMorris(board, put, playerIndex);
-        }
-        else {
-            putBuildsMyNewOpenMorris = false;
-        }
 
-        boolean moveBuildsMyNewOpenMorris;
-        if (move != null){
-            moveBuildsMyNewOpenMorris = Advisor.isThisStonePartOfMyOpenMorris(board, move.getTo(), playerIndex);
-        }
-        else {
-            moveBuildsMyNewOpenMorris = false;
-        }
-
-        boolean killBuildsMyNewOpenMorris;
-        if (kill != null){
-            killBuildsMyNewOpenMorris = Advisor.isThisPositionTheGapOfMyOpenMorris(board, kill, playerIndex);
-        }
-        else {
-            killBuildsMyNewOpenMorris = false;
-        }
-
-        return putBuildsMyNewOpenMorris || moveBuildsMyNewOpenMorris || killBuildsMyNewOpenMorris;
-    }
 
 
 }

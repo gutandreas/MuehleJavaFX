@@ -141,37 +141,40 @@ public class ComputerPlayer extends Player {
 
         gameTree.clearTree();
 
+
         for (Move move : Advisor.getAllPossibleMoves(board, playerIndex)){
 
 
-            BoardPutMoveKillScoreSet boardPutMoveKillScoreSet = new BoardPutMoveKillScoreSet();
-            boardPutMoveKillScoreSet.setMove(move);
-            gameTree.addSet(gameTree.root, boardPutMoveKillScoreSet);
+            BoardPutMoveKillScoreSet boardPutMoveKillScoreSet1 = new BoardPutMoveKillScoreSet();
+            boardPutMoveKillScoreSet1.setMove(move);
+            boardPutMoveKillScoreSet1.setLevel(1);
+            gameTree.addSet(gameTree.root, boardPutMoveKillScoreSet1);
 
             Board clonedBoard = (Board) board.clone();
             clonedBoard.move(move, playerIndex);
-            boardPutMoveKillScoreSet.setBoard(clonedBoard);
+            boardPutMoveKillScoreSet1.setBoard(clonedBoard);
 
             System.out.println();
-            System.out.println(boardPutMoveKillScoreSet.getMove());
-            System.out.println(boardPutMoveKillScoreSet.getBoard());
-            boardPutMoveKillScoreSet.setScore(boardPutMoveKillScoreSet.getScore() + Advisor.getScore(clonedBoard, null, move, null, moveScorePoints, playerIndex, true));
-            gameTree.addSet(gameTree.getRoot(), boardPutMoveKillScoreSet);
+            System.out.println(boardPutMoveKillScoreSet1.getMove());
+            System.out.println(boardPutMoveKillScoreSet1.getBoard());
+            boardPutMoveKillScoreSet1.setScore(Advisor.getMoveScore(clonedBoard, move, moveScorePoints, playerIndex, true));
+            gameTree.addSet(gameTree.getRoot(), boardPutMoveKillScoreSet1);
 
 
 
 
-                if (boardPutMoveKillScoreSet.getBoard().checkMorris(boardPutMoveKillScoreSet.getMove().getTo())){
+                if (boardPutMoveKillScoreSet1.getBoard().checkMorris(boardPutMoveKillScoreSet1.getMove().getTo())){
                     for (Position killPosition : Advisor.getAllPossibleKills(clonedBoard,playerIndex)){
                         BoardPutMoveKillScoreSet boardPutMoveKillScoreSet2 = new BoardPutMoveKillScoreSet();
+                        boardPutMoveKillScoreSet2.setLevel(2);
                         Board clonedBoard2 = (Board) clonedBoard.clone();
                         clonedBoard2.clearStone(killPosition);
 
                         boardPutMoveKillScoreSet2.setBoard(clonedBoard2);
                         boardPutMoveKillScoreSet2.setKill(killPosition);
                         boardPutMoveKillScoreSet2.setScore(1000);
-                        boardPutMoveKillScoreSet2.setScore(Advisor.getScore(clonedBoard2,null, null, killPosition, moveScorePoints, playerIndex, false));
-                        gameTree.addSet(boardPutMoveKillScoreSet, boardPutMoveKillScoreSet2);
+                        boardPutMoveKillScoreSet2.setScore(boardPutMoveKillScoreSet1.getScore() + Advisor.getKillScore(clonedBoard2, killPosition, moveScorePoints, playerIndex, false));
+                        gameTree.addSet(boardPutMoveKillScoreSet1, boardPutMoveKillScoreSet2);
                 }
             }}
 
@@ -180,6 +183,16 @@ public class ComputerPlayer extends Player {
 
             System.out.println(set);
         }
+
+
+        System.out.println();
+        System.out.println("Gewinnerpfad:");
+        Stack<BoardPutMoveKillScoreSet> winningPath = gameTree.getWinningPath();
+        while (!winningPath.isEmpty()){
+            System.out.println(winningPath.pop());
+        }
+
+
         System.out.println("Getätigter Zug: " + gameTree.getBestMove());
         return gameTree.getBestMove();
 
@@ -263,81 +276,5 @@ public class ComputerPlayer extends Player {
         }*/
     }
 
-    private void buildPlayTree(Board board, ScorePoints scorePoints, int playerIndex, boolean allowedToJump){
-        LinkedList<BoardPutMoveKillScoreSet> tempPlayTree = new LinkedList<>();
-        for (Move move : Advisor.getAllPossibleMoves(board,playerIndex)) {
 
-            BoardPutMoveKillScoreSet boardPutMoveKillScoreSet1 = new BoardPutMoveKillScoreSet();
-            boardPutMoveKillScoreSet1.setMove(move);
-
-            Board clonedBoard1 = (Board) board.clone();
-            clonedBoard1.move(move, playerIndex);
-            boardPutMoveKillScoreSet1.setBoard(clonedBoard1);
-
-            boardPutMoveKillScoreSet1.setScore(Advisor.getScore(clonedBoard1, null,  move, null, scorePoints, playerIndex, false));
-
-            if (clonedBoard1.checkMorris(move.getTo())){
-
-                for (Position killPosition : Advisor.getAllPossibleKills(board, playerIndex)){
-
-                    Board clonedBoard2 = (Board) clonedBoard1.clone();
-
-                    BoardPutMoveKillScoreSet boardPutMoveKillScoreSet2 = new BoardPutMoveKillScoreSet();
-                    clonedBoard2.clearStone(killPosition);
-
-                    boardPutMoveKillScoreSet2.setBoard(clonedBoard2);
-                    boardPutMoveKillScoreSet2.setKill(killPosition);
-                    boardPutMoveKillScoreSet2.setScore(Advisor.getScore(clonedBoard1, null,  move, killPosition,  scorePoints, playerIndex, false));
-                    boardPutMoveKillScoreSet2.setParent(boardPutMoveKillScoreSet1);
-                    //boardPutMoveKillScoreSet2.setMove(boardPutMoveKillScoreSet2.getParent().getMove());
-                    tempPlayTree.add(boardPutMoveKillScoreSet2);}
-            }
-            else {
-                tempPlayTree.add(boardPutMoveKillScoreSet1);}
-        }
-
-
-
-        for (BoardPutMoveKillScoreSet boardPutMoveKillScoreSet : tempPlayTree) {
-
-            if (boardPutMoveKillScoreSet.getKill() == null){
-                System.out.println("Möglicher Zug");
-                System.out.println(boardPutMoveKillScoreSet.getMove());
-                System.out.println(boardPutMoveKillScoreSet.getBoard());
-                Advisor.getScore(boardPutMoveKillScoreSet.getBoard(), null,  boardPutMoveKillScoreSet.getMove(), null,  scorePoints, playerIndex, true);
-                System.out.println();
-                System.out.println();}
-            else {
-                System.out.println("Möglicher Zug");
-                System.out.println(boardPutMoveKillScoreSet.getParent().getBoard());
-                System.out.println(boardPutMoveKillScoreSet.getParent().getMove());
-                System.out.println("Möglicher Kill");
-                System.out.println(boardPutMoveKillScoreSet.getBoard());
-                System.out.println(boardPutMoveKillScoreSet.getKill());
-                Advisor.getScore(boardPutMoveKillScoreSet.getBoard(), null, boardPutMoveKillScoreSet.getParent().getMove(), null, scorePoints, playerIndex, true);
-                System.out.println();
-                System.out.println();
-
-            }
-
-
-        }
-
-        tempPlayTree.sort(new Comparator<BoardPutMoveKillScoreSet>() {
-            @Override
-            public int compare(BoardPutMoveKillScoreSet o1, BoardPutMoveKillScoreSet o2) {
-
-                if (o1.getScore() == o2.getScore()) return 0;
-                if (o1.getScore() > o2.getScore()) return -1;
-                return 1;
-            }
-        });
-
-        for (BoardPutMoveKillScoreSet boardPutMoveKillScoreSet : tempPlayTree){
-            System.out.println(boardPutMoveKillScoreSet);
-        }
-
-        playTree = tempPlayTree;
-
-    }
 }
