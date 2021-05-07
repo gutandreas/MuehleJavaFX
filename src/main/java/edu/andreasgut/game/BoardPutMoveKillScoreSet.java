@@ -1,13 +1,15 @@
 package edu.andreasgut.game;
 
 
-public class BoardMoveKillScoreSet {
+public class BoardPutMoveKillScoreSet {
 
+    private int level;
     private Board board;
+    private Position put;
     private Move move;
     private Position kill;
     private int score;
-    private BoardMoveKillScoreSet parent;
+    private BoardPutMoveKillScoreSet parent;
 
     public Board getBoard() {
         return board;
@@ -15,6 +17,14 @@ public class BoardMoveKillScoreSet {
 
     public void setBoard(Board board) {
         this.board = board;
+    }
+
+    public Position getPut() {
+        return put;
+    }
+
+    public void setPut(Position put) {
+        this.put = put;
     }
 
     public Move getMove() {
@@ -41,11 +51,15 @@ public class BoardMoveKillScoreSet {
         this.score = score;
     }
 
-    public BoardMoveKillScoreSet getParent() {
+    public BoardPutMoveKillScoreSet getParent() {
         return parent;
     }
 
-    public void setParent(BoardMoveKillScoreSet parent) {
+    public void setParent(BoardPutMoveKillScoreSet parent) {
         this.parent = parent;
     }
+
+    @Override
+    public String toString() {
+        return  "Level " + level + ", Put an " + put + ", " + move + ", Kill an " + kill + " Score: " + score;}
 }

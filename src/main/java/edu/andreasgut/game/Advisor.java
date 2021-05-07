@@ -220,6 +220,18 @@ public class Advisor {
         return isThisStonePartOfMyOpenMorris(board, position, enemysIndex);
     }
 
+    static public boolean isThisPositionTheGapOfMyOpenMorris(Board board, Position position, int playerIndex){
+
+        LinkedList<OpenMorris> openMorrisLinkedList = getMyOpenMorrisList(board, playerIndex);
+
+        for (OpenMorris openMorris : openMorrisLinkedList){
+            if (openMorris.getGapPosition().equals(position)){
+                return true;
+        }}
+
+        return false;
+    }
+
     static public boolean isThisStonePartOfMyOpenMorris(Board board, Position position, int playerIndex){
 
         LinkedList<OpenMorris> openMorrisLinkedList = getMyOpenMorrisList(board, playerIndex);
@@ -253,6 +265,23 @@ public class Advisor {
             openMorrisLinkedList.add(new OpenMorris(positions.get(0), positions.get(1), positions.get(2), gapPosition));
             System.out.println(morrisColor + "e offene Mühle erkannt");
         }
+    }
+
+    static public LinkedList<Position> getAllPossibleKills(Board board, int onwPlayerIndex){
+        int enemysIndex = 1-onwPlayerIndex;
+        LinkedList<Position> killList = new LinkedList<>();
+
+        for (int ring = 0; ring < 3; ring++) {
+            for (int field = 0; field < 8; field++) {
+
+                Position position = new Position(ring, field);
+                if (board.checkKill(position, enemysIndex)){
+                    killList.add(position);
+                }
+
+            }}
+        return killList;
+
     }
 
 
