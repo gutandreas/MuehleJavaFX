@@ -1,5 +1,6 @@
 package edu.andreasgut.game;
 
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.Stack;
 
@@ -45,6 +46,16 @@ public class GameTree {
 
     }
 
+    private void getLeavesRecursive(BoardPutMoveKillScoreSet currentSet, LinkedList<BoardPutMoveKillScoreSet> leaves){
+        if (currentSet.getChildren().isEmpty() && !leaves.contains(currentSet)) {
+            leaves.add(currentSet);
+        } else {
+            for (BoardPutMoveKillScoreSet child : currentSet.getChildren()) {
+                getLeavesRecursive(child, leaves);
+            }
+        }
+    }
+
     public Position getBestPut(){
         BoardPutMoveKillScoreSet currentSet = getLeafWithBestScore();
 
@@ -69,18 +80,27 @@ public class GameTree {
 
     }
 
-
-
-
-    private void getLeavesRecursive(BoardPutMoveKillScoreSet currentSet, LinkedList<BoardPutMoveKillScoreSet> leaves){
-        if (currentSet.getChildren().isEmpty() && !leaves.contains(currentSet)) {
-            leaves.add(currentSet);
-        } else {
-            for (BoardPutMoveKillScoreSet child : currentSet.getChildren()) {
-                getLeavesRecursive(child, leaves);
+    public void keepOnlyWorstChild(BoardPutMoveKillScoreSet parent){
+        parent.getChildren().sort(new Comparator<BoardPutMoveKillScoreSet>() {
+            @Override
+            public int compare(BoardPutMoveKillScoreSet o1, BoardPutMoveKillScoreSet o2) {
+                if (o1.getScore() > o2.getScore()){
+                    return 1;
+                }
+                else return -1;
             }
-        }
+        });
+
+        BoardPutMoveKillScoreSet minSet = parent.getChildren().getFirst();
+        parent.getChildren().clear();
+        parent.getChildren().add(minSet);
+        System.out.println("MinSet: " + minSet);
     }
+
+
+
+
+
 
     public void addSet(BoardPutMoveKillScoreSet parent, BoardPutMoveKillScoreSet child){
         parent.getChildren().add(child);
@@ -95,7 +115,7 @@ public class GameTree {
         root.getChildren().clear();
     }
 
-    public Stack<BoardPutMoveKillScoreSet> getWinningPath(){
+    public Stack<BoardPutMoveKillScoreSet> getPath(BoardPutMoveKillScoreSet node){
         Stack<BoardPutMoveKillScoreSet> path = new Stack<>();
         BoardPutMoveKillScoreSet set = getLeafWithBestScore();
 
