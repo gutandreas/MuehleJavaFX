@@ -82,7 +82,7 @@ public class ComputerPlayer extends Player {
     @Override
     Move move(Board board, int playerIndex, boolean allowedToJump) {
 
-        MoveScorePoints moveScorePoints = new MoveScorePoints(100, 70,20, 20, 30,35, 2, -50, -30, -20, -100, -15, -20, -2);
+        MoveScorePoints moveScorePoints = new MoveScorePoints(300, 70,10, 10, 30,35, 2, -50, -30, -20, -100, -15, -20, -2);
 
         gameTree.clearTree();
 
@@ -90,81 +90,25 @@ public class ComputerPlayer extends Player {
         for (Move myMove1 : Advisor.getAllPossibleMoves(board, playerIndex)){
 
             // Eigener Zug 1
-            BoardPutMoveKillScoreSet boardPutMoveKillScoreSet1 = new BoardPutMoveKillScoreSet();
-            boardPutMoveKillScoreSet1.setMove(myMove1);
-            boardPutMoveKillScoreSet1.setLevel(1);
+            LinkedList<BoardPutMoveKillScoreSet> list1 = pretendMove(board, myMove1, moveScorePoints, gameTree.getRoot(), playerIndex,1);
 
-            Board clonedBoard1 = (Board) board.clone();
-            clonedBoard1.move(myMove1, playerIndex);
-            boardPutMoveKillScoreSet1.setBoard(clonedBoard1);
+            for (BoardPutMoveKillScoreSet set1 : list1){
 
-            System.out.println();
-            System.out.println(boardPutMoveKillScoreSet1.getMove());
-            System.out.println(boardPutMoveKillScoreSet1.getBoard());
-            boardPutMoveKillScoreSet1.setScore(Advisor.getMoveScore(clonedBoard1, myMove1, moveScorePoints, playerIndex, true));
-            gameTree.addSet(gameTree.getRoot(), boardPutMoveKillScoreSet1);
+                // Gegnerischer Zug
+                for (Move enemysMove : Advisor.getAllPossibleMoves(set1.getBoard(), 1-playerIndex)){
+                    LinkedList<BoardPutMoveKillScoreSet> list2 = pretendMove(set1.getBoard(), enemysMove, moveScorePoints, set1, 1-playerIndex, 3);
 
+                    gameTree.keepOnlyWorstChild(set1);
 
+                    // Eigener Zug 2
+                    for (BoardPutMoveKillScoreSet set2 : list2) {
 
-                // Eigener Kill 1
-                if (boardPutMoveKillScoreSet1.getBoard().checkMorris(boardPutMoveKillScoreSet1.getMove().getTo())){
-                    for (Position killPosition : Advisor.getAllPossibleKills(clonedBoard1,playerIndex)){
-                        BoardPutMoveKillScoreSet boardPutMoveKillScoreSet2 = new BoardPutMoveKillScoreSet();
-                        boardPutMoveKillScoreSet2.setLevel(2);
-                        Board clonedBoard2 = (Board) clonedBoard1.clone();
-                        clonedBoard2.clearStone(killPosition);
-
-                        boardPutMoveKillScoreSet2.setBoard(clonedBoard2);
-                        boardPutMoveKillScoreSet2.setKill(killPosition);
-                        boardPutMoveKillScoreSet2.setScore(boardPutMoveKillScoreSet1.getScore() + Advisor.getKillScore(clonedBoard2, killPosition, moveScorePoints, playerIndex, false));
-                        gameTree.addSet(boardPutMoveKillScoreSet1, boardPutMoveKillScoreSet2);
+                        for (Move myMove2 : Advisor.getAllPossibleMoves(set2.getBoard(), playerIndex)) {
+                            pretendMove(set2.getBoard(), myMove2, moveScorePoints, set2, playerIndex, 5);
+                        }
+                    }
                 }
             }
-
-
-
-            // Gegnerischer Zug
-            for (Move enemysMove : Advisor.getAllPossibleMoves(clonedBoard1, 1-playerIndex)){
-                BoardPutMoveKillScoreSet boardPutMoveKillScoreSet3 = new BoardPutMoveKillScoreSet();
-                boardPutMoveKillScoreSet3.setMove(enemysMove);
-                boardPutMoveKillScoreSet3.setLevel(3);
-
-
-
-                Board clonedBoard3 = (Board) board.clone();
-                clonedBoard1.move(enemysMove, 1-playerIndex);
-                boardPutMoveKillScoreSet3.setBoard(clonedBoard3);
-
-
-                boardPutMoveKillScoreSet3.setScore(Advisor.getMoveScore(clonedBoard3, enemysMove, moveScorePoints, playerIndex, true));
-                gameTree.addSet(boardPutMoveKillScoreSet1, boardPutMoveKillScoreSet3);
-                gameTree.keepOnlyWorstChild(boardPutMoveKillScoreSet1);
-
-
-
-                // Eigener Zug 2
-                for (Move myMove2 : Advisor.getAllPossibleMoves(clonedBoard3, playerIndex)){
-                    BoardPutMoveKillScoreSet boardPutMoveKillScoreSet4 = new BoardPutMoveKillScoreSet();
-                    boardPutMoveKillScoreSet4.setMove(myMove2);
-                    boardPutMoveKillScoreSet4.setLevel(4);
-
-                    Board clonedBoard4 = (Board) clonedBoard3.clone();
-                    clonedBoard4.move(myMove2, playerIndex);
-                    boardPutMoveKillScoreSet4.setBoard(clonedBoard4);
-
-                    System.out.println();
-                    System.out.println(boardPutMoveKillScoreSet4.getMove());
-                    System.out.println(boardPutMoveKillScoreSet4.getBoard());
-                    boardPutMoveKillScoreSet4.setScore(Advisor.getMoveScore(clonedBoard4, myMove2, moveScorePoints, playerIndex, true));
-                    gameTree.addSet(boardPutMoveKillScoreSet3, boardPutMoveKillScoreSet4);}
-
-
-
-
-
-            }
-
-
         }
 
 
@@ -183,25 +127,50 @@ public class ComputerPlayer extends Player {
 
 
         System.out.println("Getätigter Zug: " + gameTree.getBestMove());
+        System.out.println();
         return gameTree.getBestMove();
 
     }
 
-    private void pretendMove(Board board, Move move, MoveScorePoints moveScorePoints, int playerIndex, int level){
-        BoardPutMoveKillScoreSet boardPutMoveKillScoreSet = new BoardPutMoveKillScoreSet();
-        boardPutMoveKillScoreSet.setMove(move);
-        boardPutMoveKillScoreSet.setLevel(level);
+    private LinkedList<BoardPutMoveKillScoreSet> pretendMove(Board board, Move move, MoveScorePoints moveScorePoints, BoardPutMoveKillScoreSet parent, int playerIndex, int level){
 
-        Board clonedBoard = (Board) board.clone();
-        clonedBoard.move(move, playerIndex);
-        boardPutMoveKillScoreSet.setBoard(clonedBoard);
+        LinkedList<BoardPutMoveKillScoreSet> list = new LinkedList<>();
+        BoardPutMoveKillScoreSet boardPutMoveKillScoreSet1 = new BoardPutMoveKillScoreSet();
+        boardPutMoveKillScoreSet1.setMove(move);
+        boardPutMoveKillScoreSet1.setLevel(level);
 
-        System.out.println();
-        System.out.println(boardPutMoveKillScoreSet.getMove());
-        System.out.println(boardPutMoveKillScoreSet.getBoard());
-        boardPutMoveKillScoreSet.setScore(Advisor.getMoveScore(clonedBoard, move, moveScorePoints, playerIndex, true));
-        gameTree.addSet(gameTree.getRoot(), boardPutMoveKillScoreSet);
+        Board clonedBoard1 = (Board) board.clone();
+        clonedBoard1.move(move, playerIndex);
+        boardPutMoveKillScoreSet1.setBoard(clonedBoard1);
+
+        /*System.out.println();
+        System.out.println(boardPutMoveKillScoreSet1.getMove());
+        System.out.println(boardPutMoveKillScoreSet1.getBoard());*/
+        boardPutMoveKillScoreSet1.setScore(Advisor.getMoveScore(clonedBoard1, move, moveScorePoints, playerIndex, false));
+        gameTree.addSet(parent, boardPutMoveKillScoreSet1);
+        list.add(boardPutMoveKillScoreSet1);
+
+       if (clonedBoard1.checkMorris(move.getTo())){
+           for (Position killPosition : Advisor.getAllPossibleKills(board, playerIndex)){
+           BoardPutMoveKillScoreSet boardPutMoveKillScoreSet2 = new BoardPutMoveKillScoreSet();
+           boardPutMoveKillScoreSet2.setKill(killPosition);
+           boardPutMoveKillScoreSet2.setLevel(level+1);
+
+           Board clonedBoard2 = (Board) board.clone();
+           clonedBoard2.clearStone(killPosition);
+           boardPutMoveKillScoreSet2.setBoard(clonedBoard2);
+
+           /*System.out.println();
+           System.out.println(boardPutMoveKillScoreSet2.getMove());
+           System.out.println(boardPutMoveKillScoreSet2.getBoard());*/
+           boardPutMoveKillScoreSet2.setScore(parent.getScore() + Advisor.getKillScore(clonedBoard2, killPosition, moveScorePoints, playerIndex, false));
+           gameTree.addSet(boardPutMoveKillScoreSet1, boardPutMoveKillScoreSet2);
+           list.add(boardPutMoveKillScoreSet2);}
+       }
+
+        return list;
     }
+
 
 
 

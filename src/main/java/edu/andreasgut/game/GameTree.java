@@ -94,7 +94,6 @@ public class GameTree {
         BoardPutMoveKillScoreSet minSet = parent.getChildren().getFirst();
         parent.getChildren().clear();
         parent.getChildren().add(minSet);
-        System.out.println("MinSet: " + minSet);
     }
 
 
