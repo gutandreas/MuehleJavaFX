@@ -82,15 +82,15 @@ public class ComputerPlayer extends Player {
     @Override
     Move move(Board board, int playerIndex, boolean allowedToJump) {
 
-        MoveScorePoints moveScorePoints = new MoveScorePoints(300, 70,10, 10, 30,35, 2, -50, -30, -20, -100, -15, -20, -2);
-
+        MoveScorePoints moveScorePoints = new MoveScorePoints(100, 70,50, 50, 30,35, 2, -50, -30, -20, -100, -15, -20, -2);
         gameTree.clearTree();
-
 
         for (Move myMove1 : Advisor.getAllPossibleMoves(board, playerIndex)){
 
             // Eigener Zug 1
             LinkedList<BoardPutMoveKillScoreSet> list1 = pretendMove(board, myMove1, moveScorePoints, gameTree.getRoot(), playerIndex,1);
+
+            gameTree.keepOnlyBestChildren(gameTree.getRoot(), 3);
 
             for (BoardPutMoveKillScoreSet set1 : list1){
 
@@ -98,7 +98,7 @@ public class ComputerPlayer extends Player {
                 for (Move enemysMove : Advisor.getAllPossibleMoves(set1.getBoard(), 1-playerIndex)){
                     LinkedList<BoardPutMoveKillScoreSet> list2 = pretendMove(set1.getBoard(), enemysMove, moveScorePoints, set1, 1-playerIndex, 3);
 
-                    gameTree.keepOnlyWorstChild(set1);
+                    gameTree.keepOnlyWorstChildren(set1,3);
 
                     // Eigener Zug 2
                     for (BoardPutMoveKillScoreSet set2 : list2) {
@@ -112,19 +112,19 @@ public class ComputerPlayer extends Player {
         }
 
 
-        for (BoardPutMoveKillScoreSet set : gameTree.getLeaves()){
+       /* for (BoardPutMoveKillScoreSet set : gameTree.getLeaves()){
 
             System.out.println(set);
-        }
-
+        }*/
 
         System.out.println();
         System.out.println("Gewinnerpfad:");
         Stack<BoardPutMoveKillScoreSet> winningPath = gameTree.getPath(gameTree.getLeafWithBestScore());
-        while (!winningPath.isEmpty()){
-            System.out.println(winningPath.pop());
-        }
 
+        while (!winningPath.isEmpty()){
+            BoardPutMoveKillScoreSet currentSet = winningPath.pop();
+            System.out.println(currentSet);
+        }
 
         System.out.println("Getätigter Zug: " + gameTree.getBestMove());
         System.out.println();
@@ -148,10 +148,10 @@ public class ComputerPlayer extends Player {
         System.out.println(boardPutMoveKillScoreSet1.getBoard());*/
         boardPutMoveKillScoreSet1.setScore(Advisor.getMoveScore(clonedBoard1, move, moveScorePoints, playerIndex, false));
         gameTree.addSet(parent, boardPutMoveKillScoreSet1);
-        list.add(boardPutMoveKillScoreSet1);
+
 
        if (clonedBoard1.checkMorris(move.getTo())){
-           for (Position killPosition : Advisor.getAllPossibleKills(board, playerIndex)){
+           for (Position killPosition : Advisor.getAllPossibleKills(clonedBoard1, playerIndex)){
            BoardPutMoveKillScoreSet boardPutMoveKillScoreSet2 = new BoardPutMoveKillScoreSet();
            boardPutMoveKillScoreSet2.setKill(killPosition);
            boardPutMoveKillScoreSet2.setLevel(level+1);
@@ -163,9 +163,12 @@ public class ComputerPlayer extends Player {
            /*System.out.println();
            System.out.println(boardPutMoveKillScoreSet2.getMove());
            System.out.println(boardPutMoveKillScoreSet2.getBoard());*/
-           boardPutMoveKillScoreSet2.setScore(parent.getScore() + Advisor.getKillScore(clonedBoard2, killPosition, moveScorePoints, playerIndex, false));
+           boardPutMoveKillScoreSet2.setScore(boardPutMoveKillScoreSet1.getScore() + Advisor.getKillScore(clonedBoard2, killPosition, moveScorePoints, playerIndex, false));
            gameTree.addSet(boardPutMoveKillScoreSet1, boardPutMoveKillScoreSet2);
            list.add(boardPutMoveKillScoreSet2);}
+       }
+       else {
+           list.add(boardPutMoveKillScoreSet1);
        }
 
         return list;
@@ -180,7 +183,7 @@ public class ComputerPlayer extends Player {
     @Override
     Position kill(Board board, int ownPlayerIndex, int otherPlayerIndex) {
 
-        return gameTree.getKillLeafWithBestScore().getKill();
+        return gameTree.getBestKill();
 
     }
 

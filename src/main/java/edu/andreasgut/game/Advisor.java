@@ -276,7 +276,7 @@ public class Advisor {
             Collections.sort(positions);
 
             openMorrisLinkedList.add(new OpenMorris(positions.get(0), positions.get(1), positions.get(2), gapPosition));
-            System.out.println(morrisColor + "e offene Mühle erkannt");
+            //System.out.println(morrisColor + "e offene Mühle erkannt");
         }
     }
 
@@ -409,8 +409,10 @@ public class Advisor {
         int myNewClosedMorrisTotal = 0;
         int myNewOpenMorrisTotal = 0;
 
-        int score = myOpenMorrisesTotal + myClosedMorrisesTotal
-                + myEnemysOpenMorrisesTotal + myEnemysClosedMorrisesTotal
+        int score = myOpenMorrisesTotal
+                + myClosedMorrisesTotal
+                + myEnemysOpenMorrisesTotal
+                + myEnemysClosedMorrisesTotal
                 + myPossibleMovesTotal;
 
         if (myNewClosedMorris){

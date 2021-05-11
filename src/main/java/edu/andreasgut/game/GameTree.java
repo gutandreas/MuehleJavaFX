@@ -1,8 +1,6 @@
 package edu.andreasgut.game;
 
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.Stack;
+import java.util.*;
 
 public class GameTree {
 
@@ -22,19 +20,6 @@ public class GameTree {
         return bestLeaf;
     }
 
-    public BoardPutMoveKillScoreSet getKillLeafWithBestScore() {
-        int max = Integer.MIN_VALUE;
-        BoardPutMoveKillScoreSet bestLeaf = null;
-
-        for (BoardPutMoveKillScoreSet set : getLeaves()){
-            if (set.getKill() != null && set.getScore() > max){
-                max = set.getScore();
-                bestLeaf = set;
-            }
-        }
-
-        return bestLeaf;
-    }
 
     public LinkedList<BoardPutMoveKillScoreSet> getLeaves() {
 
@@ -75,12 +60,29 @@ public class GameTree {
             currentSet = currentSet.getParent();
         }
 
-
         return currentSet.getMove();
-
     }
 
-    public void keepOnlyWorstChild(BoardPutMoveKillScoreSet parent){
+    public Position getBestKill(){
+        BoardPutMoveKillScoreSet currentSet = getLeafWithBestScore();
+
+        while (currentSet.getParent() != root){
+            currentSet = currentSet.getParent();
+        }
+
+        int max = Integer.MIN_VALUE;
+        BoardPutMoveKillScoreSet currentKill = new BoardPutMoveKillScoreSet();
+
+        for (BoardPutMoveKillScoreSet set : currentSet.getChildren()){
+            if (set.getScore() > max){
+                max = set.getScore();
+                currentKill = set;
+            }
+        }
+        return currentKill.getKill();
+    }
+
+    public void keepOnlyWorstChildren(BoardPutMoveKillScoreSet parent, int numberOfChildren){
         parent.getChildren().sort(new Comparator<BoardPutMoveKillScoreSet>() {
             @Override
             public int compare(BoardPutMoveKillScoreSet o1, BoardPutMoveKillScoreSet o2) {
@@ -91,10 +93,48 @@ public class GameTree {
             }
         });
 
-        BoardPutMoveKillScoreSet minSet = parent.getChildren().getFirst();
-        parent.getChildren().clear();
-        parent.getChildren().add(minSet);
+        Iterator<BoardPutMoveKillScoreSet> iterator = parent.getChildren().iterator();
+
+        if (parent.getChildren().size() > numberOfChildren) {
+            for (int i = 0; i < numberOfChildren; i++) {
+                iterator.next();
+            }
+
+            while (iterator.hasNext()) {
+                iterator.next();
+                iterator.remove();
+            }
+        }
+
     }
+
+    public void keepOnlyBestChildren(BoardPutMoveKillScoreSet parent, int numberOfChildren){
+        parent.getChildren().sort(new Comparator<BoardPutMoveKillScoreSet>() {
+            @Override
+            public int compare(BoardPutMoveKillScoreSet o1, BoardPutMoveKillScoreSet o2) {
+                if (o1.getScore() > o2.getScore()){
+                    return -1;
+                }
+                else return 1;
+            }
+        });
+
+        Iterator<BoardPutMoveKillScoreSet> iterator = parent.getChildren().iterator();
+
+        if (parent.getChildren().size() > numberOfChildren) {
+            for (int i = 0; i < numberOfChildren; i++) {
+                iterator.next();
+            }
+
+            while (iterator.hasNext()) {
+                iterator.next();
+                iterator.remove();
+            }
+        }
+
+    }
+
+
 
 
 

@@ -80,5 +80,20 @@ public class BoardPutMoveKillScoreSet {
 
     @Override
     public String toString() {
-        return  "Level " + level + ", Put an " + put + ", " + move + ", Kill an " + kill + " Score: " + score;}
+
+        if (put != null){
+            return  "Level " + level + ", Put an " + put + ", Score: " + score;
+        }
+
+        if (move != null){
+            return  "Level " + level + ", " + move +  ", Score: " + score;
+        }
+
+        if (getParent().getMove() != null){
+        return  "Level " + level +", Kill " + "nach " + getParent().getMove() + " an " + kill + " Score: " + score;}
+
+        if (getParent().getPut() != null){
+            return  "Level " + level +", Kill " + "nach Put an " + getParent().getPut() + " an " + kill + " Score: " + score;}
+
+        return null;}
 }
