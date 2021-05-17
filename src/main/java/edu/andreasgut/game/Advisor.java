@@ -280,6 +280,31 @@ public class Advisor {
         }
     }
 
+    static public boolean positionBuildsTwoStonesTogetherWithFreeFieldBeside(Board board, Position position, int playerIndex){
+        if (position.getField()%2==1){
+            if (board.isThisMyStone(new Position((position.getRing()+1)%3, position.getField()), playerIndex)
+                && board.isFieldFree(new Position((position.getRing()+2)%3, position.getField()))){
+                return true;
+            }
+
+            if (board.isThisMyStone(new Position((position.getRing()+2)%3, position.getField()), playerIndex)
+                    && board.isFieldFree(new Position((position.getRing()+1)%3, position.getField()))){
+                return true;
+            }
+        }
+
+        if (board.isThisMyStone(new Position(position.getRing(), (position.getField()+1)%8), playerIndex)
+                && board.isFieldFree(new Position(position.getRing(), (position.getField()+2)%8))){
+            return true;
+        }
+        if (board.isThisMyStone(new Position(position.getRing(), (position.getField()+7)%8), playerIndex)
+                && board.isFieldFree(new Position(position.getRing(), (position.getField()+6)%8))){
+            return true;
+        }
+
+        return false;
+    }
+
     static public LinkedList<Position> getAllPossibleKills(Board board, int onwPlayerIndex){
         int enemysIndex = 1-onwPlayerIndex;
         LinkedList<Position> killList = new LinkedList<>();
@@ -365,7 +390,7 @@ public class Advisor {
         return moveList;
     }
 
-    static public int getKillScore(Board board, Position kill, MoveScorePoints killScorePoints, int playerIndex, boolean printScore){
+    static public int getKillScore(Board board, Position kill, ScorePoints killScorePoints, int playerIndex, boolean printScore){
 
         boolean myNewOpenMorris = isThisPositionTheGapOfMyOpenMorris(board, kill, playerIndex);
 
@@ -386,7 +411,7 @@ public class Advisor {
 
         return 5;
     }
-    static public int getMoveScore(Board board, Move move, MoveScorePoints moveScorePoints, int playerIndex, boolean printScore){
+    static public int getMoveScore(Board board, Move move, ScorePoints scorePoints, int playerIndex, boolean printScore){
 
         int myOpenMorrises = getMyOpenMorrisList(board, playerIndex).size();
         int myClosedMorrises = getMyClosedMorrisList(board, playerIndex).size();
@@ -401,11 +426,11 @@ public class Advisor {
         int myEnemysClosedMorrises = getMyEnemysClosedMorrisList(board, playerIndex).size();
 
 
-        int myOpenMorrisesTotal = myOpenMorrises * moveScorePoints.getOwnOpenMorrisPoints();
-        int myClosedMorrisesTotal = myClosedMorrises * moveScorePoints.getOwnClosedMorrisPoints();
-        int myEnemysOpenMorrisesTotal = myEnemysOpenMorrises * moveScorePoints.getEnemyOpenMorrisPoints();
-        int myEnemysClosedMorrisesTotal = myEnemysClosedMorrises * moveScorePoints.getEnemyClosedMorrisPoints();
-        int myPossibleMovesTotal = myPossibleMoves * moveScorePoints.getOwnPossibleMovesPoints();
+        int myOpenMorrisesTotal = myOpenMorrises * scorePoints.getOwnOpenMorrisPoints();
+        int myClosedMorrisesTotal = myClosedMorrises * scorePoints.getOwnClosedMorrisPoints();
+        int myEnemysOpenMorrisesTotal = myEnemysOpenMorrises * scorePoints.getEnemyOpenMorrisPoints();
+        int myEnemysClosedMorrisesTotal = myEnemysClosedMorrises * scorePoints.getEnemyClosedMorrisPoints();
+        int myPossibleMovesTotal = myPossibleMoves * scorePoints.getOwnPossibleMovesPoints();
         int myNewClosedMorrisTotal = 0;
         int myNewOpenMorrisTotal = 0;
 
@@ -416,12 +441,12 @@ public class Advisor {
                 + myPossibleMovesTotal;
 
         if (myNewClosedMorris){
-            myNewClosedMorrisTotal = moveScorePoints.getOwnNewClosedMorrisPoints();
+            myNewClosedMorrisTotal = scorePoints.getOwnNewClosedMorrisPoints();
             score += myNewClosedMorrisTotal;
         }
 
         if (myNewOpenMorris){
-            myNewOpenMorrisTotal = moveScorePoints.getOwnNewOpenMorrisPoints();
+            myNewOpenMorrisTotal = scorePoints.getOwnNewOpenMorrisPoints();
             score += myNewOpenMorrisTotal;
         }
 
@@ -440,32 +465,39 @@ public class Advisor {
 
     }
 
-    static public int getPutScore(Board board, Position put, MoveScorePoints moveScorePoints, int playerIndex, boolean printScore){
+    static public int getPutScore(Board board, Position put, ScorePoints scorePoints, int playerIndex, boolean printScore){
 
         int myOpenMorrises = getMyOpenMorrisList(board, playerIndex).size();
         int myClosedMorrises = getMyClosedMorrisList(board, playerIndex).size();
 
         boolean myNewClosedMorris = board.checkMorris(put);
         boolean myNewOpenMorris = Advisor.isThisStonePartOfMyOpenMorris(board, put, playerIndex);
+        boolean myNewTwoStonesTogether = Advisor.positionBuildsTwoStonesTogetherWithFreeFieldBeside(board, put, playerIndex);
 
         int myPossibleMoves = getAllPossibleMoves(board, playerIndex).size();
 
-        int myOpenMorrisesTotal = myOpenMorrises * moveScorePoints.getOwnOpenMorrisPoints();
-        int myClosedMorrisesTotal = myClosedMorrises * moveScorePoints.getOwnClosedMorrisPoints();
-        int myPossibleMovesTotal = myPossibleMoves * moveScorePoints.getOwnPossibleMovesPoints();
+        int myOpenMorrisesTotal = myOpenMorrises * scorePoints.getOwnOpenMorrisPoints();
+        int myClosedMorrisesTotal = myClosedMorrises * scorePoints.getOwnClosedMorrisPoints();
+        int myPossibleMovesTotal = myPossibleMoves * scorePoints.getOwnPossibleMovesPoints();
         int myNewClosedMorrisTotal = 0;
         int myNewOpenMorrisTotal = 0;
+        int myNewTwoStonesTogetherTotal = 0;
 
         int score = myOpenMorrisesTotal + myClosedMorrisesTotal + myPossibleMovesTotal;
 
         if (myNewClosedMorris){
-            myNewClosedMorrisTotal = moveScorePoints.getOwnNewClosedMorrisPoints();
+            myNewClosedMorrisTotal = scorePoints.getOwnNewClosedMorrisPoints();
             score += myNewClosedMorrisTotal;
         }
 
         if (myNewOpenMorris){
-            myNewOpenMorrisTotal = moveScorePoints.getOwnNewOpenMorrisPoints();
+            myNewOpenMorrisTotal = scorePoints.getOwnNewOpenMorrisPoints();
             score += myNewOpenMorrisTotal;
+        }
+
+        if (myNewTwoStonesTogether){
+            myNewTwoStonesTogetherTotal = scorePoints.getOwnTwoStonesTogetherPoints();
+            score += myNewTwoStonesTogetherTotal;
         }
 
         if (printScore) {
@@ -473,6 +505,7 @@ public class Advisor {
             System.out.println("Eigene geschlossene Mühlen: " + myClosedMorrises + " (" + myClosedMorrisesTotal + ")");
             System.out.println("Neue geschlossene eigene Mühle: " + myNewClosedMorris + " (" + myNewClosedMorrisTotal + ")");
             System.out.println("Neue offene eigene Mühle: " + myNewOpenMorris + " (" + myNewOpenMorrisTotal + ")");
+            System.out.println("Neue zwei eigene Steine nebeneinander mit freiem Feld daneben: " + myNewTwoStonesTogether + " (" + myNewTwoStonesTogetherTotal + " )");
             System.out.println("Eigene Zugmöglichkeiten: " + myPossibleMoves + " (" + myPossibleMovesTotal + ")");
             System.out.println("Score: " + score);
         }

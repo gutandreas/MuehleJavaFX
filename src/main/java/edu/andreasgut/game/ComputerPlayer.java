@@ -21,7 +21,7 @@ public class ComputerPlayer extends Player {
 
         gameTree.clearTree();
 
-        MoveScorePoints putScorePoints = new MoveScorePoints(100, 70,20, 20, 30,35, 2, -50, -30, -20, -100, -15, -20, -2);
+        ScorePoints putScorePoints = new ScorePoints(100, 70,20, 20, 30,35, 2, -50, -30, -20, -100, -15, -20, -2);
 
 
         for (Position position : Advisor.getAllFreeFields(board)) {
@@ -82,13 +82,13 @@ public class ComputerPlayer extends Player {
     @Override
     Move move(Board board, int playerIndex, boolean allowedToJump) {
 
-        MoveScorePoints moveScorePoints = new MoveScorePoints(100, 70,50, 50, 30,35, 2, -50, -30, -20, -100, -15, -20, -2);
+        ScorePoints scorePoints = new ScorePoints(100, 70,50, 50, 30,35, 2, -50, -30, -20, -100, -15, -20, -2);
         gameTree.clearTree();
 
         for (Move myMove1 : Advisor.getAllPossibleMoves(board, playerIndex)){
 
             // Eigener Zug 1
-            LinkedList<BoardPutMoveKillScoreSet> list1 = pretendMove(board, myMove1, moveScorePoints, gameTree.getRoot(), playerIndex,1);
+            LinkedList<BoardPutMoveKillScoreSet> list1 = pretendMove(board, myMove1, scorePoints, gameTree.getRoot(), playerIndex,1);
 
             gameTree.keepOnlyBestChildren(gameTree.getRoot(), 3);
 
@@ -96,7 +96,7 @@ public class ComputerPlayer extends Player {
 
                 // Gegnerischer Zug
                 for (Move enemysMove : Advisor.getAllPossibleMoves(set1.getBoard(), 1-playerIndex)){
-                    LinkedList<BoardPutMoveKillScoreSet> list2 = pretendMove(set1.getBoard(), enemysMove, moveScorePoints, set1, 1-playerIndex, 3);
+                    LinkedList<BoardPutMoveKillScoreSet> list2 = pretendMove(set1.getBoard(), enemysMove, scorePoints, set1, 1-playerIndex, 3);
 
                     gameTree.keepOnlyWorstChildren(set1,3);
 
@@ -104,7 +104,7 @@ public class ComputerPlayer extends Player {
                     for (BoardPutMoveKillScoreSet set2 : list2) {
 
                         for (Move myMove2 : Advisor.getAllPossibleMoves(set2.getBoard(), playerIndex)) {
-                            pretendMove(set2.getBoard(), myMove2, moveScorePoints, set2, playerIndex, 5);
+                            pretendMove(set2.getBoard(), myMove2, scorePoints, set2, playerIndex, 5);
                         }
                     }
                 }
@@ -132,7 +132,7 @@ public class ComputerPlayer extends Player {
 
     }
 
-    private LinkedList<BoardPutMoveKillScoreSet> pretendMove(Board board, Move move, MoveScorePoints moveScorePoints, BoardPutMoveKillScoreSet parent, int playerIndex, int level){
+    private LinkedList<BoardPutMoveKillScoreSet> pretendMove(Board board, Move move, ScorePoints scorePoints, BoardPutMoveKillScoreSet parent, int playerIndex, int level){
 
         LinkedList<BoardPutMoveKillScoreSet> list = new LinkedList<>();
         BoardPutMoveKillScoreSet boardPutMoveKillScoreSet1 = new BoardPutMoveKillScoreSet();
@@ -146,7 +146,7 @@ public class ComputerPlayer extends Player {
         /*System.out.println();
         System.out.println(boardPutMoveKillScoreSet1.getMove());
         System.out.println(boardPutMoveKillScoreSet1.getBoard());*/
-        boardPutMoveKillScoreSet1.setScore(Advisor.getMoveScore(clonedBoard1, move, moveScorePoints, playerIndex, false));
+        boardPutMoveKillScoreSet1.setScore(Advisor.getMoveScore(clonedBoard1, move, scorePoints, playerIndex, false));
         gameTree.addSet(parent, boardPutMoveKillScoreSet1);
 
 
@@ -163,7 +163,7 @@ public class ComputerPlayer extends Player {
            /*System.out.println();
            System.out.println(boardPutMoveKillScoreSet2.getMove());
            System.out.println(boardPutMoveKillScoreSet2.getBoard());*/
-           boardPutMoveKillScoreSet2.setScore(boardPutMoveKillScoreSet1.getScore() + Advisor.getKillScore(clonedBoard2, killPosition, moveScorePoints, playerIndex, false));
+           boardPutMoveKillScoreSet2.setScore(boardPutMoveKillScoreSet1.getScore() + Advisor.getKillScore(clonedBoard2, killPosition, scorePoints, playerIndex, false));
            gameTree.addSet(boardPutMoveKillScoreSet1, boardPutMoveKillScoreSet2);
            list.add(boardPutMoveKillScoreSet2);}
        }
@@ -173,10 +173,6 @@ public class ComputerPlayer extends Player {
 
         return list;
     }
-
-
-
-
 
 
 
