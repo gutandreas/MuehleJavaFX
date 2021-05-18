@@ -586,8 +586,11 @@ public class Advisor {
         int myEnemysNumberOfTwoStonesTogetherTotal = myEnemysNumberOfTwoStonesTogether * scorePoints.getEnemyTwoStonesTogetherPoints();
         int myEnemysNumberOfTwoStonesWithGapTotal = myEnemysNumberOfTwoStonesWithGap * scorePoints.getEnemyTwoStonesWithGapPoints();
 
-        int score = myOpenMorrisesTotal + myClosedMorrisesTotal + myPossibleMovesTotal
-                + myEnemysNumberOfTwoStonesTogetherTotal + myEnemysNumberOfTwoStonesWithGapTotal;
+        int score = myOpenMorrisesTotal
+                + myClosedMorrisesTotal
+                + myPossibleMovesTotal
+                + myEnemysNumberOfTwoStonesTogetherTotal
+                + myEnemysNumberOfTwoStonesWithGapTotal;
 
         if (myNewClosedMorris){
             myNewClosedMorrisTotal = scorePoints.getOwnNewClosedMorrisPoints();
