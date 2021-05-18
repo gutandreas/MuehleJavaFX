@@ -21,7 +21,7 @@ public class ComputerPlayer extends Player {
 
         gameTree.clearTree();
 
-        ScorePoints putScorePoints = new ScorePoints(100, 70,20, 20, 30,35, 2, -50, -30, -20, -100, -15, -20, -2);
+        ScorePoints putScorePoints = new ScorePoints(100, 70,20, 20, 30,35, 2, -50, -30, -20, -100, -50, -50, -2);
 
 
         for (Position position : Advisor.getAllFreeFields(board)) {
@@ -51,16 +51,11 @@ public class ComputerPlayer extends Player {
 
                     boardPutMoveKillScoreSet2.setBoard(clonedBoard2);
                     boardPutMoveKillScoreSet2.setKill(killPosition);
-                    boardPutMoveKillScoreSet2.setScore(boardPutMoveKillScoreSet1.getScore() + Advisor.getKillScore(clonedBoard2, killPosition, putScorePoints, playerIndex, false));
+                    boardPutMoveKillScoreSet2.setScore(boardPutMoveKillScoreSet1.getScore() + Advisor.getKillScore(clonedBoard2, killPosition, putScorePoints, playerIndex, true));
                     gameTree.addSet(boardPutMoveKillScoreSet1, boardPutMoveKillScoreSet2);
                 }
             }
 
-        }
-
-        for (BoardPutMoveKillScoreSet set : gameTree.getLeaves()){
-
-            System.out.println(set);
         }
 
 
@@ -82,7 +77,7 @@ public class ComputerPlayer extends Player {
     @Override
     Move move(Board board, int playerIndex, boolean allowedToJump) {
 
-        ScorePoints scorePoints = new ScorePoints(100, 70,50, 50, 30,35, 2, -50, -30, -20, -100, -15, -20, -2);
+        ScorePoints scorePoints = new ScorePoints(300, 70,50, 50, 30,35, 2, -50, -30, -20, -100, -15, -20, -2);
         gameTree.clearTree();
 
         for (Move myMove1 : Advisor.getAllPossibleMoves(board, playerIndex)){
@@ -110,12 +105,6 @@ public class ComputerPlayer extends Player {
                 }
             }
         }
-
-
-       /* for (BoardPutMoveKillScoreSet set : gameTree.getLeaves()){
-
-            System.out.println(set);
-        }*/
 
         System.out.println();
         System.out.println("Gewinnerpfad:");
@@ -146,7 +135,7 @@ public class ComputerPlayer extends Player {
         /*System.out.println();
         System.out.println(boardPutMoveKillScoreSet1.getMove());
         System.out.println(boardPutMoveKillScoreSet1.getBoard());*/
-        boardPutMoveKillScoreSet1.setScore(Advisor.getMoveScore(clonedBoard1, move, scorePoints, playerIndex, false));
+        boardPutMoveKillScoreSet1.setScore(Advisor.getMoveScore(clonedBoard1, move, scorePoints, playerIndex, true));
         gameTree.addSet(parent, boardPutMoveKillScoreSet1);
 
 
