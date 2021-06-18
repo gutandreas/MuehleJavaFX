@@ -22,7 +22,7 @@ public class ComputerPlayer extends Player {
 
         ScorePoints putScorePoints = new ScorePoints(100, 5000,20, 20, 30,3, 2, -5000, -30, -200, -100, -2);
 
-        recursivePutBfs(gameTree.getRoot(), putScorePoints, playerIndex, playerIndex, 5);
+        recursivePutBfs(gameTree.getRoot(), putScorePoints, playerIndex, playerIndex, 2);
 
         System.out.println(gameTree);
 
@@ -56,7 +56,7 @@ public class ComputerPlayer extends Player {
         }
 
         if (set.getLevel()%2 == 0){
-            gameTree.keepOnlyBestChildren(set, 3);}
+            gameTree.keepOnlyBestChildren(set, 2);}
         else {
             gameTree.keepOnlyWorstChildren(set, 1);
         }
@@ -109,12 +109,14 @@ public class ComputerPlayer extends Player {
         if (boardPutMoveKillScoreSet1.getBoard().checkMorris(boardPutMoveKillScoreSet1.getPut())){
             for (Position killPosition : Advisor.getAllPossibleKills(clonedBoard1,currentPlayerIndex)){
                 BoardPutMoveKillScoreSet boardPutMoveKillScoreSet2 = new BoardPutMoveKillScoreSet();
+                boardPutMoveKillScoreSet2.setPut(put);
                 boardPutMoveKillScoreSet2.setLevel(level);
+                boardPutMoveKillScoreSet2.setKill(killPosition);
+
                 Board clonedBoard2 = (Board) clonedBoard1.clone();
                 clonedBoard2.clearStone(killPosition);
 
                 boardPutMoveKillScoreSet2.setBoard(clonedBoard2);
-                boardPutMoveKillScoreSet2.setKill(killPosition);
                 boardPutMoveKillScoreSet2.setScore(Advisor.getPutScore(boardPutMoveKillScoreSet2, scorePoints, scorePlayerIndex, false));
                 gameTree.addSet(parent, boardPutMoveKillScoreSet2);
             }

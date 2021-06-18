@@ -80,16 +80,7 @@ public class GameTree {
             currentSet = currentSet.getParent();
         }
 
-        int max = Integer.MIN_VALUE;
-        BoardPutMoveKillScoreSet currentKill = new BoardPutMoveKillScoreSet();
-
-        for (BoardPutMoveKillScoreSet set : currentSet.getChildren()){
-            if (set.getScore() > max){
-                max = set.getScore();
-                currentKill = set;
-            }
-        }
-        return currentKill.getKill();
+        return currentSet.getKill();
     }
 
     public void keepOnlyWorstChildren(BoardPutMoveKillScoreSet parent, int numberOfChildren){
