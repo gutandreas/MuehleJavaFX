@@ -1,6 +1,5 @@
 package edu.andreasgut.game;
 
-import javafx.geometry.Pos;
 
 public class Position implements Comparable {
 

@@ -507,7 +507,7 @@ public class Advisor {
         int myOpenMorrises = getMyOpenMorrisList(board, playerIndex).size();
         int myClosedMorrises = getMyClosedMorrisList(board, playerIndex).size();
 
-        boolean myNewClosedMorris = board.checkMorris(move.getTo());
+        boolean myKill = board.checkMorris(move.getTo());
         boolean myNewOpenMorris = Advisor.isThisStonePartOfMyOpenMorris(board, move.getTo(), playerIndex);
 
 
@@ -522,7 +522,7 @@ public class Advisor {
         int myEnemysOpenMorrisesTotal = myEnemysOpenMorrises * scorePoints.getEnemyOpenMorrisPoints();
         int myEnemysClosedMorrisesTotal = myEnemysClosedMorrises * scorePoints.getEnemyClosedMorrisPoints();
         int myPossibleMovesTotal = myPossibleMoves * scorePoints.getOwnPossibleMovesPoints();
-        int myNewClosedMorrisTotal = 0;
+        int myKillTotal = 0;
         int myNewOpenMorrisTotal = 0;
 
         int score = myOpenMorrisesTotal
@@ -531,9 +531,9 @@ public class Advisor {
                 + myEnemysClosedMorrisesTotal
                 + myPossibleMovesTotal;
 
-        if (myNewClosedMorris){
-            myNewClosedMorrisTotal = scorePoints.getOwnNewClosedMorrisPoints();
-            score += myNewClosedMorrisTotal;
+        if (myKill){
+            myKillTotal = scorePoints.getOwnKillPoints();
+            score += myKillTotal;
         }
 
         if (myNewOpenMorris){
@@ -544,7 +544,7 @@ public class Advisor {
         if (printScore) {
             System.out.println("Eigene offene Mühlen: " + myOpenMorrises + " (" + myOpenMorrisesTotal + ")");
             System.out.println("Eigene geschlossene Mühlen: " + myClosedMorrises + " (" + myClosedMorrisesTotal + ")");
-            System.out.println("Neue geschlossene eigene Mühle: " + myNewClosedMorris + " (" + myNewClosedMorrisTotal + ")");
+            System.out.println("Neue geschlossene eigene Mühle: " + myKill + " (" + myKillTotal + ")");
             System.out.println("Neue offene eigene Mühle: " + myNewOpenMorris + " (" + myNewOpenMorrisTotal + ")");
             System.out.println("Gegnerische offene Mühlen: " + myEnemysOpenMorrises + " (" + myEnemysOpenMorrisesTotal + ")");
             System.out.println("Gegnerische geschlossene Mühlen: " + myEnemysClosedMorrises + " (" + myEnemysClosedMorrisesTotal + ")");
@@ -592,10 +592,7 @@ public class Advisor {
                 + myEnemysNumberOfTwoStonesTogetherTotal
                 + myEnemysNumberOfTwoStonesWithGapTotal;
 
-        if (myNewClosedMorris){
-            myNewClosedMorrisTotal = scorePoints.getOwnNewClosedMorrisPoints();
-            score += myNewClosedMorrisTotal;
-        }
+
 
         if (myNewOpenMorris){
             myNewOpenMorrisTotal = scorePoints.getOwnNewOpenMorrisPoints();

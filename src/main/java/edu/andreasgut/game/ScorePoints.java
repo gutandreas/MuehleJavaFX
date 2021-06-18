@@ -2,18 +2,17 @@ package edu.andreasgut.game;
 
 public class ScorePoints {
 
-    private int ownNewClosedMorrisPoints, ownNewOpenMorrisPoints, ownClosedMorrisPoints, ownOpenMorrisPoints, ownTwoStonesTogetherPoints, ownTwoStonesWithGapPoints, ownPossibleMovesPoints, enemyNewClosedMorrisPoints, enemyNewOpenMorrisPoints, enemyClosedMorrisPoints, enemyOpenMorrisPoints, enemyTwoStonesTogetherPoints, enemyTwoStonesWithGapPoints, enemyPossibleMovesPoints;
+    private int ownNumberOfStonesPoints, ownNewOpenMorrisPoints, ownClosedMorrisPoints, ownOpenMorrisPoints, ownTwoStonesTogetherPoints, ownTwoStonesWithGapPoints, ownPossibleMovesPoints, enemyNumberOfStonesPoints, enemyClosedMorrisPoints, enemyOpenMorrisPoints, enemyTwoStonesTogetherPoints, enemyTwoStonesWithGapPoints, enemyPossibleMovesPoints;
 
-    public ScorePoints(int ownNewClosedMorrisPoints, int ownNewOpenMorrisPoints, int ownClosedMorrisPoints, int ownOpenMorrisPoints, int ownTwoStonesTogetherPoints, int ownTwoStonesWithGapPoints, int ownPossibleMovesPoints, int enemyNewClosedMorrisPoints, int enemyNewOpenMorrisPoints, int enemyClosedMorrisPoints, int enemyOpenMorrisPoints, int enemyTwoStonesTogetherPoints, int enemyTwoStonesWithGapPoints, int enemyPossibleMovesPoints) {
-        this.ownNewClosedMorrisPoints = ownNewClosedMorrisPoints;
+    public ScorePoints(int ownNumberOfStonesPoints, int ownClosedMorrisPoints, int ownOpenMorrisPoints, int ownTwoStonesTogetherPoints, int ownTwoStonesWithGapPoints, int ownPossibleMovesPoints, int enemyNumberOfStonesPoints, int enemyClosedMorrisPoints, int enemyOpenMorrisPoints, int enemyTwoStonesTogetherPoints, int enemyTwoStonesWithGapPoints, int enemyPossibleMovesPoints) {
+        this.ownNumberOfStonesPoints = ownNumberOfStonesPoints;
         this.ownNewOpenMorrisPoints = ownNewOpenMorrisPoints;
         this.ownClosedMorrisPoints = ownClosedMorrisPoints;
         this.ownOpenMorrisPoints = ownOpenMorrisPoints;
         this.ownTwoStonesTogetherPoints = ownTwoStonesTogetherPoints;
         this.ownTwoStonesWithGapPoints = ownTwoStonesWithGapPoints;
         this.ownPossibleMovesPoints = ownPossibleMovesPoints;
-        this.enemyNewClosedMorrisPoints = enemyNewClosedMorrisPoints;
-        this.enemyNewOpenMorrisPoints = enemyNewOpenMorrisPoints;
+        this.enemyNumberOfStonesPoints = enemyNumberOfStonesPoints;
         this.enemyClosedMorrisPoints = enemyClosedMorrisPoints;
         this.enemyOpenMorrisPoints = enemyOpenMorrisPoints;
         this.enemyTwoStonesTogetherPoints = enemyTwoStonesTogetherPoints;
@@ -21,8 +20,8 @@ public class ScorePoints {
         this.enemyPossibleMovesPoints = enemyPossibleMovesPoints;
     }
 
-    public int getOwnNewClosedMorrisPoints() {
-        return ownNewClosedMorrisPoints;
+    public int getOwnKillPoints() {
+        return ownNumberOfStonesPoints;
     }
 
     public int getOwnNewOpenMorrisPoints() {
@@ -49,12 +48,8 @@ public class ScorePoints {
         return ownPossibleMovesPoints;
     }
 
-    public int getEnemyNewClosedMorrisPoints() {
-        return enemyNewClosedMorrisPoints;
-    }
-
-    public int getEnemyNewOpenMorrisPoints() {
-        return enemyNewOpenMorrisPoints;
+    public int getEnemyNumberOfStonesPoints() {
+        return enemyNumberOfStonesPoints;
     }
 
     public int getEnemyClosedMorrisPoints() {

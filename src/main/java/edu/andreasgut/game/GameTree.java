@@ -4,7 +4,17 @@ import java.util.*;
 
 public class GameTree {
 
-    BoardPutMoveKillScoreSet root = new BoardPutMoveKillScoreSet();
+    private BoardPutMoveKillScoreSet root;
+
+
+    public GameTree() {
+        root = new BoardPutMoveKillScoreSet();
+    }
+
+    public void initializeRoot(Board board){
+        root.setBoard(board);
+        root.getChildren().clear();
+    }
 
     public BoardPutMoveKillScoreSet getLeafWithBestScore() {
         int max = Integer.MIN_VALUE;
@@ -150,6 +160,8 @@ public class GameTree {
         return root;
     }
 
+
+
     public void clearTree(){
         root.getChildren().clear();
     }
@@ -164,5 +176,41 @@ public class GameTree {
 
         return path;
     }
+
+    @Override
+    public String toString(){
+        String string = "Gametree: \n \n";
+        for (BoardPutMoveKillScoreSet currentSet : root.getChildren()) {
+            string += "Level: " + currentSet.getLevel() + "\n";
+            string += currentSet.getBoard();
+            string += "Resultierender Score: " + currentSet.getScore() + "\n \n";
+            for (BoardPutMoveKillScoreSet currentSet2 : currentSet.getChildren()){
+                string += "Level: " + currentSet2.getLevel() + "\n";
+                string += currentSet2.getBoard();
+                string += "Resultierender Score: " + currentSet2.getScore() + "\n \n";
+                for (BoardPutMoveKillScoreSet currentSet3 : currentSet2.getChildren()){
+                    string += "Level: " + currentSet3.getLevel() + "\n";
+                    string += currentSet3.getBoard();
+                    string += "Resultierender Score: " + currentSet3.getScore() + "\n \n";
+            }}}
+        return string;
+    }
+
+    private String toStringRecursive(BoardPutMoveKillScoreSet set, String string){
+
+        if (set.getChildren().isEmpty()) {
+            return string;
+        }
+
+        for (BoardPutMoveKillScoreSet currentSet : root.getChildren()) {
+            string += currentSet.getBoard();
+            string += "Resultierender Score: " + currentSet.getScore() + "\n \n";
+            //toStringRecursive(currentSet, string);
+        }
+
+        return string;
+
+
+        }
 
 }
