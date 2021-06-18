@@ -584,31 +584,43 @@ public class Advisor {
 
     }
 
-    static public int getPutScore(Board board, Position put, ScorePoints scorePoints, int playerIndex, boolean printScore){
+    static public int getPutScore(BoardPutMoveKillScoreSet set, ScorePoints scorePoints, int playerIndex, boolean printScore){
 
-        int myOpenMorrisesPoints = getMyOpenMorrisList(board, playerIndex).size() * scorePoints.getOwnOpenMorrisPoints();
-        int myClosedMorrisesPoints = getMyClosedMorrisList(board, playerIndex).size() * scorePoints.getOwnClosedMorrisPoints();
-        int myNumberOfStonesPoints = countMyStones(board, playerIndex) * scorePoints.getOwnNumberOfStonesPoints();
-        int myNumberOfTwoStonesTogetherPoints = numberOfMyTwoStonesWithGap(board, playerIndex) * scorePoints.getOwnTwoStonesTogetherPoints();
-        int myNumberOfTwoStonesWithGapPoints = numberOfMyTwoStonesWithGap(board, playerIndex * scorePoints.getOwnTwoStonesWithGapPoints());
+
+        Board board = set.getBoard();
+
+        int myOpenMorrises = getMyOpenMorrisList(board, playerIndex).size();
+        int myClosedMorrises = getMyClosedMorrisList(board, playerIndex).size();
+        int myNumberOfStones = countMyStones(board, playerIndex);
+        int myNumberOfTwoStonesTogether = numberOfMyTwoStonesWithGap(board, playerIndex);
+        int myNumberOfTwoStonesWithGap = numberOfMyTwoStonesWithGap(board, playerIndex);
         int myPossibleMoves = getAllPossibleMoves(board, playerIndex).size();
 
-        int myEnemysOpenMorrisesPoints = getMyEnemysOpenMorrisList(board, playerIndex).size() * scorePoints.getEnemyOpenMorrisPoints();
-        int myEnemysClosedMorrisesPoints = getMyEnemysClosedMorrisList(board, playerIndex).size() * scorePoints.getEnemyClosedMorrisPoints();
-        int myEnemysNumberOfStonesPoints = countMyEnemysStones(board, playerIndex);
-        int myEnemysNumberOfTwoStonesTogetherPoints = numberOfMyEnemysTwoStonesTogetherWithFreeFieldBeside(board, playerIndex) * scorePoints.getEnemyTwoStonesTogetherPoints();
-        int myEnemysNumberOfTwoStonesWithGapPoints = numberOfMyEnemysTwoStonesWithGap(board, playerIndex) * scorePoints.getEnemyTwoStonesWithGapPoints();
+        int myOpenMorrisesPoints = myOpenMorrises * scorePoints.getOwnOpenMorrisPoints();
+        int myClosedMorrisesPoints = myClosedMorrises * scorePoints.getOwnClosedMorrisPoints();
+        int myNumberOfStonesPoints = myNumberOfStones * scorePoints.getOwnNumberOfStonesPoints();
+        int myNumberOfTwoStonesTogetherPoints = myNumberOfTwoStonesTogether * scorePoints.getOwnTwoStonesTogetherPoints();
+        int myNumberOfTwoStonesWithGapPoints = myNumberOfTwoStonesWithGap * scorePoints.getOwnTwoStonesWithGapPoints();
+        int myPossibleMovesPoints = myPossibleMoves * scorePoints.getOwnPossibleMovesPoints();
 
+        int myEnemysOpenMorrises = getMyEnemysOpenMorrisList(board, playerIndex).size();
+        int myEnemysClosedMorrises = getMyEnemysClosedMorrisList(board, playerIndex).size();
+        int myEnemysNumberOfStones = countMyEnemysStones(board, playerIndex);
+        int myEnemysNumberOfTwoStonesTogether = numberOfMyEnemysTwoStonesTogetherWithFreeFieldBeside(board, playerIndex);
+        int myEnemysNumberOfTwoStonesWithGap = numberOfMyEnemysTwoStonesWithGap(board, playerIndex);
 
-
-
-
+        int myEnemysOpenMorrisesPoints = myEnemysOpenMorrises * scorePoints.getEnemyOpenMorrisPoints();
+        int myEnemysClosedMorrisesPoints = myEnemysClosedMorrises * scorePoints.getEnemyClosedMorrisPoints();
+        int myEnemysNumberOfStonesPoints = myEnemysNumberOfStones * scorePoints.getEnemyNumberOfStonesPoints();
+        int myEnemysNumberOfTwoStonesTogetherPoints =  myEnemysNumberOfTwoStonesTogether * scorePoints.getEnemyTwoStonesTogetherPoints();
+        int myEnemysNumberOfTwoStonesWithGapPoints =  myEnemysNumberOfTwoStonesWithGap * scorePoints.getEnemyTwoStonesWithGapPoints();
 
         int score = myOpenMorrisesPoints
                 + myClosedMorrisesPoints
                 + myNumberOfStonesPoints
                 + myNumberOfTwoStonesTogetherPoints
                 + myNumberOfTwoStonesWithGapPoints
+                + myPossibleMovesPoints
 
                 + myEnemysOpenMorrisesPoints
                 + myEnemysClosedMorrisesPoints
@@ -617,35 +629,26 @@ public class Advisor {
                 + myEnemysNumberOfTwoStonesWithGapPoints;
 
 
-
-
-       /* if (myNewOpenMorris){
-            myNewOpenMorrisTotal = scorePoints.getOwnNewOpenMorrisPoints();
-            score += myNewOpenMorrisTotal;
-        }
-
-        if (myNewTwoStonesTogether){
-            myNewTwoStonesTogetherTotal = scorePoints.getOwnTwoStonesTogetherPoints();
-            score += myNewTwoStonesTogetherTotal;
-        }
-
-        if (myNewTwoStonesWithGap){
-            myNewTwoStonesWithGapTotal = scorePoints.getOwnTwoStonesWithGapPoints();
-            score += myNewTwoStonesWithGapTotal;
-        }
+        set.setScoreDetails(
+        "Eigene offene Mühlen: " + myOpenMorrises + " (" + myOpenMorrisesPoints + ")" + " \n" +
+        "Eigene geschlossene Mühlen: " + myClosedMorrises + " (" + myClosedMorrisesPoints + ")" + " \n" +
+        "Neue zwei eigene Steine nebeneinander mit freiem Feld daneben: " + myNumberOfTwoStonesTogether + " (" + myNumberOfTwoStonesTogetherPoints + ")" + " \n" +
+        "Neue zwei eigene Steine mit freier Lücke dazwischen: " + myNumberOfTwoStonesWithGap + " (" + myNumberOfTwoStonesWithGapPoints + ")" + " \n" +
+        "Eigene Zugmöglichkeiten: " + myPossibleMoves + " (" + myPossibleMovesPoints + ")" + " \n" +
+        "Anzahl zweier fremder Steine nebeneinander mit freiem Feld daneben " + myEnemysNumberOfTwoStonesTogether + " (" + myEnemysNumberOfTwoStonesTogetherPoints + ")" + " \n" +
+        "Anzahl zweier fremder Steine mit freier Lücke dazwischen: " + myEnemysNumberOfTwoStonesWithGap + " (" + myEnemysNumberOfTwoStonesWithGapPoints + ")" + " \n" +
+        "Score: " + score);
 
         if (printScore) {
-            System.out.println("Eigene offene Mühlen: " + myOpenMorrises + " (" + myOpenMorrisesTotal + ")");
-            System.out.println("Eigene geschlossene Mühlen: " + myClosedMorrises + " (" + myClosedMorrisesTotal + ")");
-            System.out.println("Neue geschlossene eigene Mühle: " + myNewClosedMorris + " (" + myNewClosedMorrisTotal + ")");
-            System.out.println("Neue offene eigene Mühle: " + myNewOpenMorris + " (" + myNewOpenMorrisTotal + ")");
-            System.out.println("Neue zwei eigene Steine nebeneinander mit freiem Feld daneben: " + myNewTwoStonesTogether + " (" + myNewTwoStonesTogetherTotal + ")");
-            System.out.println("Neue zwei eigene Steine mit freier Lücke dazwischen: " + myNewTwoStonesWithGap + " (" + myNewTwoStonesWithGapTotal + ")");
-            System.out.println("Anzahl zweier fremder Steine nebeneinander mit freiem Feld daneben " + myEnemysNumberOfTwoStonesTogether + " (" + myEnemysNumberOfTwoStonesTogetherTotal + ")");
-            System.out.println("Anzahl zweier fremder Steine mit freier Lücke dazwischen: " + myEnemysNumberOfTwoStonesWithGap + " (" + myEnemysNumberOfTwoStonesWithGapTotal + ")");
-            System.out.println("Eigene Zugmöglichkeiten: " + myPossibleMoves + " (" + myPossibleMovesTotal + ")");
+            System.out.println("Eigene offene Mühlen: " + myOpenMorrises + " (" + myOpenMorrisesPoints + ")");
+            System.out.println("Eigene geschlossene Mühlen: " + myClosedMorrises + " (" + myClosedMorrisesPoints + ")");
+            System.out.println("Neue zwei eigene Steine nebeneinander mit freiem Feld daneben: " + myNumberOfTwoStonesTogether + " (" + myNumberOfTwoStonesTogetherPoints + ")");
+            System.out.println("Neue zwei eigene Steine mit freier Lücke dazwischen: " + myNumberOfTwoStonesWithGap + " (" + myNumberOfTwoStonesWithGapPoints + ")");
+            System.out.println("Eigene Zugmöglichkeiten: " + myPossibleMoves + " (" + myPossibleMovesPoints + ")");
+            System.out.println("Anzahl zweier fremder Steine nebeneinander mit freiem Feld daneben " + myEnemysNumberOfTwoStonesTogether + " (" + myEnemysNumberOfTwoStonesTogetherPoints + ")");
+            System.out.println("Anzahl zweier fremder Steine mit freier Lücke dazwischen: " + myEnemysNumberOfTwoStonesWithGap + " (" + myEnemysNumberOfTwoStonesWithGapPoints + ")");
             System.out.println("Score: " + score);
-        }*/
+        }
 
         return score;
 

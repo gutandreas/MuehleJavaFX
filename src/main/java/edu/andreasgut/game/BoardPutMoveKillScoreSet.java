@@ -13,6 +13,7 @@ public class BoardPutMoveKillScoreSet {
     private int score;
     private BoardPutMoveKillScoreSet parent;
     private LinkedList<BoardPutMoveKillScoreSet> children = new LinkedList<>();
+    private String scoreDetails;
 
     public Board getBoard() {
         return board;
@@ -76,6 +77,14 @@ public class BoardPutMoveKillScoreSet {
 
     public void setChildren(LinkedList<BoardPutMoveKillScoreSet> children) {
         this.children = children;
+    }
+
+    public String getScoreDetails() {
+        return scoreDetails;
+    }
+
+    public void setScoreDetails(String scoreDetails) {
+        this.scoreDetails = scoreDetails;
     }
 
     @Override

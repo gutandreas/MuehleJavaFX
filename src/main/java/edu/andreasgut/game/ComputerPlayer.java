@@ -20,24 +20,9 @@ public class ComputerPlayer extends Player {
 
         gameTree.initializeRoot(board);
 
-        ScorePoints putScorePoints = new ScorePoints(100, 5000,20, 20, 30,35, 2, -5000, -30, -200, -100, -50);
+        ScorePoints putScorePoints = new ScorePoints(100, 5000,20, 20, 30,3, 2, -5000, -30, -200, -100, -2);
 
-        recursivePutBfs(gameTree.getRoot(), putScorePoints, playerIndex, playerIndex, 3);
-
-
-
-        //recursivePutDfs(gameTree.getRoot(), putScorePoints, playerIndex, playerIndex, 3);
-
-
-        /*for (Position position : Advisor.getAllFreeFields(board)) {
-
-            pretendPut(board, position, putScorePoints, gameTree.getRoot(), playerIndex, 1);
-
-
-        }
-
-
-       */
+        recursivePutBfs(gameTree.getRoot(), putScorePoints, playerIndex, playerIndex, 5);
 
         System.out.println(gameTree);
 
@@ -116,8 +101,9 @@ public class ComputerPlayer extends Player {
         Board clonedBoard1 = (Board) board.clone();
         clonedBoard1.putStone(put, currentPlayerIndex);
 
-        boardPutMoveKillScoreSet1.setScore(Advisor.getPutScore(clonedBoard1, put, scorePoints, scorePlayerIndex, false));
         boardPutMoveKillScoreSet1.setBoard(clonedBoard1);
+        boardPutMoveKillScoreSet1.setScore(Advisor.getPutScore(boardPutMoveKillScoreSet1, scorePoints, scorePlayerIndex, false));
+
 
 
         if (boardPutMoveKillScoreSet1.getBoard().checkMorris(boardPutMoveKillScoreSet1.getPut())){
@@ -129,15 +115,12 @@ public class ComputerPlayer extends Player {
 
                 boardPutMoveKillScoreSet2.setBoard(clonedBoard2);
                 boardPutMoveKillScoreSet2.setKill(killPosition);
-                boardPutMoveKillScoreSet2.setScore(boardPutMoveKillScoreSet1.getScore() + Advisor.getKillScore(clonedBoard2, killPosition, scorePoints, scorePlayerIndex, false));
+                boardPutMoveKillScoreSet2.setScore(Advisor.getPutScore(boardPutMoveKillScoreSet2, scorePoints, scorePlayerIndex, false));
                 gameTree.addSet(parent, boardPutMoveKillScoreSet2);
             }
         }
         else {
             gameTree.addSet(parent, boardPutMoveKillScoreSet1);
-            /*System.out.println();
-            System.out.println(boardPutMoveKillScoreSet1.getPut());
-            System.out.println(boardPutMoveKillScoreSet1.getBoard());*/
         }
 
     }

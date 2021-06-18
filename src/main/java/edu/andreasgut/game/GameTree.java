@@ -186,19 +186,19 @@ public class GameTree {
         for (BoardPutMoveKillScoreSet currentSet : root.getChildren()) {
             string += "Level: " + currentSet.getLevel() + "\n";
             string += currentSet.getBoard();
-            string += "Resultierender Score: " + currentSet.getScore() + "\n \n";
+            string += currentSet.getScoreDetails() + "\n \n";
             for (BoardPutMoveKillScoreSet currentSet2 : currentSet.getChildren()){
                 string += "Level: " + currentSet2.getLevel() + "\n";
                 string += currentSet2.getBoard();
-                string += "Resultierender Score: " + currentSet2.getScore() + "\n \n";
+                string += currentSet2.getScoreDetails() + "\n \n";
                 for (BoardPutMoveKillScoreSet currentSet3 : currentSet2.getChildren()){
                     string += "Level: " + currentSet3.getLevel() + "\n";
                     string += currentSet3.getBoard();
-                    string += "Resultierender Score: " + currentSet3.getScore() + "\n \n";
+                    string += currentSet3.getScoreDetails() + "\n \n";
                     for (BoardPutMoveKillScoreSet currentSet4 : currentSet3.getChildren()){
                         string += "Level: " + currentSet4.getLevel() + "\n";
                         string += currentSet4.getBoard();
-                        string += "Resultierender Score: " + currentSet4.getScore() + "\n \n";
+                        string += currentSet4.getScoreDetails() + "\n \n";
 
             }}}}
         return string;
