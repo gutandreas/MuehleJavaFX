@@ -4,14 +4,6 @@ import java.util.*;
 
 public class Advisor {
 
-    static boolean checkIfMyEnemyHasOpenMorris(Board board, int ownPlayerIndex) {
-        return !getMyEnemysOpenMorrisList(board, ownPlayerIndex).isEmpty();
-    }
-
-    static boolean checkIfIHaveOpenMorris(Board board, int ownPlayerIndex) {
-        return !getMyOpenMorrisList(board, ownPlayerIndex).isEmpty();
-    }
-
     static public int countMyStones(Board board, int playerIndex){
         return board.countPlayersStones(playerIndex);
     }
@@ -509,82 +501,9 @@ public class Advisor {
         return moveList;
     }
 
-    static public int getKillScore(Board board, Position kill, ScorePoints killScorePoints, int playerIndex, boolean printScore){
-
-        boolean myNewOpenMorris = isThisPositionTheGapOfMyOpenMorris(board, kill, playerIndex);
-
-        int score = 0;
-        int myNewOpenMorrisTotal = 0;
-
-        if (myNewOpenMorris){
-            myNewOpenMorrisTotal = killScorePoints.getOwnNewOpenMorrisPoints();
-            score += myNewOpenMorrisTotal;
-        }
 
 
-
-        if (printScore) {
-            System.out.println("Neue offene eigene Mühle: " + myNewOpenMorris + " (" + myNewOpenMorrisTotal + ")");
-            System.out.println("Score: " + score);
-        }
-
-        return 5;
-    }
-    static public int getMoveScore(Board board, Move move, ScorePoints scorePoints, int playerIndex, boolean printScore){
-
-        int myOpenMorrises = getMyOpenMorrisList(board, playerIndex).size();
-        int myClosedMorrises = getMyClosedMorrisList(board, playerIndex).size();
-
-        boolean myKill = board.checkMorris(move.getTo());
-        boolean myNewOpenMorris = Advisor.isThisStonePartOfMyOpenMorris(board, move.getTo(), playerIndex);
-
-
-        int myPossibleMoves = getAllPossibleMoves(board, playerIndex).size();
-
-        int myEnemysOpenMorrises = getMyEnemysOpenMorrisList(board, playerIndex).size();
-        int myEnemysClosedMorrises = getMyEnemysClosedMorrisList(board, playerIndex).size();
-
-
-        int myOpenMorrisesTotal = myOpenMorrises * scorePoints.getOwnOpenMorrisPoints();
-        int myClosedMorrisesTotal = myClosedMorrises * scorePoints.getOwnClosedMorrisPoints();
-        int myEnemysOpenMorrisesTotal = myEnemysOpenMorrises * scorePoints.getEnemyOpenMorrisPoints();
-        int myEnemysClosedMorrisesTotal = myEnemysClosedMorrises * scorePoints.getEnemyClosedMorrisPoints();
-        int myPossibleMovesTotal = myPossibleMoves * scorePoints.getOwnPossibleMovesPoints();
-        int myKillTotal = 0;
-        int myNewOpenMorrisTotal = 0;
-
-        int score = myOpenMorrisesTotal
-                + myClosedMorrisesTotal
-                + myEnemysOpenMorrisesTotal
-                + myEnemysClosedMorrisesTotal
-                + myPossibleMovesTotal;
-
-        if (myKill){
-            myKillTotal = scorePoints.getOwnKillPoints();
-            score += myKillTotal;
-        }
-
-        if (myNewOpenMorris){
-            myNewOpenMorrisTotal = scorePoints.getOwnNewOpenMorrisPoints();
-            score += myNewOpenMorrisTotal;
-        }
-
-        if (printScore) {
-            System.out.println("Eigene offene Mühlen: " + myOpenMorrises + " (" + myOpenMorrisesTotal + ")");
-            System.out.println("Eigene geschlossene Mühlen: " + myClosedMorrises + " (" + myClosedMorrisesTotal + ")");
-            System.out.println("Neue geschlossene eigene Mühle: " + myKill + " (" + myKillTotal + ")");
-            System.out.println("Neue offene eigene Mühle: " + myNewOpenMorris + " (" + myNewOpenMorrisTotal + ")");
-            System.out.println("Gegnerische offene Mühlen: " + myEnemysOpenMorrises + " (" + myEnemysOpenMorrisesTotal + ")");
-            System.out.println("Gegnerische geschlossene Mühlen: " + myEnemysClosedMorrises + " (" + myEnemysClosedMorrisesTotal + ")");
-            System.out.println("Eigene Zugmöglichkeiten: " + myPossibleMoves + " (" + myPossibleMovesTotal + ")");
-            System.out.println("Score: " + score);
-        }
-
-        return score;
-
-    }
-
-    static public int getPutScore(BoardPutMoveKillScoreSet set, ScorePoints scorePoints, int playerIndex, boolean printScore){
+    static public int getScore(BoardPutMoveKillScoreSet set, ScorePoints scorePoints, int playerIndex, boolean printScore){
 
 
         Board board = set.getBoard();
