@@ -22,7 +22,11 @@ public class ComputerPlayer extends Player {
 
         ScorePoints putScorePoints = new ScorePoints(100, 70,20, 20, 30,35, 2, -500, -30, -20, -100, -50);
 
-        recursivePut(gameTree.getRoot(), putScorePoints, playerIndex, playerIndex, 3);
+        recursivePutBfs(gameTree.getRoot(), putScorePoints, playerIndex, playerIndex, 4);
+
+
+
+        //recursivePutDfs(gameTree.getRoot(), putScorePoints, playerIndex, playerIndex, 3);
 
 
         /*for (Position position : Advisor.getAllFreeFields(board)) {
@@ -48,7 +52,38 @@ public class ComputerPlayer extends Player {
         return gameTree.getBestPut();
     }
 
-    private void recursivePut(BoardPutMoveKillScoreSet set, ScorePoints scorePoints, int scorePlayerIndex, int currentPlayerIndex, int levelLimit){
+    private void recursivePutBfs(BoardPutMoveKillScoreSet set, ScorePoints scorePoints, int scorePlayerIndex, int currentPlayerIndex, int levelLimit){
+
+        if (set.getLevel()==levelLimit){
+            return;
+        }
+
+        int tempCurrentPlayerIndex;
+
+        if (set.getLevel()%2 == 0){
+            tempCurrentPlayerIndex = scorePlayerIndex;
+        }
+        else {
+            tempCurrentPlayerIndex = 1 - scorePlayerIndex;
+        }
+
+        for (Position freeField : Advisor.getAllFreeFields(set.getBoard())){
+            pretendPut(set.getBoard(), freeField, scorePoints, set, scorePlayerIndex, tempCurrentPlayerIndex, set.getLevel()+1);
+        }
+
+        if (set.getLevel()%2 == 0){
+            gameTree.keepOnlyBestChildren(set, 3);}
+        else {
+            gameTree.keepOnlyWorstChildren(set, 1);
+        }
+
+
+        for (BoardPutMoveKillScoreSet child : set.getChildren()){
+            recursivePutBfs(child, scorePoints, scorePlayerIndex, tempCurrentPlayerIndex, levelLimit);
+        }
+    }
+
+    private void recursivePutDfs(BoardPutMoveKillScoreSet set, ScorePoints scorePoints, int scorePlayerIndex, int currentPlayerIndex, int levelLimit){
         if (set.getLevel() == levelLimit){
             return;
         }
@@ -65,7 +100,7 @@ public class ComputerPlayer extends Player {
             pretendPut(set.getBoard(), freeField, scorePoints, set, scorePlayerIndex, currentPlayerIndex, set.getLevel()+1);}
 
         for (BoardPutMoveKillScoreSet child : set.getChildren()){
-            recursivePut(child, scorePoints, scorePlayerIndex, currentPlayerIndex, levelLimit);
+            recursivePutDfs(child, scorePoints, scorePlayerIndex, currentPlayerIndex, levelLimit);
         }
 
 
@@ -95,7 +130,7 @@ public class ComputerPlayer extends Player {
 
                 boardPutMoveKillScoreSet2.setBoard(clonedBoard2);
                 boardPutMoveKillScoreSet2.setKill(killPosition);
-                boardPutMoveKillScoreSet2.setScore(boardPutMoveKillScoreSet1.getScore() + Advisor.getKillScore(clonedBoard2, killPosition, scorePoints, scorePlayerIndex, true));
+                boardPutMoveKillScoreSet2.setScore(boardPutMoveKillScoreSet1.getScore() + Advisor.getKillScore(clonedBoard2, killPosition, scorePoints, scorePlayerIndex, false));
                 gameTree.addSet(parent, boardPutMoveKillScoreSet2);
             }
         }
