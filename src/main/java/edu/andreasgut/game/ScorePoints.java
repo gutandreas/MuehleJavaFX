@@ -20,6 +20,10 @@ public class ScorePoints {
         this.enemyPossibleMovesPoints = enemyPossibleMovesPoints;
     }
 
+    public int getOwnNumberOfStonesPoints() {
+        return ownNumberOfStonesPoints;
+    }
+
     public int getOwnKillPoints() {
         return ownNumberOfStonesPoints;
     }

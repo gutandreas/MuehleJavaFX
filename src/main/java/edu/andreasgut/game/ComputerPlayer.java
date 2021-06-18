@@ -37,18 +37,17 @@ public class ComputerPlayer extends Player {
         }
 
 
-        System.out.println();
-        System.out.println("Gewinnerpfad:");
+       */
+
+        System.out.println(gameTree);
+
         Stack<BoardPutMoveKillScoreSet> winningPath = gameTree.getPath(gameTree.getLeafWithBestScore());
+        System.out.println("Gewinnerpfad:");
         while (!winningPath.isEmpty()){
             System.out.println(winningPath.pop());
         }
 
-
-        System.out.println("Gesetzter Stein: " + gameTree.getBestPut());*/
-
-        System.out.println(gameTree);
-
+        System.out.println("Gesetzter Stein: " + gameTree.getBestPut());
         return gameTree.getBestPut();
     }
 

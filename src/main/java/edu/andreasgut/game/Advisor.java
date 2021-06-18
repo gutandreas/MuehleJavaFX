@@ -280,6 +280,33 @@ public class Advisor {
         }
     }
 
+    static public int numberOfMyTwoStonesTogetherWithFreeFieldBeside(Board board, int ownPlayerIndex){
+        int counter = 0;
+
+        for (int ring = 0; ring < 3; ring++) {
+            for (int field = 0; field < 8; field++) {
+                if (board.isThisMyStone(new Position(ring, field), ownPlayerIndex)
+                        && positionBuildsTwoStonesTogetherWithFreeFieldBeside(board, new Position(ring, field), ownPlayerIndex)){
+                    counter++;
+                }
+            }}
+        return counter/2; // jedes 2er-Pack wird doppelt gezählt
+    }
+
+    static public int numberOfMyTwoStonesWithGap(Board board, int ownPlayerIndex){
+        int enemyIndex = 1-ownPlayerIndex;
+        int counter = 0;
+
+        for (int ring = 0; ring < 3; ring++) {
+            for (int field = 0; field < 8; field++) {
+                if (board.isThisMyStone(new Position(ring, field), ownPlayerIndex)
+                        && positionBuildsTwoStonesWithGap(board, new Position(ring, field), ownPlayerIndex)){
+                    counter++;
+                }
+            }}
+        return counter/2; // jedes 2er-Pack wird doppelt gezählt
+    }
+
     static public int numberOfMyEnemysTwoStonesTogetherWithFreeFieldBeside(Board board, int ownPlayerIndex){
         int enemyIndex = 1-ownPlayerIndex;
         int counter = 0;
@@ -559,43 +586,40 @@ public class Advisor {
 
     static public int getPutScore(Board board, Position put, ScorePoints scorePoints, int playerIndex, boolean printScore){
 
-        int myOpenMorrises = getMyOpenMorrisList(board, playerIndex).size();
-        int myClosedMorrises = getMyClosedMorrisList(board, playerIndex).size();
-
-        boolean myNewClosedMorris = board.checkMorris(put);
-        boolean myNewOpenMorris = Advisor.isThisStonePartOfMyOpenMorris(board, put, playerIndex);
-        boolean myNewTwoStonesTogether = Advisor.positionBuildsTwoStonesTogetherWithFreeFieldBeside(board, put, playerIndex);
-        boolean myNewTwoStonesWithGap = Advisor.positionBuildsTwoStonesWithGap(board, put, playerIndex);
-
+        int myOpenMorrisesPoints = getMyOpenMorrisList(board, playerIndex).size() * scorePoints.getOwnOpenMorrisPoints();
+        int myClosedMorrisesPoints = getMyClosedMorrisList(board, playerIndex).size() * scorePoints.getOwnClosedMorrisPoints();
+        int myNumberOfStonesPoints = countMyStones(board, playerIndex) * scorePoints.getOwnNumberOfStonesPoints();
+        int myNumberOfTwoStonesTogetherPoints = numberOfMyTwoStonesWithGap(board, playerIndex) * scorePoints.getOwnTwoStonesTogetherPoints();
+        int myNumberOfTwoStonesWithGapPoints = numberOfMyTwoStonesWithGap(board, playerIndex * scorePoints.getOwnTwoStonesWithGapPoints());
         int myPossibleMoves = getAllPossibleMoves(board, playerIndex).size();
 
-        int myEnemysNumberOfTwoStonesTogether = numberOfMyEnemysTwoStonesTogetherWithFreeFieldBeside(board, playerIndex);
-        int myEnemysNumberOfTwoStonesWithGap = numberOfMyEnemysTwoStonesWithGap(board, playerIndex);
+        int myEnemysOpenMorrisesPoints = getMyEnemysOpenMorrisList(board, playerIndex).size() * scorePoints.getEnemyOpenMorrisPoints();
+        int myEnemysClosedMorrisesPoints = getMyEnemysClosedMorrisList(board, playerIndex).size() * scorePoints.getEnemyClosedMorrisPoints();
+        int myEnemysNumberOfStonesPoints = countMyEnemysStones(board, playerIndex);
+        int myEnemysNumberOfTwoStonesTogetherPoints = numberOfMyEnemysTwoStonesTogetherWithFreeFieldBeside(board, playerIndex) * scorePoints.getEnemyTwoStonesTogetherPoints();
+        int myEnemysNumberOfTwoStonesWithGapPoints = numberOfMyEnemysTwoStonesWithGap(board, playerIndex) * scorePoints.getEnemyTwoStonesWithGapPoints();
 
 
 
 
 
-        int myOpenMorrisesTotal = myOpenMorrises * scorePoints.getOwnOpenMorrisPoints();
-        int myClosedMorrisesTotal = myClosedMorrises * scorePoints.getOwnClosedMorrisPoints();
-        int myPossibleMovesTotal = myPossibleMoves * scorePoints.getOwnPossibleMovesPoints();
-        int myNewClosedMorrisTotal = 0;
-        int myNewOpenMorrisTotal = 0;
-        int myNewTwoStonesTogetherTotal = 0;
-        int myNewTwoStonesWithGapTotal = 0;
 
-        int myEnemysNumberOfTwoStonesTogetherTotal = myEnemysNumberOfTwoStonesTogether * scorePoints.getEnemyTwoStonesTogetherPoints();
-        int myEnemysNumberOfTwoStonesWithGapTotal = myEnemysNumberOfTwoStonesWithGap * scorePoints.getEnemyTwoStonesWithGapPoints();
+        int score = myOpenMorrisesPoints
+                + myClosedMorrisesPoints
+                + myNumberOfStonesPoints
+                + myNumberOfTwoStonesTogetherPoints
+                + myNumberOfTwoStonesWithGapPoints
 
-        int score = myOpenMorrisesTotal
-                + myClosedMorrisesTotal
-                + myPossibleMovesTotal
-                + myEnemysNumberOfTwoStonesTogetherTotal
-                + myEnemysNumberOfTwoStonesWithGapTotal;
+                + myEnemysOpenMorrisesPoints
+                + myEnemysClosedMorrisesPoints
+                + myEnemysNumberOfStonesPoints
+                + myEnemysNumberOfTwoStonesTogetherPoints
+                + myEnemysNumberOfTwoStonesWithGapPoints;
 
 
 
-        if (myNewOpenMorris){
+
+       /* if (myNewOpenMorris){
             myNewOpenMorrisTotal = scorePoints.getOwnNewOpenMorrisPoints();
             score += myNewOpenMorrisTotal;
         }
@@ -621,7 +645,7 @@ public class Advisor {
             System.out.println("Anzahl zweier fremder Steine mit freier Lücke dazwischen: " + myEnemysNumberOfTwoStonesWithGap + " (" + myEnemysNumberOfTwoStonesWithGapTotal + ")");
             System.out.println("Eigene Zugmöglichkeiten: " + myPossibleMoves + " (" + myPossibleMovesTotal + ")");
             System.out.println("Score: " + score);
-        }
+        }*/
 
         return score;
 
