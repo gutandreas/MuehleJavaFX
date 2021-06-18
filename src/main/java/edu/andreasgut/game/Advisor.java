@@ -308,6 +308,7 @@ public class Advisor {
         return counter/2; // jedes 2er-Pack wird doppelt gezählt
     }
 
+
     static public boolean positionBuildsTwoStonesTogetherWithFreeFieldBeside(Board board, Position position, int playerIndex){
         if (position.getField()%2==1){ // Ungerade Felder
 

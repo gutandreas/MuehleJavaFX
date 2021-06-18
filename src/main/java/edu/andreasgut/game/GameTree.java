@@ -180,6 +180,9 @@ public class GameTree {
     @Override
     public String toString(){
         String string = "Gametree: \n \n";
+
+        //return toStringRecursive(root, string);
+
         for (BoardPutMoveKillScoreSet currentSet : root.getChildren()) {
             string += "Level: " + currentSet.getLevel() + "\n";
             string += currentSet.getBoard();
@@ -192,20 +195,22 @@ public class GameTree {
                     string += "Level: " + currentSet3.getLevel() + "\n";
                     string += currentSet3.getBoard();
                     string += "Resultierender Score: " + currentSet3.getScore() + "\n \n";
-            }}}
+                    for (BoardPutMoveKillScoreSet currentSet4 : currentSet3.getChildren()){
+                        string += "Level: " + currentSet4.getLevel() + "\n";
+                        string += currentSet4.getBoard();
+                        string += "Resultierender Score: " + currentSet4.getScore() + "\n \n";
+
+            }}}}
         return string;
     }
 
     private String toStringRecursive(BoardPutMoveKillScoreSet set, String string){
 
-        if (set.getChildren().isEmpty()) {
-            return string;
-        }
-
-        for (BoardPutMoveKillScoreSet currentSet : root.getChildren()) {
+        for (BoardPutMoveKillScoreSet currentSet : set.getChildren()) {
+            string += "Level: " + currentSet.getLevel() + "\n";
             string += currentSet.getBoard();
             string += "Resultierender Score: " + currentSet.getScore() + "\n \n";
-            //toStringRecursive(currentSet, string);
+            toStringRecursive(currentSet, string);
         }
 
         return string;
