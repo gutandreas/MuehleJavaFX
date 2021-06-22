@@ -90,19 +90,25 @@ public class BoardPutMoveKillScoreSet {
     @Override
     public String toString() {
 
+
         if (put != null){
-            return  "Level " + level + ", Put an " + put + ", Score: " + score;
+            if (kill == null){
+                return  "Level " + level + ", Put an " + put + ", Score: " + score + "\n" + board;
+                }
+            else {
+                return  "Level " + level + ", Put an " + put + " mit Kill an " + kill + ", Score: " + score + "\n" + board;
+            }
         }
 
         if (move != null){
-            return  "Level " + level + ", " + move +  ", Score: " + score;
+            if (kill == null) {
+                return "Level " + level + ", " + move + ", Score: " + score + "\n" + board;
+            }
+            else {
+                return  "Level " + level + ", Move an " + move + " mit Kill an " + kill + ", Score: " + score + "\n" + board;
+            }
         }
 
-        if (getParent().getMove() != null){
-        return  "Level " + level +", Kill " + "nach " + getParent().getMove() + " an " + kill + " Score: " + score;}
-
-        if (getParent().getPut() != null){
-            return  "Level " + level +", Kill " + "nach Put an " + getParent().getPut() + " an " + kill + " Score: " + score;}
 
         return null;}
 }

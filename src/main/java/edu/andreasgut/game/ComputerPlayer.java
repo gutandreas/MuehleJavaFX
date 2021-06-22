@@ -22,7 +22,7 @@ public class ComputerPlayer extends Player {
 
         ScorePoints putScorePoints = new ScorePoints(100, 5000,20, 20, 30,3, 2, -5000, -30, -200, -100, -2);
 
-        recursivePutBfs(gameTree.getRoot(), putScorePoints, playerIndex, playerIndex, 5);
+        recursivePutBfs(gameTree.getRoot(), putScorePoints, playerIndex, playerIndex, 10);
 
         System.out.println(gameTree);
 
@@ -110,7 +110,7 @@ public class ComputerPlayer extends Player {
 
         gameTree.initializeRoot(board);
 
-        ScorePoints moveScorePoints = new ScorePoints(10000, 3000,2000, 20, 30,3, -20000, -5000, -30, -200, -100, -2);
+        ScorePoints moveScorePoints = new ScorePoints(10000, 3000,4000, 200, 30,3, -50000, -2000, -30, -200, -500, -2);
 
         recursiveMoveBfs(gameTree.getRoot(), moveScorePoints, playerIndex, playerIndex, 5);
 
