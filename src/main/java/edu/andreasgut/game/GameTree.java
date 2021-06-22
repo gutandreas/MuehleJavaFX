@@ -2,8 +2,17 @@ package edu.andreasgut.game;
 
 import java.util.*;
 
-public class GameTree {
 
+public class GameTree {
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLACK = "\u001B[30m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_WHITE = "\u001B[37m";
     private BoardPutMoveKillScoreSet root;
 
 
@@ -181,21 +190,21 @@ public class GameTree {
         //return toStringRecursive(root, string);
 
         for (BoardPutMoveKillScoreSet currentSet : root.getChildren()) {
-            string += "Level: " + currentSet.getLevel() + "\n";
+            string += ANSI_GREEN + "Level: " + currentSet.getLevel() + "\n" ;
             string += currentSet.getBoard();
-            string += currentSet.getScoreDetails() + "\n \n";
+            string += currentSet.getScoreDetails() + "\n \n" + ANSI_RESET;
             for (BoardPutMoveKillScoreSet currentSet2 : currentSet.getChildren()){
-                string += "Level: " + currentSet2.getLevel() + "\n";
+                string += ANSI_YELLOW + "Level: " + currentSet2.getLevel() + "\n" ;
                 string += currentSet2.getBoard();
-                string += currentSet2.getScoreDetails() + "\n \n";
+                string += currentSet2.getScoreDetails() + "\n \n" + ANSI_RESET;
                 for (BoardPutMoveKillScoreSet currentSet3 : currentSet2.getChildren()){
-                    string += "Level: " + currentSet3.getLevel() + "\n";
+                    string += ANSI_BLUE + "Level: " + currentSet3.getLevel() + "\n" ;
                     string += currentSet3.getBoard();
-                    string += currentSet3.getScoreDetails() + "\n \n";
+                    string += currentSet3.getScoreDetails() + "\n \n" + ANSI_RESET;
                     for (BoardPutMoveKillScoreSet currentSet4 : currentSet3.getChildren()){
-                        string += "Level: " + currentSet4.getLevel() + "\n";
+                        string += ANSI_PURPLE + "Level: " + currentSet4.getLevel() + "\n";
                         string += currentSet4.getBoard();
-                        string += currentSet4.getScoreDetails() + "\n \n";
+                        string += currentSet4.getScoreDetails() + "\n \n"  + ANSI_RESET;
 
             }}}}
         return string;
