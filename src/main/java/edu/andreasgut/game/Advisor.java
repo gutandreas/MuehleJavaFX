@@ -551,11 +551,13 @@ public class Advisor {
         set.setScoreDetails(
         "Eigene offene Mühlen: " + myOpenMorrises + " (" + myOpenMorrisesPoints + ")" + " \n" +
         "Eigene geschlossene Mühlen: " + myClosedMorrises + " (" + myClosedMorrisesPoints + ")" + " \n" +
+        "Anzahl eigene Steine: " + myNumberOfStones + " (" + myNumberOfStonesPoints + ")" + " \n" +
         "Neue zwei eigene Steine nebeneinander mit freiem Feld daneben: " + myNumberOfTwoStonesTogether + " (" + myNumberOfTwoStonesTogetherPoints + ")" + " \n" +
         "Neue zwei eigene Steine mit freier Lücke dazwischen: " + myNumberOfTwoStonesWithGap + " (" + myNumberOfTwoStonesWithGapPoints + ")" + " \n" +
         "Eigene Zugmöglichkeiten: " + myPossibleMoves + " (" + myPossibleMovesPoints + ")" + " \n" +
         "Fremde offene Mühlen: " + myEnemysOpenMorrises + " (" + myEnemysOpenMorrisesPoints + ")" + " \n" +
         "Fremde geschlossene Mühlen: " + myEnemysClosedMorrises + " (" + myEnemysClosedMorrisesPoints + ")" + " \n" +
+        "Anzahl fremde Steine: " + myEnemysNumberOfStones + " (" + myEnemysNumberOfStonesPoints + ")" + " \n" +
         "Anzahl zweier fremder Steine nebeneinander mit freiem Feld daneben " + myEnemysNumberOfTwoStonesTogether + " (" + myEnemysNumberOfTwoStonesTogetherPoints + ")" + " \n" +
         "Anzahl zweier fremder Steine mit freier Lücke dazwischen: " + myEnemysNumberOfTwoStonesWithGap + " (" + myEnemysNumberOfTwoStonesWithGapPoints + ")" + " \n" +
         "Score: " + score);

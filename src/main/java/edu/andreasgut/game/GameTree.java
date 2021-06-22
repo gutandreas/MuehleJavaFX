@@ -90,6 +90,9 @@ public class GameTree {
                 if (o1.getScore() > o2.getScore()){
                     return 1;
                 }
+                if (o1.getScore() == o2.getScore()){
+                    return 0;
+                }
                 else return -1;
             }
         });
@@ -115,6 +118,9 @@ public class GameTree {
             public int compare(BoardPutMoveKillScoreSet o1, BoardPutMoveKillScoreSet o2) {
                 if (o1.getScore() > o2.getScore()){
                     return -1;
+                }
+                if (o1.getScore() == o2.getScore()){
+                    return 0;
                 }
                 else return 1;
             }

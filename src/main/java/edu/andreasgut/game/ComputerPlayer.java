@@ -20,9 +20,9 @@ public class ComputerPlayer extends Player {
 
         gameTree.initializeRoot(board);
 
-        ScorePoints putScorePoints = new ScorePoints(100, 5000,20, 20, 30,3, 2, -5000, -30, -200, -100, -2);
+        ScorePoints putScorePoints = new ScorePoints(2000, 5000,20, 20, 30,3, -2000, -5000, -30, -200, -100, -2);
 
-        recursivePutBfs(gameTree.getRoot(), putScorePoints, playerIndex, playerIndex, 10);
+        recursivePutBfs(gameTree.getRoot(), putScorePoints, playerIndex, playerIndex, 3);
 
         System.out.println(gameTree);
 
