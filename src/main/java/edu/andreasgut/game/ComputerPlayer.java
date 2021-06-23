@@ -20,7 +20,7 @@ public class ComputerPlayer extends Player {
 
         gameTree.initializeRoot(board);
 
-        ScorePoints putScorePoints = new ScorePoints(2000, 1000,20, 200, 300,3, -2000, -1000, -30, -200, -100, -2);
+        ScorePoints putScorePoints = new ScorePoints(4000, 1000,20, 200, 300,3, -2000, -1000, -30, -200, -100, -2);
 
         recursivePutBfs(gameTree.getRoot(), putScorePoints, playerIndex, playerIndex, 3);
 
@@ -142,7 +142,7 @@ public class ComputerPlayer extends Player {
             tempCurrentPlayerIndex = 1 - scorePlayerIndex;
         }
 
-        for (Move move : Advisor.getAllPossibleMoves(set.getBoard(), currentPlayerIndex)){
+        for (Move move : Advisor.getAllPossibleMoves(set.getBoard(), tempCurrentPlayerIndex)){
             pretendMove(set.getBoard(), move, scorePoints, set, scorePlayerIndex, tempCurrentPlayerIndex, set.getLevel()+1);
         }
 
@@ -191,46 +191,6 @@ public class ComputerPlayer extends Player {
         else {
             gameTree.addSet(parent, boardPutMoveKillScoreSet1);
         }
-
-        /*LinkedList<BoardPutMoveKillScoreSet> list = new LinkedList<>();
-        BoardPutMoveKillScoreSet boardPutMoveKillScoreSet1 = new BoardPutMoveKillScoreSet();
-        boardPutMoveKillScoreSet1.setMove(move);
-        boardPutMoveKillScoreSet1.setLevel(level);
-
-        Board clonedBoard1 = (Board) board.clone();
-
-
-        *//*System.out.println();
-        System.out.println(boardPutMoveKillScoreSet1.getMove());
-        System.out.println(boardPutMoveKillScoreSet1.getBoard());*//*
-
-
-       if (clonedBoard1.checkMorris(move.getTo())){
-           for (Position killPosition : Advisor.getAllPossibleKills(clonedBoard1, playerIndex)){
-           BoardPutMoveKillScoreSet boardPutMoveKillScoreSet2 = new BoardPutMoveKillScoreSet();
-           boardPutMoveKillScoreSet2.setKill(killPosition);
-           boardPutMoveKillScoreSet2.setLevel(level);
-
-           Board clonedBoard2 = (Board) clonedBoard1.clone();
-           clonedBoard2.clearStone(killPosition);
-           boardPutMoveKillScoreSet2.setBoard(clonedBoard2);
-
-           *//*System.out.println();
-           System.out.println(boardPutMoveKillScoreSet2.getMove());
-           System.out.println(boardPutMoveKillScoreSet2.getBoard());*//*
-           boardPutMoveKillScoreSet2.setScore(Advisor.getMoveScore(clonedBoard2, move, scorePoints, playerIndex, false));
-           gameTree.addSet(parent, boardPutMoveKillScoreSet2);
-           list.add(boardPutMoveKillScoreSet2);}
-       }
-       else {
-           list.add(boardPutMoveKillScoreSet1);
-           boardPutMoveKillScoreSet1.setScore(Advisor.getMoveScore(clonedBoard1, move, scorePoints, playerIndex, false));
-           clonedBoard1.move(move, playerIndex);
-           boardPutMoveKillScoreSet1.setBoard(clonedBoard1);
-           gameTree.addSet(parent, boardPutMoveKillScoreSet1);
-       }*/
-
-        //return list;
     }
 
 
