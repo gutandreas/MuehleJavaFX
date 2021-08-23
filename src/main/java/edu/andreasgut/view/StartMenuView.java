@@ -2,7 +2,6 @@ package edu.andreasgut.view;
 
 import edu.andreasgut.game.Game;
 import edu.andreasgut.game.HumanPlayer;
-import edu.andreasgut.game.InvalidPutException;
 import edu.andreasgut.sound.MUSIC;
 import edu.andreasgut.view.fxElements.BeginnerSwitchButton;
 import edu.andreasgut.view.fxElements.SelectColorButton;
@@ -12,19 +11,25 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+
 public class StartMenuView extends VBox {
 
     private final int STARTDIMENSION = 600;
     ViewManager viewManager;
-    VBox vBox;
-    HBox hBoxRadioButtons, player1HBox, player2HBox, beginnerHBox;
+    VBox offlineVBox, onlineVBox;
+    HBox hBoxRadioButtons, player1HBox, player2HBox, beginnerHBox, startGameHBox;
     ToggleGroup radioButtonGroup;
     RadioButton onePlayerRadioButton, twoPlayersRadioButton;
-    TextField namePlayer1Textfield, namePlayer2Textfield;
-    Label informationLabel, titleLabel, stonesColorLabel1, stonesColorLabel2, beginnerLabel1, beginnerLabel2;
-    Button startButton;
+    TextField namePlayer1Textfield, namePlayer2Textfield, gameCodeTextfield;
+    Label informationLabel, offlineTitleLabel, onlineTitleLabel, stonesColorLabel1, stonesColorLabel2, beginnerLabel1, beginnerLabel2, startGameLabel, joinGameLabel;
+    Button startButton, computerOnlineButton;
     SelectColorButton stonesBlackButton1, stonesWhiteButton1, stonesBlackButton2, stonesWhiteButton2;
-    BeginnerSwitchButton beginnerSwitchButton;
+    BeginnerSwitchButton beginnerSwitchButton, startGameSwitchButton;
     ImageView player1StonesImageView, player2StonesImageView;
     STONECOLOR player1Color, player2Color;
 
@@ -33,29 +38,45 @@ public class StartMenuView extends VBox {
     public StartMenuView(ViewManager viewManager) {
         this.viewManager = viewManager;
         this.setPrefWidth(STARTDIMENSION);
-        vBox = new VBox();
+        offlineVBox = new VBox();
+        onlineVBox = new VBox();
         startButton = new Button("Start");
+        computerOnlineButton = new Button("Onlinespiel Computer");
+        gameCodeTextfield = new TextField();
+        gameCodeTextfield.setPromptText("Gamecode");
 
-        setupTitleAndWarning();
+
+        setupOfflineTitleAndWarning();
         setupRadioButtons();
         setupBeginnerSwitch();
         setupPlayerInformations();
+        setupOnlineTitleAndWarning();
+        setupStartGameSwitchButton();
 
-        vBox.getChildren().addAll(titleLabel, informationLabel, hBoxRadioButtons, player1HBox, beginnerHBox, startButton);
-        vBox.setSpacing(20);
-        this.getChildren().addAll(vBox);
+        offlineVBox.getChildren().addAll(offlineTitleLabel, informationLabel, hBoxRadioButtons, player1HBox, beginnerHBox, startButton);
+        offlineVBox.setSpacing(20);
+        offlineVBox.setStyle("-fx-padding: 50 0 0 0");
+        onlineVBox.getChildren().addAll(onlineTitleLabel, gameCodeTextfield, startGameHBox, computerOnlineButton);
+        onlineVBox.setSpacing(20);
+        this.getChildren().addAll(onlineVBox, offlineVBox);
         this.setAlignment(Pos.CENTER);
 
         setupRadioButtonAction();
         setupColorButtonAction();
         setupStartButtonAction();
+        setupComputerOnlineButtonAction();
     }
 
-    private void setupTitleAndWarning(){
-        titleLabel = new Label("Neues Spiel starten");
-        titleLabel.getStyleClass().add("labelTitle");
+    private void setupOfflineTitleAndWarning(){
+        offlineTitleLabel = new Label( "Offline spielen");
+        offlineTitleLabel.getStyleClass().add("labelTitle");
         informationLabel = new Label();
         informationLabel.getStyleClass().add("labelWarning");
+    }
+
+    private void setupOnlineTitleAndWarning(){
+        onlineTitleLabel = new Label("Online spielen");
+        onlineTitleLabel.getStyleClass().add("labelTitle");
     }
 
     private void setupRadioButtons(){
@@ -80,6 +101,17 @@ public class StartMenuView extends VBox {
         beginnerHBox.setSpacing(10);
         beginnerHBox.setPrefHeight(70);
 
+    }
+
+    private void setupStartGameSwitchButton(){
+        startGameHBox = new HBox();
+        startGameSwitchButton = new BeginnerSwitchButton(viewManager);
+        startGameLabel = new Label("Spiel eröffnen");
+        joinGameLabel = new Label("Einem Spiel beitreten");
+        startGameHBox.getChildren().addAll(startGameLabel, startGameSwitchButton, joinGameLabel);
+        startGameHBox.setAlignment(Pos.CENTER_LEFT);
+        startGameHBox.setSpacing(10);
+        startGameHBox.setPrefHeight(70);
     }
 
     private void setupPlayerInformations(){
@@ -184,13 +216,13 @@ public class StartMenuView extends VBox {
 
     private void setupRadioButtonAction(){
         onePlayerRadioButton.setOnAction(action -> {
-            vBox.getChildren().add(4, beginnerHBox);
-            vBox.getChildren().remove(player2HBox);
+            offlineVBox.getChildren().add(4, beginnerHBox);
+            offlineVBox.getChildren().remove(player2HBox);
 
         });
         twoPlayersRadioButton.setOnAction(action -> {
-            vBox.getChildren().remove(beginnerHBox);
-            vBox.getChildren().add(4, player2HBox);
+            offlineVBox.getChildren().remove(beginnerHBox);
+            offlineVBox.getChildren().add(4, player2HBox);
 
         });
     }
@@ -236,5 +268,28 @@ public class StartMenuView extends VBox {
 
             }
             else {informationLabel.setText("Es fehlen Eingaben, um das Spiel zu starten");}});
+    }
+
+    private void setupComputerOnlineButtonAction(){
+        computerOnlineButton.setOnAction( action -> {
+
+            HttpClient client = HttpClient.newBuilder().build();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8080"))
+                    .POST(HttpRequest.BodyPublishers.ofString("test"))
+                    .build();
+
+            HttpResponse<?> response = null;
+            try {
+                response = client.send(request, HttpResponse.BodyHandlers.discarding());
+            } catch (IOException e) {
+                System.out.println("Test");
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println(response.statusCode());
+
+        });
     }
 }
