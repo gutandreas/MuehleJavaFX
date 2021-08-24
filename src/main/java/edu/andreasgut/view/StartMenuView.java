@@ -27,7 +27,7 @@ public class StartMenuView extends VBox {
     ToggleGroup radioButtonGroup;
     RadioButton onePlayerRadioButton, twoPlayersRadioButton;
     TextField namePlayer1Textfield, namePlayer2Textfield, computerBattleTextfield, gameCodeTextfield;
-    Label informationLabel, offlineTitleLabel, onlineTitleLabel, stonesColorLabel1, stonesColorLabel2, beginnerLabel1, beginnerLabel2, stoneColorComputerLabel, startGameLabel, joinGameLabel;
+    Label offlineInformationLabel, offlineTitleLabel, onlineInformationLabel, onlineTitleLabel, stonesColorLabel1, stonesColorLabel2, beginnerLabel1, beginnerLabel2, stoneColorComputerLabel, startGameLabel, joinGameLabel;
     Button startButton, computerOnlineButton;
     SelectColorButton stonesBlackButton1, stonesWhiteButton1, stonesBlackButton2, stonesWhiteButton2, computerBlackButton, computerWhiteButton;
     BeginnerSwitchButton beginnerSwitchButton, startGameSwitchButton;
@@ -51,14 +51,14 @@ public class StartMenuView extends VBox {
         setupRadioButtons();
         setupBeginnerSwitch();
         setupPlayerInformations();
-        setupOnlineTitle();
+        setupOnlineTitleAndWarning();
         setupStartGameSwitchButton();
         setupComputerBattleInformation();
 
-        offlineVBox.getChildren().addAll(offlineTitleLabel, hBoxRadioButtons, player1HBox, beginnerHBox, startButton, informationLabel);
+        offlineVBox.getChildren().addAll(offlineTitleLabel, hBoxRadioButtons, player1HBox, beginnerHBox, startButton, offlineInformationLabel);
         offlineVBox.setSpacing(20);
-        offlineVBox.setStyle("-fx-padding: 50 0 0 0");
-        onlineVBox.getChildren().addAll(onlineTitleLabel, gameCodeTextfield, startGameHBox, computerBattleHBox, computerOnlineButton);
+        offlineVBox.setStyle("-fx-padding: 5 0 0 0");
+        onlineVBox.getChildren().addAll(onlineTitleLabel, gameCodeTextfield, startGameHBox, computerBattleHBox, computerOnlineButton, onlineInformationLabel);
         onlineVBox.setSpacing(20);
         this.getChildren().addAll(onlineVBox, offlineVBox);
         this.setAlignment(Pos.CENTER);
@@ -73,13 +73,15 @@ public class StartMenuView extends VBox {
     private void setupOfflineTitleAndWarning(){
         offlineTitleLabel = new Label( "Offline spielen");
         offlineTitleLabel.getStyleClass().add("labelTitle");
-        informationLabel = new Label();
-        informationLabel.getStyleClass().add("labelWarning");
+        offlineInformationLabel = new Label();
+        offlineInformationLabel.getStyleClass().add("labelWarning");
     }
 
-    private void setupOnlineTitle(){
+    private void setupOnlineTitleAndWarning(){
         onlineTitleLabel = new Label("Computer Onlinebattle spielen");
         onlineTitleLabel.getStyleClass().add("labelTitle");
+        onlineInformationLabel = new Label();
+        onlineInformationLabel.getStyleClass().add("labelWarning");
     }
 
     private void setupRadioButtons(){
@@ -306,7 +308,8 @@ public class StartMenuView extends VBox {
 
 
             }
-            else {informationLabel.setText("Es fehlen Eingaben, um das Spiel zu starten");}});
+            else {
+                offlineInformationLabel.setText("Es fehlen Eingaben, um das Spiel zu starten");}});
     }
 
     private void setupComputerOnlineButtonAction(){
@@ -317,9 +320,31 @@ public class StartMenuView extends VBox {
             jsonObject.put("gameCode", gameCodeTextfield.getText());
 
 
+            STONECOLOR computerColor;
+            if (computerBlackButton.isSelected()){
+                computerColor = STONECOLOR.BLACK;
+            }
+            else {
+                computerColor = STONECOLOR.WHITE;
+            }
+
+            jsonObject.put("player1Color", computerColor.toString());
+
+            String urlAsString;
+            if (startGameSwitchButton.getState()){
+                urlAsString = "http://localhost:8080/index/controller/menschVsMensch/join";
+                jsonObject.put("player2Name", computerBattleTextfield.getText());
+
+            }
+            else {
+                urlAsString = "http://localhost:8080/index/controller/menschVsMensch/start";
+                jsonObject.put("player1Name", computerBattleTextfield.getText());
+            }
+
+
 
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:8080/index/controller/menschVsMensch/start"))
+                    .uri(URI.create(urlAsString))
                     .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
                     .build();
 
@@ -333,6 +358,13 @@ public class StartMenuView extends VBox {
                 e.printStackTrace();
             }
             System.out.println(response.statusCode());
+
+            if (response.statusCode() == 200){
+                //Spiel starten
+            }
+            else {
+                onlineInformationLabel.setText("Der Gamecode existiert bereits. Wählen Sie einen anderen Gamecode.");
+            }
 
         });
     }
