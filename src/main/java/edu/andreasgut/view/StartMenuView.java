@@ -16,19 +16,20 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import org.json.JSONObject;
 
 public class StartMenuView extends VBox {
 
     private final int STARTDIMENSION = 600;
     ViewManager viewManager;
     VBox offlineVBox, onlineVBox;
-    HBox hBoxRadioButtons, player1HBox, player2HBox, beginnerHBox, startGameHBox;
+    HBox hBoxRadioButtons, player1HBox, player2HBox, beginnerHBox, startGameHBox, computerBattleHBox;
     ToggleGroup radioButtonGroup;
     RadioButton onePlayerRadioButton, twoPlayersRadioButton;
-    TextField namePlayer1Textfield, namePlayer2Textfield, gameCodeTextfield;
-    Label informationLabel, offlineTitleLabel, onlineTitleLabel, stonesColorLabel1, stonesColorLabel2, beginnerLabel1, beginnerLabel2, startGameLabel, joinGameLabel;
+    TextField namePlayer1Textfield, namePlayer2Textfield, computerBattleTextfield, gameCodeTextfield;
+    Label informationLabel, offlineTitleLabel, onlineTitleLabel, stonesColorLabel1, stonesColorLabel2, beginnerLabel1, beginnerLabel2, stoneColorComputerLabel, startGameLabel, joinGameLabel;
     Button startButton, computerOnlineButton;
-    SelectColorButton stonesBlackButton1, stonesWhiteButton1, stonesBlackButton2, stonesWhiteButton2;
+    SelectColorButton stonesBlackButton1, stonesWhiteButton1, stonesBlackButton2, stonesWhiteButton2, computerBlackButton, computerWhiteButton;
     BeginnerSwitchButton beginnerSwitchButton, startGameSwitchButton;
     ImageView player1StonesImageView, player2StonesImageView;
     STONECOLOR player1Color, player2Color;
@@ -41,7 +42,7 @@ public class StartMenuView extends VBox {
         offlineVBox = new VBox();
         onlineVBox = new VBox();
         startButton = new Button("Start");
-        computerOnlineButton = new Button("Onlinespiel Computer");
+        computerOnlineButton = new Button("Computerbattle starten");
         gameCodeTextfield = new TextField();
         gameCodeTextfield.setPromptText("Gamecode");
 
@@ -50,13 +51,14 @@ public class StartMenuView extends VBox {
         setupRadioButtons();
         setupBeginnerSwitch();
         setupPlayerInformations();
-        setupOnlineTitleAndWarning();
+        setupOnlineTitle();
         setupStartGameSwitchButton();
+        setupComputerBattleInformation();
 
-        offlineVBox.getChildren().addAll(offlineTitleLabel, informationLabel, hBoxRadioButtons, player1HBox, beginnerHBox, startButton);
+        offlineVBox.getChildren().addAll(offlineTitleLabel, hBoxRadioButtons, player1HBox, beginnerHBox, startButton, informationLabel);
         offlineVBox.setSpacing(20);
         offlineVBox.setStyle("-fx-padding: 50 0 0 0");
-        onlineVBox.getChildren().addAll(onlineTitleLabel, gameCodeTextfield, startGameHBox, computerOnlineButton);
+        onlineVBox.getChildren().addAll(onlineTitleLabel, gameCodeTextfield, startGameHBox, computerBattleHBox, computerOnlineButton);
         onlineVBox.setSpacing(20);
         this.getChildren().addAll(onlineVBox, offlineVBox);
         this.setAlignment(Pos.CENTER);
@@ -65,6 +67,7 @@ public class StartMenuView extends VBox {
         setupColorButtonAction();
         setupStartButtonAction();
         setupComputerOnlineButtonAction();
+        setupComputerBattleColorButtonAction();
     }
 
     private void setupOfflineTitleAndWarning(){
@@ -74,8 +77,8 @@ public class StartMenuView extends VBox {
         informationLabel.getStyleClass().add("labelWarning");
     }
 
-    private void setupOnlineTitleAndWarning(){
-        onlineTitleLabel = new Label("Online spielen");
+    private void setupOnlineTitle(){
+        onlineTitleLabel = new Label("Computer Onlinebattle spielen");
         onlineTitleLabel.getStyleClass().add("labelTitle");
     }
 
@@ -112,6 +115,20 @@ public class StartMenuView extends VBox {
         startGameHBox.setAlignment(Pos.CENTER_LEFT);
         startGameHBox.setSpacing(10);
         startGameHBox.setPrefHeight(70);
+    }
+
+    private void setupComputerBattleInformation(){
+        computerBattleTextfield = new TextField();
+        computerBattleTextfield.setPromptText("Name des Computers");
+        computerBlackButton = new SelectColorButton(null, STONECOLOR.BLACK, true);
+        computerWhiteButton = new SelectColorButton(null, STONECOLOR.WHITE, false);
+        stoneColorComputerLabel = new Label("Steinfarbe: ");
+
+        computerBattleHBox = new HBox();
+        computerBattleHBox.getChildren().addAll(computerBattleTextfield, stoneColorComputerLabel, computerBlackButton, computerWhiteButton);
+        computerBattleHBox.setSpacing(20);
+        computerBattleHBox.setAlignment(Pos.CENTER_LEFT);
+
     }
 
     private void setupPlayerInformations(){
@@ -214,15 +231,37 @@ public class StartMenuView extends VBox {
         });
     }
 
+    private void setupComputerBattleColorButtonAction(){
+        computerBlackButton.setOnAction(click -> {
+            computerBlackButton.setSelected(true);
+            computerBlackButton.getStyleClass().removeAll("selectColorButtonOff");
+            computerBlackButton.getStyleClass().add("selectColorButtonOn");
+            computerWhiteButton.setSelected(false);
+            computerWhiteButton.getStyleClass().removeAll("selectColorButtonOn");
+            computerWhiteButton.getStyleClass().add("selectColorButtonOff");
+        });
+
+        computerWhiteButton.setOnAction(click -> {
+            computerWhiteButton.setSelected(true);
+            computerWhiteButton.getStyleClass().removeAll("selectColorButtonOff");
+            computerWhiteButton.getStyleClass().add("selectColorButtonOn");
+            computerBlackButton.setSelected(false);
+            computerBlackButton.getStyleClass().removeAll("selectColorButtonOn");
+            computerBlackButton.getStyleClass().add("selectColorButtonOff");
+        });
+
+
+    }
+
     private void setupRadioButtonAction(){
         onePlayerRadioButton.setOnAction(action -> {
-            offlineVBox.getChildren().add(4, beginnerHBox);
+            offlineVBox.getChildren().add(3, beginnerHBox);
             offlineVBox.getChildren().remove(player2HBox);
 
         });
         twoPlayersRadioButton.setOnAction(action -> {
             offlineVBox.getChildren().remove(beginnerHBox);
-            offlineVBox.getChildren().add(4, player2HBox);
+            offlineVBox.getChildren().add(3, player2HBox);
 
         });
     }
@@ -274,9 +313,14 @@ public class StartMenuView extends VBox {
         computerOnlineButton.setOnAction( action -> {
 
             HttpClient client = HttpClient.newBuilder().build();
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("gameCode", gameCodeTextfield.getText());
+
+
+
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("http://localhost:8080"))
-                    .POST(HttpRequest.BodyPublishers.ofString("test"))
+                    .uri(URI.create("http://localhost:8080/index/controller/menschVsMensch/start"))
+                    .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
                     .build();
 
             HttpResponse<?> response = null;
