@@ -232,6 +232,10 @@ public class FieldView extends AnchorPane {
         return releasedOnAnotherfield[0];
     }
 
+    public void onlineGraphicPut(Position position){
+
+    }
+
     public void computerGraphicPut(Position position){
         Object loopObject = new Object();
         Timeline timeline = new Timeline(new KeyFrame(

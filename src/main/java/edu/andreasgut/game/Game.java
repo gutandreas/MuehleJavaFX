@@ -161,6 +161,7 @@ public class Game {
                 viewManager.getFieldView().computerGraphicPut(putPosition);
             }
 
+
             viewManager.getScoreView().increaseStonesPut();
         }
         else {

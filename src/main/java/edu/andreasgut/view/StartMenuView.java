@@ -1,7 +1,10 @@
 package edu.andreasgut.view;
 
+import edu.andreasgut.game.ComputerPlayer;
 import edu.andreasgut.game.Game;
 import edu.andreasgut.game.HumanPlayer;
+import edu.andreasgut.game.OnlinePlayer;
+import edu.andreasgut.online.WebsocketClient;
 import edu.andreasgut.sound.MUSIC;
 import edu.andreasgut.view.fxElements.BeginnerSwitchButton;
 import edu.andreasgut.view.fxElements.SelectColorButton;
@@ -13,6 +16,7 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -319,6 +323,15 @@ public class StartMenuView extends VBox {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("gameCode", gameCodeTextfield.getText());
 
+            if (gameCodeTextfield.getText().length() == 0){
+                onlineInformationLabel.setText("Der Gamecode fehlt");
+                return;
+            }
+
+            if (computerBattleTextfield.getText().length() == 0){
+                onlineInformationLabel.setText("Der Computername fehlt");
+                return;
+            }
 
             STONECOLOR computerColor;
             if (computerBlackButton.isSelected()){
@@ -360,10 +373,44 @@ public class StartMenuView extends VBox {
             System.out.println(response.statusCode());
 
             if (response.statusCode() == 200){
-                //Spiel starten
+
+
+
+                viewManager.getSoundManager().chooseSound(MUSIC.PLAY_SOUND);
+                if (!viewManager.getOptionsView().getAudioOnOffSwitchButton().getState()){
+                    viewManager.getSoundManager().stopMusic();
+                }
+
+                viewManager.setGame(new Game(viewManager,
+                        new ComputerPlayer(viewManager, computerBattleTextfield.getText().toUpperCase()), new OnlinePlayer(viewManager, "Onlineplayer")));
+
+                viewManager.createGameScene(new FieldView(viewManager, player1Color, player2Color),
+                        new ScoreView(viewManager, player1Color, player2Color),
+                        new LogView(viewManager));
+
+                viewManager.changeToGameScene();
+
+
+                viewManager.getGame().play();
+
+
+                try {
+                    URI uri = new URI("ws://localhost:8080/board");
+                    WebsocketClient websocketClient = new WebsocketClient(uri, viewManager);
+                    websocketClient.connect();
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
+
+
             }
             else {
-                onlineInformationLabel.setText("Der Gamecode existiert bereits. Wählen Sie einen anderen Gamecode.");
+                if (startGameSwitchButton.getState()){
+                    onlineInformationLabel.setText("Dieses Game existiert noch nicht. Kontrollieren Sie den Gamecode.");
+                }
+                else {
+                    onlineInformationLabel.setText("Der Gamecode existiert bereits. Wählen Sie einen anderen Gamecode.");
+                }
             }
 
         });

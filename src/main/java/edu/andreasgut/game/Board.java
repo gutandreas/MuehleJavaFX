@@ -199,6 +199,10 @@ public class Board {
         return isFieldOccupied(position) && !isThisMyStone(position, ownPlayerIndex);
     }
 
+    public int getNumberOnPosition(int ring, int field){
+        return array[ring][field];
+    }
+
 
 
 
