@@ -25,7 +25,7 @@ public class ScoreView extends VBox {
     private int stonesKilled2 = 0;
 
 
-    public ScoreView(ViewManager viewManager, STONECOLOR player1Color, STONECOLOR player2Color) {
+    public ScoreView(ViewManager viewManager, StoneColor player1Color, StoneColor player2Color) {
         this.viewManager = viewManager;
         this.getStyleClass().add("scoreview");
 
@@ -41,7 +41,7 @@ public class ScoreView extends VBox {
         this.getChildren().addAll(titleLabel, phaseLabel, roundLabel, player1VBox, player2VBox);
     }
 
-    private void setupPlayer1andPlayer2(STONECOLOR player1Color, STONECOLOR player2Color){
+    private void setupPlayer1andPlayer2(StoneColor player1Color, StoneColor player2Color){
         player1VBox = new VBox();
         player1Label = new Label("Player 1: " + viewManager.getGame().getPlayer0().getName());
         player1Label.getStyleClass().add("biglabel");
