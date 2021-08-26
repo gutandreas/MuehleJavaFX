@@ -34,7 +34,7 @@ public class FieldView extends AnchorPane {
 
 
 
-    public FieldView(ViewManager viewManager, STONECOLOR player1Color, STONECOLOR player2Color) {
+    public FieldView(ViewManager viewManager, StoneColor player1Color, StoneColor player2Color) {
         this.viewManager = viewManager;
         this.getStyleClass().add("fieldview");
         initializeTranslationArray();
@@ -56,7 +56,7 @@ public class FieldView extends AnchorPane {
 
     }
 
-    private void setupPlayerImagesAndCursors(STONECOLOR player1Color, STONECOLOR player2Color){
+    private void setupPlayerImagesAndCursors(StoneColor player1Color, StoneColor player2Color){
         player1StoneImage = new Image(player1Color.getPathStone(), 85, 85, true, true);
         player2StoneImage = new Image(player2Color.getPathStone(), 85, 85, true, true);
         emptyField = new Image("edu/andreasgut/images/FullyTransparent.png");

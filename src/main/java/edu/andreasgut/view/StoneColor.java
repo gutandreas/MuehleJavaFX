@@ -1,18 +1,19 @@
 package edu.andreasgut.view;
 
-public enum STONECOLOR {
+public enum StoneColor {
 
     BLACK("edu/andreasgut/Images/StoneBlack.png",
-            "edu/andreasgut/Images/HandCursorBlack.png",
-            "edu/andreasgut/Images/KillCursorBlack.png"),
-    WHITE( "edu/andreasgut/Images/StoneWhite.png",
-            "edu/andreasgut/Images/HandCursorWhite.png",
-            "edu/andreasgut/Images/KillCursorWhite.png"),
+          "edu/andreasgut/Images/HandCursorBlack.png",
+          "edu/andreasgut/Images/KillCursorBlack.png"),
+
+    WHITE("edu/andreasgut/Images/StoneWhite.png",
+          "edu/andreasgut/Images/HandCursorWhite.png",
+          "edu/andreasgut/Images/KillCursorWhite.png"),
     ;
 
     private String pathStone, pathMoveCursor, pathKillCursor;
 
-    STONECOLOR(String pathStone, String pathMoveCursor, String pathKillCursor){
+    StoneColor(String pathStone, String pathMoveCursor, String pathKillCursor){
         this.pathStone = pathStone;
         this.pathMoveCursor = pathMoveCursor;
         this.pathKillCursor = pathKillCursor;

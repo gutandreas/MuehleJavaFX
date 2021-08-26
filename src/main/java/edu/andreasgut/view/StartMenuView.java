@@ -36,7 +36,7 @@ public class StartMenuView extends VBox {
     SelectColorButton stonesBlackButton1, stonesWhiteButton1, stonesBlackButton2, stonesWhiteButton2, computerBlackButton, computerWhiteButton;
     BeginnerSwitchButton beginnerSwitchButton, startGameSwitchButton;
     ImageView player1StonesImageView, player2StonesImageView;
-    STONECOLOR player1Color, player2Color;
+    StoneColor player1Color, player2Color;
 
 
 
@@ -126,8 +126,8 @@ public class StartMenuView extends VBox {
     private void setupComputerBattleInformation(){
         computerBattleTextfield = new TextField();
         computerBattleTextfield.setPromptText("Name des Computers");
-        computerBlackButton = new SelectColorButton(null, STONECOLOR.BLACK, true);
-        computerWhiteButton = new SelectColorButton(null, STONECOLOR.WHITE, false);
+        computerBlackButton = new SelectColorButton(null, StoneColor.BLACK, true);
+        computerWhiteButton = new SelectColorButton(null, StoneColor.WHITE, false);
         stoneColorComputerLabel = new Label("Steinfarbe: ");
 
         computerBattleHBox = new HBox();
@@ -141,9 +141,9 @@ public class StartMenuView extends VBox {
         namePlayer1Textfield = new TextField();
         namePlayer1Textfield.setPromptText("Name Spieler 1");
         stonesColorLabel1 = new Label("Steinfarbe: ");
-        stonesBlackButton1 = new SelectColorButton(null, STONECOLOR.BLACK, true);
-        stonesWhiteButton1 = new SelectColorButton(null, STONECOLOR.WHITE, false);
-        player1Color = STONECOLOR.BLACK;
+        stonesBlackButton1 = new SelectColorButton(null, StoneColor.BLACK, true);
+        stonesWhiteButton1 = new SelectColorButton(null, StoneColor.WHITE, false);
+        player1Color = StoneColor.BLACK;
 
         player1HBox = new HBox();
         player1HBox.getChildren().addAll(namePlayer1Textfield, stonesColorLabel1, stonesBlackButton1, stonesWhiteButton1);
@@ -154,9 +154,9 @@ public class StartMenuView extends VBox {
         namePlayer2Textfield.setPromptText("Name Spieler 2");
         namePlayer2Textfield.setVisible(true);
         stonesColorLabel2 = new Label("Steinfarbe: ");
-        stonesBlackButton2 = new SelectColorButton(null, STONECOLOR.BLACK, false);
-        stonesWhiteButton2 = new SelectColorButton(null, STONECOLOR.WHITE, true);
-        player2Color = STONECOLOR.WHITE;
+        stonesBlackButton2 = new SelectColorButton(null, StoneColor.BLACK, false);
+        stonesWhiteButton2 = new SelectColorButton(null, StoneColor.WHITE, true);
+        player2Color = StoneColor.WHITE;
 
         player2HBox = new HBox();
         player2HBox.getChildren().addAll(namePlayer2Textfield, stonesColorLabel2, stonesBlackButton2, stonesWhiteButton2);
@@ -179,8 +179,8 @@ public class StartMenuView extends VBox {
             stonesWhiteButton2.setSelected(true);
             stonesWhiteButton2.getStyleClass().removeAll("selectColorButtonOff");
             stonesWhiteButton2.getStyleClass().add("selectColorButtonOn");
-            player1Color = STONECOLOR.BLACK;
-            player2Color = STONECOLOR.WHITE;
+            player1Color = StoneColor.BLACK;
+            player2Color = StoneColor.WHITE;
 
         });
 
@@ -197,8 +197,8 @@ public class StartMenuView extends VBox {
             stonesWhiteButton1.setSelected(true);
             stonesWhiteButton1.getStyleClass().removeAll("selectColorButtonOff");
             stonesWhiteButton1.getStyleClass().add("selectColorButtonOn");
-            player2Color = STONECOLOR.BLACK;
-            player1Color = STONECOLOR.WHITE;
+            player2Color = StoneColor.BLACK;
+            player1Color = StoneColor.WHITE;
 
         });
 
@@ -215,8 +215,8 @@ public class StartMenuView extends VBox {
             stonesWhiteButton2.setSelected(false);
             stonesWhiteButton2.getStyleClass().removeAll("selectColorButtonOn");
             stonesWhiteButton2.getStyleClass().add("selectColorButtonOff");
-            player1Color = STONECOLOR.WHITE;
-            player2Color = STONECOLOR.BLACK;
+            player1Color = StoneColor.WHITE;
+            player2Color = StoneColor.BLACK;
         });
 
         stonesWhiteButton2.setOnAction(click -> {
@@ -232,8 +232,8 @@ public class StartMenuView extends VBox {
             stonesWhiteButton1.setSelected(false);
             stonesWhiteButton1.getStyleClass().removeAll("selectColorButtonOn");
             stonesWhiteButton1.getStyleClass().add("selectColorButtonOff");
-            player2Color = STONECOLOR.WHITE;
-            player1Color = STONECOLOR.BLACK;
+            player2Color = StoneColor.WHITE;
+            player1Color = StoneColor.BLACK;
         });
     }
 
@@ -333,12 +333,12 @@ public class StartMenuView extends VBox {
                 return;
             }
 
-            STONECOLOR computerColor;
+            StoneColor computerColor;
             if (computerBlackButton.isSelected()){
-                computerColor = STONECOLOR.BLACK;
+                computerColor = StoneColor.BLACK;
             }
             else {
-                computerColor = STONECOLOR.WHITE;
+                computerColor = StoneColor.WHITE;
             }
 
             jsonObject.put("player1Color", computerColor.toString());
