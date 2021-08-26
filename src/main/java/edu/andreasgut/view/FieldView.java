@@ -45,7 +45,7 @@ public class FieldView extends AnchorPane {
 
         fieldGridPane = new GridPane();
         fieldGridPane.setPadding(new Insets(3));
-        fieldGridPane.setOnMouseExited (action ->{
+        fieldGridPane.setOnMouseExited (action -> {
             imageView.getScene().setCursor(Cursor.DEFAULT);
         });
 
@@ -97,15 +97,14 @@ public class FieldView extends AnchorPane {
     public Position humanGraphicPut() {
         Object loopObject = new Object();
         setPutCursor();
-        final Position position = new Position();
         final int[] ring = new int[1];
         final int[] field = new int[1];
 
+        final Position[] position = new Position[1];
         for (Node n : fieldGridPane.getChildren()){
             if(((ImageView) n).getImage().equals(emptyField)){
             n.setOnMouseClicked(click ->{
-                position.setRing(translateToRing(n));
-                position.setField(translateToField(n));
+            	position[0] = new Position(translateToRing(n), translateToField(n));
 
                 System.out.println("Feld in Repräsentationsarray: " + ring[0] + "/" + field[0]);
                 System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
@@ -127,25 +126,24 @@ public class FieldView extends AnchorPane {
         clearAllFieldFunctions();
         viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
         moveMouseposition(20, 20);
-        return position;
+        return position[0];
     }
 
     public Position humanGraphicKill(){
         Object loopObject = new Object();
         setKillCursor();
 
-        final Position position = new Position();
+        final Position[] position = new Position[1];
 
         for (Node n : fieldGridPane.getChildren()){
             if(((ImageView) n).getImage().equals(getEnemysStoneImage()) &&
                     viewManager.getGame().getBoard().checkKill(new Position(translateToRing(n),translateToField(n)),
                     viewManager.getGame().getOtherPlayerIndex())) {
-            n.setOnMouseClicked(click ->{
-                position.setRing(translateToRing(n));
-                position.setField(translateToField(n));
+            n.setOnMouseClicked(click -> {
+            	position[0] = new Position(translateToRing(n), translateToField(n));
 
                 System.out.println("Stein wurde gesetzt.");
-                System.out.println("Feld in Repräsentationsarray: " + position.getRing() + "/" + position.getField());
+                System.out.println("Feld in Repräsentationsarray: " + position[0]);
                 System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
 
                 ((ImageView) n).setImage(emptyField);
@@ -156,7 +154,7 @@ public class FieldView extends AnchorPane {
         viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.KILL_STONE);
         moveMouseposition(20, 20);
 
-        return position;
+        return position[0];
     }
 
     public Move humanGraphicMove() {
@@ -164,17 +162,17 @@ public class FieldView extends AnchorPane {
         Move move = new Move();
         boolean releasedOnAnotherField = false;
 
-        while (!releasedOnAnotherField){
+		while (!releasedOnAnotherField) {
+			setMoveCursor();
 
-            setMoveCursor();
+			final ImageView clickedField = humanGraphicMoveTakeStep(move)[0];
+			clearAllFieldFunctions();
 
-            final ImageView clickedField = humanGraphicMoveTakeStep(move)[0];
-            clearAllFieldFunctions();
+			setPutCursor();
 
-            setPutCursor();
-
-            releasedOnAnotherField = humanGraphicMoveReleaseStep(move, clickedField);
-            clearAllFieldFunctions();}
+			releasedOnAnotherField = humanGraphicMoveReleaseStep(move, clickedField);
+			clearAllFieldFunctions();
+		}
 
         return move;
     }
@@ -218,7 +216,8 @@ public class FieldView extends AnchorPane {
                     ((ImageView) n).setImage(getOwnStoneImage());
                     releasedOnAnotherfield[0] = true;
                     Platform.exitNestedEventLoop(loopObject, null);
-                });}
+                });
+            }
             if (n == clickedField){
                 n.setOnMouseClicked(click ->{
                     ((ImageView) n).setImage(getOwnStoneImage());
