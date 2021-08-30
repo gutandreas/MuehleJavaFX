@@ -4,6 +4,7 @@ import edu.andreasgut.game.Board;
 import edu.andreasgut.game.Move;
 import edu.andreasgut.game.Position;
 import edu.andreasgut.view.ViewManager;
+import javafx.application.Platform;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONObject;
@@ -15,15 +16,13 @@ public class WebsocketClient extends WebSocketClient {
 
     private ViewManager viewManager;
     private Board board;
+    private static Object loopObject;
 
 
     public WebsocketClient(URI serverUri, ViewManager viewManager) {
         super(serverUri);
         this.viewManager = viewManager;
         this.board = viewManager.getGame().getBoard();
-
-
-
     }
 
     @Override
@@ -42,6 +41,7 @@ public class WebsocketClient extends WebSocketClient {
         switch (command){
             case "join":
                 System.out.println("Spiel beigetreten");
+                Platform.exitNestedEventLoop(loopObject, new Position(0,0));
             case "update":
 
                 if (jsonObject.getString("action").equals("put")){
@@ -120,5 +120,9 @@ public class WebsocketClient extends WebSocketClient {
         jsonObject.put("command", "watch");
         jsonObject.put("gameCode", gameCode);
         send(jsonObject.toString());
+    }
+
+    static public void setLoopObject(Object object) {
+        loopObject = object;
     }
 }

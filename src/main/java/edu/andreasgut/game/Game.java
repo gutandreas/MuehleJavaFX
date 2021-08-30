@@ -1,6 +1,7 @@
 package edu.andreasgut.game;
 
 import edu.andreasgut.view.ViewManager;
+
 import java.util.ArrayList;
 
 public class Game {
@@ -14,8 +15,13 @@ public class Game {
     private final Board board;
     boolean putPhase = true;
     boolean movePhase = false;
+    boolean movePhaseTake = true;
+    boolean movePhaseRelase = false;
+    private boolean killPhase = false;
     private final ViewManager viewManager;
     private boolean player2starts;
+    private boolean clickOkay = true;
+
 
     ArrayList<Player> playerArrayList = new ArrayList<>();
 
@@ -102,34 +108,119 @@ public class Game {
     }
 
 
-    public void play() {
+    public void clickOnField(Position clickedPosition) {
 
-        while (true){
 
-            System.out.println(board);
+        if (clickOkay){
+
+            clickOkay = false;
 
             if (round == NUMBEROFSTONES*2){
                 viewManager.getScoreView().updatePhase("Steine verschieben");
             }
 
+            if (killPhase){
+                if (board.checkKill(clickedPosition, getOtherPlayerIndex())){
+                    ((HumanPlayer) currentPlayer).setClickedKillPosition(clickedPosition);
+                    currentPlayer.kill(board, getCurrentPlayerIndex(), getOtherPlayerIndex());
+                    viewManager.getFieldView().graphicKill(clickedPosition);
+                    increaseRound();
+                    updateCurrentPlayer();
+                    if (currentPlayer instanceof ComputerPlayer){
+                        callComputer();
+                    }
+                    clickOkay = true;
+                    killPhase = false;
+                    return;}
+                else {
+                    System.out.println("Ungültiger Kill");
+                    return;
+                }
+            }
+
+            if (putPhase){
+                if (board.checkPut(clickedPosition)){
+
+                    ((HumanPlayer) currentPlayer).setClickedPutPosition(clickedPosition);
+                    currentPlayer.put(board, getCurrentPlayerIndex());
+                    viewManager.getFieldView().graphicPut(clickedPosition, getCurrentPlayerIndex(), 0);
+
+                    if (board.checkMorris(clickedPosition) && board.isThereStoneToKill(getOtherPlayerIndex())){
+                        killPhase = true;
+                        clickOkay = true;
+                        return;
+                    }
+                    else {
+                        increaseRound();
+                        updateCurrentPlayer();
+                        viewManager.getLogView().setStatusLabel(currentPlayer.getName() + " ist an der Reihe");
+                        setGamesPhaseBooleans();
+                        if (currentPlayer instanceof ComputerPlayer){
+                            callComputer();
+                        }
+                        else {
+                            clickOkay = true;
+                        }
+                        return;
+                    }
+
+                }
+                else {
+                    System.out.println("Ungültiger Put, Feld ist nicht frei");
+                    return;
+                }
+            }
+
+            if (movePhase){
+                if (movePhaseTake){
+                    ((HumanPlayer) currentPlayer).setClickedMovePositionTakeStep(clickedPosition);
+                    movePhaseTake = false;
+                    movePhaseRelase = true;
+                    clickOkay = true;
+                    return;
+                }
+                if (movePhaseRelase){
+                    ((HumanPlayer) currentPlayer).setClickedMovePositionReleaseStep(clickedPosition);
+                    boolean allowedToJump = board.countPlayersStones(getCurrentPlayerIndex()) == 3;
+                    Move move = currentPlayer.move(board, getCurrentPlayerIndex(), allowedToJump);
+                    if (board.checkMove(move,allowedToJump)){
+                        board.move(move, getCurrentPlayerIndex());
+                        viewManager.getFieldView().graphicMove(move, getCurrentPlayerIndex());
+                        increaseRound();
+                        updateCurrentPlayer();
+                        movePhaseTake = true;
+                        movePhaseRelase = false;
+                        setGamesPhaseBooleans();
+                        if (currentPlayer instanceof ComputerPlayer){
+                            callComputer();
+                        }
+                    }
+                    else {
+                        System.out.println("Kein gültiger Move");
+                    }
+                }
+
+
+                currentPlayer.move(board, getCurrentPlayerIndex(), board.countPlayersStones(getCurrentPlayerIndex()) == 3);
+            }
+
+            System.out.println(board);
+
+
+
             //viewManager.getScoreView().setPlayerLabelEffects(); // funktioniert noch nicht wie gewünscht
 
-            if (movePhase &&
-                    (board.countPlayersStones(getCurrentPlayerIndex()) <= 2
-                    || !board.checkIfAbleToMove(getCurrentPlayerIndex()))){
-                winGame();
-                break;
-            }
+
 
             System.out.println(getCurrentPlayer().getName() + " ist an der Reihe!");
             viewManager.getLogView().setStatusLabel(getCurrentPlayer().getName() + " ist an der Reihe!");
 
             setGamesPhaseBooleans();
 
-            Position positionToCheckMorris = null;
+            /*Position positionToCheckMorris = null;
 
             if (putPhase){
-                positionToCheckMorris = put();
+                positionToCheckMorris = put(position);
             }
 
             if (movePhase && board.checkIfAbleToMove(getCurrentPlayerIndex())){
@@ -143,14 +234,57 @@ public class Game {
                 kill();
             }
 
+            if (movePhase &&
+                    (board.countPlayersStones(getCurrentPlayerIndex()) <= 2
+                            || !board.checkIfAbleToMove(getCurrentPlayerIndex()))){
+                winGame();
+                return;
+            }
+
+            increaseRound();
+            updateCurrentPlayer();*/}
+        else {
+            System.out.println("Kein Klick möglich");
+        }
+
+    }
+
+    private void callComputer(){
+        if (round < NUMBEROFSTONES*2){
+            Position computerPutPosition = currentPlayer.put(board,getCurrentPlayerIndex());
+            board.putStone(computerPutPosition, getCurrentPlayerIndex());
+            viewManager.getFieldView().graphicPut(computerPutPosition, getCurrentPlayerIndex(), 0);
+            if (board.checkMorris(computerPutPosition)){
+                Position computerKillPosition = currentPlayer.kill(board,getCurrentPlayerIndex(), getOtherPlayerIndex());
+                board.clearStone(computerKillPosition);
+                viewManager.getFieldView().graphicKill(computerKillPosition);
+            }
+            clickOkay = true;
             increaseRound();
             updateCurrentPlayer();
-
+            setGamesPhaseBooleans();
+            viewManager.getLogView().setStatusLabel(currentPlayer.getName() + " ist an der Reihe");
+            return;
+        }
+        else {
+            boolean allowedToJump = board.countPlayersStones(getCurrentPlayerIndex()) == 3;
+            Move computerMove = currentPlayer.move(board, getCurrentPlayerIndex(), allowedToJump);
+            if (board.checkMove(computerMove, allowedToJump)){
+                board.move(computerMove, getCurrentPlayerIndex());
+                viewManager.getFieldView().graphicMove(computerMove, getCurrentPlayerIndex());
+                clickOkay = true;
+                increaseRound();
+                updateCurrentPlayer();
+                setGamesPhaseBooleans();
+                viewManager.getLogView().setStatusLabel(currentPlayer.getName() + " ist an der Reihe");
+                return;
             }
+        }
+
     }
 
 
-    private Position put(){
+    private Position put(Position position){
         Position putPosition = currentPlayer.put(board, getCurrentPlayerIndex());
         Position positionToCheckMorris;
 
@@ -158,7 +292,7 @@ public class Game {
             board.putStone(putPosition, getCurrentPlayerIndex());
 
             if (currentPlayer instanceof ComputerPlayer){
-                viewManager.getFieldView().computerGraphicPut(putPosition);
+                viewManager.getFieldView().graphicPut(putPosition, getCurrentPlayerIndex(), 500);
             }
 
 
@@ -183,7 +317,7 @@ public class Game {
             board.move(move, getCurrentPlayerIndex());
 
             if (currentPlayer instanceof ComputerPlayer){
-                viewManager.getFieldView().computerGraphicMove(move);
+                viewManager.getFieldView().graphicMove(move, getCurrentPlayerIndex());
             }
         }
         else {
@@ -209,7 +343,7 @@ public class Game {
             viewManager.getScoreView().increaseStonesLost();
 
             if (currentPlayer instanceof ComputerPlayer){
-                viewManager.getFieldView().computerGraphicKill(killPosition);
+                viewManager.getFieldView().graphicKill(killPosition);
             }
         }
         else {
@@ -219,7 +353,7 @@ public class Game {
 
 
     private void setGamesPhaseBooleans(){
-        if (round == NUMBEROFSTONES*2){
+        if (round >= NUMBEROFSTONES*2){
             putPhase = false;
             movePhase = true;}
     }

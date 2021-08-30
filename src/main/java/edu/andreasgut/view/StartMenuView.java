@@ -307,7 +307,6 @@ public class StartMenuView extends VBox {
                 viewManager.changeToGameScene();
 
 
-                viewManager.getGame().play();
 
 
 
@@ -391,7 +390,6 @@ public class StartMenuView extends VBox {
                 viewManager.changeToGameScene();
 
 
-                viewManager.getGame().play();
 
 
                 try {

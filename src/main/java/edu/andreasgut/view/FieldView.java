@@ -91,6 +91,19 @@ public class FieldView extends AnchorPane {
                     fieldGridPane.add(tempImageView,row,column);}
                 else {ImageView tempImageView = new ImageView(forbiddenField);
                     fieldGridPane.add(tempImageView,row,column);}}}
+
+        for (Node n : fieldGridPane.getChildren()){
+            if(((ImageView) n).getImage().equals(emptyField)){
+                n.setOnMouseClicked(click ->{
+                    Position position = new Position(translateToRing(n), translateToField(n));
+
+                    System.out.println("Feld in Repräsentationsarray: " + position.getRing() + "/" + position.getField());
+                    System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
+                    System.out.println("Test");
+
+                    viewManager.getGame().clickOnField(position);
+                });}}
+
     }
 
 
@@ -236,39 +249,73 @@ public class FieldView extends AnchorPane {
 
     }
 
-    public void computerGraphicPut(Position position){
+    public void graphicPut(Position position, int playerIndex, int delay){
         Object loopObject = new Object();
-        Timeline timeline = new Timeline(new KeyFrame(
-                Duration.millis(COMPREACTIONTIME),
-                put -> {((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(player2StoneImage);
+
+        Image image;
+
+        if (playerIndex == 0){
+            image = player1StoneImage;
+        }
+        else {
+            image = player2StoneImage;
+        }
+
+        ((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(image);
+        viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
+
+        /*Timeline timeline = new Timeline(new KeyFrame(
+                Duration.millis(delay),
+                put -> {((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(player1StoneImage);
                         viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
                         Platform.exitNestedEventLoop(loopObject, null);}));
         timeline.play();
-        Platform.enterNestedEventLoop(loopObject);
+        Platform.enterNestedEventLoop(loopObject);*/
 
     }
 
-    public void computerGraphicMove(Move move){
+    public void graphicMove(Move move, int playerIndex){
         Object loopObject = new Object();
-        Timeline timeline = new Timeline(new KeyFrame(
+
+        Image image;
+
+        if (playerIndex == 0){
+            image = player1StoneImage;
+        }
+        else {
+            image = player2StoneImage;
+        }
+
+        ((ImageView) fieldGridPane.getChildren().get(translateToIndex(move.getFrom()))).setImage(emptyField);
+        ((ImageView) fieldGridPane.getChildren().get(translateToIndex(move.getTo()))).setImage(image);
+        viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
+
+
+
+        /*Timeline timeline = new Timeline(new KeyFrame(
                 Duration.millis(COMPREACTIONTIME*1.5),
                 moveAction -> {((ImageView) fieldGridPane.getChildren().get(translateToIndex(move.getFrom()))).setImage(emptyField);
                     ((ImageView) fieldGridPane.getChildren().get(translateToIndex(move.getTo()))).setImage(player2StoneImage);
                     viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
                     Platform.exitNestedEventLoop(loopObject, null);}));
         timeline.play();
-        Platform.enterNestedEventLoop(loopObject);
+        Platform.enterNestedEventLoop(loopObject);*/
     }
 
-    public void computerGraphicKill(Position position){
+    public void graphicKill(Position position){
         Object loopObject = new Object();
-        Timeline timeline = new Timeline(new KeyFrame(
+
+        ((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(emptyField);
+        viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.KILL_STONE);
+
+
+        /*Timeline timeline = new Timeline(new KeyFrame(
                 Duration.millis(COMPREACTIONTIME*1.5),
                 kill -> {((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(emptyField);
                         viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.KILL_STONE);
                         Platform.exitNestedEventLoop(loopObject, null);}));
         timeline.play();
-        Platform.enterNestedEventLoop(loopObject);
+        Platform.enterNestedEventLoop(loopObject);*/
     }
 
     private void moveMouseposition(int dx, int dy){

@@ -4,28 +4,51 @@ import edu.andreasgut.view.ViewManager;
 
 public class HumanPlayer extends Player{
 
+    private Position clickedPutPosition, clickedKillPosition, clickedMovePositionTakeStep, clickedMovePositionReleaseStep;
+
     public HumanPlayer(ViewManager viewManager, String name) {
         super(viewManager, name);
     }
 
     @Override
     Position put(Board board, int playerIndex) {
-        Position position = viewManager.getFieldView().humanGraphicPut();
+        board.putStone(clickedPutPosition, playerIndex);
 
-        return position;
+        return clickedPutPosition;
     }
 
     @Override
     Move move(Board board, int playerIndex, boolean allowedToJump) {
-        Move move = viewManager.getFieldView().humanGraphicMove();
+        Move move = new Move(clickedMovePositionTakeStep, clickedMovePositionReleaseStep);
+        //Move move = viewManager.getFieldView().humanGraphicMove();
 
         return move;
     }
 
     @Override
     Position kill(Board board, int ownPlayerIndex, int otherPlayerIndex) {
-        Position position = viewManager.getFieldView().humanGraphicKill();
+        board.clearStone(clickedPutPosition);
 
-        return position;
+        return clickedKillPosition;
+    }
+
+    public Position getClickedPutPosition() {
+        return clickedPutPosition;
+    }
+
+    public void setClickedPutPosition(Position clickedPutPosition) {
+        this.clickedPutPosition = clickedPutPosition;
+    }
+
+    public void setClickedKillPosition(Position clickedKillPosition) {
+        this.clickedKillPosition = clickedKillPosition;
+    }
+
+    public void setClickedMovePositionTakeStep(Position clickedMovePositionTakeStep) {
+        this.clickedMovePositionTakeStep = clickedMovePositionTakeStep;
+    }
+
+    public void setClickedMovePositionReleaseStep(Position clickedMovePositionReleaseStep) {
+        this.clickedMovePositionReleaseStep = clickedMovePositionReleaseStep;
     }
 }
