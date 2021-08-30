@@ -193,6 +193,7 @@ public class Game {
                         setGamesPhaseBooleans();
                         if (currentPlayer instanceof ComputerPlayer){
                             callComputer();
+                            return;
                         }
                     }
                     else {
@@ -254,7 +255,7 @@ public class Game {
             Position computerPutPosition = currentPlayer.put(board,getCurrentPlayerIndex());
             board.putStone(computerPutPosition, getCurrentPlayerIndex());
             viewManager.getFieldView().graphicPut(computerPutPosition, getCurrentPlayerIndex(), 0);
-            if (board.checkMorris(computerPutPosition)){
+            if (board.checkMorris(computerPutPosition) && board.isThereStoneToKill(getOtherPlayerIndex())){
                 Position computerKillPosition = currentPlayer.kill(board,getCurrentPlayerIndex(), getOtherPlayerIndex());
                 board.clearStone(computerKillPosition);
                 viewManager.getFieldView().graphicKill(computerKillPosition);
@@ -272,6 +273,11 @@ public class Game {
             if (board.checkMove(computerMove, allowedToJump)){
                 board.move(computerMove, getCurrentPlayerIndex());
                 viewManager.getFieldView().graphicMove(computerMove, getCurrentPlayerIndex());
+                if (board.checkMorris(computerMove.getTo()) && board.isThereStoneToKill(getOtherPlayerIndex())){
+                    Position computerKillPosition = currentPlayer.kill(board,getCurrentPlayerIndex(), getOtherPlayerIndex());
+                    board.clearStone(computerKillPosition);
+                    viewManager.getFieldView().graphicKill(computerKillPosition);
+                }
                 clickOkay = true;
                 increaseRound();
                 updateCurrentPlayer();
