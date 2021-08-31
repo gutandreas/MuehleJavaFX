@@ -20,7 +20,6 @@ public class HumanPlayer extends Player{
     @Override
     Move move(Board board, int playerIndex, boolean allowedToJump) {
         Move move = new Move(clickedMovePositionTakeStep, clickedMovePositionReleaseStep);
-        //Move move = viewManager.getFieldView().humanGraphicMove();
 
         return move;
     }

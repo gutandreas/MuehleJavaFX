@@ -124,8 +124,7 @@ public class Game {
                     ((HumanPlayer) currentPlayer).setClickedKillPosition(clickedPosition);
                     currentPlayer.kill(board, getCurrentPlayerIndex(), getOtherPlayerIndex());
                     viewManager.getFieldView().graphicKill(clickedPosition);
-                    increaseRound();
-                    updateCurrentPlayer();
+                    updateGameState(false, true);
                     if (currentPlayer instanceof ComputerPlayer){
                         callComputer();
                     }
@@ -151,10 +150,7 @@ public class Game {
                         return;
                     }
                     else {
-                        increaseRound();
-                        updateCurrentPlayer();
-                        viewManager.getLogView().setStatusLabel(currentPlayer.getName() + " ist an der Reihe");
-                        setGamesPhaseBooleans();
+                        updateGameState(true, false);
                         if (currentPlayer instanceof ComputerPlayer){
                             callComputer();
                         }
@@ -177,6 +173,8 @@ public class Game {
                     movePhaseTake = false;
                     movePhaseRelase = true;
                     clickOkay = true;
+                    viewManager.getFieldView().setPutCursor();
+                    viewManager.getFieldView().graphicKill(clickedPosition);
                     return;
                 }
                 if (movePhaseRelase){
@@ -186,11 +184,13 @@ public class Game {
                     if (board.checkMove(move,allowedToJump)){
                         board.move(move, getCurrentPlayerIndex());
                         viewManager.getFieldView().graphicMove(move, getCurrentPlayerIndex());
-                        increaseRound();
-                        updateCurrentPlayer();
+                        updateGameState(false,false);
                         movePhaseTake = true;
                         movePhaseRelase = false;
-                        setGamesPhaseBooleans();
+                        if (board.checkMorris(move.getTo()) && board.isThereStoneToKill(getOtherPlayerIndex())){
+                            killPhase = true;
+                            return;
+                        }
                         if (currentPlayer instanceof ComputerPlayer){
                             callComputer();
                             return;
@@ -202,7 +202,6 @@ public class Game {
                 }
 
 
-                currentPlayer.move(board, getCurrentPlayerIndex(), board.countPlayersStones(getCurrentPlayerIndex()) == 3);
             }
 
             System.out.println(board);
@@ -210,13 +209,6 @@ public class Game {
 
 
             //viewManager.getScoreView().setPlayerLabelEffects(); // funktioniert noch nicht wie gewünscht
-
-
-
-            System.out.println(getCurrentPlayer().getName() + " ist an der Reihe!");
-            viewManager.getLogView().setStatusLabel(getCurrentPlayer().getName() + " ist an der Reihe!");
-
-            setGamesPhaseBooleans();
 
             /*Position positionToCheckMorris = null;
 
@@ -252,6 +244,7 @@ public class Game {
 
     private void callComputer(){
         if (round < NUMBEROFSTONES*2){
+            boolean kill = false;
             Position computerPutPosition = currentPlayer.put(board,getCurrentPlayerIndex());
             board.putStone(computerPutPosition, getCurrentPlayerIndex());
             viewManager.getFieldView().graphicPut(computerPutPosition, getCurrentPlayerIndex(), 0);
@@ -259,16 +252,15 @@ public class Game {
                 Position computerKillPosition = currentPlayer.kill(board,getCurrentPlayerIndex(), getOtherPlayerIndex());
                 board.clearStone(computerKillPosition);
                 viewManager.getFieldView().graphicKill(computerKillPosition);
+                kill = true;
             }
             clickOkay = true;
-            increaseRound();
-            updateCurrentPlayer();
-            setGamesPhaseBooleans();
-            viewManager.getLogView().setStatusLabel(currentPlayer.getName() + " ist an der Reihe");
+            updateGameState(true, kill);
             return;
         }
         else {
             boolean allowedToJump = board.countPlayersStones(getCurrentPlayerIndex()) == 3;
+            boolean kill = false;
             Move computerMove = currentPlayer.move(board, getCurrentPlayerIndex(), allowedToJump);
             if (board.checkMove(computerMove, allowedToJump)){
                 board.move(computerMove, getCurrentPlayerIndex());
@@ -277,16 +269,36 @@ public class Game {
                     Position computerKillPosition = currentPlayer.kill(board,getCurrentPlayerIndex(), getOtherPlayerIndex());
                     board.clearStone(computerKillPosition);
                     viewManager.getFieldView().graphicKill(computerKillPosition);
+                    kill = true;
                 }
                 clickOkay = true;
-                increaseRound();
-                updateCurrentPlayer();
-                setGamesPhaseBooleans();
-                viewManager.getLogView().setStatusLabel(currentPlayer.getName() + " ist an der Reihe");
+                updateGameState(false, kill);
                 return;
             }
         }
 
+    }
+
+    private void updateGameState(boolean put, boolean kill){
+        if (put){
+            viewManager.getScoreView().increaseStonesPut();
+        }
+        if (kill){
+            viewManager.getScoreView().increaseStonesKilled();
+            viewManager.getScoreView().increaseStonesLost();
+        }
+
+        increaseRound();
+        updateCurrentPlayer();
+        setGamesPhaseBooleans();
+        viewManager.getLogView().setStatusLabel(currentPlayer.getName() + " ist an der Reihe");
+
+        if (round < NUMBEROFSTONES*2){
+            viewManager.getFieldView().setPutCursor();
+        }
+        else {
+            viewManager.getFieldView().setMoveCursor();
+        }
     }
 
 

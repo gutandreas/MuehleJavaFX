@@ -331,7 +331,7 @@ public class FieldView extends AnchorPane {
         return viewManager.getGame().getCurrentPlayerIndex()==0 ? player1StoneImage : player2StoneImage;
     }
 
-    private void setPutCursor(){
+    public void setPutCursor(){
         choosePutCursor();
         fieldGridPane.setOnMouseEntered(enter ->{
             choosePutCursor();
@@ -350,7 +350,7 @@ public class FieldView extends AnchorPane {
 
 
 
-    private void setKillCursor(){
+    public void setKillCursor(){
        chooseKillCursor();
         fieldGridPane.setOnMouseEntered(enter ->{
             chooseKillCursor();
@@ -367,7 +367,7 @@ public class FieldView extends AnchorPane {
                 break;}
     }
 
-    private void setMoveCursor(){
+    public void setMoveCursor(){
         chooseMoveCursor();
         fieldGridPane.setOnMouseEntered(enter ->{
             chooseMoveCursor();
