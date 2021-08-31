@@ -55,6 +55,7 @@ public class WebsocketClient extends WebSocketClient {
 
                     if (board.checkPut(position)){
                         board.putStone(position, playerIndex);
+                        viewManager.getFieldView().graphicPut(position, viewManager.getGame().getCurrentPlayerIndex(), 0);
                         System.out.println(board);}
                     else {
                         System.out.println("Es wurde ein ungültiger Put ausgeführt");

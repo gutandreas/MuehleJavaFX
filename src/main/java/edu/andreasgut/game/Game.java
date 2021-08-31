@@ -251,7 +251,7 @@ public class Game {
 
     }
 
-    private void callComputer(){
+    public void callComputer(){
         if (round < NUMBEROFSTONES*2){
             boolean kill = false;
             Position computerPutPosition = currentPlayer.put(board,getCurrentPlayerIndex());

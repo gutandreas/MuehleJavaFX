@@ -297,9 +297,9 @@ public class StartMenuView extends VBox {
                 }
 
 
-                viewManager.createGameScene(new FieldView(viewManager, player1Color, player2Color),
+                viewManager.createGameScene(new FieldView(viewManager, player1Color, player2Color, true),
                         new ScoreView(viewManager, player1Color, player2Color),
-                        new LogView(viewManager));
+                        new LogView(viewManager, false));
 
                 /*viewManager.getScoreView().updatePlayerNames(viewManager.getGame().getPlayer0(),
                         viewManager.getGame().getPlayer1());*/
@@ -383,9 +383,9 @@ public class StartMenuView extends VBox {
                 viewManager.setGame(new Game(viewManager,
                         new ComputerPlayer(viewManager, computerBattleTextfield.getText().toUpperCase()), new OnlinePlayer(viewManager, "Onlineplayer")));
 
-                viewManager.createGameScene(new FieldView(viewManager, player1Color, player2Color),
+                viewManager.createGameScene(new FieldView(viewManager, player1Color, player2Color, false),
                         new ScoreView(viewManager, player1Color, player2Color),
-                        new LogView(viewManager));
+                        new LogView(viewManager, true));
 
                 viewManager.changeToGameScene();
 

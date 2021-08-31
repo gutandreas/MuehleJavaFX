@@ -34,7 +34,7 @@ public class FieldView extends AnchorPane {
 
 
 
-    public FieldView(ViewManager viewManager, STONECOLOR player1Color, STONECOLOR player2Color) {
+    public FieldView(ViewManager viewManager, STONECOLOR player1Color, STONECOLOR player2Color, boolean activateBoardFunctions) {
         this.viewManager = viewManager;
         this.getStyleClass().add("fieldview");
         initializeTranslationArray();
@@ -50,7 +50,7 @@ public class FieldView extends AnchorPane {
         });
 
         setupPlayerImagesAndCursors(player1Color, player2Color);
-        setupFields();
+        setupFields(activateBoardFunctions);
 
         this.getChildren().addAll(imageView,fieldGridPane);
 
@@ -74,37 +74,47 @@ public class FieldView extends AnchorPane {
 
     }
 
-    private void setupFields(){
+    private void setupFields(boolean activateBoardFunctions){
 
         fieldGridPane.setGridLinesVisible(false);
-        for (int row = 0; row < 7; row++){
+
+        for (int row = 0; row < 7; row++) {
             fieldGridPane.addRow(row);
         }
-        for (int column = 0; column < 7; column++){
+        for (int column = 0; column < 7; column++) {
             fieldGridPane.addRow(column);
         }
 
         //Füllt Felder mit emptyField wenn in Repräsentation vorhanden, sonst mit forbiddenField
         for (int row = 0; row < 7; row++) {
             for (int column = 0; column < 7; column++) {
-                if (translationArrayGraphicToRepresentation[row][column].getRing()!=-1){
+                if (translationArrayGraphicToRepresentation[row][column].getRing() != -1) {
                     ImageView tempImageView = new ImageView(emptyField);
-                    fieldGridPane.add(tempImageView,row,column);}
-                else {ImageView tempImageView = new ImageView(forbiddenField);
-                    fieldGridPane.add(tempImageView,row,column);}}}
+                    fieldGridPane.add(tempImageView, row, column);
+                } else {
+                    ImageView tempImageView = new ImageView(forbiddenField);
+                    fieldGridPane.add(tempImageView, row, column);
+                }
+            }
+        }
 
-        for (Node n : fieldGridPane.getChildren()){
-            if(((ImageView) n).getImage().equals(emptyField)){
-                n.setOnMouseClicked(click ->{
-                    Position position = new Position(translateToRing(n), translateToField(n));
 
-                    System.out.println("Feld in Repräsentationsarray: " + position.getRing() + "/" + position.getField());
-                    System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
-                    System.out.println("Test");
+        if (activateBoardFunctions){
 
-                    viewManager.getGame().clickOnField(position);
-                });}}
+            for (Node n : fieldGridPane.getChildren()) {
+                if (((ImageView) n).getImage().equals(emptyField)) {
+                    n.setOnMouseClicked(click -> {
+                        Position position = new Position(translateToRing(n), translateToField(n));
 
+                        System.out.println("Feld in Repräsentationsarray: " + position.getRing() + "/" + position.getField());
+                        System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
+                        System.out.println("Test");
+
+                        viewManager.getGame().clickOnField(position);
+                    });
+                }
+            }
+        }
     }
 
 
