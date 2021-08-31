@@ -16,7 +16,7 @@ public class ComputerPlayer extends Player {
 
 
     @Override
-    Position put(Board board, int playerIndex) {
+    synchronized Position put(Board board, int playerIndex) {
 
         gameTree.initializeRoot(board);
 
@@ -36,7 +36,7 @@ public class ComputerPlayer extends Player {
         return gameTree.getBestPut();
     }
 
-    private void recursivePutBfs(BoardPutMoveKillScoreSet set, ScorePoints scorePoints, int scorePlayerIndex, int currentPlayerIndex, int levelLimit){
+    synchronized private void recursivePutBfs(BoardPutMoveKillScoreSet set, ScorePoints scorePoints, int scorePlayerIndex, int currentPlayerIndex, int levelLimit){
 
         if (set.getLevel()==levelLimit){
             return;
@@ -68,7 +68,7 @@ public class ComputerPlayer extends Player {
     }
 
 
-    private void pretendPut(Board board, Position put, ScorePoints scorePoints, BoardPutMoveKillScoreSet parent, int scorePlayerIndex, int currentPlayerIndex, int level){
+    synchronized private void pretendPut(Board board, Position put, ScorePoints scorePoints, BoardPutMoveKillScoreSet parent, int scorePlayerIndex, int currentPlayerIndex, int level){
 
         BoardPutMoveKillScoreSet boardPutMoveKillScoreSet1 = new BoardPutMoveKillScoreSet();
         boardPutMoveKillScoreSet1.setPut(put);
@@ -105,7 +105,7 @@ public class ComputerPlayer extends Player {
 
 
     @Override
-    Move move(Board board, int playerIndex, boolean allowedToJump) {
+    synchronized Move move(Board board, int playerIndex, boolean allowedToJump) {
 
 
         gameTree.initializeRoot(board);
@@ -127,7 +127,7 @@ public class ComputerPlayer extends Player {
 
     }
 
-    private void recursiveMoveBfs(BoardPutMoveKillScoreSet set, ScorePoints scorePoints, int scorePlayerIndex, int currentPlayerIndex, int levelLimit){
+    synchronized private void recursiveMoveBfs(BoardPutMoveKillScoreSet set, ScorePoints scorePoints, int scorePlayerIndex, int currentPlayerIndex, int levelLimit){
 
         if (set.getLevel()==levelLimit){
             return;
@@ -159,7 +159,7 @@ public class ComputerPlayer extends Player {
     }
 
 
-    private void pretendMove(Board board, Move move, ScorePoints scorePoints, BoardPutMoveKillScoreSet parent, int scorePlayerIndex, int currentPlayerIndex, int level){
+    synchronized private void pretendMove(Board board, Move move, ScorePoints scorePoints, BoardPutMoveKillScoreSet parent, int scorePlayerIndex, int currentPlayerIndex, int level){
 
         BoardPutMoveKillScoreSet boardPutMoveKillScoreSet1 = new BoardPutMoveKillScoreSet();
         boardPutMoveKillScoreSet1.setMove(move);
@@ -196,7 +196,7 @@ public class ComputerPlayer extends Player {
 
 
     @Override
-    Position kill(Board board, int ownPlayerIndex, int otherPlayerIndex) {
+    synchronized Position kill(Board board, int ownPlayerIndex, int otherPlayerIndex) {
 
         return gameTree.getBestKill();
 

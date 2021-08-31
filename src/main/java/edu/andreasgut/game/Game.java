@@ -133,6 +133,8 @@ public class Game {
                     return;}
                 else {
                     System.out.println("Ungültiger Kill");
+                    viewManager.getLogView().setStatusLabel("Auf diesem Feld kann kein Stein entfernt werden.");
+                    clickOkay = true;
                     return;
                 }
             }
@@ -147,6 +149,8 @@ public class Game {
                     if (board.checkMorris(clickedPosition) && board.isThereStoneToKill(getOtherPlayerIndex())){
                         killPhase = true;
                         clickOkay = true;
+                        viewManager.getFieldView().setKillCursor();
+                        viewManager.getLogView().setStatusLabel(currentPlayer.getName() + " darf einen gegnerischen Stein entfernen.");
                         return;
                     }
                     else {
@@ -163,6 +167,8 @@ public class Game {
                 }
                 else {
                     System.out.println("Ungültiger Put, Feld ist nicht frei");
+                    viewManager.getLogView().setStatusLabel("Dieses Feld ist nicht frei.");
+                    clickOkay = true;
                     return;
                 }
             }
@@ -198,6 +204,8 @@ public class Game {
                     }
                     else {
                         System.out.println("Kein gültiger Move");
+                        viewManager.getLogView().setStatusLabel("Das ist kein gültiger Zug");
+                        clickOkay = true;
                     }
                 }
 
@@ -238,6 +246,7 @@ public class Game {
             updateCurrentPlayer();*/}
         else {
             System.out.println("Kein Klick möglich");
+            viewManager.getLogView().setStatusLabel("Warten Sie bis Sie an der Reihe sind.");
         }
 
     }
@@ -286,6 +295,7 @@ public class Game {
         if (kill){
             viewManager.getScoreView().increaseStonesKilled();
             viewManager.getScoreView().increaseStonesLost();
+            checkWinner();
         }
 
         increaseRound();
@@ -299,6 +309,8 @@ public class Game {
         else {
             viewManager.getFieldView().setMoveCursor();
         }
+
+        System.out.println(board);
     }
 
 
@@ -377,10 +389,11 @@ public class Game {
     }
 
 
-    private void winGame(){
-        winner = getOtherPlayer();
-        viewManager.getLogView().setStatusLabel(winner.getName() + " hat das Spiel gewonnen");
-        viewManager.getFieldView().setDisable(true);
-        System.out.println(winner.getName() + " hat das Spiel gewonnen!");
+    private void checkWinner(){
+        if (movePhase && board.countPlayersStones(getOtherPlayerIndex()) < 3){
+            winner = getCurrentPlayer();
+            viewManager.getLogView().setStatusLabel(winner.getName() + " hat das Spiel gewonnen");
+            viewManager.getFieldView().setDisable(true);
+            System.out.println(winner.getName() + " hat das Spiel gewonnen!");}
     }
 }

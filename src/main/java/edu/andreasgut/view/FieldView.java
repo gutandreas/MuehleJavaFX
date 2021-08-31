@@ -71,6 +71,7 @@ public class FieldView extends AnchorPane {
 
         player1killCursor = new ImageCursor(new Image(player1Color.getPathKillCursor(), 85, 85, true, true));
         player2killCursor = new ImageCursor(new Image(player2Color.getPathKillCursor(), 85, 85, true, true));
+
     }
 
     private void setupFields(){
@@ -331,14 +332,15 @@ public class FieldView extends AnchorPane {
         return viewManager.getGame().getCurrentPlayerIndex()==0 ? player1StoneImage : player2StoneImage;
     }
 
-    public void setPutCursor(){
+    synchronized public void setPutCursor(){
         choosePutCursor();
         fieldGridPane.setOnMouseEntered(enter ->{
             choosePutCursor();
         });
+        moveMouseposition(20,20);
     }
 
-    private void choosePutCursor() {
+    synchronized private void choosePutCursor() {
         switch (viewManager.getGame().getCurrentPlayerIndex()){
             case 0:
                 imageView.getScene().setCursor(player1StoneCursor);
@@ -350,14 +352,14 @@ public class FieldView extends AnchorPane {
 
 
 
-    public void setKillCursor(){
+    synchronized public void setKillCursor(){
        chooseKillCursor();
         fieldGridPane.setOnMouseEntered(enter ->{
             chooseKillCursor();
         });
     }
 
-    private void chooseKillCursor() {
+    synchronized private void chooseKillCursor() {
         switch (viewManager.getGame().getCurrentPlayerIndex()){
             case 0:
                 imageView.getScene().setCursor(player1killCursor);
@@ -367,7 +369,7 @@ public class FieldView extends AnchorPane {
                 break;}
     }
 
-    public void setMoveCursor(){
+    synchronized public void setMoveCursor(){
         chooseMoveCursor();
         fieldGridPane.setOnMouseEntered(enter ->{
             chooseMoveCursor();

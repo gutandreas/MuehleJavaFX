@@ -26,14 +26,11 @@ public class HumanPlayer extends Player{
 
     @Override
     Position kill(Board board, int ownPlayerIndex, int otherPlayerIndex) {
-        board.clearStone(clickedPutPosition);
+        board.clearStone(clickedKillPosition);
 
         return clickedKillPosition;
     }
 
-    public Position getClickedPutPosition() {
-        return clickedPutPosition;
-    }
 
     public void setClickedPutPosition(Position clickedPutPosition) {
         this.clickedPutPosition = clickedPutPosition;
