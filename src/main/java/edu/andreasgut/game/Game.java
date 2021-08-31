@@ -1,7 +1,14 @@
 package edu.andreasgut.game;
 
 import edu.andreasgut.view.ViewManager;
+import javafx.geometry.Pos;
+import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
 public class Game {
@@ -21,6 +28,7 @@ public class Game {
     private final ViewManager viewManager;
     private boolean player2starts;
     private boolean clickOkay = true;
+    private String gameCode;
 
 
     ArrayList<Player> playerArrayList = new ArrayList<>();
@@ -33,6 +41,18 @@ public class Game {
         playerArrayList.add(1, player1);
         round = 0;
         currentPlayer=playerArrayList.get(0);
+        board = new Board(this);
+    }
+
+    public Game(ViewManager viewManager, Player player0, Player player1, String gameCode) {
+        this.viewManager = viewManager;
+        this.player0 = player0;
+        this.player1 = player1;
+        playerArrayList.add(0, player0);
+        playerArrayList.add(1, player1);
+        round = 0;
+        currentPlayer=playerArrayList.get(0);
+        this.gameCode = gameCode;
         board = new Board(this);
     }
 
@@ -96,6 +116,9 @@ public class Game {
         return board;
     }
 
+    public void setGameCode(String gameCode) {
+        this.gameCode = gameCode;
+    }
 
     public void increaseRound(){
         round++;
@@ -257,6 +280,7 @@ public class Game {
             Position computerPutPosition = currentPlayer.put(board,getCurrentPlayerIndex());
             board.putStone(computerPutPosition, getCurrentPlayerIndex());
             viewManager.getFieldView().graphicPut(computerPutPosition, getCurrentPlayerIndex(), 0);
+            sendPutAsHTTP(computerPutPosition);
             if (board.checkMorris(computerPutPosition) && board.isThereStoneToKill(getOtherPlayerIndex())){
                 Position computerKillPosition = currentPlayer.kill(board,getCurrentPlayerIndex(), getOtherPlayerIndex());
                 board.clearStone(computerKillPosition);
@@ -285,6 +309,39 @@ public class Game {
                 return;
             }
         }
+
+    }
+
+    private void sendPutAsHTTP(Position position){
+        HttpClient client = HttpClient.newBuilder().build();
+        JSONObject jsonObject = new JSONObject();
+        System.out.println(viewManager.getGame().getCurrentPlayer().getUuid());
+
+        jsonObject.put("gameCode", gameCode);
+        jsonObject.put("playerUuid", getCurrentPlayer().getUuid());
+        jsonObject.put("putRing", position.getRing());
+        jsonObject.put("putField", position.getField());
+        jsonObject.put("callComputer", false);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/controller/game/controller/put"))
+                .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
+                .build();
+
+        HttpResponse<?> response = null;
+
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+
+
 
     }
 

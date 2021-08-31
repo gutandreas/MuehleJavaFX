@@ -23,8 +23,10 @@ public class LogView extends VBox {
 
         if (computerOnlineBattle){
             nextComputerStepButton = new Button("Nächster Schritt des Computers");
-            nextComputerStepButton.setOnAction(click -> {viewManager.getGame().callComputer();
-            System.out.println("Button");});
+            nextComputerStepButton.setOnAction(click -> {
+                viewManager.getGame().callComputer();
+                nextComputerStepButton.setDisable(true);
+                System.out.println("Computer next step Button pressed");});
             this.getChildren().addAll(nextComputerStepButton);
         }
     }

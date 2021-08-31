@@ -13,6 +13,10 @@ public class ComputerPlayer extends Player {
         super(viewManager, name);
     }
 
+    public ComputerPlayer(ViewManager viewManager, String name, String uuid) {
+        super(viewManager, name, uuid);
+    }
+
 
 
     @Override

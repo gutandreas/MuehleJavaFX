@@ -20,7 +20,12 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+
+import org.apache.tomcat.util.json.JSONParser;
+import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 
 public class StartMenuView extends VBox {
 
@@ -361,10 +366,19 @@ public class StartMenuView extends VBox {
                     .build();
 
             HttpResponse<?> response = null;
+            ComputerPlayer computerPlayer = null;
+
             try {
-                response = client.send(request, HttpResponse.BodyHandlers.discarding());
+                response = client.send(request,HttpResponse.BodyHandlers.ofString());
+
+                String body = (String) response.body();
+                JSONObject jsonResponseObject = new JSONObject(body);
+                String uuid = jsonResponseObject.getString("player1Uuid");
+                System.out.println(uuid);
+
+                computerPlayer = new ComputerPlayer(viewManager, computerBattleTextfield.getText().toUpperCase(), uuid);
+
             } catch (IOException e) {
-                System.out.println("Test");
                 e.printStackTrace();
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -381,7 +395,9 @@ public class StartMenuView extends VBox {
                 }
 
                 viewManager.setGame(new Game(viewManager,
-                        new ComputerPlayer(viewManager, computerBattleTextfield.getText().toUpperCase()), new OnlinePlayer(viewManager, "Onlineplayer")));
+                        computerPlayer, new OnlinePlayer(viewManager, "Onlineplayer"), computerBattleTextfield.getText()));
+
+
 
                 viewManager.createGameScene(new FieldView(viewManager, player1Color, player2Color, false),
                         new ScoreView(viewManager, player1Color, player2Color),
