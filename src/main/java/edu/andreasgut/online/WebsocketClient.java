@@ -1,6 +1,7 @@
 package edu.andreasgut.online;
 
 import edu.andreasgut.game.Board;
+import edu.andreasgut.game.Game;
 import edu.andreasgut.game.Move;
 import edu.andreasgut.game.Position;
 import edu.andreasgut.view.ViewManager;
@@ -16,7 +17,6 @@ public class WebsocketClient extends WebSocketClient {
 
     private ViewManager viewManager;
     private Board board;
-    private static Object loopObject;
 
 
     public WebsocketClient(URI serverUri, ViewManager viewManager) {
@@ -28,8 +28,11 @@ public class WebsocketClient extends WebSocketClient {
     @Override
     public void onOpen(ServerHandshake handshakedata) {
         System.out.println("Verbunden mit Server");
-        //Ebb ebb = new Ebb("/dev/cu.usbmodem142101");
-        //Ebb ebb = new Ebb("/dev/ttyACM0");
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("gameCode", viewManager.getGame().getGameCode());
+        jsonObject.put("command", "start");
+        send(jsonObject.toString());
+
     }
 
     @Override
@@ -41,7 +44,9 @@ public class WebsocketClient extends WebSocketClient {
         switch (command){
             case "join":
                 System.out.println("Spiel beigetreten");
-                Platform.exitNestedEventLoop(loopObject, new Position(0,0));
+                viewManager.getLogView().activateNextComputerStepButton();
+                break;
+
             case "update":
 
                 if (jsonObject.getString("action").equals("put")){
@@ -101,6 +106,7 @@ public class WebsocketClient extends WebSocketClient {
 
 
                 }
+                break;
 
         }
 
@@ -123,7 +129,4 @@ public class WebsocketClient extends WebSocketClient {
         send(jsonObject.toString());
     }
 
-    static public void setLoopObject(Object object) {
-        loopObject = object;
-    }
 }

@@ -290,6 +290,7 @@ public class StartMenuView extends VBox {
                     viewManager.getSoundManager().stopMusic();
                 }
 
+
                 if (twoPlayersRadioButton.isSelected()){
                     viewManager.setGame(new Game(viewManager,
                             new HumanPlayer(viewManager, namePlayer1Textfield.getText().toUpperCase()),
@@ -306,10 +307,15 @@ public class StartMenuView extends VBox {
                         new ScoreView(viewManager, player1Color, player2Color),
                         new LogView(viewManager, false));
 
+
+
                 /*viewManager.getScoreView().updatePlayerNames(viewManager.getGame().getPlayer0(),
                         viewManager.getGame().getPlayer1());*/
 
                 viewManager.changeToGameScene();
+                if (beginnerSwitchButton.getState()){
+                    viewManager.getGame().callComputer();
+                }
 
 
 
@@ -387,15 +393,13 @@ public class StartMenuView extends VBox {
 
             if (response.statusCode() == 200){
 
-
-
                 viewManager.getSoundManager().chooseSound(MUSIC.PLAY_SOUND);
                 if (!viewManager.getOptionsView().getAudioOnOffSwitchButton().getState()){
                     viewManager.getSoundManager().stopMusic();
                 }
 
                 viewManager.setGame(new Game(viewManager,
-                        computerPlayer, new OnlinePlayer(viewManager, "Onlineplayer"), computerBattleTextfield.getText()));
+                        computerPlayer, new OnlinePlayer(viewManager, "Onlineplayer"), gameCodeTextfield.getText()));
 
 
 

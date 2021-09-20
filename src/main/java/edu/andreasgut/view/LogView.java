@@ -27,11 +27,16 @@ public class LogView extends VBox {
                 viewManager.getGame().callComputer();
                 nextComputerStepButton.setDisable(true);
                 System.out.println("Computer next step Button pressed");});
+            nextComputerStepButton.setDisable(true);
             this.getChildren().addAll(nextComputerStepButton);
         }
     }
 
     public void setStatusLabel(String string) {
         statusLabel.setText(string);
+    }
+
+    public void activateNextComputerStepButton(){
+        nextComputerStepButton.setDisable(false);
     }
 }

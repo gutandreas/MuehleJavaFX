@@ -20,13 +20,10 @@ public class OnlinePlayer extends Player{
     @Override
     Position put(Board board, int playerIndex) {
         Object loopObject = new Object();
-        WebsocketClient.setLoopObject(loopObject);
 
-        // Put von Websocket abholen
-        // Evtl. mit https://de.switch-case.com/61360391
 
-        Position position = (Position) Platform.enterNestedEventLoop(loopObject);
-        return position;
+
+        return null;
     }
 
     @Override

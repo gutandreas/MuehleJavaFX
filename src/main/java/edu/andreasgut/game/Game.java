@@ -65,11 +65,13 @@ public class Game {
         playerArrayList.add(0, player0);
         playerArrayList.add(1, player1);
         round = 0;
+        board = new Board(this);
         if (player2starts){
             currentPlayer=playerArrayList.get(1);}
         else {
             currentPlayer=playerArrayList.get(0);}
-        board = new Board(this);
+
+
     }
 
 
@@ -120,6 +122,10 @@ public class Game {
         this.gameCode = gameCode;
     }
 
+    public String getGameCode() {
+        return gameCode;
+    }
+
     public void increaseRound(){
         round++;
         viewManager.getScoreView().increaseRound();
@@ -131,7 +137,7 @@ public class Game {
     }
 
 
-    public void clickOnField(Position clickedPosition) {
+    public void nextStep(Position clickedPosition) {
 
 
         if (clickOkay){
@@ -218,6 +224,7 @@ public class Game {
                         movePhaseRelase = false;
                         if (board.checkMorris(move.getTo()) && board.isThereStoneToKill(getOtherPlayerIndex())){
                             killPhase = true;
+                            clickOkay = true;
                             return;
                         }
                         if (currentPlayer instanceof ComputerPlayer){

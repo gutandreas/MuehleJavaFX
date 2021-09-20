@@ -4,8 +4,6 @@ package edu.andreasgut.view;
 import edu.andreasgut.game.Move;
 import edu.andreasgut.game.Position;
 import edu.andreasgut.sound.SOUNDEFFECT;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
@@ -16,7 +14,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.robot.Robot;
-import javafx.util.Duration;
 
 
 public class FieldView extends AnchorPane {
@@ -110,7 +107,7 @@ public class FieldView extends AnchorPane {
                         System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
                         System.out.println("Test");
 
-                        viewManager.getGame().clickOnField(position);
+                        viewManager.getGame().nextStep(position);
                     });
                 }
             }
