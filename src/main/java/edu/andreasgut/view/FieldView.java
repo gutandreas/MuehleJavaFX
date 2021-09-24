@@ -2,6 +2,7 @@ package edu.andreasgut.view;
 
 
 import edu.andreasgut.game.Move;
+import edu.andreasgut.game.OfflineGame;
 import edu.andreasgut.game.Position;
 import edu.andreasgut.sound.SOUNDEFFECT;
 import javafx.application.Platform;
@@ -107,7 +108,7 @@ public class FieldView extends AnchorPane {
                         System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
                         System.out.println("Test");
 
-                        viewManager.getGame().nextStep(position);
+                        ((OfflineGame) viewManager.getGame()).nextStep(position);
                     });
                 }
             }
@@ -115,147 +116,7 @@ public class FieldView extends AnchorPane {
     }
 
 
-    public Position humanGraphicPut() {
-        Object loopObject = new Object();
-        setPutCursor();
-        final Position position = new Position();
-        final int[] ring = new int[1];
-        final int[] field = new int[1];
 
-        for (Node n : fieldGridPane.getChildren()){
-            if(((ImageView) n).getImage().equals(emptyField)){
-            n.setOnMouseClicked(click ->{
-                position.setRing(translateToRing(n));
-                position.setField(translateToField(n));
-
-                System.out.println("Feld in Repräsentationsarray: " + ring[0] + "/" + field[0]);
-                System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
-
-                switch (viewManager.getGame().getCurrentPlayerIndex()){
-                    case 0:
-                        ((ImageView)n).setImage(player1StoneImage);
-                        break;
-                    case 1:
-                        ((ImageView)n).setImage(player2StoneImage);
-                        break;
-                }
-
-                Platform.exitNestedEventLoop(loopObject, null);
-
-            });}}
-
-        Platform.enterNestedEventLoop(loopObject);
-        clearAllFieldFunctions();
-        viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
-        moveMouseposition(20, 20);
-        return position;
-    }
-
-    public Position humanGraphicKill(){
-        Object loopObject = new Object();
-        setKillCursor();
-
-        final Position position = new Position();
-
-        for (Node n : fieldGridPane.getChildren()){
-            if(((ImageView) n).getImage().equals(getEnemysStoneImage()) &&
-                    viewManager.getGame().getBoard().checkKill(new Position(translateToRing(n),translateToField(n)),
-                    viewManager.getGame().getOtherPlayerIndex())) {
-            n.setOnMouseClicked(click ->{
-                position.setRing(translateToRing(n));
-                position.setField(translateToField(n));
-
-                System.out.println("Stein wurde gesetzt.");
-                System.out.println("Feld in Repräsentationsarray: " + position.getRing() + "/" + position.getField());
-                System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
-
-                ((ImageView) n).setImage(emptyField);
-                Platform.exitNestedEventLoop(loopObject, null);
-            });}}
-        Platform.enterNestedEventLoop(loopObject);
-        clearAllFieldFunctions();
-        viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.KILL_STONE);
-        moveMouseposition(20, 20);
-
-        return position;
-    }
-
-    public Move humanGraphicMove() {
-
-        Move move = new Move();
-        boolean releasedOnAnotherField = false;
-
-        while (!releasedOnAnotherField){
-
-            setMoveCursor();
-
-            final ImageView clickedField = humanGraphicMoveTakeStep(move)[0];
-            clearAllFieldFunctions();
-
-            setPutCursor();
-
-            releasedOnAnotherField = humanGraphicMoveReleaseStep(move, clickedField);
-            clearAllFieldFunctions();}
-
-        return move;
-    }
-
-    private ImageView[] humanGraphicMoveTakeStep(Move move){
-        Object loopObject = new Object();
-        final ImageView[] clickedField = new ImageView[1];
-
-        for (Node n : fieldGridPane.getChildren()){
-            if(((ImageView) n).getImage().equals(getOwnStoneImage())){
-                n.setOnMouseClicked(click ->{
-                    move.setFrom(new Position(translateToRing(n), translateToField(n)));
-
-                    System.out.println("Stein wurde genommen.");
-                    System.out.println("Feld in Repräsentationsarray: " + move.getFrom().getRing() + "/" + move.getFrom().getField());
-                    System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
-
-                    ((ImageView) n).setImage(emptyField);
-                    Platform.exitNestedEventLoop(loopObject, null);
-                    clickedField[0] = (ImageView) click.getSource();
-                });}}
-        Platform.enterNestedEventLoop(loopObject);
-        return clickedField;
-    }
-
-    private boolean humanGraphicMoveReleaseStep(Move move, ImageView clickedField){
-        Object loopObject = new Object();
-        final boolean[] releasedOnAnotherfield = {false};
-        for (Node n : fieldGridPane.getChildren()){
-            move.setTo(new Position(translateToRing(n), translateToField(n)));
-            if(((ImageView) n).getImage().equals(emptyField) &&
-                    (viewManager.getGame().getBoard().checkMove(move,
-                            viewManager.getGame().getBoard().countPlayersStones(viewManager.getGame().getCurrentPlayerIndex()) == 3))){
-                n.setOnMouseClicked(click ->{
-                    move.setTo(new Position(translateToRing(n), translateToField(n)));
-
-                    System.out.println("Stein wurde hingelegt.");
-                    System.out.println("Feld in Repräsentationsarray: " + move.getTo().getRing() + "/" + move.getTo().getField());
-                    System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
-
-                    ((ImageView) n).setImage(getOwnStoneImage());
-                    releasedOnAnotherfield[0] = true;
-                    Platform.exitNestedEventLoop(loopObject, null);
-                });}
-            if (n == clickedField){
-                n.setOnMouseClicked(click ->{
-                    ((ImageView) n).setImage(getOwnStoneImage());
-                    releasedOnAnotherfield[0] = false;
-                    Platform.exitNestedEventLoop(loopObject, null);
-                });
-            }
-        }
-        Platform.enterNestedEventLoop(loopObject);
-        setMoveCursor();
-        return releasedOnAnotherfield[0];
-    }
-
-    public void onlineGraphicPut(Position position){
-
-    }
 
     public void graphicPut(Position position, int playerIndex, int delay){
         Object loopObject = new Object();
@@ -272,13 +133,6 @@ public class FieldView extends AnchorPane {
         ((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(image);
         viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
 
-        /*Timeline timeline = new Timeline(new KeyFrame(
-                Duration.millis(delay),
-                put -> {((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(player1StoneImage);
-                        viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
-                        Platform.exitNestedEventLoop(loopObject, null);}));
-        timeline.play();
-        Platform.enterNestedEventLoop(loopObject);*/
 
     }
 
@@ -311,19 +165,13 @@ public class FieldView extends AnchorPane {
     }
 
     public void graphicKill(Position position){
-        Object loopObject = new Object();
+
 
         ((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(emptyField);
         viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.KILL_STONE);
 
 
-        /*Timeline timeline = new Timeline(new KeyFrame(
-                Duration.millis(COMPREACTIONTIME*1.5),
-                kill -> {((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(emptyField);
-                        viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.KILL_STONE);
-                        Platform.exitNestedEventLoop(loopObject, null);}));
-        timeline.play();
-        Platform.enterNestedEventLoop(loopObject);*/
+
     }
 
     private void moveMouseposition(int dx, int dy){
@@ -332,11 +180,11 @@ public class FieldView extends AnchorPane {
     }
 
     private Image getEnemysStoneImage(){
-        return viewManager.getGame().getCurrentPlayerIndex()==0 ? player2StoneImage : player1StoneImage;
+        return ((OfflineGame) viewManager.getGame()).getCurrentPlayerIndex()==0 ? player2StoneImage : player1StoneImage;
     }
 
     private Image getOwnStoneImage(){
-        return viewManager.getGame().getCurrentPlayerIndex()==0 ? player1StoneImage : player2StoneImage;
+        return ((OfflineGame) viewManager.getGame()).getCurrentPlayerIndex()==0 ? player1StoneImage : player2StoneImage;
     }
 
     synchronized public void setPutCursor(){
@@ -348,7 +196,7 @@ public class FieldView extends AnchorPane {
     }
 
     synchronized private void choosePutCursor() {
-        switch (viewManager.getGame().getCurrentPlayerIndex()){
+        switch (((OfflineGame) viewManager.getGame()).getCurrentPlayerIndex()){
             case 0:
                 imageView.getScene().setCursor(player1StoneCursor);
                 break;
@@ -367,7 +215,7 @@ public class FieldView extends AnchorPane {
     }
 
     synchronized private void chooseKillCursor() {
-        switch (viewManager.getGame().getCurrentPlayerIndex()){
+        switch (((OfflineGame) viewManager.getGame()).getCurrentPlayerIndex()){
             case 0:
                 imageView.getScene().setCursor(player1killCursor);
                 break;
@@ -384,7 +232,7 @@ public class FieldView extends AnchorPane {
     }
 
     private void chooseMoveCursor(){
-        switch (viewManager.getGame().getCurrentPlayerIndex()){
+        switch (((OfflineGame) viewManager.getGame()).getCurrentPlayerIndex()){
             case 0:
                 imageView.getScene().setCursor(player1HandCursor);
                 break;

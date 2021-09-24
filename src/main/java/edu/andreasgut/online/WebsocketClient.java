@@ -1,11 +1,7 @@
 package edu.andreasgut.online;
 
-import edu.andreasgut.game.Board;
-import edu.andreasgut.game.Game;
-import edu.andreasgut.game.Move;
-import edu.andreasgut.game.Position;
+import edu.andreasgut.game.*;
 import edu.andreasgut.view.ViewManager;
-import javafx.application.Platform;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONObject;
@@ -16,20 +12,18 @@ import java.net.URI;
 public class WebsocketClient extends WebSocketClient {
 
     private ViewManager viewManager;
-    private Board board;
 
 
     public WebsocketClient(URI serverUri, ViewManager viewManager) {
         super(serverUri);
         this.viewManager = viewManager;
-        this.board = viewManager.getGame().getBoard();
     }
 
     @Override
     public void onOpen(ServerHandshake handshakedata) {
         System.out.println("Verbunden mit Server");
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("gameCode", viewManager.getGame().getGameCode());
+        jsonObject.put("gameCode", ((OnlineGame) viewManager.getGame()).getGameCode());
         jsonObject.put("command", "start");
         send(jsonObject.toString());
 
@@ -40,6 +34,7 @@ public class WebsocketClient extends WebSocketClient {
         System.out.println(message);
         JSONObject jsonObject = new JSONObject(message);
         String command = jsonObject.getString("command");
+        Board board = viewManager.getGame().getBoard();
 
         switch (command){
             case "join":
@@ -54,6 +49,7 @@ public class WebsocketClient extends WebSocketClient {
                     int ring = jsonObject.getInt("ring");
                     int field = jsonObject.getInt("field");
                     int playerIndex = jsonObject.getInt("playerIndex");
+                    OnlineGame game = ((OnlineGame) viewManager.getGame());
 
                     Position position = new Position(ring, field);
                     System.out.println(position);
@@ -61,6 +57,13 @@ public class WebsocketClient extends WebSocketClient {
                     if (board.checkPut(position)){
                         board.putStone(position, playerIndex);
                         viewManager.getFieldView().graphicPut(position, viewManager.getGame().getCurrentPlayerIndex(), 0);
+                        if (board.checkMorris(position) && board.isThereStoneToKill(1-playerIndex) ||
+                                (game.getRound() > 18 && board.countPlayersStones(1-playerIndex) != 3)){
+                            // Gegner darf Stein entfernen
+                        }
+                        else {
+                            viewManager.getLogView().activateNextComputerStepButton();
+                        }
                         System.out.println(board);}
                     else {
                         System.out.println("Es wurde ein ungültiger Put ausgeführt");

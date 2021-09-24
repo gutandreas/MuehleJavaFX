@@ -1,9 +1,6 @@
 package edu.andreasgut.view;
 
-import edu.andreasgut.game.ComputerPlayer;
-import edu.andreasgut.game.Game;
-import edu.andreasgut.game.HumanPlayer;
-import edu.andreasgut.game.OnlinePlayer;
+import edu.andreasgut.game.*;
 import edu.andreasgut.online.WebsocketClient;
 import edu.andreasgut.sound.MUSIC;
 import edu.andreasgut.view.fxElements.BeginnerSwitchButton;
@@ -21,11 +18,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import org.apache.tomcat.util.json.JSONParser;
-import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
 
 public class StartMenuView extends VBox {
 
@@ -292,12 +285,12 @@ public class StartMenuView extends VBox {
 
 
                 if (twoPlayersRadioButton.isSelected()){
-                    viewManager.setGame(new Game(viewManager,
+                    viewManager.setGame(new OfflineGame(viewManager,
                             new HumanPlayer(viewManager, namePlayer1Textfield.getText().toUpperCase()),
                             new HumanPlayer(viewManager, namePlayer2Textfield.getText().toUpperCase())));
                 }
                 else {
-                    viewManager.setGame(new Game(viewManager,
+                    viewManager.setGame(new OfflineGame(viewManager,
                             new HumanPlayer(viewManager, namePlayer1Textfield.getText().toUpperCase()),
                             beginnerSwitchButton.getState()));
                 }
@@ -314,7 +307,7 @@ public class StartMenuView extends VBox {
 
                 viewManager.changeToGameScene();
                 if (beginnerSwitchButton.getState()){
-                    viewManager.getGame().callComputer();
+                    ((OfflineGame) viewManager.getGame()).callComputer();
                 }
 
 
@@ -398,9 +391,15 @@ public class StartMenuView extends VBox {
                     viewManager.getSoundManager().stopMusic();
                 }
 
-                viewManager.setGame(new Game(viewManager,
-                        computerPlayer, new OnlinePlayer(viewManager, "Onlineplayer"), gameCodeTextfield.getText()));
 
+                try {
+                    URI uri = new URI("ws://localhost:8080/board");
+                    WebsocketClient websocketClient = new WebsocketClient(uri, viewManager);
+                    viewManager.setGame(new OnlineGame(viewManager, computerPlayer, new OnlinePlayer(viewManager, "Onlineplayer"), gameCodeTextfield.getText(), websocketClient));
+                    websocketClient.connect();
+                } catch (URISyntaxException e) {
+                    e.printStackTrace();
+                }
 
 
                 viewManager.createGameScene(new FieldView(viewManager, player1Color, player2Color, false),
@@ -410,21 +409,10 @@ public class StartMenuView extends VBox {
                 viewManager.changeToGameScene();
 
 
-
-
-                try {
-                    URI uri = new URI("ws://localhost:8080/board");
-                    WebsocketClient websocketClient = new WebsocketClient(uri, viewManager);
-                    websocketClient.connect();
-                } catch (URISyntaxException e) {
-                    e.printStackTrace();
-                }
-
-
             }
             else {
                 if (startGameSwitchButton.getState()){
-                    onlineInformationLabel.setText("Dieses Game existiert noch nicht. Kontrollieren Sie den Gamecode.");
+                    onlineInformationLabel.setText("Dieses OfflineGame existiert noch nicht. Kontrollieren Sie den Gamecode.");
                 }
                 else {
                     onlineInformationLabel.setText("Der Gamecode existiert bereits. Wählen Sie einen anderen Gamecode.");
