@@ -1,5 +1,6 @@
 package edu.andreasgut.view;
 
+import edu.andreasgut.game.OnlineGame;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -24,7 +25,7 @@ public class LogView extends VBox {
         if (computerOnlineBattle){
             nextComputerStepButton = new Button("Nächster Schritt des Computers");
             nextComputerStepButton.setOnAction(click -> {
-                viewManager.getGame().callComputer();
+                ((OnlineGame) viewManager.getGame()).getNextComputerStep();
                 nextComputerStepButton.setDisable(true);
                 System.out.println("Computer next step Button pressed");});
             nextComputerStepButton.setDisable(true);

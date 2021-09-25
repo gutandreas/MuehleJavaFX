@@ -1,8 +1,5 @@
 package edu.andreasgut.game;
 
-import java.util.LinkedList;
-import java.util.List;
-
 public class Board {
 
     final private int[][] array;
