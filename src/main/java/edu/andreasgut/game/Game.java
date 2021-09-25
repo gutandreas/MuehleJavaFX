@@ -1,14 +1,9 @@
 package edu.andreasgut.game;
 
+import edu.andreasgut.online.MessageInterface;
 import edu.andreasgut.view.ViewManager;
-import javafx.geometry.Pos;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 
 public class Game {
@@ -17,7 +12,7 @@ public class Game {
     private final Player player1;
     private Player winner;
     private int round;
-    private final int NUMBEROFSTONES = 9;
+    private final int NUMBEROFSTONES = 5;
     private Player currentPlayer;
     private final Board board;
     boolean putPhase = true;
@@ -29,6 +24,7 @@ public class Game {
     private boolean player2starts;
     private boolean clickOkay = true;
     private String gameCode;
+    private Position lastClickedPosition;
 
 
     ArrayList<Player> playerArrayList = new ArrayList<>();
@@ -60,7 +56,7 @@ public class Game {
     public Game(ViewManager viewManager, Player player0, boolean player2starts) {
         this.viewManager = viewManager;
         this.player0 = player0;
-        this.player1 = new ComputerPlayer(viewManager, "COMPUTER");
+        this.player1 = new ComputerPlayer(viewManager, "COMPUTER", true);
         this.player2starts = player2starts;
         playerArrayList.add(0, player0);
         playerArrayList.add(1, player1);
@@ -122,6 +118,30 @@ public class Game {
         this.gameCode = gameCode;
     }
 
+    public void setClickOkay(boolean clickOkay) {
+        this.clickOkay = clickOkay;
+    }
+
+    public void setPutPhase(boolean putPhase) {
+        this.putPhase = putPhase;
+    }
+
+    public void setMovePhase(boolean movePhase) {
+        this.movePhase = movePhase;
+    }
+
+    public void setMovePhaseTake(boolean movePhaseTake) {
+        this.movePhaseTake = movePhaseTake;
+    }
+
+    public void setMovePhaseRelase(boolean movePhaseRelase) {
+        this.movePhaseRelase = movePhaseRelase;
+    }
+
+    public void setKillPhase(boolean killPhase) {
+        this.killPhase = killPhase;
+    }
+
     public String getGameCode() {
         return gameCode;
     }
@@ -150,16 +170,9 @@ public class Game {
 
             if (killPhase){
                 if (board.checkKill(clickedPosition, getOtherPlayerIndex())){
-                    ((HumanPlayer) currentPlayer).setClickedKillPosition(clickedPosition);
-                    currentPlayer.kill(board, getCurrentPlayerIndex(), getOtherPlayerIndex());
-                    viewManager.getFieldView().graphicKill(clickedPosition);
-                    updateGameState(false, true);
-                    if (currentPlayer instanceof ComputerPlayer){
-                        callComputer();
-                    }
-                    clickOkay = true;
-                    killPhase = false;
-                    return;}
+                    sendKillToMessageInterface(clickedPosition);
+                    return;
+                   }
                 else {
                     System.out.println("Ungültiger Kill");
                     viewManager.getLogView().setStatusLabel("Auf diesem Feld kann kein Stein entfernt werden.");
@@ -171,27 +184,7 @@ public class Game {
             if (putPhase){
                 if (board.checkPut(clickedPosition)){
 
-                    ((HumanPlayer) currentPlayer).setClickedPutPosition(clickedPosition);
-                    currentPlayer.put(board, getCurrentPlayerIndex());
-                    viewManager.getFieldView().graphicPut(clickedPosition, getCurrentPlayerIndex(), 0);
-
-                    if (board.checkMorris(clickedPosition) && board.isThereStoneToKill(getOtherPlayerIndex())){
-                        killPhase = true;
-                        clickOkay = true;
-                        viewManager.getFieldView().setKillCursor();
-                        viewManager.getLogView().setStatusLabel(currentPlayer.getName() + " darf einen gegnerischen Stein entfernen.");
-                        return;
-                    }
-                    else {
-                        updateGameState(true, false);
-                        if (currentPlayer instanceof ComputerPlayer){
-                            callComputer();
-                        }
-                        else {
-                            clickOkay = true;
-                        }
-                        return;
-                    }
+                    sendPutToMessageInterface(clickedPosition);
 
                 }
                 else {
@@ -204,76 +197,45 @@ public class Game {
 
             if (movePhase){
                 if (movePhaseTake){
-                    ((HumanPlayer) currentPlayer).setClickedMovePositionTakeStep(clickedPosition);
-                    movePhaseTake = false;
-                    movePhaseRelase = true;
-                    clickOkay = true;
-                    viewManager.getFieldView().setPutCursor();
-                    viewManager.getFieldView().graphicKill(clickedPosition);
-                    return;
+                    if (board.isThisMyStone(clickedPosition, getCurrentPlayerIndex())){
+                        viewManager.getFieldView().setPutCursor();
+                        viewManager.getFieldView().graphicTake(clickedPosition);
+                        lastClickedPosition = clickedPosition;
+                        clickOkay = true;
+                        movePhaseRelase = true;
+                        movePhaseTake = false;
+                        return;}
+                    else {
+                        clickOkay = true;
+                        return;
+                    }
+
                 }
+
+
                 if (movePhaseRelase){
-                    ((HumanPlayer) currentPlayer).setClickedMovePositionReleaseStep(clickedPosition);
                     boolean allowedToJump = board.countPlayersStones(getCurrentPlayerIndex()) == 3;
-                    Move move = currentPlayer.move(board, getCurrentPlayerIndex(), allowedToJump);
+                    Move move = new Move(lastClickedPosition, clickedPosition);
                     if (board.checkMove(move,allowedToJump)){
-                        board.move(move, getCurrentPlayerIndex());
-                        viewManager.getFieldView().graphicMove(move, getCurrentPlayerIndex());
-                        updateGameState(false,false);
-                        movePhaseTake = true;
-                        movePhaseRelase = false;
-                        if (board.checkMorris(move.getTo()) && board.isThereStoneToKill(getOtherPlayerIndex())){
-                            killPhase = true;
-                            clickOkay = true;
-                            return;
-                        }
-                        if (currentPlayer instanceof ComputerPlayer){
-                            callComputer();
-                            return;
-                        }
+                        sendMoveToMessageInterface(move);
                     }
                     else {
                         System.out.println("Kein gültiger Move");
                         viewManager.getLogView().setStatusLabel("Das ist kein gültiger Zug");
+                        viewManager.getFieldView().graphicPut(lastClickedPosition, getCurrentPlayerIndex(), 0);
+                        viewManager.getFieldView().setMoveCursor();
                         clickOkay = true;
+                        movePhaseRelase = false;
+                        movePhaseTake = true;
                     }
                 }
 
 
             }
 
-            System.out.println(board);
 
 
-
-            //viewManager.getScoreView().setPlayerLabelEffects(); // funktioniert noch nicht wie gewünscht
-
-            /*Position positionToCheckMorris = null;
-
-            if (putPhase){
-                positionToCheckMorris = put(position);
-            }
-
-            if (movePhase && board.checkIfAbleToMove(getCurrentPlayerIndex())){
-                positionToCheckMorris = move();
-            }
-
-            if (positionToCheckMorris != null
-                    && board.checkMorris(positionToCheckMorris)
-                    && (board.isThereStoneToKill(getOtherPlayerIndex())
-                    || (board.countPlayersStones(getOtherPlayerIndex())==3) && movePhase)){
-                kill();
-            }
-
-            if (movePhase &&
-                    (board.countPlayersStones(getCurrentPlayerIndex()) <= 2
-                            || !board.checkIfAbleToMove(getCurrentPlayerIndex()))){
-                winGame();
-                return;
-            }
-
-            increaseRound();
-            updateCurrentPlayer();*/}
+        }
         else {
             System.out.println("Kein Klick möglich");
             viewManager.getLogView().setStatusLabel("Warten Sie bis Sie an der Reihe sind.");
@@ -287,7 +249,7 @@ public class Game {
             Position computerPutPosition = currentPlayer.put(board,getCurrentPlayerIndex());
             board.putStone(computerPutPosition, getCurrentPlayerIndex());
             viewManager.getFieldView().graphicPut(computerPutPosition, getCurrentPlayerIndex(), 0);
-            sendPutAsHTTP(computerPutPosition);
+            sendPutToMessageInterface(computerPutPosition);
             if (board.checkMorris(computerPutPosition) && board.isThereStoneToKill(getOtherPlayerIndex())){
                 Position computerKillPosition = currentPlayer.kill(board,getCurrentPlayerIndex(), getOtherPlayerIndex());
                 board.clearStone(computerKillPosition);
@@ -319,44 +281,63 @@ public class Game {
 
     }
 
-    private void sendPutAsHTTP(Position position){
-        HttpClient client = HttpClient.newBuilder().build();
+
+
+    private void sendPutToMessageInterface(Position position) {
+
         JSONObject jsonObject = new JSONObject();
         System.out.println(viewManager.getGame().getCurrentPlayer().getUuid());
 
         jsonObject.put("gameCode", gameCode);
-        jsonObject.put("playerUuid", getCurrentPlayer().getUuid());
-        jsonObject.put("putRing", position.getRing());
-        jsonObject.put("putField", position.getField());
+        jsonObject.put("command", "update");
+        jsonObject.put("action", "put");
+        jsonObject.put("playerUuid", player0.getUuid());
+        jsonObject.put("ring", position.getRing());
+        jsonObject.put("field", position.getField());
         jsonObject.put("callComputer", false);
-
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("http://localhost:8080/controller/game/controller/put"))
-                .POST(HttpRequest.BodyPublishers.ofString(jsonObject.toString()))
-                .build();
-
-        HttpResponse<?> response = null;
-
-        try {
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-
-
-
-
+        jsonObject.put("playerIndex", getCurrentPlayerIndex());
+        MessageInterface.sendMessage(viewManager, jsonObject.toString());
     }
 
-    private void updateGameState(boolean put, boolean kill){
+    private void sendMoveToMessageInterface(Move move) {
+
+        JSONObject jsonObject = new JSONObject();
+        System.out.println(viewManager.getGame().getCurrentPlayer().getUuid());
+
+        jsonObject.put("gameCode", gameCode);
+        jsonObject.put("command", "update");
+        jsonObject.put("action", "move");
+        jsonObject.put("playerUuid", player0.getUuid());
+        jsonObject.put("moveFromRing", move.getFrom().getRing());
+        jsonObject.put("moveFromField", move.getFrom().getField());
+        jsonObject.put("moveToRing", move.getTo().getRing());
+        jsonObject.put("moveToField", move.getTo().getField());
+        jsonObject.put("callComputer", false);
+        jsonObject.put("playerIndex", getCurrentPlayerIndex());
+        MessageInterface.sendMessage(viewManager, jsonObject.toString());
+    }
+
+    private void sendKillToMessageInterface(Position position) {
+
+        JSONObject jsonObject = new JSONObject();
+        System.out.println(viewManager.getGame().getCurrentPlayer().getUuid());
+
+        jsonObject.put("gameCode", gameCode);
+        jsonObject.put("command", "update");
+        jsonObject.put("action", "kill");
+        jsonObject.put("playerUuid", player0.getUuid());
+        jsonObject.put("ring", position.getRing());
+        jsonObject.put("field", position.getField());
+        jsonObject.put("callComputer", false);
+        jsonObject.put("playerIndex", getCurrentPlayerIndex());
+        MessageInterface.sendMessage(viewManager, jsonObject.toString());
+    }
+
+    public void updateGameState(boolean put, boolean killHappend){
         if (put){
             viewManager.getScoreView().increaseStonesPut();
         }
-        if (kill){
+        if (killHappend){
             viewManager.getScoreView().increaseStonesKilled();
             viewManager.getScoreView().increaseStonesLost();
             checkWinner();
@@ -368,88 +349,28 @@ public class Game {
         viewManager.getLogView().setStatusLabel(currentPlayer.getName() + " ist an der Reihe");
 
         if (round < NUMBEROFSTONES*2){
+            putPhase = true;
             viewManager.getFieldView().setPutCursor();
         }
         else {
+            movePhase = true;
+            movePhaseTake = true;
+            movePhaseRelase = false;
             viewManager.getFieldView().setMoveCursor();
         }
 
-        System.out.println(board);
     }
 
 
-    private Position put(Position position){
-        Position putPosition = currentPlayer.put(board, getCurrentPlayerIndex());
-        Position positionToCheckMorris;
 
-        if (board.checkPut(putPosition)){
-            board.putStone(putPosition, getCurrentPlayerIndex());
-
-            if (currentPlayer instanceof ComputerPlayer){
-                viewManager.getFieldView().graphicPut(putPosition, getCurrentPlayerIndex(), 500);
-            }
-
-
-            viewManager.getScoreView().increaseStonesPut();
-        }
-        else {
-            throw new InvalidPutException("Dieses Feld ist nicht frei.");
-        }
-
-        positionToCheckMorris = putPosition;
-
-        return positionToCheckMorris;
-    }
-
-
-    private Position move(){
-        Move move = currentPlayer.move(board, getCurrentPlayerIndex(),
-                board.countPlayersStones(getCurrentPlayerIndex())==3);
-        Position positionToCheckMorris;
-
-        if (board.checkMove(move, board.countPlayersStones(getCurrentPlayerIndex())==3)){
-            board.move(move, getCurrentPlayerIndex());
-
-            if (currentPlayer instanceof ComputerPlayer){
-                viewManager.getFieldView().graphicMove(move, getCurrentPlayerIndex());
-            }
-        }
-        else {
-            throw new InvalidMoveException("Das ist ein ungültiger Zug.");
-        }
-
-        positionToCheckMorris = move.getTo();
-
-        return positionToCheckMorris;
-    }
-
-
-    private void kill(){
-        System.out.println(currentPlayer.getName() + " darf einen gegnerischen Stein entfernen");
-        viewManager.getLogView().setStatusLabel(currentPlayer.getName() +
-                " darf einen gegnerischen Stein entfernen. Wähle den Stein, der entfernt werden soll");
-
-        Position killPosition = currentPlayer.kill(board, getCurrentPlayerIndex(), getOtherPlayerIndex());
-
-        if(board.checkKill(killPosition, getOtherPlayerIndex())){
-            board.clearStone(killPosition);
-            viewManager.getScoreView().increaseStonesKilled();
-            viewManager.getScoreView().increaseStonesLost();
-
-            if (currentPlayer instanceof ComputerPlayer){
-                viewManager.getFieldView().graphicKill(killPosition);
-            }
-        }
-        else {
-            throw new InvalidKillException("Auf diesem Feld befindet sich kein gegnerischer Stein");
-        }
-    }
 
 
     private void setGamesPhaseBooleans(){
         if (round >= NUMBEROFSTONES*2){
             putPhase = false;
-            movePhase = true;}
+            movePhase = true;
+            System.out.println("Wechsel von Setz- zu Zugphase");
+        }
     }
 
 

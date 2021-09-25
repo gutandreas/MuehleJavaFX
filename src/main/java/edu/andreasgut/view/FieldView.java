@@ -310,6 +310,10 @@ public class FieldView extends AnchorPane {
         Platform.enterNestedEventLoop(loopObject);*/
     }
 
+    public void graphicTake(Position position){
+        ((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(emptyField);
+    }
+
     public void graphicKill(Position position){
         Object loopObject = new Object();
 

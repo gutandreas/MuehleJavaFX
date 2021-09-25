@@ -37,78 +37,7 @@ public class WebsocketClient extends WebSocketClient {
 
     @Override
     public void onMessage(String message) {
-        System.out.println(message);
-        JSONObject jsonObject = new JSONObject(message);
-        String command = jsonObject.getString("command");
-
-        switch (command){
-            case "join":
-                System.out.println("Spiel beigetreten");
-                viewManager.getLogView().activateNextComputerStepButton();
-                break;
-
-            case "update":
-
-                if (jsonObject.getString("action").equals("put")){
-
-                    int ring = jsonObject.getInt("ring");
-                    int field = jsonObject.getInt("field");
-                    int playerIndex = jsonObject.getInt("playerIndex");
-
-                    Position position = new Position(ring, field);
-                    System.out.println(position);
-
-                    if (board.checkPut(position)){
-                        board.putStone(position, playerIndex);
-                        viewManager.getFieldView().graphicPut(position, viewManager.getGame().getCurrentPlayerIndex(), 0);
-                        System.out.println(board);}
-                    else {
-                        System.out.println("Es wurde ein ungültiger Put ausgeführt");
-                    }
-                }
-
-                if (jsonObject.getString("action").equals("move")){
-
-                    int moveFromRing = jsonObject.getInt("moveFromRing");
-                    int moveFromField = jsonObject.getInt("moveFromField");
-                    int moveToRing = jsonObject.getInt("moveToRing");
-                    int moveToField = jsonObject.getInt("moveToField");
-                    int playerIndex = jsonObject.getInt("playerIndex");
-
-                    Move move = new Move(new Position(moveFromRing, moveFromField), new Position(moveToRing, moveToField));
-                    boolean jump = board.countPlayersStones(0) == 3;
-
-
-                    if (board.checkMove(move, jump)){
-                        board.move(move, playerIndex);
-                        System.out.println(board);}
-                    else {
-                        System.out.println("Es wurde ein ungültiger Move ausgeführt");
-                    }
-
-                }
-
-                if (jsonObject.getString("action").equals("kill")){
-
-                    int ring = jsonObject.getInt("ring");
-                    int field = jsonObject.getInt("field");
-
-                    int playerIndex = board.getNumberOnPosition(ring, field);
-                    Position position = new Position(ring, field);
-
-                    if (board.checkKill(position, playerIndex)){
-                        board.clearStone(position);
-                        System.out.println(board);
-                    }
-                    else {
-                        System.out.println("Es wurde ein ungültiger Kill ausgeführt");
-                    }
-
-
-                }
-                break;
-
-        }
+        MessageInterface.receiveMessage(viewManager, message);
 
     }
 

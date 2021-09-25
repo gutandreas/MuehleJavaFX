@@ -6,8 +6,8 @@ public class HumanPlayer extends Player{
 
     private Position clickedPutPosition, clickedKillPosition, clickedMovePositionTakeStep, clickedMovePositionReleaseStep;
 
-    public HumanPlayer(ViewManager viewManager, String name) {
-        super(viewManager, name);
+    public HumanPlayer(ViewManager viewManager, String name, boolean local) {
+        super(viewManager, name, local);
     }
 
     @Override

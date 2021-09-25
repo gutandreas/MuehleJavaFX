@@ -293,12 +293,12 @@ public class StartMenuView extends VBox {
 
                 if (twoPlayersRadioButton.isSelected()){
                     viewManager.setGame(new Game(viewManager,
-                            new HumanPlayer(viewManager, namePlayer1Textfield.getText().toUpperCase()),
-                            new HumanPlayer(viewManager, namePlayer2Textfield.getText().toUpperCase())));
+                            new HumanPlayer(viewManager, namePlayer1Textfield.getText().toUpperCase(), true),
+                            new HumanPlayer(viewManager, namePlayer2Textfield.getText().toUpperCase(), true)));
                 }
                 else {
                     viewManager.setGame(new Game(viewManager,
-                            new HumanPlayer(viewManager, namePlayer1Textfield.getText().toUpperCase()),
+                            new HumanPlayer(viewManager, namePlayer1Textfield.getText().toUpperCase(), true),
                             beginnerSwitchButton.getState()));
                 }
 

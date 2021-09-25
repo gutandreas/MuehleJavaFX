@@ -9,8 +9,8 @@ public class ComputerPlayer extends Player {
     GameTree gameTree = new GameTree();
 
 
-    public ComputerPlayer(ViewManager viewManager, String name) {
-        super(viewManager, name);
+    public ComputerPlayer(ViewManager viewManager, String name, boolean local) {
+        super(viewManager, name, local);
     }
 
     public ComputerPlayer(ViewManager viewManager, String name, String uuid) {

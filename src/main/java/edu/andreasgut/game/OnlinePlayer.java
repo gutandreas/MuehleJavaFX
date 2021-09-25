@@ -9,7 +9,7 @@ public class OnlinePlayer extends Player{
 
 
     public OnlinePlayer(ViewManager viewManager, String name) {
-        super(viewManager, name);
+        super(viewManager, name, false);
     }
 
     @Override
