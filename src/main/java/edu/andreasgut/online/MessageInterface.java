@@ -1,21 +1,21 @@
 package edu.andreasgut.online;
 
-import edu.andreasgut.game.Board;
-import edu.andreasgut.game.Game;
-import edu.andreasgut.game.Move;
-import edu.andreasgut.game.Position;
+import edu.andreasgut.game.*;
 import edu.andreasgut.view.ViewManager;
 import org.json.JSONObject;
 
 public class MessageInterface {
 
     public static void sendMessage(ViewManager viewManager, String message){
-        receiveMessage(viewManager, message);
+        if (viewManager.getGame().getWebsocketClient() == null){
+            receiveMessage(viewManager, message);
+        }
+        else {
+            viewManager.getGame().getWebsocketClient().send(message);
+        }
+
     }
 
-    public static void sendMessage(WebsocketClient websocketClient, String message){
-
-    }
 
     public static void receiveMessage(ViewManager viewManager, String message){
 
@@ -44,7 +44,7 @@ public class MessageInterface {
 
                     if (board.checkPut(position)){
                         board.putStone(position, playerIndex);
-                        viewManager.getFieldView().graphicPut(position, viewManager.getGame().getCurrentPlayerIndex(), 0);
+                        viewManager.getFieldView().graphicPut(position, viewManager.getGame().getCurrentPlayerIndex(), 200);
                         System.out.println(board);
                         //führt zu Mühle
                         if (board.checkMorris(position) && board.isThereStoneToKill(1-playerIndex)){
@@ -65,6 +65,15 @@ public class MessageInterface {
                             if (viewManager.getGame().getCurrentPlayer().isLocal()) {
                                 game.setClickOkay(true);
                             }
+
+                            if (game.getCurrentPlayer() instanceof ComputerPlayer){
+                                if (((ComputerPlayer) game.getCurrentPlayer()).isAutomaticTrigger()){
+                                    game.callComputer();
+                                }
+                                else {
+                                    viewManager.getLogView().activateNextComputerStepButton();
+                                }
+                            }
                         }
                     }
                     else {
@@ -81,7 +90,7 @@ public class MessageInterface {
                     int playerIndex = jsonObject.getInt("playerIndex");
 
                     Move move = new Move(new Position(moveFromRing, moveFromField), new Position(moveToRing, moveToField));
-                    boolean jump = board.countPlayersStones(0) == 3;
+                    boolean jump = board.countPlayersStones(game.getCurrentPlayerIndex()) == 3;
 
 
                     if (board.checkMove(move, jump)){
@@ -109,6 +118,16 @@ public class MessageInterface {
                                 game.setMovePhaseTake(true);
                                 game.setMovePhaseRelase(false);
                             }
+
+                            if (game.getCurrentPlayer() instanceof ComputerPlayer){
+                                if (((ComputerPlayer) game.getCurrentPlayer()).isAutomaticTrigger()){
+                                    game.callComputer();
+                                }
+                                else {
+                                    viewManager.getLogView().activateNextComputerStepButton();
+                                }
+                            }
+
                         }
                     }
                     else {

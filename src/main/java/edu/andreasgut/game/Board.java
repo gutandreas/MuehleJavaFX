@@ -153,6 +153,11 @@ public class Board {
 
 
     public boolean isThereStoneToKill(int otherPlayerIndex){
+
+        if (countPlayersStones(otherPlayerIndex) == 3 && game.movePhase){
+            return true;
+        }
+
         for (int ring = 0; ring < 3; ring++){
             for (int field = 0; field < 8; field++){
                 if (array[ring][field] == otherPlayerIndex && !checkMorris(new Position(ring,field))){

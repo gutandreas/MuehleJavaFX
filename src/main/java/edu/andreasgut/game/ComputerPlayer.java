@@ -7,20 +7,25 @@ import java.util.*;
 public class ComputerPlayer extends Player {
 
     GameTree gameTree = new GameTree();
+    boolean automaticTrigger;
 
 
     public ComputerPlayer(ViewManager viewManager, String name, boolean local) {
         super(viewManager, name, local);
+        automaticTrigger = true;
     }
 
     public ComputerPlayer(ViewManager viewManager, String name, String uuid) {
         super(viewManager, name, uuid);
+        automaticTrigger = false;
     }
 
-
+    public boolean isAutomaticTrigger() {
+        return automaticTrigger;
+    }
 
     @Override
-    synchronized Position put(Board board, int playerIndex) {
+    Position put(Board board, int playerIndex) {
 
         gameTree.initializeRoot(board);
 
@@ -28,7 +33,7 @@ public class ComputerPlayer extends Player {
 
         recursivePutBfs(gameTree.getRoot(), putScorePoints, playerIndex, playerIndex, 3);
 
-        System.out.println(gameTree);
+        //System.out.println(gameTree);
 
         Stack<BoardPutMoveKillScoreSet> winningPath = gameTree.getPath(gameTree.getLeafWithBestScore());
         System.out.println("Gewinnerpfad:");
@@ -40,7 +45,7 @@ public class ComputerPlayer extends Player {
         return gameTree.getBestPut();
     }
 
-    synchronized private void recursivePutBfs(BoardPutMoveKillScoreSet set, ScorePoints scorePoints, int scorePlayerIndex, int currentPlayerIndex, int levelLimit){
+    private void recursivePutBfs(BoardPutMoveKillScoreSet set, ScorePoints scorePoints, int scorePlayerIndex, int currentPlayerIndex, int levelLimit){
 
         if (set.getLevel()==levelLimit){
             return;
@@ -72,7 +77,7 @@ public class ComputerPlayer extends Player {
     }
 
 
-    synchronized private void pretendPut(Board board, Position put, ScorePoints scorePoints, BoardPutMoveKillScoreSet parent, int scorePlayerIndex, int currentPlayerIndex, int level){
+    private void pretendPut(Board board, Position put, ScorePoints scorePoints, BoardPutMoveKillScoreSet parent, int scorePlayerIndex, int currentPlayerIndex, int level){
 
         BoardPutMoveKillScoreSet boardPutMoveKillScoreSet1 = new BoardPutMoveKillScoreSet();
         boardPutMoveKillScoreSet1.setPut(put);
@@ -109,7 +114,7 @@ public class ComputerPlayer extends Player {
 
 
     @Override
-    synchronized Move move(Board board, int playerIndex, boolean allowedToJump) {
+    Move move(Board board, int playerIndex, boolean allowedToJump) {
 
 
         gameTree.initializeRoot(board);
@@ -131,7 +136,7 @@ public class ComputerPlayer extends Player {
 
     }
 
-    synchronized private void recursiveMoveBfs(BoardPutMoveKillScoreSet set, ScorePoints scorePoints, int scorePlayerIndex, int currentPlayerIndex, int levelLimit){
+    private void recursiveMoveBfs(BoardPutMoveKillScoreSet set, ScorePoints scorePoints, int scorePlayerIndex, int currentPlayerIndex, int levelLimit){
 
         if (set.getLevel()==levelLimit){
             return;
@@ -163,7 +168,7 @@ public class ComputerPlayer extends Player {
     }
 
 
-    synchronized private void pretendMove(Board board, Move move, ScorePoints scorePoints, BoardPutMoveKillScoreSet parent, int scorePlayerIndex, int currentPlayerIndex, int level){
+    private void pretendMove(Board board, Move move, ScorePoints scorePoints, BoardPutMoveKillScoreSet parent, int scorePlayerIndex, int currentPlayerIndex, int level){
 
         BoardPutMoveKillScoreSet boardPutMoveKillScoreSet1 = new BoardPutMoveKillScoreSet();
         boardPutMoveKillScoreSet1.setMove(move);
@@ -200,7 +205,7 @@ public class ComputerPlayer extends Player {
 
 
     @Override
-    synchronized Position kill(Board board, int ownPlayerIndex, int otherPlayerIndex) {
+    Position kill(Board board, int ownPlayerIndex, int otherPlayerIndex) {
 
         return gameTree.getBestKill();
 

@@ -1,6 +1,7 @@
 package edu.andreasgut.game;
 
 import edu.andreasgut.online.MessageInterface;
+import edu.andreasgut.online.WebsocketClient;
 import edu.andreasgut.view.ViewManager;
 import org.json.JSONObject;
 
@@ -12,7 +13,7 @@ public class Game {
     private final Player player1;
     private Player winner;
     private int round;
-    private final int NUMBEROFSTONES = 5;
+    private final int NUMBEROFSTONES = 9;
     private Player currentPlayer;
     private final Board board;
     boolean putPhase = true;
@@ -25,6 +26,7 @@ public class Game {
     private boolean clickOkay = true;
     private String gameCode;
     private Position lastClickedPosition;
+    private WebsocketClient websocketClient;
 
 
     ArrayList<Player> playerArrayList = new ArrayList<>();
@@ -90,6 +92,13 @@ public class Game {
         return player1;
     }
 
+    public WebsocketClient getWebsocketClient() {
+        return websocketClient;
+    }
+
+    public void setWebsocketClient(WebsocketClient websocketClient) {
+        this.websocketClient = websocketClient;
+    }
 
     public int getCurrentPlayerIndex(){
         return currentPlayer.equals(playerArrayList.get(0)) ? 0 : 1;
@@ -218,6 +227,7 @@ public class Game {
                     Move move = new Move(lastClickedPosition, clickedPosition);
                     if (board.checkMove(move,allowedToJump)){
                         sendMoveToMessageInterface(move);
+
                     }
                     else {
                         System.out.println("Kein gültiger Move");
@@ -245,36 +255,24 @@ public class Game {
 
     public void callComputer(){
         if (round < NUMBEROFSTONES*2){
-            boolean kill = false;
             Position computerPutPosition = currentPlayer.put(board,getCurrentPlayerIndex());
-            board.putStone(computerPutPosition, getCurrentPlayerIndex());
-            viewManager.getFieldView().graphicPut(computerPutPosition, getCurrentPlayerIndex(), 0);
             sendPutToMessageInterface(computerPutPosition);
             if (board.checkMorris(computerPutPosition) && board.isThereStoneToKill(getOtherPlayerIndex())){
                 Position computerKillPosition = currentPlayer.kill(board,getCurrentPlayerIndex(), getOtherPlayerIndex());
-                board.clearStone(computerKillPosition);
-                viewManager.getFieldView().graphicKill(computerKillPosition);
-                kill = true;
+                sendKillToMessageInterface(computerKillPosition);
             }
-            clickOkay = true;
-            updateGameState(true, kill);
             return;
         }
         else {
             boolean allowedToJump = board.countPlayersStones(getCurrentPlayerIndex()) == 3;
-            boolean kill = false;
             Move computerMove = currentPlayer.move(board, getCurrentPlayerIndex(), allowedToJump);
             if (board.checkMove(computerMove, allowedToJump)){
-                board.move(computerMove, getCurrentPlayerIndex());
-                viewManager.getFieldView().graphicMove(computerMove, getCurrentPlayerIndex());
+                sendMoveToMessageInterface(computerMove);
                 if (board.checkMorris(computerMove.getTo()) && board.isThereStoneToKill(getOtherPlayerIndex())){
                     Position computerKillPosition = currentPlayer.kill(board,getCurrentPlayerIndex(), getOtherPlayerIndex());
-                    board.clearStone(computerKillPosition);
-                    viewManager.getFieldView().graphicKill(computerKillPosition);
-                    kill = true;
+                    sendKillToMessageInterface(computerKillPosition);
                 }
-                clickOkay = true;
-                updateGameState(false, kill);
+
                 return;
             }
         }
@@ -340,7 +338,9 @@ public class Game {
         if (killHappend){
             viewManager.getScoreView().increaseStonesKilled();
             viewManager.getScoreView().increaseStonesLost();
-            checkWinner();
+            if (checkWinner()){
+                return;
+            }
         }
 
         increaseRound();
@@ -374,11 +374,16 @@ public class Game {
     }
 
 
-    private void checkWinner(){
+    private boolean checkWinner(){
         if (movePhase && board.countPlayersStones(getOtherPlayerIndex()) < 3){
             winner = getCurrentPlayer();
             viewManager.getLogView().setStatusLabel(winner.getName() + " hat das Spiel gewonnen");
             viewManager.getFieldView().setDisable(true);
-            System.out.println(winner.getName() + " hat das Spiel gewonnen!");}
+            System.out.println(winner.getName() + " hat das Spiel gewonnen!");
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 }

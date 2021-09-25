@@ -194,7 +194,7 @@ public class FieldView extends AnchorPane {
         fieldGridPane.setOnMouseEntered(enter ->{
             choosePutCursor();
         });
-        moveMouseposition(20,20);
+        //moveMouseposition(20,20);
     }
 
     synchronized private void choosePutCursor() {

@@ -344,11 +344,15 @@ public class StartMenuView extends VBox {
             }
 
             STONECOLOR computerColor;
+            STONECOLOR onlinePlayerColor;
             if (computerBlackButton.isSelected()){
                 computerColor = STONECOLOR.BLACK;
+                onlinePlayerColor = STONECOLOR.WHITE;
+
             }
             else {
                 computerColor = STONECOLOR.WHITE;
+                onlinePlayerColor = STONECOLOR.BLACK;
             }
 
             jsonObject.put("player1Color", computerColor.toString());
@@ -398,13 +402,15 @@ public class StartMenuView extends VBox {
                     viewManager.getSoundManager().stopMusic();
                 }
 
-                viewManager.setGame(new Game(viewManager,
-                        computerPlayer, new OnlinePlayer(viewManager, "Onlineplayer"), gameCodeTextfield.getText()));
+                Game game = new Game(viewManager,
+                        computerPlayer, new HumanPlayer(viewManager, "Onlineplayer", false), gameCodeTextfield.getText());
+                viewManager.setGame(game);
 
 
 
-                viewManager.createGameScene(new FieldView(viewManager, player1Color, player2Color, false),
-                        new ScoreView(viewManager, player1Color, player2Color),
+                System.out.println(computerColor);
+                viewManager.createGameScene(new FieldView(viewManager, computerColor, onlinePlayerColor, false),
+                        new ScoreView(viewManager, computerColor, onlinePlayerColor),
                         new LogView(viewManager, true));
 
                 viewManager.changeToGameScene();
@@ -416,6 +422,8 @@ public class StartMenuView extends VBox {
                     URI uri = new URI("ws://localhost:8080/board");
                     WebsocketClient websocketClient = new WebsocketClient(uri, viewManager);
                     websocketClient.connect();
+                    game.setWebsocketClient(websocketClient);
+
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
                 }
