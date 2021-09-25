@@ -1,7 +1,6 @@
 package edu.andreasgut.view;
 
 import edu.andreasgut.game.Game;
-import edu.andreasgut.game.OfflineGame;
 import edu.andreasgut.sound.AudioPlayer;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;

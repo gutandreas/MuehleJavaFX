@@ -2,10 +2,8 @@ package edu.andreasgut.view;
 
 
 import edu.andreasgut.game.Move;
-import edu.andreasgut.game.OfflineGame;
 import edu.andreasgut.game.Position;
 import edu.andreasgut.sound.SOUNDEFFECT;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
@@ -108,7 +106,7 @@ public class FieldView extends AnchorPane {
                         System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
                         System.out.println("Test");
 
-                        ((OfflineGame) viewManager.getGame()).nextStep(position);
+                        viewManager.getGame().nextStep(position);
                     });
                 }
             }
@@ -184,11 +182,11 @@ public class FieldView extends AnchorPane {
     }
 
     private Image getEnemysStoneImage(){
-        return ((OfflineGame) viewManager.getGame()).getCurrentPlayerIndex()==0 ? player2StoneImage : player1StoneImage;
+        return  viewManager.getGame().getCurrentPlayerIndex()==0 ? player2StoneImage : player1StoneImage;
     }
 
     private Image getOwnStoneImage(){
-        return ((OfflineGame) viewManager.getGame()).getCurrentPlayerIndex()==0 ? player1StoneImage : player2StoneImage;
+        return viewManager.getGame().getCurrentPlayerIndex()==0 ? player1StoneImage : player2StoneImage;
     }
 
     synchronized public void setPutCursor(){
@@ -200,7 +198,7 @@ public class FieldView extends AnchorPane {
     }
 
     synchronized private void choosePutCursor() {
-        switch (((OfflineGame) viewManager.getGame()).getCurrentPlayerIndex()){
+        switch (viewManager.getGame().getCurrentPlayerIndex()){
             case 0:
                 imageView.getScene().setCursor(player1StoneCursor);
                 break;
@@ -219,7 +217,7 @@ public class FieldView extends AnchorPane {
     }
 
     synchronized private void chooseKillCursor() {
-        switch (((OfflineGame) viewManager.getGame()).getCurrentPlayerIndex()){
+        switch (viewManager.getGame().getCurrentPlayerIndex()){
             case 0:
                 imageView.getScene().setCursor(player1killCursor);
                 break;
@@ -236,7 +234,7 @@ public class FieldView extends AnchorPane {
     }
 
     private void chooseMoveCursor(){
-        switch (((OfflineGame) viewManager.getGame()).getCurrentPlayerIndex()){
+        switch (viewManager.getGame().getCurrentPlayerIndex()){
             case 0:
                 imageView.getScene().setCursor(player1HandCursor);
                 break;
