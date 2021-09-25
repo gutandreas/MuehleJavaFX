@@ -3,7 +3,6 @@ package edu.andreasgut.view;
 import edu.andreasgut.game.ComputerPlayer;
 import edu.andreasgut.game.Game;
 import edu.andreasgut.game.HumanPlayer;
-import edu.andreasgut.game.OnlinePlayer;
 import edu.andreasgut.online.WebsocketClient;
 import edu.andreasgut.sound.MUSIC;
 import edu.andreasgut.view.fxElements.BeginnerSwitchButton;
@@ -21,11 +20,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import org.apache.tomcat.util.json.JSONParser;
-import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
 
 public class StartMenuView extends VBox {
 
@@ -39,7 +34,7 @@ public class StartMenuView extends VBox {
     Label offlineInformationLabel, offlineTitleLabel, onlineInformationLabel, onlineTitleLabel, stonesColorLabel1, stonesColorLabel2, beginnerLabel1, beginnerLabel2, stoneColorComputerLabel, startGameLabel, joinGameLabel;
     Button startButton, computerOnlineButton;
     SelectColorButton stonesBlackButton1, stonesWhiteButton1, stonesBlackButton2, stonesWhiteButton2, computerBlackButton, computerWhiteButton;
-    BeginnerSwitchButton beginnerSwitchButton, startGameSwitchButton;
+    BeginnerSwitchButton beginnerSwitchButton, startOnlineGameSwitchButton;
     ImageView player1StonesImageView, player2StonesImageView;
     STONECOLOR player1Color, player2Color;
 
@@ -74,6 +69,7 @@ public class StartMenuView extends VBox {
 
         setupRadioButtonAction();
         setupColorButtonAction();
+        setupStartOnlineGameSwitchButton();
         setupStartButtonAction();
         setupComputerOnlineButtonAction();
         setupComputerBattleColorButtonAction();
@@ -119,10 +115,10 @@ public class StartMenuView extends VBox {
 
     private void setupStartGameSwitchButton(){
         startGameHBox = new HBox();
-        startGameSwitchButton = new BeginnerSwitchButton(viewManager);
+        startOnlineGameSwitchButton = new BeginnerSwitchButton(viewManager);
         startGameLabel = new Label("Spiel eröffnen");
         joinGameLabel = new Label("Einem Spiel beitreten");
-        startGameHBox.getChildren().addAll(startGameLabel, startGameSwitchButton, joinGameLabel);
+        startGameHBox.getChildren().addAll(startGameLabel, startOnlineGameSwitchButton, joinGameLabel);
         startGameHBox.setAlignment(Pos.CENTER_LEFT);
         startGameHBox.setSpacing(10);
         startGameHBox.setPrefHeight(70);
@@ -242,6 +238,23 @@ public class StartMenuView extends VBox {
         });
     }
 
+    private void setupStartOnlineGameSwitchButton(){
+        startOnlineGameSwitchButton.setOnMousePressed(click -> {
+
+            if (!startOnlineGameSwitchButton.getState()){
+                stoneColorComputerLabel.setVisible(false);
+                computerBlackButton.setVisible(false);
+                computerWhiteButton.setVisible(false);
+            }
+            else {
+                stoneColorComputerLabel.setVisible(true);
+                computerBlackButton.setVisible(true);
+                computerWhiteButton.setVisible(true);
+            }
+
+        });
+    }
+
     private void setupComputerBattleColorButtonAction(){
         computerBlackButton.setOnAction(click -> {
             computerBlackButton.setSelected(true);
@@ -326,6 +339,7 @@ public class StartMenuView extends VBox {
                 offlineInformationLabel.setText("Es fehlen Eingaben, um das Spiel zu starten");}});
     }
 
+
     private void setupComputerOnlineButtonAction(){
         computerOnlineButton.setOnAction( action -> {
 
@@ -335,40 +349,34 @@ public class StartMenuView extends VBox {
 
             if (gameCodeTextfield.getText().length() == 0){
                 onlineInformationLabel.setText("Der Gamecode fehlt");
-                return;
-            }
+                return;}
 
             if (computerBattleTextfield.getText().length() == 0){
                 onlineInformationLabel.setText("Der Computername fehlt");
-                return;
-            }
+                return;}
 
             STONECOLOR computerColor;
             STONECOLOR onlinePlayerColor;
             if (computerBlackButton.isSelected()){
                 computerColor = STONECOLOR.BLACK;
-                onlinePlayerColor = STONECOLOR.WHITE;
-
-            }
+                onlinePlayerColor = STONECOLOR.WHITE;}
             else {
                 computerColor = STONECOLOR.WHITE;
-                onlinePlayerColor = STONECOLOR.BLACK;
-            }
+                onlinePlayerColor = STONECOLOR.BLACK;}
 
             jsonObject.put("player1Color", computerColor.toString());
 
             String urlAsString;
-            if (startGameSwitchButton.getState()){
-                urlAsString = "http://localhost:8080/index/controller/menschVsMensch/join";
-                jsonObject.put("player2Name", computerBattleTextfield.getText());
 
-            }
+            //join
+            if (startOnlineGameSwitchButton.getState()){
+                urlAsString = "http://localhost:8080/index/controller/menschVsMensch/join";
+                jsonObject.put("player2Name", computerBattleTextfield.getText());}
+            //start
             else {
                 urlAsString = "http://localhost:8080/index/controller/menschVsMensch/start";
                 jsonObject.put("player1Name", computerBattleTextfield.getText());
             }
-
-
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(urlAsString))
@@ -377,14 +385,28 @@ public class StartMenuView extends VBox {
 
             HttpResponse<?> response = null;
             ComputerPlayer computerPlayer = null;
+            String onlinePlayerName = "---";
 
             try {
                 response = client.send(request,HttpResponse.BodyHandlers.ofString());
 
                 String body = (String) response.body();
+                System.out.println(body);
                 JSONObject jsonResponseObject = new JSONObject(body);
-                String uuid = jsonResponseObject.getString("player1Uuid");
-                System.out.println(uuid);
+
+                String uuid;
+
+                //join
+                if (startOnlineGameSwitchButton.getState()){
+                    uuid = jsonResponseObject.getString("player2Uuid");
+                    computerColor = STONECOLOR.valueOf(jsonResponseObject.getString("player2Color"));
+                    onlinePlayerColor = computerColor == STONECOLOR.BLACK ? STONECOLOR.WHITE : STONECOLOR.BLACK;
+                    onlinePlayerName = jsonResponseObject.getString("player1Name");
+                }
+                //start
+                else {
+                    uuid = jsonResponseObject.getString("player1Uuid");
+                }
 
                 computerPlayer = new ComputerPlayer(viewManager, computerBattleTextfield.getText().toUpperCase(), uuid);
 
@@ -393,6 +415,7 @@ public class StartMenuView extends VBox {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
             System.out.println(response.statusCode());
 
             if (response.statusCode() == 200){
@@ -402,21 +425,26 @@ public class StartMenuView extends VBox {
                     viewManager.getSoundManager().stopMusic();
                 }
 
-                Game game = new Game(viewManager,
-                        computerPlayer, new HumanPlayer(viewManager, "Onlineplayer", false), gameCodeTextfield.getText());
-                viewManager.setGame(game);
+                Game game;
 
-
-
-                System.out.println(computerColor);
-                viewManager.createGameScene(new FieldView(viewManager, computerColor, onlinePlayerColor, false),
-                        new ScoreView(viewManager, computerColor, onlinePlayerColor),
-                        new LogView(viewManager, true));
+                //join
+                if (startOnlineGameSwitchButton.getState()){
+                    game = new Game(viewManager, new HumanPlayer(viewManager, onlinePlayerName, false), computerPlayer, gameCodeTextfield.getText(), startOnlineGameSwitchButton.getState());
+                    viewManager.setGame(game);
+                    viewManager.createGameScene(new FieldView(viewManager, onlinePlayerColor, computerColor, false),
+                            new ScoreView(viewManager, onlinePlayerColor, computerColor),
+                            new LogView(viewManager, true));
+                }
+                //start
+                else {
+                    game = new Game(viewManager, computerPlayer, new HumanPlayer(viewManager, onlinePlayerName, false), gameCodeTextfield.getText(), startOnlineGameSwitchButton.getState());
+                    viewManager.setGame(game);
+                    viewManager.createGameScene(new FieldView(viewManager, computerColor, onlinePlayerColor, false),
+                            new ScoreView(viewManager, computerColor, onlinePlayerColor),
+                            new LogView(viewManager, true));
+                }
 
                 viewManager.changeToGameScene();
-
-
-
 
                 try {
                     URI uri = new URI("ws://localhost:8080/board");
@@ -425,13 +453,11 @@ public class StartMenuView extends VBox {
                     game.setWebsocketClient(websocketClient);
 
                 } catch (URISyntaxException e) {
-                    e.printStackTrace();
-                }
-
+                    e.printStackTrace();}
 
             }
             else {
-                if (startGameSwitchButton.getState()){
+                if (startOnlineGameSwitchButton.getState()){
                     onlineInformationLabel.setText("Dieses Game existiert noch nicht. Kontrollieren Sie den Gamecode.");
                 }
                 else {

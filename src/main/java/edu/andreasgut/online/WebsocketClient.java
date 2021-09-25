@@ -29,8 +29,19 @@ public class WebsocketClient extends WebSocketClient {
     public void onOpen(ServerHandshake handshakedata) {
         System.out.println("Verbunden mit Server");
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("gameCode", viewManager.getGame().getGameCode());
-        jsonObject.put("command", "start");
+
+        if (viewManager.getGame().isJoinExistingGame()){
+            System.out.println("join");
+            jsonObject.put("gameCode", viewManager.getGame().getGameCode());
+            jsonObject.put("command", "join");
+            jsonObject.put("player2Name", viewManager.getGame().getPlayer1().getName());
+        }
+        else {
+            System.out.println("start");
+            jsonObject.put("gameCode", viewManager.getGame().getGameCode());
+            jsonObject.put("command", "start");
+        }
+
         send(jsonObject.toString());
 
     }

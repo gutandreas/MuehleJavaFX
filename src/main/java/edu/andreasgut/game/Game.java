@@ -27,6 +27,7 @@ public class Game {
     private String gameCode;
     private Position lastClickedPosition;
     private WebsocketClient websocketClient;
+    private boolean joinExistingGame;
 
 
     ArrayList<Player> playerArrayList = new ArrayList<>();
@@ -42,7 +43,7 @@ public class Game {
         board = new Board(this);
     }
 
-    public Game(ViewManager viewManager, Player player0, Player player1, String gameCode) {
+    public Game(ViewManager viewManager, Player player0, Player player1, String gameCode, boolean joinExistingGame) {
         this.viewManager = viewManager;
         this.player0 = player0;
         this.player1 = player1;
@@ -52,6 +53,7 @@ public class Game {
         currentPlayer=playerArrayList.get(0);
         this.gameCode = gameCode;
         board = new Board(this);
+        this.joinExistingGame = joinExistingGame;
     }
 
 
@@ -72,6 +74,9 @@ public class Game {
 
     }
 
+    public boolean isJoinExistingGame() {
+        return joinExistingGame;
+    }
 
     public Player getCurrentPlayer() {
         return currentPlayer;
