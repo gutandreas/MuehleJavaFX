@@ -187,6 +187,19 @@ public class MessageInterface {
                         else {
                             game.setClickOkay(false);
                         }
+                        //Computerplayer
+                        if (game.getCurrentPlayer() instanceof ComputerPlayer){
+                            if (((ComputerPlayer) game.getCurrentPlayer()).isAutomaticTrigger()){
+                                game.callComputer(game.isPutPhase(), game.isMovePhase(), false);
+                            }
+                            else {
+                                if (game.isPutPhase()){
+                                viewManager.getLogView().getNextComputerStepButton().setPut();}
+                                else {
+                                    viewManager.getLogView().getNextComputerStepButton().setMove();
+                                }
+                            }
+                        }
 
                     }
                     else {
