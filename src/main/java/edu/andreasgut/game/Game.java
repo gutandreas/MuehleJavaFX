@@ -291,10 +291,11 @@ public class Game {
         JSONObject jsonObject = new JSONObject();
         System.out.println(viewManager.getGame().getCurrentPlayer().getUuid());
 
+
         jsonObject.put("gameCode", gameCode);
         jsonObject.put("command", "update");
         jsonObject.put("action", "put");
-        jsonObject.put("playerUuid", player0.getUuid());
+        jsonObject.put("playerUuid", viewManager.getGame().getCurrentPlayer().getUuid());
         jsonObject.put("ring", position.getRing());
         jsonObject.put("field", position.getField());
         jsonObject.put("callComputer", false);
@@ -310,7 +311,7 @@ public class Game {
         jsonObject.put("gameCode", gameCode);
         jsonObject.put("command", "update");
         jsonObject.put("action", "move");
-        jsonObject.put("playerUuid", player0.getUuid());
+        jsonObject.put("playerUuid", viewManager.getGame().getCurrentPlayer().getUuid());
         jsonObject.put("moveFromRing", move.getFrom().getRing());
         jsonObject.put("moveFromField", move.getFrom().getField());
         jsonObject.put("moveToRing", move.getTo().getRing());
@@ -328,7 +329,7 @@ public class Game {
         jsonObject.put("gameCode", gameCode);
         jsonObject.put("command", "update");
         jsonObject.put("action", "kill");
-        jsonObject.put("playerUuid", player0.getUuid());
+        jsonObject.put("playerUuid", viewManager.getGame().getCurrentPlayer().getUuid());
         jsonObject.put("ring", position.getRing());
         jsonObject.put("field", position.getField());
         jsonObject.put("callComputer", false);
