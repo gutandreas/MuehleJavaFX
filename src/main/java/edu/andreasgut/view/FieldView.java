@@ -131,12 +131,9 @@ public class FieldView extends AnchorPane{
             image = player2StoneImage;
         }
 
-        Platform.runLater(new Runnable(){
-            @Override
-            public void run() {
+        Platform.runLater(() -> {
                 ((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(image);
                 viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
-            }
         });
 
 
@@ -144,7 +141,6 @@ public class FieldView extends AnchorPane{
     }
 
     public void graphicMove(Move move, int playerIndex){
-        Object loopObject = new Object();
 
         Image image;
 
@@ -155,9 +151,11 @@ public class FieldView extends AnchorPane{
             image = player2StoneImage;
         }
 
-        ((ImageView) fieldGridPane.getChildren().get(translateToIndex(move.getFrom()))).setImage(emptyField);
-        ((ImageView) fieldGridPane.getChildren().get(translateToIndex(move.getTo()))).setImage(image);
-        viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
+        Platform.runLater(() -> {
+            ((ImageView) fieldGridPane.getChildren().get(translateToIndex(move.getFrom()))).setImage(emptyField);
+            ((ImageView) fieldGridPane.getChildren().get(translateToIndex(move.getTo()))).setImage(image);
+            viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
+        });
 
 
 
@@ -177,9 +175,10 @@ public class FieldView extends AnchorPane{
 
     public void graphicKill(Position position){
 
-
-        ((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(emptyField);
-        viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.KILL_STONE);
+        Platform.runLater(() -> {
+            ((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(emptyField);
+            viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.KILL_STONE);
+        });
 
 
 
@@ -202,6 +201,7 @@ public class FieldView extends AnchorPane{
         choosePutCursor();
         fieldGridPane.setOnMouseEntered(enter ->{
             choosePutCursor();
+
         });
         moveMouseposition(20,20);
     }
@@ -222,6 +222,7 @@ public class FieldView extends AnchorPane{
        chooseKillCursor();
         fieldGridPane.setOnMouseEntered(enter ->{
             chooseKillCursor();
+
         });
     }
 

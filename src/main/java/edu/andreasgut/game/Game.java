@@ -97,6 +97,18 @@ public class Game {
         return player1;
     }
 
+    public boolean isPutPhase() {
+        return putPhase;
+    }
+
+    public boolean isMovePhase() {
+        return movePhase;
+    }
+
+    public boolean isKillPhase() {
+        return killPhase;
+    }
+
     public WebsocketClient getWebsocketClient() {
         return websocketClient;
     }
@@ -178,9 +190,6 @@ public class Game {
 
             clickOkay = false;
 
-            if (round == NUMBEROFSTONES*2){
-                viewManager.getScoreView().updatePhase("Steine verschieben");
-            }
 
             if (killPhase){
                 if (board.checkKill(clickedPosition, getOtherPlayerIndex())){
@@ -253,13 +262,32 @@ public class Game {
         }
         else {
             System.out.println("Kein Klick möglich");
-            viewManager.getLogView().setStatusLabel("Warten Sie bis Sie an der Reihe sind.");
+            viewManager.getLogView().setStatusLabel("Warten Sie, bis Sie an der Reihe sind.");
         }
 
     }
 
-    public void callComputer(){
-        if (round < NUMBEROFSTONES*2){
+    public void callComputer(boolean put, boolean move, boolean kill){
+
+        if (put){
+            Position computerPutPosition = currentPlayer.put(board,getCurrentPlayerIndex());
+            sendPutToMessageInterface(computerPutPosition);
+            return;
+        }
+
+        if (move){
+            boolean allowedToJump = board.countPlayersStones(getCurrentPlayerIndex()) == 3;
+            Move computerMove = currentPlayer.move(board, getCurrentPlayerIndex(), allowedToJump);
+            sendMoveToMessageInterface(computerMove);
+            return;
+        }
+
+        if (kill){
+            Position computerKillPosition = currentPlayer.kill(board,getCurrentPlayerIndex(), getOtherPlayerIndex());
+            sendKillToMessageInterface(computerKillPosition);
+        }
+
+        /*if (round < NUMBEROFSTONES*2){
             Position computerPutPosition = currentPlayer.put(board,getCurrentPlayerIndex());
             sendPutToMessageInterface(computerPutPosition);
             if (board.checkMorris(computerPutPosition) && board.isThereStoneToKill(getOtherPlayerIndex())){
@@ -280,7 +308,7 @@ public class Game {
 
                 return;
             }
-        }
+        }*/
 
     }
 
@@ -377,7 +405,7 @@ public class Game {
         if (round >= NUMBEROFSTONES*2){
             putPhase = false;
             movePhase = true;
-            System.out.println("Wechsel von Setz- zu Zugphase");
+            viewManager.getScoreView().updatePhase("Steine verschieben");
         }
     }
 

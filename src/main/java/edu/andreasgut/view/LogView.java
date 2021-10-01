@@ -1,5 +1,6 @@
 package edu.andreasgut.view;
 
+import edu.andreasgut.view.fxElements.NextStepButton;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -8,8 +9,9 @@ import javafx.scene.layout.VBox;
 public class LogView extends VBox {
 
     private Label titleLabel, statusLabel;
-    private Button nextComputerStepButton;
+    private NextStepButton nextComputerStepButton;
     private ViewManager viewManager;
+
 
     public LogView(ViewManager viewManager, boolean computerOnlineBattle) {
         this.viewManager = viewManager;
@@ -23,9 +25,9 @@ public class LogView extends VBox {
         this.getChildren().addAll(titleLabel, statusLabel);
 
         if (computerOnlineBattle){
-            nextComputerStepButton = new Button("Nächster Schritt des Computers");
+            nextComputerStepButton = new NextStepButton("Stein setzen");
             nextComputerStepButton.setOnAction(click -> {
-                viewManager.getGame().callComputer();
+                viewManager.getGame().callComputer(nextComputerStepButton.isPut(), nextComputerStepButton.isMove(), nextComputerStepButton.isKill());
                 nextComputerStepButton.setDisable(true);
                 System.out.println("Computer next step Button pressed");});
             nextComputerStepButton.setDisable(true);
@@ -38,6 +40,10 @@ public class LogView extends VBox {
             statusLabel.setText(string);
         });
 
+    }
+
+    public NextStepButton getNextComputerStepButton() {
+        return nextComputerStepButton;
     }
 
     public void activateNextComputerStepButton(){

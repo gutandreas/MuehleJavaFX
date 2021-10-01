@@ -61,6 +61,15 @@ public class MessageInterface {
                             else {
                                 game.setClickOkay(false);
                             }
+                            //Computerplayer
+                            if (game.getCurrentPlayer() instanceof ComputerPlayer){
+                                if (((ComputerPlayer) game.getCurrentPlayer()).isAutomaticTrigger()){
+                                    game.callComputer(false, false, true);
+                                }
+                                else {
+                                    viewManager.getLogView().getNextComputerStepButton().setKill();
+                                }
+                            }
                         }
                         //führt nicht zu Mühle
                         else {
@@ -68,14 +77,18 @@ public class MessageInterface {
                             if (viewManager.getGame().getCurrentPlayer().isLocal()) {
                                 game.setClickOkay(true);
                             }
-
+                            //Computerplayer
                             if (game.getCurrentPlayer() instanceof ComputerPlayer){
                                 if (((ComputerPlayer) game.getCurrentPlayer()).isAutomaticTrigger()){
-                                    System.out.println("Automatic Trigger");
-                                    game.callComputer();
+                                    game.callComputer(game.isPutPhase(), game.isMovePhase(), false);
                                 }
                                 else {
-                                    viewManager.getLogView().activateNextComputerStepButton();
+                                    if (game.isPutPhase()){
+                                        viewManager.getLogView().getNextComputerStepButton().setPut();
+                                    }
+                                    else {
+                                        viewManager.getLogView().getNextComputerStepButton().setMove();
+                                    }
                                 }
                             }
                         }
@@ -99,20 +112,30 @@ public class MessageInterface {
 
                     if (board.checkMove(move, jump)){
                         board.move(move, playerIndex);
-                        viewManager.getFieldView().graphicPut(new Position(moveToRing, moveToField), playerIndex, 0);
+                        viewManager.getFieldView().graphicMove(move, playerIndex);
                         System.out.println(board);
                         //führt zu Mühle
                         if (board.checkMorris(move.getTo()) && board.isThereStoneToKill(1-playerIndex)){
                             //lokaler Spieler
                             if (viewManager.getGame().getCurrentPlayer().isLocal()){
                                 game.setClickOkay(true);
-                                viewManager.getFieldView().setKillCursor();
                                 game.setKillPhase(true);
+                                viewManager.getFieldView().setKillCursor();
                             }
                             //nicht lokaler Spieler
                             else {
                                 game.setClickOkay(false);
                             }
+                            //Computerplayer
+                            if (game.getCurrentPlayer() instanceof ComputerPlayer){
+                                if (((ComputerPlayer) game.getCurrentPlayer()).isAutomaticTrigger()){
+                                    game.callComputer(false, false, true);
+                                }
+                                else {
+                                    viewManager.getLogView().getNextComputerStepButton().setKill();
+                                }
+                            }
+
                         }
                         //führt nicht zu Mühle
                         else {
@@ -125,10 +148,10 @@ public class MessageInterface {
 
                             if (game.getCurrentPlayer() instanceof ComputerPlayer){
                                 if (((ComputerPlayer) game.getCurrentPlayer()).isAutomaticTrigger()){
-                                    game.callComputer();
+                                    game.callComputer(false, true, false);
                                 }
                                 else {
-                                    viewManager.getLogView().activateNextComputerStepButton();
+                                    viewManager.getLogView().getNextComputerStepButton().setMove();
                                 }
                             }
 

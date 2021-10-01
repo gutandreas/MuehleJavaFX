@@ -327,7 +327,7 @@ public class StartMenuView extends VBox {
 
                 viewManager.changeToGameScene();
                 if (beginnerSwitchButton.getState()){
-                    viewManager.getGame().callComputer();
+                    viewManager.getGame().callComputer(true, false, false);
                 }
 
 
