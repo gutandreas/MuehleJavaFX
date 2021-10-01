@@ -90,44 +90,45 @@ public class ScoreView extends VBox {
     }
 
     public void increaseStonesPut(){
-        Platform.runLater(() -> {
-                switch (viewManager.getGame().getCurrentPlayerIndex()){
+
+        switch (viewManager.getGame().getCurrentPlayerIndex()){
                     case 0:
-                        stonesPutPlayer1Label.setText("Steine gesetzt: " + ++stonesPut1);
+                        Platform.runLater(() ->
+                        stonesPutPlayer1Label.setText("Steine gesetzt: " + ++stonesPut1));
                         break;
                     case 1:
-                        stonesPutPlayer2Label.setText("Steine gesetzt: " + ++stonesPut2);
+                        Platform.runLater(() ->
+                        stonesPutPlayer2Label.setText("Steine gesetzt: " + ++stonesPut2));
                         break;}
-                }
-        );
 
 
     }
 
     public void increaseStonesLost(){
-        Platform.runLater(() -> {
+
             switch ((viewManager.getGame().getOtherPlayerIndex())) {
                 case 0:
-                    stonesLostPlayer1Label.setText("Steine verloren: " + ++stonesLost1);
+                    Platform.runLater(() ->
+                    stonesLostPlayer1Label.setText("Steine verloren: " + ++stonesLost1));
                     break;
                 case 1:
-                    stonesLostPlayer2Label.setText("Steine verloren: " + ++stonesLost2);
+                    Platform.runLater(() ->
+                    stonesLostPlayer2Label.setText("Steine verloren: " + ++stonesLost2));
                     break;
             }
-        });
     }
 
     public void increaseStonesKilled(){
-        Platform.runLater(() -> {
+
         switch (viewManager.getGame().getCurrentPlayerIndex()){
             case 0:
-                stonesKilledPlayer1Label.setText("Steine gewonnen: " + ++stonesKilled1);
+                Platform.runLater(() ->
+                stonesKilledPlayer1Label.setText("Steine gewonnen: " + ++stonesKilled1));
                 break;
             case 1:
-                stonesKilledPlayer2Label.setText("Steine gewonnen: " + ++stonesKilled2);
-                break;
-            }
-        });
+                Platform.runLater(() ->
+                stonesKilledPlayer2Label.setText("Steine gewonnen: " + ++stonesKilled2));
+                break;}
     }
 
     public void increaseRound(){
