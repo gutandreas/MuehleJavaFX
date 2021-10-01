@@ -28,12 +28,15 @@ public class FieldView extends AnchorPane{
     private Position[][] translationArrayGraphicToRepresentation;
     private int[][] translationArrayRepresentationToIndex;
     private final int COMPREACTIONTIME = 500;
+    private boolean activateBoardFunctions;
 
 
 
     public FieldView(ViewManager viewManager, STONECOLOR player1Color, STONECOLOR player2Color, boolean activateBoardFunctions) {
         this.viewManager = viewManager;
         this.getStyleClass().add("fieldview");
+        this.activateBoardFunctions = activateBoardFunctions;
+
         initializeTranslationArray();
         imageView = new ImageView();
         image = new Image("edu/andreasgut/images/Spielfeld.png",
@@ -200,7 +203,7 @@ public class FieldView extends AnchorPane{
         fieldGridPane.setOnMouseEntered(enter ->{
             choosePutCursor();
         });
-        //moveMouseposition(20,20);
+        moveMouseposition(20,20);
     }
 
     synchronized private void choosePutCursor() {
@@ -252,6 +255,10 @@ public class FieldView extends AnchorPane{
     private void clearAllFieldFunctions(){
         for (Node n : fieldGridPane.getChildren()){
             n.setOnMouseClicked(click -> {/* clear old function*/});}
+    }
+
+    public boolean isActivateBoardFunctions() {
+        return activateBoardFunctions;
     }
 
     private int translateToRing(Node node){

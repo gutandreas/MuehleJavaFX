@@ -355,13 +355,15 @@ public class Game {
 
         if (round < NUMBEROFSTONES*2){
             putPhase = true;
-            viewManager.getFieldView().setPutCursor();
+            if (viewManager.getFieldView().isActivateBoardFunctions()){
+                viewManager.getFieldView().setPutCursor();}
         }
         else {
             movePhase = true;
             movePhaseTake = true;
             movePhaseRelase = false;
-            viewManager.getFieldView().setMoveCursor();
+            if (viewManager.getFieldView().isActivateBoardFunctions()){
+                viewManager.getFieldView().setMoveCursor();}
         }
 
     }

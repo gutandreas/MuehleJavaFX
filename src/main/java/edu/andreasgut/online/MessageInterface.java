@@ -54,8 +54,8 @@ public class MessageInterface {
                             //lokaler Spieler
                             if (viewManager.getGame().getCurrentPlayer().isLocal()){
                                 game.setClickOkay(true);
-                                viewManager.getFieldView().setKillCursor();
                                 game.setKillPhase(true);
+                                viewManager.getFieldView().setKillCursor();
                             }
                             //nicht lokaler Spieler
                             else {
