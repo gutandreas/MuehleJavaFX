@@ -1,5 +1,6 @@
 package edu.andreasgut.view;
 
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -33,7 +34,10 @@ public class LogView extends VBox {
     }
 
     public void setStatusLabel(String string) {
-        statusLabel.setText(string);
+        Platform.runLater(()-> {
+            statusLabel.setText(string);
+        });
+
     }
 
     public void activateNextComputerStepButton(){

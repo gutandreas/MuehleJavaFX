@@ -4,6 +4,7 @@ package edu.andreasgut.view;
 import edu.andreasgut.game.Move;
 import edu.andreasgut.game.Position;
 import edu.andreasgut.sound.SOUNDEFFECT;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
@@ -15,7 +16,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.robot.Robot;
 
 
-public class FieldView extends AnchorPane {
+public class FieldView extends AnchorPane{
 
     private ImageView imageView;
     private Image image;
@@ -117,7 +118,6 @@ public class FieldView extends AnchorPane {
 
 
     public void graphicPut(Position position, int playerIndex, int delay){
-        Object loopObject = new Object();
 
         Image image;
 
@@ -128,8 +128,14 @@ public class FieldView extends AnchorPane {
             image = player2StoneImage;
         }
 
-        ((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(image);
-        viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
+        Platform.runLater(new Runnable(){
+            @Override
+            public void run() {
+                ((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(image);
+                viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
+            }
+        });
+
 
 
     }

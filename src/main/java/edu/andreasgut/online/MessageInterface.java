@@ -29,6 +29,7 @@ public class MessageInterface {
             case "join":
                 System.out.println("Spiel beigetreten");
                 viewManager.getLogView().activateNextComputerStepButton();
+                //viewManager.getScoreView().getPlayer2Label().setText(jsonObject.getString("player2Name"));
                 break;
 
             case "update":

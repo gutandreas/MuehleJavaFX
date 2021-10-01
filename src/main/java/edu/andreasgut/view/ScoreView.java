@@ -1,6 +1,7 @@
 package edu.andreasgut.view;
 
 import edu.andreasgut.game.Player;
+import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -89,28 +90,35 @@ public class ScoreView extends VBox {
     }
 
     public void increaseStonesPut(){
-        switch (viewManager.getGame().getCurrentPlayerIndex()){
-            case 0:
-                stonesPutPlayer1Label.setText("Steine gesetzt: " + ++stonesPut1);
-                break;
-            case 1:
-                stonesPutPlayer2Label.setText("Steine gesetzt: " + ++stonesPut2);
-                break;
-        }
+        Platform.runLater(() -> {
+                switch (viewManager.getGame().getCurrentPlayerIndex()){
+                    case 0:
+                        stonesPutPlayer1Label.setText("Steine gesetzt: " + ++stonesPut1);
+                        break;
+                    case 1:
+                        stonesPutPlayer2Label.setText("Steine gesetzt: " + ++stonesPut2);
+                        break;}
+                }
+        );
+
+
     }
 
     public void increaseStonesLost(){
-        switch ((viewManager.getGame().getOtherPlayerIndex())){
-            case 0:
-                stonesLostPlayer1Label.setText("Steine verloren: " + ++stonesLost1);
-                break;
-            case 1:
-                stonesLostPlayer2Label.setText("Steine verloren: " + ++stonesLost2);
-                break;
-        }
+        Platform.runLater(() -> {
+            switch ((viewManager.getGame().getOtherPlayerIndex())) {
+                case 0:
+                    stonesLostPlayer1Label.setText("Steine verloren: " + ++stonesLost1);
+                    break;
+                case 1:
+                    stonesLostPlayer2Label.setText("Steine verloren: " + ++stonesLost2);
+                    break;
+            }
+        });
     }
 
     public void increaseStonesKilled(){
+        Platform.runLater(() -> {
         switch (viewManager.getGame().getCurrentPlayerIndex()){
             case 0:
                 stonesKilledPlayer1Label.setText("Steine gewonnen: " + ++stonesKilled1);
@@ -118,11 +126,13 @@ public class ScoreView extends VBox {
             case 1:
                 stonesKilledPlayer2Label.setText("Steine gewonnen: " + ++stonesKilled2);
                 break;
-        }
+            }
+        });
     }
 
     public void increaseRound(){
-        roundLabel.setText("Spielzug: " + ++round);
+        Platform.runLater(()-> roundLabel.setText("Spielzug: " + ++round));
+
     }
 
 
