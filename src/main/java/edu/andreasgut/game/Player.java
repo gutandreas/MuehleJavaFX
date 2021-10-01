@@ -4,7 +4,7 @@ import edu.andreasgut.view.ViewManager;
 
 public abstract class Player {
 
-    private final String name;
+    protected String name;
     protected String uuid;
     protected final ViewManager viewManager;
     protected boolean local;
@@ -32,6 +32,10 @@ public abstract class Player {
 
     public boolean isLocal() {
         return local;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     abstract Move move(Board board, int playerIndex, boolean allowedToJump);

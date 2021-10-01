@@ -2,6 +2,7 @@ package edu.andreasgut.online;
 
 import edu.andreasgut.game.*;
 import edu.andreasgut.view.ViewManager;
+import javafx.application.Platform;
 import org.json.JSONObject;
 
 public class MessageInterface {
@@ -29,7 +30,8 @@ public class MessageInterface {
             case "join":
                 System.out.println("Spiel beigetreten");
                 viewManager.getLogView().activateNextComputerStepButton();
-                //viewManager.getScoreView().getPlayer2Label().setText(jsonObject.getString("player2Name"));
+                game.getPlayer1().setName(jsonObject.getString("player2Name"));
+                Platform.runLater(()-> viewManager.getScoreView().getPlayer2Label().setText("Player 2: " + jsonObject.getString("player2Name")));
                 break;
 
             case "update":
@@ -69,6 +71,7 @@ public class MessageInterface {
 
                             if (game.getCurrentPlayer() instanceof ComputerPlayer){
                                 if (((ComputerPlayer) game.getCurrentPlayer()).isAutomaticTrigger()){
+                                    System.out.println("Automatic Trigger");
                                     game.callComputer();
                                 }
                                 else {
