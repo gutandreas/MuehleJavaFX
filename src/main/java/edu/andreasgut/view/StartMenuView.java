@@ -7,6 +7,7 @@ import edu.andreasgut.online.WebsocketClient;
 import edu.andreasgut.sound.MUSIC;
 import edu.andreasgut.view.fxElements.BeginnerSwitchButton;
 import edu.andreasgut.view.fxElements.SelectColorButton;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
@@ -19,8 +20,11 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.regex.Pattern;
 
 import org.json.JSONObject;
+
+import javax.swing.event.ChangeListener;
 
 public class StartMenuView extends VBox {
 
@@ -47,7 +51,21 @@ public class StartMenuView extends VBox {
 
 
 
+
+
     public StartMenuView(ViewManager viewManager) {
+
+        Pattern pattern = Pattern.compile("[a-zA-Z0-9]*");
+        TextFormatter<?> formatter = new TextFormatter<Object>(change -> {
+            if (pattern.matcher(change.getControlNewText()).matches()) {
+                change.setText(change.getText().toUpperCase());
+                return change;
+            } else {
+                //Verbotene Zeichen
+                return null;
+            }
+        });
+
         this.viewManager = viewManager;
         this.setPrefWidth(STARTDIMENSION);
         offlineVBox = new VBox();
@@ -56,6 +74,15 @@ public class StartMenuView extends VBox {
         computerOnlineButton = new Button("Computerbattle starten");
         gameCodeTextfield = new TextField();
         gameCodeTextfield.setPromptText("Gamecode");
+        gameCodeTextfield.setTextFormatter(formatter);
+        gameCodeTextfield.textProperty().addListener(change -> {
+                if (gameCodeTextfield.getText().length() > 10) {
+                    String s = gameCodeTextfield.getText().substring(0, 10);
+                    gameCodeTextfield.setText(s);
+                }
+            }
+        );
+        gameCodeTextfield.setMaxWidth(120);
 
 
         setupOfflineTitleAndWarning();
@@ -132,8 +159,28 @@ public class StartMenuView extends VBox {
     }
 
     private void setupComputerBattleInformation(){
+
+        Pattern pattern = Pattern.compile("[a-zA-Z0-9]*");
+        TextFormatter<?> formatter = new TextFormatter<Object>(change -> {
+            if (pattern.matcher(change.getControlNewText()).matches()) {
+                change.setText(change.getText().toUpperCase());
+                return change;
+            } else {
+                //Verbotene Zeichen
+                return null;
+            }
+        });
+
         computerBattleTextfield = new TextField();
         computerBattleTextfield.setPromptText("Name des Computers");
+        computerBattleTextfield.setTextFormatter(formatter);
+        computerBattleTextfield.textProperty().addListener(change -> {
+                    if (computerBattleTextfield.getText().length() > 15) {
+                        String s = computerBattleTextfield.getText().substring(0, 15);
+                        computerBattleTextfield.setText(s);
+                    }
+                }
+        );
         computerBlackButton = new SelectColorButton(null, STONECOLOR.BLACK, true);
         computerWhiteButton = new SelectColorButton(null, STONECOLOR.WHITE, false);
         stoneColorComputerLabel = new Label("Steinfarbe: ");
@@ -146,8 +193,39 @@ public class StartMenuView extends VBox {
     }
 
     private void setupPlayerInformations(){
+
+        Pattern pattern = Pattern.compile("[a-zA-Z0-9]*");
+        TextFormatter<?> formatter1 = new TextFormatter<Object>(change -> {
+            if (pattern.matcher(change.getControlNewText()).matches()) {
+                change.setText(change.getText().toUpperCase());
+                return change;
+            } else {
+                //Verbotene Zeichen
+                return null;
+            }
+        });
+
+        TextFormatter<?> formatter2 = new TextFormatter<Object>(change -> {
+            if (pattern.matcher(change.getControlNewText()).matches()) {
+                change.setText(change.getText().toUpperCase());
+                return change;
+            } else {
+                //Verbotene Zeichen
+                return null;
+            }
+        });
+
+
         namePlayer1Textfield = new TextField();
+        namePlayer1Textfield.setTextFormatter(formatter1);
         namePlayer1Textfield.setPromptText("Name Spieler 1");
+        namePlayer1Textfield.textProperty().addListener(change -> {
+                    if (namePlayer1Textfield.getText().length() > 15) {
+                        String s = namePlayer1Textfield.getText().substring(0, 15);
+                        namePlayer1Textfield.setText(s);
+                    }
+                }
+        );
         stonesColorLabel1 = new Label("Steinfarbe: ");
         stonesBlackButton1 = new SelectColorButton(null, STONECOLOR.BLACK, true);
         stonesWhiteButton1 = new SelectColorButton(null, STONECOLOR.WHITE, false);
@@ -159,8 +237,16 @@ public class StartMenuView extends VBox {
         player1HBox.setAlignment(Pos.CENTER_LEFT);
 
         namePlayer2Textfield = new TextField();
+        namePlayer2Textfield.setTextFormatter(formatter2);
         namePlayer2Textfield.setPromptText("Name Spieler 2");
         namePlayer2Textfield.setVisible(true);
+        namePlayer2Textfield.textProperty().addListener(change -> {
+                    if (namePlayer2Textfield.getText().length() > 15) {
+                        String s = namePlayer2Textfield.getText().substring(0, 15);
+                        namePlayer2Textfield.setText(s);
+                    }
+                }
+        );
         stonesColorLabel2 = new Label("Steinfarbe: ");
         stonesBlackButton2 = new SelectColorButton(null, STONECOLOR.BLACK, false);
         stonesWhiteButton2 = new SelectColorButton(null, STONECOLOR.WHITE, true);
