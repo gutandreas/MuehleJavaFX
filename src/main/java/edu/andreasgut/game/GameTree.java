@@ -191,89 +191,89 @@ public class GameTree {
 
         int counter1 = 0;
 
-        for (GameTreeNode currentSet : root.getChildren()) {
+        for (GameTreeNode currentNode : root.getChildren()) {
             int counter2 = 0;
-            string += ANSI_GREEN + "Level: " + currentSet.getLevel() + ", Pfad: " + ++counter1 + " \n";
-            if (currentSet.getPut() != null){
-                if (currentSet.getKill() != null){
-                    string += "Put an " + currentSet.getPut() + " mit Kill an " + currentSet.getKill() + "\n";
+            string += ANSI_GREEN + "Level: " + currentNode.getLevel() + ", Pfad: " + ++counter1 + " \n";
+            if (currentNode.getPut() != null){
+                if (currentNode.getKill() != null){
+                    string += "Put an " + currentNode.getPut() + " mit Kill an " + currentNode.getKill() + "\n";
                 }
                 else {
-                    string += "Put an " + currentSet.getPut() + "\n";
+                    string += "Put an " + currentNode.getPut() + "\n";
                 }
             }
-            if (currentSet.getMove() != null){
-                if (currentSet.getKill() != null){
-                    string += currentSet.getMove() + " mit Kill an " + currentSet.getKill() + "\n";
+            if (currentNode.getMove() != null){
+                if (currentNode.getKill() != null){
+                    string += currentNode.getMove() + " mit Kill an " + currentNode.getKill() + "\n";
                 }
                 else {
-                    string += currentSet.getMove() + "\n";
+                    string += currentNode.getMove() + "\n";
                 }
             }
-            string += currentSet.getBoard();
-            string += currentSet.getScoreDetails() + "\n \n" + ANSI_RESET;
-            for (GameTreeNode currentSet2 : currentSet.getChildren()){
+            string += currentNode.getBoard();
+            string += currentNode.getScoreDetails() + "\n \n" + ANSI_RESET;
+            for (GameTreeNode currentNode2 : currentNode.getChildren()){
                 int counter3 = 0;
-                string += ANSI_YELLOW + "Level: " + currentSet2.getLevel() + ", Pfad: " + counter1 + "." + ++counter2 + " \n";
-                if (currentSet2.getPut() != null){
-                    if (currentSet2.getKill() != null){
-                        string += "Put an " + currentSet2.getPut() + " mit Kill an " + currentSet2.getKill() + "\n";
+                string += ANSI_YELLOW + "Level: " + currentNode2.getLevel() + ", Pfad: " + counter1 + "." + ++counter2 + " \n";
+                if (currentNode2.getPut() != null){
+                    if (currentNode2.getKill() != null){
+                        string += "Put an " + currentNode2.getPut() + " mit Kill an " + currentNode2.getKill() + "\n";
                     }
                     else {
-                        string += "Put an " + currentSet2.getPut() + "\n";
+                        string += "Put an " + currentNode2.getPut() + "\n";
                     }
                 }
-                if (currentSet2.getMove() != null){
-                    if (currentSet2.getKill() != null){
-                        string += currentSet2.getMove() + " mit Kill an " + currentSet2.getKill() + "\n";
+                if (currentNode2.getMove() != null){
+                    if (currentNode2.getKill() != null){
+                        string += currentNode2.getMove() + " mit Kill an " + currentNode2.getKill() + "\n";
                     }
                     else {
-                        string += currentSet2.getMove() + "\n";
+                        string += currentNode2.getMove() + "\n";
                     }
                 }
-                string += currentSet2.getBoard();
-                string += currentSet2.getScoreDetails() + "\n \n" + ANSI_RESET;
-                for (GameTreeNode currentSet3 : currentSet2.getChildren()){
+                string += currentNode2.getBoard();
+                string += currentNode2.getScoreDetails() + "\n \n" + ANSI_RESET;
+                for (GameTreeNode currentNode3 : currentNode2.getChildren()){
                     int counter4 = 0;
-                    string += ANSI_BLUE + "Level: " + currentSet3.getLevel() + ", Pfad: " + counter1 + "." + counter2 + "." + ++counter3 + "\n";
-                    if (currentSet3.getPut() != null){
-                        if (currentSet3.getKill() != null){
-                            string += "Put an " + currentSet3.getPut() + " mit Kill an " + currentSet3.getKill() + "\n";
+                    string += ANSI_BLUE + "Level: " + currentNode3.getLevel() + ", Pfad: " + counter1 + "." + counter2 + "." + ++counter3 + "\n";
+                    if (currentNode3.getPut() != null){
+                        if (currentNode3.getKill() != null){
+                            string += "Put an " + currentNode3.getPut() + " mit Kill an " + currentNode3.getKill() + "\n";
                         }
                         else {
-                            string += "Put an " + currentSet3.getPut() + "\n";
+                            string += "Put an " + currentNode3.getPut() + "\n";
                         }
                     }
-                    if (currentSet3.getMove() != null){
-                        if (currentSet3.getKill() != null){
-                            string += currentSet3.getMove() + " mit Kill an " + currentSet3.getKill() + "\n";
+                    if (currentNode3.getMove() != null){
+                        if (currentNode3.getKill() != null){
+                            string += currentNode3.getMove() + " mit Kill an " + currentNode3.getKill() + "\n";
                         }
                         else {
-                            string += currentSet3.getMove() + "\n";
+                            string += currentNode3.getMove() + "\n";
                         }
                     }
-                    string += currentSet3.getBoard();
-                    string += currentSet3.getScoreDetails() + "\n \n" + ANSI_RESET;
-                    for (GameTreeNode currentSet4 : currentSet3.getChildren()){
-                        string += ANSI_PURPLE + "Level: " + currentSet4.getLevel() + ", Pfad: " + counter1 + "." + counter2 + "." + counter3 + "." + ++counter4 +  "\n";
-                        if (currentSet4.getPut() != null){
-                            if (currentSet4.getKill() != null){
-                                string += "Put an " + currentSet4.getPut() + " mit Kill an " + currentSet4.getKill() + "\n";
+                    string += currentNode3.getBoard();
+                    string += currentNode3.getScoreDetails() + "\n \n" + ANSI_RESET;
+                    for (GameTreeNode currentNode4 : currentNode3.getChildren()){
+                        string += ANSI_PURPLE + "Level: " + currentNode4.getLevel() + ", Pfad: " + counter1 + "." + counter2 + "." + counter3 + "." + ++counter4 +  "\n";
+                        if (currentNode4.getPut() != null){
+                            if (currentNode4.getKill() != null){
+                                string += "Put an " + currentNode4.getPut() + " mit Kill an " + currentNode4.getKill() + "\n";
                             }
                             else {
-                                string += "Put an " + currentSet4.getPut() + "\n";
+                                string += "Put an " + currentNode4.getPut() + "\n";
                             }
                         }
-                        if (currentSet.getMove() != null){
-                            if (currentSet4.getKill() != null){
-                                string += currentSet4.getMove() + " mit Kill an " + currentSet4.getKill() + "\n";
+                        if (currentNode.getMove() != null){
+                            if (currentNode4.getKill() != null){
+                                string += currentNode4.getMove() + " mit Kill an " + currentNode4.getKill() + "\n";
                             }
                             else {
-                                string += currentSet4.getMove() + "\n";
+                                string += currentNode4.getMove() + "\n";
                             }
                         }
-                        string += currentSet4.getBoard();
-                        string += currentSet4.getScoreDetails() + "\n \n"  + ANSI_RESET;
+                        string += currentNode4.getBoard();
+                        string += currentNode4.getScoreDetails() + "\n \n"  + ANSI_RESET;
 
             }}}}
         return string;
