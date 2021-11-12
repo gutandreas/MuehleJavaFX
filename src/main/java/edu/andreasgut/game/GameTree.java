@@ -61,35 +61,35 @@ public class GameTree {
     }
 
     public Position getBestPut(){
-        GameTreeNode currentSet = getLeafWithBestScore();
+        GameTreeNode currentNode = getLeafWithBestScore();
 
-        while (currentSet.getParent() != root){
-            currentSet = currentSet.getParent();
+        while (currentNode.getParent() != root){
+            currentNode = currentNode.getParent();
         }
 
 
-        return currentSet.getPut();
+        return currentNode.getPut();
 
     }
 
     public Move getBestMove(){
-        GameTreeNode currentSet = getLeafWithBestScore();
+        GameTreeNode currentNode = getLeafWithBestScore();
 
-        while (currentSet.getParent() != root){
-            currentSet = currentSet.getParent();
+        while (currentNode.getParent() != root){
+            currentNode = currentNode.getParent();
         }
 
-        return currentSet.getMove();
+        return currentNode.getMove();
     }
 
     public Position getBestKill(){
-        GameTreeNode currentSet = getLeafWithBestScore();
+        GameTreeNode currentNode = getLeafWithBestScore();
 
-        while (currentSet.getParent() != root){
-            currentSet = currentSet.getParent();
+        while (currentNode.getParent() != root){
+            currentNode = currentNode.getParent();
         }
 
-        return currentSet.getKill();
+        return currentNode.getKill();
     }
 
     public void keepOnlyWorstChildren(GameTreeNode parent, int numberOfChildren){
