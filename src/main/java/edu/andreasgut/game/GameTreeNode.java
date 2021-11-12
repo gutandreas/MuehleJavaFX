@@ -3,7 +3,7 @@ package edu.andreasgut.game;
 
 import java.util.LinkedList;
 
-public class BoardPutMoveKillScoreSet {
+public class GameTreeNode {
 
     private int level;
     private Board board;
@@ -11,8 +11,8 @@ public class BoardPutMoveKillScoreSet {
     private Move move;
     private Position kill;
     private int score;
-    private BoardPutMoveKillScoreSet parent;
-    private LinkedList<BoardPutMoveKillScoreSet> children = new LinkedList<>();
+    private GameTreeNode parent;
+    private LinkedList<GameTreeNode> children = new LinkedList<>();
     private String scoreDetails;
 
     public Board getBoard() {
@@ -55,11 +55,11 @@ public class BoardPutMoveKillScoreSet {
         this.score = score;
     }
 
-    public BoardPutMoveKillScoreSet getParent() {
+    public GameTreeNode getParent() {
         return parent;
     }
 
-    public void setParent(BoardPutMoveKillScoreSet parent) {
+    public void setParent(GameTreeNode parent) {
         this.parent = parent;
     }
 
@@ -71,11 +71,11 @@ public class BoardPutMoveKillScoreSet {
         this.level = level;
     }
 
-    public LinkedList<BoardPutMoveKillScoreSet> getChildren() {
+    public LinkedList<GameTreeNode> getChildren() {
         return children;
     }
 
-    public void setChildren(LinkedList<BoardPutMoveKillScoreSet> children) {
+    public void setChildren(LinkedList<GameTreeNode> children) {
         this.children = children;
     }
 

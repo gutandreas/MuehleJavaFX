@@ -39,9 +39,4 @@ public abstract class Player implements MessageHandler {
         this.name = name;
     }
 
-    abstract Move move(Board board, int playerIndex, boolean allowedToJump);
-    abstract Position put(Board board, int playerIndex);
-    abstract Position kill(Board board, int ownPlayerIndex, int otherPlayerIndex);
-
-    public abstract void prepareKill(ViewManager viewManager);
 }

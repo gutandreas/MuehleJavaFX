@@ -5,7 +5,7 @@ import edu.andreasgut.view.ViewManager;
 import javafx.application.Platform;
 import org.json.JSONObject;
 
-public class MessageInterface {
+public class Messenger {
 
     private static void sendMessage(ViewManager viewManager, String message){
         if (viewManager.getGame().getWebsocketClient() == null){
@@ -102,12 +102,13 @@ public class MessageInterface {
                         System.out.println(board);
                         //führt zu Mühle
                         if (board.checkMorris(position) && board.isThereStoneToKill(1-playerIndex)){
-                           viewManager.getGame().getCurrentPlayer().prepareKill(viewManager);
+                            game.updateGameState(true, false, false);
+                            viewManager.getGame().getCurrentPlayer().prepareKill(viewManager);
                         }
                         //führt nicht zu Mühle
                         else {
-                            game.updateGameState(true, false);
-                            game.getCurrentPlayer().prepareNextPutOrMove(viewManager);
+                            game.updateGameState(true, false, true);
+                            game.getCurrentPlayer().preparePutOrMove(viewManager);
                         }
                     }
                     else {
@@ -133,12 +134,13 @@ public class MessageInterface {
                         System.out.println(board);
                         //führt zu Mühle
                         if (board.checkMorris(move.getTo()) && board.isThereStoneToKill(1-playerIndex)){
+                            game.updateGameState(false, false, false);
                             viewManager.getGame().getCurrentPlayer().prepareKill(viewManager);
                         }
                         //führt nicht zu Mühle
                         else {
-                            game.updateGameState(true, false);
-                            game.getCurrentPlayer().prepareNextPutOrMove(viewManager);
+                            game.updateGameState(false, false, true);
+                            game.getCurrentPlayer().preparePutOrMove(viewManager);
                             }
                     }
                     else {
@@ -160,9 +162,9 @@ public class MessageInterface {
                         viewManager.getFieldView().graphicKill(position);
                         System.out.println(board);
 
-                        game.updateGameState(false, true);
+                        game.updateGameState(false, true, true);
                         game.setKillPhase(false);
-                        game.getCurrentPlayer().prepareNextPutOrMove(viewManager);
+                        game.getCurrentPlayer().preparePutOrMove(viewManager);
 
                     }
                     else {

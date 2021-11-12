@@ -1,7 +1,8 @@
 package edu.andreasgut.game;
 
-import edu.andreasgut.online.MessageInterface;
+import edu.andreasgut.online.Messenger;
 import edu.andreasgut.view.ViewManager;
+
 
 import java.util.*;
 
@@ -11,8 +12,8 @@ public class ComputerPlayer extends Player {
     boolean automaticTrigger;
 
 
-    public ComputerPlayer(ViewManager viewManager, String name, boolean local) {
-        super(viewManager, name, local);
+    public ComputerPlayer(ViewManager viewManager, String name) {
+        super(viewManager, name, true);
         automaticTrigger = true;
     }
 
@@ -21,11 +22,7 @@ public class ComputerPlayer extends Player {
         automaticTrigger = false;
     }
 
-    public boolean isAutomaticTrigger() {
-        return automaticTrigger;
-    }
 
-    @Override
     Position put(Board board, int playerIndex) {
 
         gameTree.initializeRoot(board);
@@ -36,7 +33,7 @@ public class ComputerPlayer extends Player {
 
         System.out.println(gameTree);
 
-        Stack<BoardPutMoveKillScoreSet> winningPath = gameTree.getPath(gameTree.getLeafWithBestScore());
+        Stack<GameTreeNode> winningPath = gameTree.getPath(gameTree.getLeafWithBestScore());
         System.out.println("Gewinnerpfad:");
         while (!winningPath.isEmpty()){
             System.out.println(winningPath.pop());
@@ -46,7 +43,7 @@ public class ComputerPlayer extends Player {
         return gameTree.getBestPut();
     }
 
-    private void recursivePutBfs(BoardPutMoveKillScoreSet set, ScorePoints scorePoints, int scorePlayerIndex, int currentPlayerIndex, int levelLimit){
+    private void recursivePutBfs(GameTreeNode set, ScorePoints scorePoints, int scorePlayerIndex, int currentPlayerIndex, int levelLimit){
 
         if (set.getLevel()==levelLimit){
             return;
@@ -72,49 +69,48 @@ public class ComputerPlayer extends Player {
         }
 
 
-        for (BoardPutMoveKillScoreSet child : set.getChildren()){
+        for (GameTreeNode child : set.getChildren()){
             recursivePutBfs(child, scorePoints, scorePlayerIndex, tempCurrentPlayerIndex, levelLimit);
         }
     }
 
 
-    private void pretendPut(Board board, Position put, ScorePoints scorePoints, BoardPutMoveKillScoreSet parent, int scorePlayerIndex, int currentPlayerIndex, int level){
+    private void pretendPut(Board board, Position put, ScorePoints scorePoints, GameTreeNode parent, int scorePlayerIndex, int currentPlayerIndex, int level){
 
-        BoardPutMoveKillScoreSet boardPutMoveKillScoreSet1 = new BoardPutMoveKillScoreSet();
-        boardPutMoveKillScoreSet1.setPut(put);
-        boardPutMoveKillScoreSet1.setLevel(level);
+        GameTreeNode gameTreeNode1 = new GameTreeNode();
+        gameTreeNode1.setPut(put);
+        gameTreeNode1.setLevel(level);
 
         Board clonedBoard1 = (Board) board.clone();
         clonedBoard1.putStone(put, currentPlayerIndex);
 
-        boardPutMoveKillScoreSet1.setBoard(clonedBoard1);
-        boardPutMoveKillScoreSet1.setScore(Advisor.getScore(boardPutMoveKillScoreSet1, scorePoints, scorePlayerIndex, false));
+        gameTreeNode1.setBoard(clonedBoard1);
+        gameTreeNode1.setScore(Advisor.getScore(gameTreeNode1, scorePoints, scorePlayerIndex, false));
 
 
 
-        if (boardPutMoveKillScoreSet1.getBoard().checkMorris(boardPutMoveKillScoreSet1.getPut())){
+        if (gameTreeNode1.getBoard().checkMorris(gameTreeNode1.getPut())){
             for (Position killPosition : Advisor.getAllPossibleKills(clonedBoard1,currentPlayerIndex)){
-                BoardPutMoveKillScoreSet boardPutMoveKillScoreSet2 = new BoardPutMoveKillScoreSet();
-                boardPutMoveKillScoreSet2.setPut(put);
-                boardPutMoveKillScoreSet2.setLevel(level);
-                boardPutMoveKillScoreSet2.setKill(killPosition);
+                GameTreeNode gameTreeNode2 = new GameTreeNode();
+                gameTreeNode2.setPut(put);
+                gameTreeNode2.setLevel(level);
+                gameTreeNode2.setKill(killPosition);
 
                 Board clonedBoard2 = (Board) clonedBoard1.clone();
                 clonedBoard2.clearStone(killPosition);
 
-                boardPutMoveKillScoreSet2.setBoard(clonedBoard2);
-                boardPutMoveKillScoreSet2.setScore(Advisor.getScore(boardPutMoveKillScoreSet2, scorePoints, scorePlayerIndex, false));
-                gameTree.addSet(parent, boardPutMoveKillScoreSet2);
+                gameTreeNode2.setBoard(clonedBoard2);
+                gameTreeNode2.setScore(Advisor.getScore(gameTreeNode2, scorePoints, scorePlayerIndex, false));
+                gameTree.addSet(parent, gameTreeNode2);
             }
         }
         else {
-            gameTree.addSet(parent, boardPutMoveKillScoreSet1);
+            gameTree.addSet(parent, gameTreeNode1);
         }
 
     }
 
 
-    @Override
     Move move(Board board, int playerIndex, boolean allowedToJump) {
 
 
@@ -126,7 +122,7 @@ public class ComputerPlayer extends Player {
 
         System.out.println(gameTree);
 
-        Stack<BoardPutMoveKillScoreSet> winningPath = gameTree.getPath(gameTree.getLeafWithBestScore());
+        Stack<GameTreeNode> winningPath = gameTree.getPath(gameTree.getLeafWithBestScore());
         System.out.println("Gewinnerpfad:");
         while (!winningPath.isEmpty()){
             System.out.println(winningPath.pop());
@@ -137,7 +133,7 @@ public class ComputerPlayer extends Player {
 
     }
 
-    private void recursiveMoveBfs(BoardPutMoveKillScoreSet set, ScorePoints scorePoints, int scorePlayerIndex, int currentPlayerIndex, int levelLimit){
+    private void recursiveMoveBfs(GameTreeNode set, ScorePoints scorePoints, int scorePlayerIndex, int currentPlayerIndex, int levelLimit){
 
         if (set.getLevel()==levelLimit){
             return;
@@ -163,49 +159,48 @@ public class ComputerPlayer extends Player {
         }
 
 
-        for (BoardPutMoveKillScoreSet child : set.getChildren()){
+        for (GameTreeNode child : set.getChildren()){
             recursiveMoveBfs(child, scorePoints, scorePlayerIndex, tempCurrentPlayerIndex, levelLimit);
         }
     }
 
 
-    private void pretendMove(Board board, Move move, ScorePoints scorePoints, BoardPutMoveKillScoreSet parent, int scorePlayerIndex, int currentPlayerIndex, int level){
+    private void pretendMove(Board board, Move move, ScorePoints scorePoints, GameTreeNode parent, int scorePlayerIndex, int currentPlayerIndex, int level){
 
-        BoardPutMoveKillScoreSet boardPutMoveKillScoreSet1 = new BoardPutMoveKillScoreSet();
-        boardPutMoveKillScoreSet1.setMove(move);
-        boardPutMoveKillScoreSet1.setLevel(level);
+        GameTreeNode gameTreeNode1 = new GameTreeNode();
+        gameTreeNode1.setMove(move);
+        gameTreeNode1.setLevel(level);
 
         Board clonedBoard1 = (Board) board.clone();
         clonedBoard1.move(move, currentPlayerIndex);
 
-        boardPutMoveKillScoreSet1.setBoard(clonedBoard1);
-        boardPutMoveKillScoreSet1.setScore(Advisor.getScore(boardPutMoveKillScoreSet1, scorePoints, scorePlayerIndex, false));
+        gameTreeNode1.setBoard(clonedBoard1);
+        gameTreeNode1.setScore(Advisor.getScore(gameTreeNode1, scorePoints, scorePlayerIndex, false));
 
 
 
-        if (boardPutMoveKillScoreSet1.getBoard().checkMorris(boardPutMoveKillScoreSet1.getMove().getTo())){
+        if (gameTreeNode1.getBoard().checkMorris(gameTreeNode1.getMove().getTo())){
             for (Position killPosition : Advisor.getAllPossibleKills(clonedBoard1,currentPlayerIndex)){
-                BoardPutMoveKillScoreSet boardPutMoveKillScoreSet2 = new BoardPutMoveKillScoreSet();
-                boardPutMoveKillScoreSet2.setMove(move);
-                boardPutMoveKillScoreSet2.setLevel(level);
-                boardPutMoveKillScoreSet2.setKill(killPosition);
+                GameTreeNode gameTreeNode2 = new GameTreeNode();
+                gameTreeNode2.setMove(move);
+                gameTreeNode2.setLevel(level);
+                gameTreeNode2.setKill(killPosition);
 
                 Board clonedBoard2 = (Board) clonedBoard1.clone();
                 clonedBoard2.clearStone(killPosition);
 
-                boardPutMoveKillScoreSet2.setBoard(clonedBoard2);
-                boardPutMoveKillScoreSet2.setScore(Advisor.getScore(boardPutMoveKillScoreSet2, scorePoints, scorePlayerIndex, false));
-                gameTree.addSet(parent, boardPutMoveKillScoreSet2);
+                gameTreeNode2.setBoard(clonedBoard2);
+                gameTreeNode2.setScore(Advisor.getScore(gameTreeNode2, scorePoints, scorePlayerIndex, false));
+                gameTree.addSet(parent, gameTreeNode2);
             }
         }
         else {
-            gameTree.addSet(parent, boardPutMoveKillScoreSet1);
+            gameTree.addSet(parent, gameTreeNode1);
         }
     }
 
 
 
-    @Override
     Position kill(Board board, int ownPlayerIndex, int otherPlayerIndex) {
 
         return gameTree.getBestKill();
@@ -213,7 +208,6 @@ public class ComputerPlayer extends Player {
     }
 
 
-    @Override
     public void prepareKill(ViewManager viewManager) {
         if (automaticTrigger){
             triggerKill(viewManager);
@@ -223,8 +217,8 @@ public class ComputerPlayer extends Player {
         }
     }
 
-    @Override
-    public void prepareNextPutOrMove(ViewManager viewManager) {
+
+    public void preparePutOrMove(ViewManager viewManager) {
 
         Game game = viewManager.getGame();
 
@@ -249,19 +243,23 @@ public class ComputerPlayer extends Player {
     public void triggerPut(ViewManager viewManager){
         Game game = viewManager.getGame();
         Position putPosition = put(game.getBoard(), game.getCurrentPlayerIndex());
-        MessageInterface.sendPutMessage(viewManager, putPosition);
+        Messenger.sendPutMessage(viewManager, putPosition);
     }
 
     public void triggerMove(ViewManager viewManager){
         Game game = viewManager.getGame();
         boolean allowedToJump = game.getBoard().countPlayersStones(game.getCurrentPlayerIndex()) == 3;
         Move move = move(game.getBoard(), game.getCurrentPlayerIndex(),allowedToJump);
-        MessageInterface.sendMoveMessage(viewManager, move);
+        Messenger.sendMoveMessage(viewManager, move);
     }
 
     public void triggerKill(ViewManager viewManager){
         Game game = viewManager.getGame();
         Position killPosition = kill(game.getBoard(), game.getCurrentPlayerIndex(), game.getOtherPlayerIndex());
-        MessageInterface.sendKillMessage(viewManager, killPosition);
+        Messenger.sendKillMessage(viewManager, killPosition);
     }
+
+
+
+
 }

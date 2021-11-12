@@ -329,13 +329,13 @@ public class StartMenuView extends VBox {
 
 
 
-                /*viewManager.getScoreView().updatePlayerNames(viewManager.getGame().getPlayer0(),
-                        viewManager.getGame().getPlayer1());*/
-
                 viewManager.changeToGameScene();
                 if (beginnerSwitchButton.getState()){
-                    viewManager.getGame().getCurrentPlayer().prepareNextPutOrMove(viewManager);
+                    viewManager.getGame().getCurrentPlayer().preparePutOrMove(viewManager);
                 }
+
+                viewManager.getFieldView().setPutCursor();
+
 
 
 

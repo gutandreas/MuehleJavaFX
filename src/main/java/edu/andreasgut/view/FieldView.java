@@ -159,6 +159,7 @@ public class FieldView extends AnchorPane{
 
 
 
+
         /*Timeline timeline = new Timeline(new KeyFrame(
                 Duration.millis(COMPREACTIONTIME*1.5),
                 moveAction -> {((ImageView) fieldGridPane.getChildren().get(translateToIndex(move.getFrom()))).setImage(emptyField);
@@ -197,16 +198,16 @@ public class FieldView extends AnchorPane{
         return viewManager.getGame().getCurrentPlayerIndex()==0 ? player1StoneImage : player2StoneImage;
     }
 
-    synchronized public void setPutCursor(){
+    public void setPutCursor(){
         choosePutCursor();
         fieldGridPane.setOnMouseEntered(enter ->{
             choosePutCursor();
 
         });
-        moveMouseposition(20,20);
+        moveMouseposition(10,10);
     }
 
-    synchronized private void choosePutCursor() {
+    private void choosePutCursor() {
         switch (viewManager.getGame().getCurrentPlayerIndex()){
             case 0:
                 imageView.getScene().setCursor(player1StoneCursor);
@@ -218,15 +219,17 @@ public class FieldView extends AnchorPane{
 
 
 
-    synchronized public void setKillCursor(){
-       chooseKillCursor();
-        fieldGridPane.setOnMouseEntered(enter ->{
-            chooseKillCursor();
+    public void setKillCursor(){
+        Platform.runLater(() -> {
+           chooseKillCursor();
+            fieldGridPane.setOnMouseEntered(enter ->{
+                chooseKillCursor();
 
+            });
         });
     }
 
-    synchronized private void chooseKillCursor() {
+    private void chooseKillCursor() {
         switch (viewManager.getGame().getCurrentPlayerIndex()){
             case 0:
                 imageView.getScene().setCursor(player1killCursor);
@@ -236,11 +239,14 @@ public class FieldView extends AnchorPane{
                 break;}
     }
 
-    synchronized public void setMoveCursor(){
-        chooseMoveCursor();
-        fieldGridPane.setOnMouseEntered(enter ->{
+    public void setMoveCursor(){
+        Platform.runLater(() -> {
             chooseMoveCursor();
+            fieldGridPane.setOnMouseEntered(enter -> {
+                chooseMoveCursor();
+            });
         });
+
     }
 
     private void chooseMoveCursor(){

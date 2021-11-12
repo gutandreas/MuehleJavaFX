@@ -503,7 +503,7 @@ public class Advisor {
 
 
 
-    static public int getScore(BoardPutMoveKillScoreSet set, ScorePoints scorePoints, int playerIndex, boolean printScore){
+    static public int getScore(GameTreeNode set, ScorePoints scorePoints, int playerIndex, boolean printScore){
 
 
         Board board = set.getBoard();

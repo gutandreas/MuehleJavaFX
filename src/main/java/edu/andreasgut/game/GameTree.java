@@ -13,11 +13,11 @@ public class GameTree {
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
-    private BoardPutMoveKillScoreSet root;
+    private GameTreeNode root;
 
 
     public GameTree() {
-        root = new BoardPutMoveKillScoreSet();
+        root = new GameTreeNode();
     }
 
     public void initializeRoot(Board board){
@@ -25,11 +25,11 @@ public class GameTree {
         root.getChildren().clear();
     }
 
-    public BoardPutMoveKillScoreSet getLeafWithBestScore() {
+    public GameTreeNode getLeafWithBestScore() {
         int max = Integer.MIN_VALUE;
-        BoardPutMoveKillScoreSet bestLeaf = null;
+        GameTreeNode bestLeaf = null;
 
-        for (BoardPutMoveKillScoreSet set : getLeaves()){
+        for (GameTreeNode set : getLeaves()){
             if (set.getScore() > max){
                 max = set.getScore();
                 bestLeaf = set;
@@ -40,9 +40,9 @@ public class GameTree {
     }
 
 
-    public LinkedList<BoardPutMoveKillScoreSet> getLeaves() {
+    public LinkedList<GameTreeNode> getLeaves() {
 
-        LinkedList<BoardPutMoveKillScoreSet> leaves = new LinkedList<>();
+        LinkedList<GameTreeNode> leaves = new LinkedList<>();
 
         getLeavesRecursive(root, leaves);
 
@@ -50,18 +50,18 @@ public class GameTree {
 
     }
 
-    private void getLeavesRecursive(BoardPutMoveKillScoreSet currentSet, LinkedList<BoardPutMoveKillScoreSet> leaves){
+    private void getLeavesRecursive(GameTreeNode currentSet, LinkedList<GameTreeNode> leaves){
         if (currentSet.getChildren().isEmpty() && !leaves.contains(currentSet)) {
             leaves.add(currentSet);
         } else {
-            for (BoardPutMoveKillScoreSet child : currentSet.getChildren()) {
+            for (GameTreeNode child : currentSet.getChildren()) {
                 getLeavesRecursive(child, leaves);
             }
         }
     }
 
     public Position getBestPut(){
-        BoardPutMoveKillScoreSet currentSet = getLeafWithBestScore();
+        GameTreeNode currentSet = getLeafWithBestScore();
 
         while (currentSet.getParent() != root){
             currentSet = currentSet.getParent();
@@ -73,7 +73,7 @@ public class GameTree {
     }
 
     public Move getBestMove(){
-        BoardPutMoveKillScoreSet currentSet = getLeafWithBestScore();
+        GameTreeNode currentSet = getLeafWithBestScore();
 
         while (currentSet.getParent() != root){
             currentSet = currentSet.getParent();
@@ -83,7 +83,7 @@ public class GameTree {
     }
 
     public Position getBestKill(){
-        BoardPutMoveKillScoreSet currentSet = getLeafWithBestScore();
+        GameTreeNode currentSet = getLeafWithBestScore();
 
         while (currentSet.getParent() != root){
             currentSet = currentSet.getParent();
@@ -92,10 +92,10 @@ public class GameTree {
         return currentSet.getKill();
     }
 
-    public void keepOnlyWorstChildren(BoardPutMoveKillScoreSet parent, int numberOfChildren){
-        parent.getChildren().sort(new Comparator<BoardPutMoveKillScoreSet>() {
+    public void keepOnlyWorstChildren(GameTreeNode parent, int numberOfChildren){
+        parent.getChildren().sort(new Comparator<GameTreeNode>() {
             @Override
-            public int compare(BoardPutMoveKillScoreSet o1, BoardPutMoveKillScoreSet o2) {
+            public int compare(GameTreeNode o1, GameTreeNode o2) {
                 if (o1.getScore() > o2.getScore()){
                     return 1;
                 }
@@ -106,7 +106,7 @@ public class GameTree {
             }
         });
 
-        Iterator<BoardPutMoveKillScoreSet> iterator = parent.getChildren().iterator();
+        Iterator<GameTreeNode> iterator = parent.getChildren().iterator();
 
         if (parent.getChildren().size() > numberOfChildren) {
             for (int i = 0; i < numberOfChildren; i++) {
@@ -121,10 +121,10 @@ public class GameTree {
 
     }
 
-    public void keepOnlyBestChildren(BoardPutMoveKillScoreSet parent, int numberOfChildren){
-        parent.getChildren().sort(new Comparator<BoardPutMoveKillScoreSet>() {
+    public void keepOnlyBestChildren(GameTreeNode parent, int numberOfChildren){
+        parent.getChildren().sort(new Comparator<GameTreeNode>() {
             @Override
-            public int compare(BoardPutMoveKillScoreSet o1, BoardPutMoveKillScoreSet o2) {
+            public int compare(GameTreeNode o1, GameTreeNode o2) {
                 if (o1.getScore() > o2.getScore()){
                     return -1;
                 }
@@ -135,7 +135,7 @@ public class GameTree {
             }
         });
 
-        Iterator<BoardPutMoveKillScoreSet> iterator = parent.getChildren().iterator();
+        Iterator<GameTreeNode> iterator = parent.getChildren().iterator();
 
         if (parent.getChildren().size() > numberOfChildren) {
             for (int i = 0; i < numberOfChildren; i++) {
@@ -157,12 +157,12 @@ public class GameTree {
 
 
 
-    public void addSet(BoardPutMoveKillScoreSet parent, BoardPutMoveKillScoreSet child){
+    public void addSet(GameTreeNode parent, GameTreeNode child){
         parent.getChildren().add(child);
         child.setParent(parent);
     }
 
-    public BoardPutMoveKillScoreSet getRoot() {
+    public GameTreeNode getRoot() {
         return root;
     }
 
@@ -172,9 +172,9 @@ public class GameTree {
         root.getChildren().clear();
     }
 
-    public Stack<BoardPutMoveKillScoreSet> getPath(BoardPutMoveKillScoreSet node){
-        Stack<BoardPutMoveKillScoreSet> path = new Stack<>();
-        BoardPutMoveKillScoreSet set = getLeafWithBestScore();
+    public Stack<GameTreeNode> getPath(GameTreeNode node){
+        Stack<GameTreeNode> path = new Stack<>();
+        GameTreeNode set = getLeafWithBestScore();
 
         while (set!=root){
             path.push(set);
@@ -191,7 +191,7 @@ public class GameTree {
 
         int counter1 = 0;
 
-        for (BoardPutMoveKillScoreSet currentSet : root.getChildren()) {
+        for (GameTreeNode currentSet : root.getChildren()) {
             int counter2 = 0;
             string += ANSI_GREEN + "Level: " + currentSet.getLevel() + ", Pfad: " + ++counter1 + " \n";
             if (currentSet.getPut() != null){
@@ -212,7 +212,7 @@ public class GameTree {
             }
             string += currentSet.getBoard();
             string += currentSet.getScoreDetails() + "\n \n" + ANSI_RESET;
-            for (BoardPutMoveKillScoreSet currentSet2 : currentSet.getChildren()){
+            for (GameTreeNode currentSet2 : currentSet.getChildren()){
                 int counter3 = 0;
                 string += ANSI_YELLOW + "Level: " + currentSet2.getLevel() + ", Pfad: " + counter1 + "." + ++counter2 + " \n";
                 if (currentSet2.getPut() != null){
@@ -233,7 +233,7 @@ public class GameTree {
                 }
                 string += currentSet2.getBoard();
                 string += currentSet2.getScoreDetails() + "\n \n" + ANSI_RESET;
-                for (BoardPutMoveKillScoreSet currentSet3 : currentSet2.getChildren()){
+                for (GameTreeNode currentSet3 : currentSet2.getChildren()){
                     int counter4 = 0;
                     string += ANSI_BLUE + "Level: " + currentSet3.getLevel() + ", Pfad: " + counter1 + "." + counter2 + "." + ++counter3 + "\n";
                     if (currentSet3.getPut() != null){
@@ -254,7 +254,7 @@ public class GameTree {
                     }
                     string += currentSet3.getBoard();
                     string += currentSet3.getScoreDetails() + "\n \n" + ANSI_RESET;
-                    for (BoardPutMoveKillScoreSet currentSet4 : currentSet3.getChildren()){
+                    for (GameTreeNode currentSet4 : currentSet3.getChildren()){
                         string += ANSI_PURPLE + "Level: " + currentSet4.getLevel() + ", Pfad: " + counter1 + "." + counter2 + "." + counter3 + "." + ++counter4 +  "\n";
                         if (currentSet4.getPut() != null){
                             if (currentSet4.getKill() != null){
@@ -279,9 +279,9 @@ public class GameTree {
         return string;
     }
 
-    private String toStringRecursive(BoardPutMoveKillScoreSet set, String string){
+    private String toStringRecursive(GameTreeNode set, String string){
 
-        for (BoardPutMoveKillScoreSet currentSet : set.getChildren()) {
+        for (GameTreeNode currentSet : set.getChildren()) {
             string += "Level: " + currentSet.getLevel() + "\n";
             string += currentSet.getBoard();
             string += "Resultierender Score: " + currentSet.getScore() + "\n \n";

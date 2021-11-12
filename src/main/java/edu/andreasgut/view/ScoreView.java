@@ -89,7 +89,7 @@ public class ScoreView extends VBox {
         phaseLabel.setText("Phase: " + phase);
     }
 
-    public void increaseStonesPut(){
+    synchronized public void increaseStonesPut(){
 
         switch (viewManager.getGame().getCurrentPlayerIndex()){
                     case 0:
@@ -104,7 +104,7 @@ public class ScoreView extends VBox {
 
     }
 
-    public void increaseStonesLost(){
+    synchronized public void increaseStonesLost(){
 
             switch ((viewManager.getGame().getOtherPlayerIndex())) {
                 case 0:
@@ -118,7 +118,7 @@ public class ScoreView extends VBox {
             }
     }
 
-    public void increaseStonesKilled(){
+    synchronized public void increaseStonesKilled(){
 
         switch (viewManager.getGame().getCurrentPlayerIndex()){
             case 0:

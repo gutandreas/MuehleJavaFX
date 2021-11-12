@@ -1,11 +1,7 @@
 package edu.andreasgut.online;
 
 import edu.andreasgut.game.Board;
-import edu.andreasgut.game.Game;
-import edu.andreasgut.game.Move;
-import edu.andreasgut.game.Position;
 import edu.andreasgut.view.ViewManager;
-import javafx.application.Platform;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONObject;
@@ -48,7 +44,7 @@ public class WebsocketClient extends WebSocketClient {
 
     @Override
     public void onMessage(String message) {
-        MessageInterface.receiveMessage(viewManager, message);
+        Messenger.receiveMessage(viewManager, message);
 
     }
 

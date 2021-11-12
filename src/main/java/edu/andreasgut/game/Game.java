@@ -1,6 +1,6 @@
 package edu.andreasgut.game;
 
-import edu.andreasgut.online.MessageInterface;
+import edu.andreasgut.online.Messenger;
 import edu.andreasgut.online.WebsocketClient;
 import edu.andreasgut.view.ViewManager;
 
@@ -18,7 +18,7 @@ public class Game {
     boolean putPhase = true;
     boolean movePhase = false;
     boolean movePhaseTake = true;
-    boolean movePhaseRelase = false;
+    boolean movePhaseRelease = false;
     private boolean killPhase = false;
     private final ViewManager viewManager;
     private boolean player2starts;
@@ -59,7 +59,7 @@ public class Game {
     public Game(ViewManager viewManager, Player player0, boolean player2starts) {
         this.viewManager = viewManager;
         this.player0 = player0;
-        this.player1 = new ComputerPlayer(viewManager, "COMPUTER", true);
+        this.player1 = new ComputerPlayer(viewManager, "COMPUTER");
         this.player2starts = player2starts;
         playerArrayList.add(0, player0);
         playerArrayList.add(1, player1);
@@ -173,7 +173,7 @@ public class Game {
 
             if (killPhase){
                 if (board.checkKill(clickedPosition, getOtherPlayerIndex())){
-                    MessageInterface.sendKillMessage(viewManager, clickedPosition);
+                    Messenger.sendKillMessage(viewManager, clickedPosition);
                     return;
                    }
                 else {
@@ -186,8 +186,8 @@ public class Game {
 
             if (putPhase){
                 if (board.checkPut(clickedPosition)){
-
-                    MessageInterface.sendPutMessage(viewManager, clickedPosition);
+                    Messenger.sendPutMessage(viewManager, clickedPosition);
+                    return;
 
                 }
                 else {
@@ -205,7 +205,7 @@ public class Game {
                         viewManager.getFieldView().graphicTake(clickedPosition);
                         lastClickedPosition = clickedPosition;
                         clickOkay = true;
-                        movePhaseRelase = true;
+                        movePhaseRelease = true;
                         movePhaseTake = false;
                         return;}
                     else {
@@ -216,11 +216,11 @@ public class Game {
                 }
 
 
-                if (movePhaseRelase){
+                if (movePhaseRelease){
                     boolean allowedToJump = board.countPlayersStones(getCurrentPlayerIndex()) == 3;
                     Move move = new Move(lastClickedPosition, clickedPosition);
                     if (board.checkMove(move,allowedToJump)){
-                        MessageInterface.sendMoveMessage(viewManager, move);
+                        Messenger.sendMoveMessage(viewManager, move);
                     }
                     else {
                         System.out.println("Kein gültiger Move");
@@ -228,7 +228,7 @@ public class Game {
                         viewManager.getFieldView().graphicPut(lastClickedPosition, getCurrentPlayerIndex(), 0);
                         viewManager.getFieldView().setMoveCursor();
                         clickOkay = true;
-                        movePhaseRelase = false;
+                        movePhaseRelease = false;
                         movePhaseTake = true;
                     }
                 }
@@ -242,35 +242,44 @@ public class Game {
 
     }
 
-    public void updateGameState(boolean put, boolean killHappend){
+    public void updateGameState(boolean put, boolean killHappend, boolean increaseRound){
         if (put){
             viewManager.getScoreView().increaseStonesPut();
         }
         if (killHappend){
             viewManager.getScoreView().increaseStonesKilled();
             viewManager.getScoreView().increaseStonesLost();
-            if (checkWinner()){
-                return;
+        }
+
+
+        if (increaseRound) {
+
+            increaseRound();
+            updateCurrentPlayer();
+            setGamesPhaseBooleans();
+            viewManager.getLogView().setStatusLabel(currentPlayer.getName() + " ist an der Reihe");
+            System.out.println(round);
+
+            if (round < NUMBEROFSTONES * 2) {
+                putPhase = true;
+                if (viewManager.getFieldView().isActivateBoardFunctions()) {
+                    viewManager.getFieldView().setPutCursor();
+                }
+            } else {
+                movePhase = true;
+                movePhaseTake = true;
+                movePhaseRelease = false;
+                if (viewManager.getFieldView().isActivateBoardFunctions()) {
+                    viewManager.getFieldView().setMoveCursor();
+                }
             }
         }
 
-        increaseRound();
-        updateCurrentPlayer();
-        setGamesPhaseBooleans();
-        viewManager.getLogView().setStatusLabel(currentPlayer.getName() + " ist an der Reihe");
+        if (isThereAWinner()){
+            return;
+        }
 
-        if (round < NUMBEROFSTONES*2){
-            putPhase = true;
-            if (viewManager.getFieldView().isActivateBoardFunctions()){
-                viewManager.getFieldView().setPutCursor();}
-        }
-        else {
-            movePhase = true;
-            movePhaseTake = true;
-            movePhaseRelase = false;
-            if (viewManager.getFieldView().isActivateBoardFunctions()){
-                viewManager.getFieldView().setMoveCursor();}
-        }
+
 
     }
 
@@ -287,16 +296,21 @@ public class Game {
     }
 
 
-    private boolean checkWinner(){
-        if (movePhase && board.countPlayersStones(getOtherPlayerIndex()) < 3){
-            winner = getCurrentPlayer();
+    private boolean isThereAWinner(){
+        if (movePhase && board.countPlayersStones(getCurrentPlayerIndex()) < 3){
+            winner = getOtherPlayer();
             viewManager.getLogView().setStatusLabel(winner.getName() + " hat das Spiel gewonnen");
             viewManager.getFieldView().setDisable(true);
             System.out.println(winner.getName() + " hat das Spiel gewonnen!");
             return true;
         }
-        else {
-            return false;
+        if (movePhase && !board.checkIfAbleToMove(getCurrentPlayerIndex())){
+            winner = getOtherPlayer();
+            viewManager.getLogView().setStatusLabel(winner.getName() + " hat das Spiel gewonnen");
+            viewManager.getFieldView().setDisable(true);
+            System.out.println(winner.getName() + " hat das Spiel gewonnen!");
+            return true;
         }
+        return false;
     }
 }
