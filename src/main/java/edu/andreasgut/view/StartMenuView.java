@@ -24,6 +24,9 @@ import org.json.JSONObject;
 
 public class StartMenuView extends VBox {
 
+
+    String ipAdress = "217.160.10.113";
+    String port = "443";
     private final int STARTDIMENSION = 600;
     ViewManager viewManager;
     VBox offlineVBox, onlineVBox;
@@ -370,11 +373,11 @@ public class StartMenuView extends VBox {
 
             //join
             if (startOnlineGameSwitchButton.getState()){
-                urlAsString = "http://localhost:8080/index/controller/menschVsMensch/join";
+                urlAsString = "http://" + ipAdress + ":" + port + "/index/controller/menschVsMensch/join";
                 jsonObject.put("player2Name", computerBattleTextfield.getText());}
             //start
             else {
-                urlAsString = "http://localhost:8080/index/controller/menschVsMensch/start";
+                urlAsString = "http://" + ipAdress + ":" + port + "/index/controller/menschVsMensch/start";
                 jsonObject.put("player1Name", computerBattleTextfield.getText());
             }
 
@@ -447,7 +450,7 @@ public class StartMenuView extends VBox {
                 viewManager.changeToGameScene();
 
                 try {
-                    URI uri = new URI("ws://localhost:8080/board");
+                    URI uri = new URI("ws://" + ipAdress + ":" + port + "/board");
                     WebsocketClient websocketClient = new WebsocketClient(uri, viewManager);
                     websocketClient.connect();
                     game.setWebsocketClient(websocketClient);

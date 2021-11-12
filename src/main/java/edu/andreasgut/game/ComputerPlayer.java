@@ -33,7 +33,7 @@ public class ComputerPlayer extends Player {
 
         recursivePutBfs(gameTree.getRoot(), putScorePoints, playerIndex, playerIndex, 3);
 
-        //System.out.println(gameTree);
+        System.out.println(gameTree);
 
         Stack<BoardPutMoveKillScoreSet> winningPath = gameTree.getPath(gameTree.getLeafWithBestScore());
         System.out.println("Gewinnerpfad:");
