@@ -12,7 +12,8 @@ import javafx.scene.layout.VBox;
 public class ScoreView extends VBox {
 
     private Label titleLabel, player1Label, player2Label, stonesPutPlayer1Label, stonesPutPlayer2Label, roundLabel,
-            phaseLabel, stonesLostPlayer1Label, stonesLostPlayer2Label, stonesKilledPlayer1Label, stonesKilledPlayer2Label;
+            phaseLabel, stonesLostPlayer1Label, stonesLostPlayer2Label, stonesKilledPlayer1Label, stonesKilledPlayer2Label,
+            gameCodeLabel;
     private ViewManager viewManager;
     private VBox player1VBox, player2VBox, player1LabelsVBox, player2LabelsVBox;
     private HBox player1HBox, player2HBox;
@@ -39,7 +40,15 @@ public class ScoreView extends VBox {
 
         setupPlayer1andPlayer2(player1Color, player2Color);
 
-        this.getChildren().addAll(titleLabel, phaseLabel, roundLabel, player1VBox, player2VBox);
+        if (viewManager.getGame().getGameCode() != null){
+            gameCodeLabel = new Label();
+            gameCodeLabel.getStyleClass().add("biglabel");
+            this.getChildren().addAll(titleLabel, gameCodeLabel, phaseLabel, roundLabel, player1VBox, player2VBox);
+        }
+        else {
+            this.getChildren().addAll(titleLabel, phaseLabel, roundLabel, player1VBox, player2VBox);
+        }
+
     }
 
     private void setupPlayer1andPlayer2(STONECOLOR player1Color, STONECOLOR player2Color){
@@ -163,6 +172,10 @@ public class ScoreView extends VBox {
                 viewManager.getScoreView().getStonesPutPlayer1Label().getStyleClass().add("labelOtherPlayer");
                 break;
         }
+    }
+
+    public void setGameCodeLabel(String text){
+        gameCodeLabel.setText("Gamecode: " + text);
     }
 
     public Label getPlayer1Label() {

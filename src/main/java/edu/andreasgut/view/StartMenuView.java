@@ -538,6 +538,8 @@ public class StartMenuView extends VBox {
                 }
 
                 viewManager.changeToGameScene();
+                viewManager.getLogView().setStatusLabel(viewManager.getGame().getPlayer0().getName() + " startet das Spiel");
+                viewManager.getScoreView().setGameCodeLabel(viewManager.getGame().getGameCode());
 
                 try {
                     URI uri = new URI("ws://" + ipAdress + ":" + port + "/board");
