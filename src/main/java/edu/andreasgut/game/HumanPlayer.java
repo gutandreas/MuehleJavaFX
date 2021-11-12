@@ -1,8 +1,12 @@
 package edu.andreasgut.game;
 
+import edu.andreasgut.online.MessageHandler;
+import edu.andreasgut.online.MessageInterface;
 import edu.andreasgut.view.ViewManager;
+import javafx.application.Platform;
+import org.json.JSONObject;
 
-public class HumanPlayer extends Player{
+public class HumanPlayer extends Player implements MessageHandler {
 
     private Position clickedPutPosition, clickedKillPosition, clickedMovePositionTakeStep, clickedMovePositionReleaseStep;
 
@@ -32,6 +36,8 @@ public class HumanPlayer extends Player{
     }
 
 
+
+
     public void setClickedPutPosition(Position clickedPutPosition) {
         this.clickedPutPosition = clickedPutPosition;
     }
@@ -46,5 +52,28 @@ public class HumanPlayer extends Player{
 
     public void setClickedMovePositionReleaseStep(Position clickedMovePositionReleaseStep) {
         this.clickedMovePositionReleaseStep = clickedMovePositionReleaseStep;
+    }
+
+
+    @Override
+    public void prepareKill(ViewManager viewManager) {
+
+        //lokaler Spieler
+        if (viewManager.getGame().getCurrentPlayer().isLocal()){
+            viewManager.getGame().setClickOkay(true);
+            viewManager.getGame().setKillPhase(true);
+            viewManager.getFieldView().setKillCursor();
+        }
+        //nicht lokaler Spieler
+        else {
+            viewManager.getGame().setClickOkay(false);
+        }
+    }
+
+    @Override
+    public void prepareNextPutOrMove(ViewManager viewManager) {
+        if (viewManager.getGame().getCurrentPlayer().isLocal()) {
+            viewManager.getGame().setClickOkay(true);
+        }
     }
 }

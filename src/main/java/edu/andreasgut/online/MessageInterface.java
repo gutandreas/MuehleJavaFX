@@ -17,6 +17,56 @@ public class MessageInterface {
 
     }
 
+    public static void sendPutMessage(ViewManager viewManager, Position position){
+        JSONObject jsonObject = new JSONObject();
+        System.out.println(viewManager.getGame().getCurrentPlayer().getUuid());
+
+
+        jsonObject.put("gameCode", viewManager.getGame().getGameCode());
+        jsonObject.put("command", "update");
+        jsonObject.put("action", "put");
+        jsonObject.put("playerUuid", viewManager.getGame().getCurrentPlayer().getUuid());
+        jsonObject.put("ring", position.getRing());
+        jsonObject.put("field", position.getField());
+        jsonObject.put("callComputer", false);
+        jsonObject.put("playerIndex", viewManager.getGame().getCurrentPlayerIndex());
+        sendMessage(viewManager, jsonObject.toString());
+    }
+
+    public static void sendMoveMessage(ViewManager viewManager, Move move) {
+
+        JSONObject jsonObject = new JSONObject();
+
+
+        jsonObject.put("gameCode", viewManager.getGame().getGameCode());
+        jsonObject.put("command", "update");
+        jsonObject.put("action", "move");
+        jsonObject.put("playerUuid", viewManager.getGame().getCurrentPlayer().getUuid());
+        jsonObject.put("moveFromRing", move.getFrom().getRing());
+        jsonObject.put("moveFromField", move.getFrom().getField());
+        jsonObject.put("moveToRing", move.getTo().getRing());
+        jsonObject.put("moveToField", move.getTo().getField());
+        jsonObject.put("callComputer", false);
+        jsonObject.put("playerIndex", viewManager.getGame().getCurrentPlayerIndex());
+        sendMessage(viewManager, jsonObject.toString());
+    }
+
+    public static void sendKillMessage(ViewManager viewManager, Position position) {
+
+        JSONObject jsonObject = new JSONObject();
+        System.out.println(viewManager.getGame().getCurrentPlayer().getUuid());
+
+        jsonObject.put("gameCode", viewManager.getGame().getGameCode());
+        jsonObject.put("command", "update");
+        jsonObject.put("action", "kill");
+        jsonObject.put("playerUuid", viewManager.getGame().getCurrentPlayer().getUuid());
+        jsonObject.put("ring", position.getRing());
+        jsonObject.put("field", position.getField());
+        jsonObject.put("callComputer", false);
+        jsonObject.put("playerIndex", viewManager.getGame().getCurrentPlayerIndex());
+        sendMessage(viewManager, jsonObject.toString());
+    }
+
 
     public static void receiveMessage(ViewManager viewManager, String message){
 
@@ -51,46 +101,12 @@ public class MessageInterface {
                         System.out.println(board);
                         //führt zu Mühle
                         if (board.checkMorris(position) && board.isThereStoneToKill(1-playerIndex)){
-                            //lokaler Spieler
-                            if (viewManager.getGame().getCurrentPlayer().isLocal()){
-                                game.setClickOkay(true);
-                                game.setKillPhase(true);
-                                viewManager.getFieldView().setKillCursor();
-                            }
-                            //nicht lokaler Spieler
-                            else {
-                                game.setClickOkay(false);
-                            }
-                            //Computerplayer
-                            if (game.getCurrentPlayer() instanceof ComputerPlayer){
-                                if (((ComputerPlayer) game.getCurrentPlayer()).isAutomaticTrigger()){
-                                    game.callComputer(false, false, true);
-                                }
-                                else {
-                                    viewManager.getLogView().getNextComputerStepButton().setKill();
-                                }
-                            }
+                           viewManager.getGame().getCurrentPlayer().prepareKill(viewManager);
                         }
                         //führt nicht zu Mühle
                         else {
                             game.updateGameState(true, false);
-                            if (viewManager.getGame().getCurrentPlayer().isLocal()) {
-                                game.setClickOkay(true);
-                            }
-                            //Computerplayer
-                            if (game.getCurrentPlayer() instanceof ComputerPlayer){
-                                if (((ComputerPlayer) game.getCurrentPlayer()).isAutomaticTrigger()){
-                                    game.callComputer(game.isPutPhase(), game.isMovePhase(), false);
-                                }
-                                else {
-                                    if (game.isPutPhase()){
-                                        viewManager.getLogView().getNextComputerStepButton().setPut();
-                                    }
-                                    else {
-                                        viewManager.getLogView().getNextComputerStepButton().setMove();
-                                    }
-                                }
-                            }
+                            game.getCurrentPlayer().prepareNextPutOrMove(viewManager);
                         }
                     }
                     else {
@@ -116,46 +132,13 @@ public class MessageInterface {
                         System.out.println(board);
                         //führt zu Mühle
                         if (board.checkMorris(move.getTo()) && board.isThereStoneToKill(1-playerIndex)){
-                            //lokaler Spieler
-                            if (viewManager.getGame().getCurrentPlayer().isLocal()){
-                                game.setClickOkay(true);
-                                game.setKillPhase(true);
-                                viewManager.getFieldView().setKillCursor();
-                            }
-                            //nicht lokaler Spieler
-                            else {
-                                game.setClickOkay(false);
-                            }
-                            //Computerplayer
-                            if (game.getCurrentPlayer() instanceof ComputerPlayer){
-                                if (((ComputerPlayer) game.getCurrentPlayer()).isAutomaticTrigger()){
-                                    game.callComputer(false, false, true);
-                                }
-                                else {
-                                    viewManager.getLogView().getNextComputerStepButton().setKill();
-                                }
-                            }
-
+                            viewManager.getGame().getCurrentPlayer().prepareKill(viewManager);
                         }
                         //führt nicht zu Mühle
                         else {
-                            game.updateGameState(false, false);
-                            if (viewManager.getGame().getCurrentPlayer().isLocal()) {
-                                game.setClickOkay(true);
-                                game.setMovePhaseTake(true);
-                                game.setMovePhaseRelase(false);
+                            game.updateGameState(true, false);
+                            game.getCurrentPlayer().prepareNextPutOrMove(viewManager);
                             }
-
-                            if (game.getCurrentPlayer() instanceof ComputerPlayer){
-                                if (((ComputerPlayer) game.getCurrentPlayer()).isAutomaticTrigger()){
-                                    game.callComputer(false, true, false);
-                                }
-                                else {
-                                    viewManager.getLogView().getNextComputerStepButton().setMove();
-                                }
-                            }
-
-                        }
                     }
                     else {
                         System.out.println("Es wurde ein ungültiger Move ausgeführt");
@@ -178,28 +161,7 @@ public class MessageInterface {
 
                         game.updateGameState(false, true);
                         game.setKillPhase(false);
-
-                        //lokaler Spieler
-                        if (viewManager.getGame().getCurrentPlayer().isLocal()){
-                            game.setClickOkay(true);
-                        }
-                        //nicht lokaler Spieler
-                        else {
-                            game.setClickOkay(false);
-                        }
-                        //Computerplayer
-                        if (game.getCurrentPlayer() instanceof ComputerPlayer){
-                            if (((ComputerPlayer) game.getCurrentPlayer()).isAutomaticTrigger()){
-                                game.callComputer(game.isPutPhase(), game.isMovePhase(), false);
-                            }
-                            else {
-                                if (game.isPutPhase()){
-                                viewManager.getLogView().getNextComputerStepButton().setPut();}
-                                else {
-                                    viewManager.getLogView().getNextComputerStepButton().setMove();
-                                }
-                            }
-                        }
+                        game.getCurrentPlayer().prepareNextPutOrMove(viewManager);
 
                     }
                     else {

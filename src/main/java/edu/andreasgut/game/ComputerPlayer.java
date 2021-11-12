@@ -1,10 +1,12 @@
 package edu.andreasgut.game;
 
+import edu.andreasgut.online.MessageHandler;
+import edu.andreasgut.online.MessageInterface;
 import edu.andreasgut.view.ViewManager;
 
 import java.util.*;
 
-public class ComputerPlayer extends Player {
+public class ComputerPlayer extends Player implements MessageHandler {
 
     GameTree gameTree = new GameTree();
     boolean automaticTrigger;
@@ -212,4 +214,40 @@ public class ComputerPlayer extends Player {
     }
 
 
+    @Override
+    public void prepareKill(ViewManager viewManager) {
+        if (((ComputerPlayer) viewManager.getGame().getCurrentPlayer()).isAutomaticTrigger()){
+            Game game = viewManager.getGame();
+            Position killPosition = kill(game.getBoard(), game.getCurrentPlayerIndex(), game.getOtherPlayerIndex());
+            MessageInterface.sendKillMessage(viewManager, killPosition);
+        }
+        else {
+            viewManager.getLogView().getNextComputerStepButton().setKill();
+        }
+    }
+
+    @Override
+    public void prepareNextPutOrMove(ViewManager viewManager) {
+        if (((ComputerPlayer) viewManager.getGame().getCurrentPlayer()).isAutomaticTrigger()){
+            Game game = viewManager.getGame();
+            if (game.isPutPhase()){
+                Position putPosition = put(game.getBoard(), game.getCurrentPlayerIndex());
+                MessageInterface.sendPutMessage(viewManager, putPosition);
+            }
+            else {
+                boolean allowedToJump = game.getBoard().countPlayersStones(game.getCurrentPlayerIndex()) == 3;
+                Move move = move(game.getBoard(), game.getCurrentPlayerIndex(), allowedToJump);
+                MessageInterface.sendMoveMessage(viewManager, move);
+
+            }
+        }
+        else {
+            if (viewManager.getGame().isPutPhase()){
+                viewManager.getLogView().getNextComputerStepButton().setPut();
+            }
+            else {
+                viewManager.getLogView().getNextComputerStepButton().setMove();
+            }
+        }
+    }
 }

@@ -193,7 +193,7 @@ public class Game {
 
             if (killPhase){
                 if (board.checkKill(clickedPosition, getOtherPlayerIndex())){
-                    sendKillToMessageInterface(clickedPosition);
+                    MessageInterface.sendKillMessage(viewManager, clickedPosition);
                     return;
                    }
                 else {
@@ -207,7 +207,7 @@ public class Game {
             if (putPhase){
                 if (board.checkPut(clickedPosition)){
 
-                    sendPutToMessageInterface(clickedPosition);
+                    MessageInterface.sendPutMessage(viewManager, clickedPosition);
 
                 }
                 else {
@@ -240,8 +240,7 @@ public class Game {
                     boolean allowedToJump = board.countPlayersStones(getCurrentPlayerIndex()) == 3;
                     Move move = new Move(lastClickedPosition, clickedPosition);
                     if (board.checkMove(move,allowedToJump)){
-                        sendMoveToMessageInterface(move);
-
+                        MessageInterface.sendMoveMessage(viewManager, move);
                     }
                     else {
                         System.out.println("Kein gültiger Move");
@@ -253,11 +252,7 @@ public class Game {
                         movePhaseTake = true;
                     }
                 }
-
-
             }
-
-
 
         }
         else {
@@ -265,104 +260,6 @@ public class Game {
             viewManager.getLogView().setStatusLabel("Warten Sie, bis Sie an der Reihe sind.");
         }
 
-    }
-
-    public void callComputer(boolean put, boolean move, boolean kill){
-
-        if (put){
-            Position computerPutPosition = currentPlayer.put(board,getCurrentPlayerIndex());
-            sendPutToMessageInterface(computerPutPosition);
-            return;
-        }
-
-        if (move){
-            boolean allowedToJump = board.countPlayersStones(getCurrentPlayerIndex()) == 3;
-            Move computerMove = currentPlayer.move(board, getCurrentPlayerIndex(), allowedToJump);
-            sendMoveToMessageInterface(computerMove);
-            return;
-        }
-
-        if (kill){
-            Position computerKillPosition = currentPlayer.kill(board,getCurrentPlayerIndex(), getOtherPlayerIndex());
-            sendKillToMessageInterface(computerKillPosition);
-        }
-
-        /*if (round < NUMBEROFSTONES*2){
-            Position computerPutPosition = currentPlayer.put(board,getCurrentPlayerIndex());
-            sendPutToMessageInterface(computerPutPosition);
-            if (board.checkMorris(computerPutPosition) && board.isThereStoneToKill(getOtherPlayerIndex())){
-                Position computerKillPosition = currentPlayer.kill(board,getCurrentPlayerIndex(), getOtherPlayerIndex());
-                sendKillToMessageInterface(computerKillPosition);
-            }
-            return;
-        }
-        else {
-            boolean allowedToJump = board.countPlayersStones(getCurrentPlayerIndex()) == 3;
-            Move computerMove = currentPlayer.move(board, getCurrentPlayerIndex(), allowedToJump);
-            if (board.checkMove(computerMove, allowedToJump)){
-                sendMoveToMessageInterface(computerMove);
-                if (board.checkMorris(computerMove.getTo()) && board.isThereStoneToKill(getOtherPlayerIndex())){
-                    Position computerKillPosition = currentPlayer.kill(board,getCurrentPlayerIndex(), getOtherPlayerIndex());
-                    sendKillToMessageInterface(computerKillPosition);
-                }
-
-                return;
-            }
-        }*/
-
-    }
-
-
-
-    private void sendPutToMessageInterface(Position position) {
-
-        JSONObject jsonObject = new JSONObject();
-        System.out.println(viewManager.getGame().getCurrentPlayer().getUuid());
-
-
-        jsonObject.put("gameCode", gameCode);
-        jsonObject.put("command", "update");
-        jsonObject.put("action", "put");
-        jsonObject.put("playerUuid", viewManager.getGame().getCurrentPlayer().getUuid());
-        jsonObject.put("ring", position.getRing());
-        jsonObject.put("field", position.getField());
-        jsonObject.put("callComputer", false);
-        jsonObject.put("playerIndex", getCurrentPlayerIndex());
-        MessageInterface.sendMessage(viewManager, jsonObject.toString());
-    }
-
-    private void sendMoveToMessageInterface(Move move) {
-
-        JSONObject jsonObject = new JSONObject();
-        System.out.println(viewManager.getGame().getCurrentPlayer().getUuid());
-
-        jsonObject.put("gameCode", gameCode);
-        jsonObject.put("command", "update");
-        jsonObject.put("action", "move");
-        jsonObject.put("playerUuid", viewManager.getGame().getCurrentPlayer().getUuid());
-        jsonObject.put("moveFromRing", move.getFrom().getRing());
-        jsonObject.put("moveFromField", move.getFrom().getField());
-        jsonObject.put("moveToRing", move.getTo().getRing());
-        jsonObject.put("moveToField", move.getTo().getField());
-        jsonObject.put("callComputer", false);
-        jsonObject.put("playerIndex", getCurrentPlayerIndex());
-        MessageInterface.sendMessage(viewManager, jsonObject.toString());
-    }
-
-    private void sendKillToMessageInterface(Position position) {
-
-        JSONObject jsonObject = new JSONObject();
-        System.out.println(viewManager.getGame().getCurrentPlayer().getUuid());
-
-        jsonObject.put("gameCode", gameCode);
-        jsonObject.put("command", "update");
-        jsonObject.put("action", "kill");
-        jsonObject.put("playerUuid", viewManager.getGame().getCurrentPlayer().getUuid());
-        jsonObject.put("ring", position.getRing());
-        jsonObject.put("field", position.getField());
-        jsonObject.put("callComputer", false);
-        jsonObject.put("playerIndex", getCurrentPlayerIndex());
-        MessageInterface.sendMessage(viewManager, jsonObject.toString());
     }
 
     public void updateGameState(boolean put, boolean killHappend){

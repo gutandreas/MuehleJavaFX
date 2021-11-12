@@ -1,8 +1,9 @@
 package edu.andreasgut.game;
 
+import edu.andreasgut.online.MessageHandler;
 import edu.andreasgut.view.ViewManager;
 
-public abstract class Player {
+public abstract class Player implements MessageHandler {
 
     protected String name;
     protected String uuid;
@@ -41,4 +42,6 @@ public abstract class Player {
     abstract Move move(Board board, int playerIndex, boolean allowedToJump);
     abstract Position put(Board board, int playerIndex);
     abstract Position kill(Board board, int ownPlayerIndex, int otherPlayerIndex);
+
+    public abstract void prepareKill(ViewManager viewManager);
 }
