@@ -42,8 +42,8 @@ public class ScoreView extends VBox {
 
         if (viewManager.getGame().getGameCode() != null){
             gameCodeLabel = new Label();
-            gameCodeLabel.getStyleClass().add("biglabel");
-            this.getChildren().addAll(titleLabel, gameCodeLabel, phaseLabel, roundLabel, player1VBox, player2VBox);
+            gameCodeLabel.getStyleClass().add("labelGamecode");
+            this.getChildren().addAll(titleLabel, phaseLabel, roundLabel, player1VBox, player2VBox, gameCodeLabel);
         }
         else {
             this.getChildren().addAll(titleLabel, phaseLabel, roundLabel, player1VBox, player2VBox);

@@ -22,6 +22,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.regex.Pattern;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import javax.swing.event.ChangeListener;
@@ -70,8 +71,10 @@ public class StartMenuView extends VBox {
         this.setPrefWidth(STARTDIMENSION);
         offlineVBox = new VBox();
         onlineVBox = new VBox();
-        startButton = new Button("Start");
+        startButton = new Button("Offlinespiel starten");
+        startButton.setPrefWidth(185);
         computerOnlineButton = new Button("Computerbattle starten");
+        computerOnlineButton.setPrefWidth(185);
         gameCodeTextfield = new TextField();
         gameCodeTextfield.setPromptText("Gamecode");
         gameCodeTextfield.setTextFormatter(formatter);
@@ -489,6 +492,10 @@ public class StartMenuView extends VBox {
 
                 String uuid;
 
+                if (response.statusCode() == 417){
+
+                }
+
                 //join
                 if (startOnlineGameSwitchButton.getState()){
                     uuid = jsonResponseObject.getString("player2Uuid");
@@ -507,6 +514,8 @@ public class StartMenuView extends VBox {
                 e.printStackTrace();
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            } catch (JSONException e){
+                onlineInformationLabel.setText("Ungültiger Gamecode");
             }
 
             System.out.println(response.statusCode());
@@ -551,14 +560,7 @@ public class StartMenuView extends VBox {
                     e.printStackTrace();}
 
             }
-            else {
-                if (startOnlineGameSwitchButton.getState()){
-                    onlineInformationLabel.setText("Dieses Game existiert noch nicht. Kontrollieren Sie den Gamecode.");
-                }
-                else {
-                    onlineInformationLabel.setText("Der Gamecode existiert bereits. Wählen Sie einen anderen Gamecode.");
-                }
-            }
+
 
         });
     }
