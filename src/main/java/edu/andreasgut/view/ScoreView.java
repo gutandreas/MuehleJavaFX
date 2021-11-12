@@ -86,7 +86,8 @@ public class ScoreView extends VBox {
     }
 
     public void updatePhase(String phase){
-        phaseLabel.setText("Phase: " + phase);
+        Platform.runLater(() ->
+        phaseLabel.setText("Phase: " + phase));
     }
 
     synchronized public void increaseStonesPut(){

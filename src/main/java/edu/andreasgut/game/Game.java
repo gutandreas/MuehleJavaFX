@@ -275,9 +275,9 @@ public class Game {
             }
         }
 
-        if (isThereAWinner()){
-            return;
-        }
+        checkWinner();
+
+
 
 
 
@@ -296,21 +296,16 @@ public class Game {
     }
 
 
-    private boolean isThereAWinner(){
-        if (movePhase && board.countPlayersStones(getCurrentPlayerIndex()) < 3){
+    private void checkWinner(){
+
+        boolean thereIsAWinner = (movePhase && board.countPlayersStones(getCurrentPlayerIndex()) < 3)
+                || (movePhase && !board.checkIfAbleToMove(getCurrentPlayerIndex()));
+
+        if (thereIsAWinner){
             winner = getOtherPlayer();
             viewManager.getLogView().setStatusLabel(winner.getName() + " hat das Spiel gewonnen");
             viewManager.getFieldView().setDisable(true);
             System.out.println(winner.getName() + " hat das Spiel gewonnen!");
-            return true;
         }
-        if (movePhase && !board.checkIfAbleToMove(getCurrentPlayerIndex())){
-            winner = getOtherPlayer();
-            viewManager.getLogView().setStatusLabel(winner.getName() + " hat das Spiel gewonnen");
-            viewManager.getFieldView().setDisable(true);
-            System.out.println(winner.getName() + " hat das Spiel gewonnen!");
-            return true;
-        }
-        return false;
     }
 }

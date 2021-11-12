@@ -220,13 +220,10 @@ public class FieldView extends AnchorPane{
 
 
     public void setKillCursor(){
-        Platform.runLater(() -> {
            chooseKillCursor();
             fieldGridPane.setOnMouseEntered(enter ->{
                 chooseKillCursor();
-
             });
-        });
     }
 
     private void chooseKillCursor() {
@@ -240,12 +237,10 @@ public class FieldView extends AnchorPane{
     }
 
     public void setMoveCursor(){
-        Platform.runLater(() -> {
             chooseMoveCursor();
             fieldGridPane.setOnMouseEntered(enter -> {
                 chooseMoveCursor();
             });
-        });
 
     }
 
