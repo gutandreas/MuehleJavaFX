@@ -1,12 +1,8 @@
 package edu.andreasgut.game;
 
-import edu.andreasgut.online.MessageHandler;
-import edu.andreasgut.online.MessageInterface;
 import edu.andreasgut.view.ViewManager;
-import javafx.application.Platform;
-import org.json.JSONObject;
 
-public class HumanPlayer extends Player implements MessageHandler {
+public class HumanPlayer extends Player {
 
     private Position clickedPutPosition, clickedKillPosition, clickedMovePositionTakeStep, clickedMovePositionReleaseStep;
 
@@ -33,25 +29,6 @@ public class HumanPlayer extends Player implements MessageHandler {
         board.clearStone(clickedKillPosition);
 
         return clickedKillPosition;
-    }
-
-
-
-
-    public void setClickedPutPosition(Position clickedPutPosition) {
-        this.clickedPutPosition = clickedPutPosition;
-    }
-
-    public void setClickedKillPosition(Position clickedKillPosition) {
-        this.clickedKillPosition = clickedKillPosition;
-    }
-
-    public void setClickedMovePositionTakeStep(Position clickedMovePositionTakeStep) {
-        this.clickedMovePositionTakeStep = clickedMovePositionTakeStep;
-    }
-
-    public void setClickedMovePositionReleaseStep(Position clickedMovePositionReleaseStep) {
-        this.clickedMovePositionReleaseStep = clickedMovePositionReleaseStep;
     }
 
 

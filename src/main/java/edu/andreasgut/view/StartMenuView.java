@@ -25,8 +25,12 @@ import org.json.JSONObject;
 public class StartMenuView extends VBox {
 
 
-    String ipAdress = "217.160.10.113";
+    /*String ipAdress = "217.160.10.113";
+    String port = "443";*/
+
+    String ipAdress = "localhost";
     String port = "443";
+
     private final int STARTDIMENSION = 600;
     ViewManager viewManager;
     VBox offlineVBox, onlineVBox;

@@ -3,7 +3,6 @@ package edu.andreasgut.game;
 import edu.andreasgut.online.MessageInterface;
 import edu.andreasgut.online.WebsocketClient;
 import edu.andreasgut.view.ViewManager;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -140,29 +139,10 @@ public class Game {
         return board;
     }
 
-    public void setGameCode(String gameCode) {
-        this.gameCode = gameCode;
-    }
-
     public void setClickOkay(boolean clickOkay) {
         this.clickOkay = clickOkay;
     }
 
-    public void setPutPhase(boolean putPhase) {
-        this.putPhase = putPhase;
-    }
-
-    public void setMovePhase(boolean movePhase) {
-        this.movePhase = movePhase;
-    }
-
-    public void setMovePhaseTake(boolean movePhaseTake) {
-        this.movePhaseTake = movePhaseTake;
-    }
-
-    public void setMovePhaseRelase(boolean movePhaseRelase) {
-        this.movePhaseRelase = movePhaseRelase;
-    }
 
     public void setKillPhase(boolean killPhase) {
         this.killPhase = killPhase;

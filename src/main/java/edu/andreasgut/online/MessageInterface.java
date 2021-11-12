@@ -7,14 +7,13 @@ import org.json.JSONObject;
 
 public class MessageInterface {
 
-    public static void sendMessage(ViewManager viewManager, String message){
+    private static void sendMessage(ViewManager viewManager, String message){
         if (viewManager.getGame().getWebsocketClient() == null){
             receiveMessage(viewManager, message);
         }
         else {
             viewManager.getGame().getWebsocketClient().send(message);
         }
-
     }
 
     public static void sendPutMessage(ViewManager viewManager, Position position){
@@ -78,10 +77,12 @@ public class MessageInterface {
 
         switch (command){
             case "join":
-                System.out.println("Spiel beigetreten");
-                viewManager.getLogView().activateNextComputerStepButton();
-                game.getPlayer1().setName(jsonObject.getString("player2Name"));
-                Platform.runLater(()-> viewManager.getScoreView().getPlayer2Label().setText("Player 2: " + jsonObject.getString("player2Name")));
+                if (!game.isJoinExistingGame()){
+                        System.out.println("Spiel beigetreten");
+                        viewManager.getLogView().activateNextComputerStepButton();
+                        game.getPlayer1().setName(jsonObject.getString("player2Name"));
+                        Platform.runLater(()-> viewManager.getScoreView().getPlayer2Label().setText("Player 2: " + jsonObject.getString("player2Name")));
+                }
                 break;
 
             case "update":
@@ -167,13 +168,8 @@ public class MessageInterface {
                     else {
                         System.out.println("Es wurde ein ungültiger Kill ausgeführt");
                     }
-
-
                 }
                 break;
-
         }
-
-
     }
 }

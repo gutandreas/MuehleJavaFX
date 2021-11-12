@@ -1,5 +1,6 @@
 package edu.andreasgut.view;
 
+import edu.andreasgut.game.ComputerPlayer;
 import edu.andreasgut.view.fxElements.NextStepButton;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
@@ -27,11 +28,14 @@ public class LogView extends VBox {
         if (computerOnlineBattle){
             nextComputerStepButton = new NextStepButton("Stein setzen");
             nextComputerStepButton.setOnAction(click -> {
-                if (nextComputerStepButton.isPut() || nextComputerStepButton.isMove()){
-                    viewManager.getGame().getCurrentPlayer().prepareNextPutOrMove(viewManager);
+                if (nextComputerStepButton.isPut()){
+                    ((ComputerPlayer) viewManager.getGame().getCurrentPlayer()).triggerPut(viewManager);
+                }
+                if (nextComputerStepButton.isMove()){
+                    ((ComputerPlayer) viewManager.getGame().getCurrentPlayer()).triggerMove(viewManager);
                 }
                 if (nextComputerStepButton.isKill()){
-                    viewManager.getGame().getCurrentPlayer().prepareKill(viewManager);
+                    ((ComputerPlayer) viewManager.getGame().getCurrentPlayer()).triggerKill(viewManager);
                 }
                 nextComputerStepButton.setDisable(true);
                 System.out.println("Computer next step Button pressed");});
@@ -53,5 +57,9 @@ public class LogView extends VBox {
 
     public void activateNextComputerStepButton(){
         nextComputerStepButton.setDisable(false);
+    }
+
+    public void disableNextComputerStepButton(){
+        nextComputerStepButton.setDisable(true);
     }
 }

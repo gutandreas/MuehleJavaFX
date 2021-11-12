@@ -1,12 +1,11 @@
 package edu.andreasgut.game;
 
-import edu.andreasgut.online.MessageHandler;
 import edu.andreasgut.online.MessageInterface;
 import edu.andreasgut.view.ViewManager;
 
 import java.util.*;
 
-public class ComputerPlayer extends Player implements MessageHandler {
+public class ComputerPlayer extends Player {
 
     GameTree gameTree = new GameTree();
     boolean automaticTrigger;
@@ -216,10 +215,8 @@ public class ComputerPlayer extends Player implements MessageHandler {
 
     @Override
     public void prepareKill(ViewManager viewManager) {
-        if (((ComputerPlayer) viewManager.getGame().getCurrentPlayer()).isAutomaticTrigger()){
-            Game game = viewManager.getGame();
-            Position killPosition = kill(game.getBoard(), game.getCurrentPlayerIndex(), game.getOtherPlayerIndex());
-            MessageInterface.sendKillMessage(viewManager, killPosition);
+        if (automaticTrigger){
+            triggerKill(viewManager);
         }
         else {
             viewManager.getLogView().getNextComputerStepButton().setKill();
@@ -228,17 +225,15 @@ public class ComputerPlayer extends Player implements MessageHandler {
 
     @Override
     public void prepareNextPutOrMove(ViewManager viewManager) {
-        if (((ComputerPlayer) viewManager.getGame().getCurrentPlayer()).isAutomaticTrigger()){
-            Game game = viewManager.getGame();
+
+        Game game = viewManager.getGame();
+
+        if (automaticTrigger){
             if (game.isPutPhase()){
-                Position putPosition = put(game.getBoard(), game.getCurrentPlayerIndex());
-                MessageInterface.sendPutMessage(viewManager, putPosition);
+                triggerPut(viewManager);
             }
             else {
-                boolean allowedToJump = game.getBoard().countPlayersStones(game.getCurrentPlayerIndex()) == 3;
-                Move move = move(game.getBoard(), game.getCurrentPlayerIndex(), allowedToJump);
-                MessageInterface.sendMoveMessage(viewManager, move);
-
+                triggerMove(viewManager);
             }
         }
         else {
@@ -249,5 +244,24 @@ public class ComputerPlayer extends Player implements MessageHandler {
                 viewManager.getLogView().getNextComputerStepButton().setMove();
             }
         }
+    }
+
+    public void triggerPut(ViewManager viewManager){
+        Game game = viewManager.getGame();
+        Position putPosition = put(game.getBoard(), game.getCurrentPlayerIndex());
+        MessageInterface.sendPutMessage(viewManager, putPosition);
+    }
+
+    public void triggerMove(ViewManager viewManager){
+        Game game = viewManager.getGame();
+        boolean allowedToJump = game.getBoard().countPlayersStones(game.getCurrentPlayerIndex()) == 3;
+        Move move = move(game.getBoard(), game.getCurrentPlayerIndex(),allowedToJump);
+        MessageInterface.sendMoveMessage(viewManager, move);
+    }
+
+    public void triggerKill(ViewManager viewManager){
+        Game game = viewManager.getGame();
+        Position killPosition = kill(game.getBoard(), game.getCurrentPlayerIndex(), game.getOtherPlayerIndex());
+        MessageInterface.sendKillMessage(viewManager, killPosition);
     }
 }
