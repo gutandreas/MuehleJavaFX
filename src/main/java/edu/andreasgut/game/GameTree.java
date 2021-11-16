@@ -152,11 +152,6 @@ public class GameTree {
 
 
 
-
-
-
-
-
     public void addSet(GameTreeNode parent, GameTreeNode child){
         parent.getChildren().add(child);
         child.setParent(parent);
@@ -167,12 +162,7 @@ public class GameTree {
     }
 
 
-
-    public void clearTree(){
-        root.getChildren().clear();
-    }
-
-    public Stack<GameTreeNode> getPath(GameTreeNode node){
+    public Stack<GameTreeNode> getPathToBestLeaf(){
         Stack<GameTreeNode> path = new Stack<>();
         GameTreeNode set = getLeafWithBestScore();
 

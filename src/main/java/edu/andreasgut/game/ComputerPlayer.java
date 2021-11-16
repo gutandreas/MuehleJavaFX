@@ -33,7 +33,7 @@ public class ComputerPlayer extends Player {
 
         System.out.println(gameTree);
 
-        Stack<GameTreeNode> winningPath = gameTree.getPath(gameTree.getLeafWithBestScore());
+        Stack<GameTreeNode> winningPath = gameTree.getPathToBestLeaf();
         System.out.println("Gewinnerpfad:");
         while (!winningPath.isEmpty()){
             System.out.println(winningPath.pop());
@@ -120,9 +120,9 @@ public class ComputerPlayer extends Player {
 
         recursiveMoveBfs(gameTree.getRoot(), moveScorePoints, playerIndex, playerIndex, 5);
 
-        System.out.println(gameTree);
+        //System.out.println(gameTree);
 
-        Stack<GameTreeNode> winningPath = gameTree.getPath(gameTree.getLeafWithBestScore());
+        Stack<GameTreeNode> winningPath = gameTree.getPathToBestLeaf();
         System.out.println("Gewinnerpfad:");
         while (!winningPath.isEmpty()){
             System.out.println(winningPath.pop());
