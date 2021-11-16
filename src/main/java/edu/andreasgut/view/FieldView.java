@@ -21,6 +21,7 @@ public class FieldView extends AnchorPane{
     private ImageView imageView;
     private Image image;
     private ViewManager viewManager;
+    private STONECOLOR player1Color, player2Color;
     private Image player1StoneImage, player2StoneImage, emptyField, forbiddenField, allowedField;
     private ImageCursor player1StoneCursor, player2StoneCursor, player2HandCursor, player1HandCursor,
             player2killCursor, player1killCursor;
@@ -36,6 +37,8 @@ public class FieldView extends AnchorPane{
         this.viewManager = viewManager;
         this.getStyleClass().add("fieldview");
         this.activateBoardFunctions = activateBoardFunctions;
+        this.player1Color = player1Color;
+        this.player2Color = player2Color;
 
         initializeTranslationArray();
         imageView = new ImageView();
@@ -49,29 +52,37 @@ public class FieldView extends AnchorPane{
             imageView.getScene().setCursor(Cursor.DEFAULT);
         });
 
-        setupPlayerImagesAndCursors(player1Color, player2Color);
+        setupPlayerImages(player1Color, player2Color);
         setupFields(activateBoardFunctions);
 
         this.getChildren().addAll(imageView,fieldGridPane);
 
     }
 
-    private void setupPlayerImagesAndCursors(STONECOLOR player1Color, STONECOLOR player2Color){
+    private void setupPlayerImages(STONECOLOR player1Color, STONECOLOR player2Color){
         player1StoneImage = new Image(player1Color.getPathStone(), 85, 85, true, true);
         player2StoneImage = new Image(player2Color.getPathStone(), 85, 85, true, true);
         emptyField = new Image("edu/andreasgut/images/FullyTransparent.png");
         allowedField = new Image("edu/andreasgut/images/GreenTransparent.png");
         forbiddenField = new Image("edu/andreasgut/images/FullyTransparent.png");
 
+
+    }
+
+    private void setupPlayerPutCursors(STONECOLOR player1Color, STONECOLOR player2Color){
         player1StoneCursor = new ImageCursor(new Image(player1Color.getPathStone(), 85, 85, true, true),42,42);
         player2StoneCursor = new ImageCursor(new Image(player2Color.getPathStone(), 85, 85, true, true), 42,42);
 
+    }
+
+    private void setupPlayerMoveCursors(STONECOLOR player1Color, STONECOLOR player2Color){
         player1HandCursor = new ImageCursor(new Image(player1Color.getPathMoveCursor(), 85, 85, true, true));
         player2HandCursor = new ImageCursor(new Image(player2Color.getPathMoveCursor(), 85, 85, true, true));
+    }
 
+    private void setupPlayerKiillCursors(STONECOLOR player1Color, STONECOLOR player2Color){
         player1killCursor = new ImageCursor(new Image(player1Color.getPathKillCursor(), 85, 85, true, true));
         player2killCursor = new ImageCursor(new Image(player2Color.getPathKillCursor(), 85, 85, true, true));
-
     }
 
     private void setupFields(boolean activateBoardFunctions){
@@ -199,6 +210,7 @@ public class FieldView extends AnchorPane{
     }
 
     public void setPutCursor(){
+        setupPlayerPutCursors(player1Color,player2Color);
         choosePutCursor();
         fieldGridPane.setOnMouseEntered(enter ->{
             choosePutCursor();
@@ -220,6 +232,7 @@ public class FieldView extends AnchorPane{
 
 
     public void setKillCursor(){
+           setupPlayerKiillCursors(player1Color,player2Color);
            chooseKillCursor();
             fieldGridPane.setOnMouseEntered(enter ->{
                 chooseKillCursor();
@@ -236,15 +249,16 @@ public class FieldView extends AnchorPane{
                 break;}
     }
 
-    public void setMoveCursor(){
-            chooseMoveCursor();
+    synchronized public void setMoveCursor(){
+        setupPlayerMoveCursors(player1Color,player2Color);
+        chooseMoveCursor();
             fieldGridPane.setOnMouseEntered(enter -> {
                 chooseMoveCursor();
             });
 
     }
 
-    private void chooseMoveCursor(){
+    synchronized private void chooseMoveCursor(){
         switch (viewManager.getGame().getCurrentPlayerIndex()){
             case 0:
                 imageView.getScene().setCursor(player1HandCursor);
