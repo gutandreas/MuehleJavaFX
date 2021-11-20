@@ -161,11 +161,20 @@
     -fx-spacing: 10px;
 }
 
+
 .choice-box {
     -fx-pref-width: 50px;
-    -fx-background-color:#c2eafc;
+    -fx-background-color: #c2eafc;
+    -fx-mark-color: black;
 }
 
+.choice-box .label { -fx-text-fill: black; }
+
+.buttonHBox{
+    -fx-spacing: 10px;
+    -fx-alignment: center-left;
+    -fx-end-margin: 10px;
+}
 
 
 

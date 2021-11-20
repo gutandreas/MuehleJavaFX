@@ -10,11 +10,17 @@ public class ComputerPlayer extends Player {
 
     GameTree gameTree = new GameTree();
     boolean automaticTrigger;
+    ScorePoints putPoints;
+    ScorePoints movePoints;
+    int levelLimit;
 
 
-    public ComputerPlayer(ViewManager viewManager, String name) {
+    public ComputerPlayer(ViewManager viewManager, String name, ScorePoints putPoints, ScorePoints movePoints, int levelLimit) {
         super(viewManager, name, true);
         automaticTrigger = true;
+        this.putPoints = putPoints;
+        this.movePoints = movePoints;
+        this.levelLimit = levelLimit;
     }
 
     public ComputerPlayer(ViewManager viewManager, String name, String uuid) {
@@ -27,11 +33,11 @@ public class ComputerPlayer extends Player {
 
         gameTree.initializeRoot(board);
 
-        ScorePoints putScorePoints = new ScorePoints(4000, 1000,20, 200, 300,3, -2000, -1000, -30, -200, -100, -2);
+        //ScorePoints putScorePoints = new ScorePoints(4000, 1000,20, 200, 300,3, -2000, -1000, -30, -200, -100, -2);
 
-        recursivePutBfs(gameTree.getRoot(), putScorePoints, playerIndex, playerIndex, 5);
+        recursivePutBfs(gameTree.getRoot(), putPoints, playerIndex, playerIndex, levelLimit);
 
-        //System.out.println(gameTree);
+        System.out.println(gameTree);
 
         Stack<GameTreeNode> winningPath = gameTree.getPathToBestLeaf();
         System.out.println("Gewinnerpfad:");
@@ -116,9 +122,9 @@ public class ComputerPlayer extends Player {
 
         gameTree.initializeRoot(board);
 
-        ScorePoints moveScorePoints = new ScorePoints(1000, 300,300, 200, 30,3, -1000, -280, -300, -300, -300, -2);
+        //ScorePoints moveScorePoints = new ScorePoints(1000, 300,300, 200, 30,3, -1000, -280, -300, -300, -300, -2);
 
-        recursiveMoveBfs(gameTree.getRoot(), moveScorePoints, playerIndex, playerIndex, 5);
+        recursiveMoveBfs(gameTree.getRoot(), movePoints, playerIndex, playerIndex, levelLimit);
 
         //System.out.println(gameTree);
 

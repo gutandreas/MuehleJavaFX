@@ -503,10 +503,10 @@ public class Advisor {
 
 
 
-    static public int getScore(GameTreeNode set, ScorePoints scorePoints, int playerIndex, boolean printScore){
+    static public int getScore(GameTreeNode node, ScorePoints scorePoints, int playerIndex, boolean printScore){
 
 
-        Board board = set.getBoard();
+        Board board = node.getBoard();
 
         int myOpenMorrises = getMyOpenMorrisList(board, playerIndex).size();
         int myClosedMorrises = getMyClosedMorrisList(board, playerIndex).size();
@@ -527,12 +527,14 @@ public class Advisor {
         int myEnemysNumberOfStones = countMyEnemysStones(board, playerIndex);
         int myEnemysNumberOfTwoStonesTogether = numberOfMyEnemysTwoStonesTogetherWithFreeFieldBeside(board, playerIndex);
         int myEnemysNumberOfTwoStonesWithGap = numberOfMyEnemysTwoStonesWithGap(board, playerIndex);
+        int myEnemysPossiblesMoves = getAllPossibleMoves(board, playerIndex).size();
 
         int myEnemysOpenMorrisesPoints = myEnemysOpenMorrises * scorePoints.getEnemyOpenMorrisPoints();
         int myEnemysClosedMorrisesPoints = myEnemysClosedMorrises * scorePoints.getEnemyClosedMorrisPoints();
         int myEnemysNumberOfStonesPoints = myEnemysNumberOfStones * scorePoints.getEnemyNumberOfStonesPoints();
         int myEnemysNumberOfTwoStonesTogetherPoints =  myEnemysNumberOfTwoStonesTogether * scorePoints.getEnemyTwoStonesTogetherPoints();
         int myEnemysNumberOfTwoStonesWithGapPoints =  myEnemysNumberOfTwoStonesWithGap * scorePoints.getEnemyTwoStonesWithGapPoints();
+        int myEnemysPossiblesMovesPoints = myEnemysPossiblesMoves * scorePoints.getEnemyPossibleMovesPoints();
 
         int score = myOpenMorrisesPoints
                 + myClosedMorrisesPoints
@@ -545,10 +547,11 @@ public class Advisor {
                 + myEnemysClosedMorrisesPoints
                 + myEnemysNumberOfStonesPoints
                 + myEnemysNumberOfTwoStonesTogetherPoints
-                + myEnemysNumberOfTwoStonesWithGapPoints;
+                + myEnemysNumberOfTwoStonesWithGapPoints
+                + myEnemysPossiblesMovesPoints;
 
 
-        set.setScoreDetails(
+        node.setScoreDetails(
         "Eigene offene Mühlen: " + myOpenMorrises + " (" + myOpenMorrisesPoints + ")" + " \n" +
         "Eigene geschlossene Mühlen: " + myClosedMorrises + " (" + myClosedMorrisesPoints + ")" + " \n" +
         "Anzahl eigene Steine: " + myNumberOfStones + " (" + myNumberOfStonesPoints + ")" + " \n" +
@@ -560,10 +563,11 @@ public class Advisor {
         "Anzahl fremde Steine: " + myEnemysNumberOfStones + " (" + myEnemysNumberOfStonesPoints + ")" + " \n" +
         "Anzahl zweier fremder Steine nebeneinander mit freiem Feld daneben " + myEnemysNumberOfTwoStonesTogether + " (" + myEnemysNumberOfTwoStonesTogetherPoints + ")" + " \n" +
         "Anzahl zweier fremder Steine mit freier Lücke dazwischen: " + myEnemysNumberOfTwoStonesWithGap + " (" + myEnemysNumberOfTwoStonesWithGapPoints + ")" + " \n" +
+        "Gegnerische Zugmöglichkeiten: " + myEnemysPossiblesMoves + " (" + myEnemysPossiblesMovesPoints + ")" + " \n" +
         "Score: " + score);
 
         if (printScore) {
-            set.getScoreDetails();
+            node.getScoreDetails();
         }
 
         return score;

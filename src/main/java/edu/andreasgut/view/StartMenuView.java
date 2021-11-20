@@ -3,6 +3,7 @@ package edu.andreasgut.view;
 import edu.andreasgut.game.ComputerPlayer;
 import edu.andreasgut.game.Game;
 import edu.andreasgut.game.HumanPlayer;
+import edu.andreasgut.game.ScorePoints;
 import edu.andreasgut.online.WebsocketClient;
 import edu.andreasgut.sound.MUSIC;
 import edu.andreasgut.view.fxElements.BeginnerSwitchButton;
@@ -48,8 +49,8 @@ public class StartMenuView extends VBox {
 
     private final int STARTDIMENSION = 600;
     ViewManager viewManager;
-    VBox offlineVBox, onlineVBox;
-    HBox hBoxRadioButtons, player1HBox, player2HBox, computerHBox, beginnerHBox, startGameHBox, computerBattleHBox, computerSettingBox;
+    VBox offlineVBox, onlineVBox, scoreVBoxComputerPut, scoreVBoxComputerMove, scoreVBoxEnemyPut, scoreVBoxEnemyMove;
+    HBox hBoxRadioButtons, player1HBox, player2HBox, computerHBox, beginnerHBox, startGameHBox, computerBattleHBox, computerSettingBox, putPhaseHBox, movePhaseHBox, onlineButtonHBox, offlineButtonHBox;
     ToggleGroup radioButtonGroup;
     RadioButton onePlayerRadioButton, twoPlayersRadioButton;
     TextField namePlayer1Textfield, namePlayer2Textfield, computerBattleTextfield, gameCodeTextfield;
@@ -60,6 +61,11 @@ public class StartMenuView extends VBox {
     ImageView player1StonesImageView, player2StonesImageView;
     STONECOLOR player1Color, player2Color;
     ChoiceBox computerLevelChoiceBox;
+
+    ScorePoints putPoints = new ScorePoints(4000, 1000,20, 200, 300,3, -2000, -1000, -30, -200, -100, -2);
+    ScorePoints movePoints = new ScorePoints(1000, 300,300, 200, 30,3, 1000, 280, 300, 300, 300, 2);
+    /*int[] defaultPutPoints = {4000, 1000,20, 200, 300,3, 2000, 1000, 30, 200, 100, 2};
+    int[] defaultMovePoints = {1000, 300,300, 200, 30,3, 1000, 280, 300, 300, 300, 2};*/
 
 
 
@@ -111,10 +117,18 @@ public class StartMenuView extends VBox {
         computerHBox = new HBox();
         computerHBox.getChildren().addAll(beginnerHBox, computerSettingBox);
 
-        offlineVBox.getChildren().addAll(offlineTitleLabel, hBoxRadioButtons, player1HBox, computerHBox, startButton, offlineInformationLabel);
+        onlineButtonHBox = new HBox();
+        onlineButtonHBox.getChildren().addAll(computerOnlineButton, onlineInformationLabel);
+        onlineButtonHBox.getStyleClass().add("buttonHBox");
+
+        offlineButtonHBox = new HBox();
+        offlineButtonHBox.getChildren().addAll(startButton, offlineInformationLabel);
+        offlineButtonHBox.getStyleClass().add("buttonHBox");
+
+        offlineVBox.getChildren().addAll(offlineTitleLabel, hBoxRadioButtons, player1HBox, computerHBox, offlineButtonHBox);
         offlineVBox.setSpacing(20);
-        offlineVBox.setStyle("-fx-padding: 5 0 0 0");
-        onlineVBox.getChildren().addAll(onlineTitleLabel, gameCodeTextfield, startGameHBox, computerBattleHBox, computerOnlineButton, onlineInformationLabel);
+        offlineVBox.setStyle("-fx-padding: 30 0 0 0");
+        onlineVBox.getChildren().addAll(onlineTitleLabel, gameCodeTextfield, startGameHBox, computerBattleHBox, onlineButtonHBox);
         onlineVBox.setSpacing(20);
         this.getChildren().addAll(onlineVBox, offlineVBox);
         this.setAlignment(Pos.CENTER);
@@ -169,6 +183,7 @@ public class StartMenuView extends VBox {
         computerSettingBox = new HBox();
         scorePointsButton = new Button("Score");
         computerLevelChoiceBox = new ChoiceBox(FXCollections.observableArrayList("1","2","3","4","5"));
+        computerLevelChoiceBox.getSelectionModel().select(2);
         levelLabel = new Label("Level: ");
         computerSettingBox.getChildren().addAll(levelLabel, computerLevelChoiceBox, scorePointsButton);
         computerSettingBox.getStyleClass().add("computerSettingBox");
@@ -176,24 +191,24 @@ public class StartMenuView extends VBox {
         PopOver popOver = new PopOver();
         Group root = new Group();
         HBox mainHBox = new HBox();
-        HBox putPhaseHBox = new HBox();
-        HBox movePhaseHBox = new HBox();
+        putPhaseHBox = new HBox();
+        movePhaseHBox = new HBox();
         mainHBox.getStyleClass().add("popOver");
 
-        VBox scoreVBoxComputerPut = new VBox();
+        scoreVBoxComputerPut = new VBox();
         Label computerTitlePut = new Label("Computer");
         computerTitlePut.getStyleClass().add("scoreTitles");
         scoreVBoxComputerPut.getChildren().addAll(computerTitlePut);
-        VBox scoreVBoxEnemyPut = new VBox();
+        scoreVBoxEnemyPut = new VBox();
         Label enemyTitlePut = new Label("Gegenspieler");
         enemyTitlePut.getStyleClass().add("scoreTitles");
         scoreVBoxEnemyPut.getChildren().addAll(enemyTitlePut);
 
-        VBox scoreVBoxComputerMove = new VBox();
+        scoreVBoxComputerMove = new VBox();
         Label computerTitleMove = new Label("Computer");
         computerTitlePut.getStyleClass().add("scoreTitles");
         scoreVBoxComputerMove.getChildren().addAll(computerTitleMove);
-        VBox scoreVBoxEnemyMove = new VBox();
+        scoreVBoxEnemyMove = new VBox();
         Label enemyTitleMove = new Label("Gegenspieler");
         enemyTitlePut.getStyleClass().add("scoreTitles");
         scoreVBoxEnemyMove.getChildren().addAll(enemyTitleMove);
@@ -201,14 +216,14 @@ public class StartMenuView extends VBox {
 
 
         String[] labelTitles = {"Anzahl Steine:", "Geschlossene Mühle:", "Offene Mühle:", "2 nebeneinander:", "2 mit Lücke:", "Möglicher Zug:"};
-        int[] defaultPutPoints = {4000, 1000,20, 200, 300,3, 2000, 1000, 30, 200, 100, 2};
-        int[] defaultMovePoints = {1000, 300,300, 200, 30,3, 1000, 280, 300, 300, 300, 2};
+
 
         for (int i = 0; i < 6; i++){
 
-            Pattern pattern = Pattern.compile("[0-9]*");
+            Pattern positivePattern = Pattern.compile("[0-9]*");
+            Pattern negativePattern = Pattern.compile("-[0-9]*");
             TextFormatter<?> formatterComputerPut = new TextFormatter<Object>(change -> {
-                if (pattern.matcher(change.getControlNewText()).matches()) {
+                if (positivePattern.matcher(change.getControlNewText()).matches()) {
                     return change;
                 } else {
                     //Verbotene Zeichen
@@ -216,7 +231,7 @@ public class StartMenuView extends VBox {
                 }
             });
             TextFormatter<?> formatterEnemyPut = new TextFormatter<Object>(change -> {
-                if (pattern.matcher(change.getControlNewText()).matches()) {
+                if (negativePattern.matcher(change.getControlNewText()).matches()) {
                     return change;
                 } else {
                     //Verbotene Zeichen
@@ -224,7 +239,7 @@ public class StartMenuView extends VBox {
                 }
             });
             TextFormatter<?> formatterComputerMove = new TextFormatter<Object>(change -> {
-                if (pattern.matcher(change.getControlNewText()).matches()) {
+                if (positivePattern.matcher(change.getControlNewText()).matches()) {
                     return change;
                 } else {
                     //Verbotene Zeichen
@@ -232,7 +247,7 @@ public class StartMenuView extends VBox {
                 }
             });
             TextFormatter<?> formatterEnemyMove = new TextFormatter<Object>(change -> {
-                if (pattern.matcher(change.getControlNewText()).matches()) {
+                if (negativePattern.matcher(change.getControlNewText()).matches()) {
                     return change;
                 } else {
                     //Verbotene Zeichen
@@ -243,7 +258,7 @@ public class StartMenuView extends VBox {
 
             Label labelComputerPut = new Label(labelTitles[i]);
             TextField textFieldComputerPut = new TextField();
-            textFieldComputerPut.setPromptText(String.valueOf(defaultPutPoints[i]));
+            textFieldComputerPut.setPromptText(String.valueOf(putPoints.getValueByIndex(i)));
             textFieldComputerPut.setTextFormatter(formatterComputerPut);
             textFieldComputerPut.textProperty().addListener(change -> {
                         if (textFieldComputerPut.getText().length() > 5) {
@@ -256,11 +271,11 @@ public class StartMenuView extends VBox {
 
             Label labelEnemyPut = new Label(labelTitles[i]);
             TextField textFieldEnemyPut = new TextField();
-            textFieldEnemyPut.setPromptText(String.valueOf(defaultPutPoints[i+6]));
+            textFieldEnemyPut.setPromptText(String.valueOf(putPoints.getValueByIndex(i+6)));
             textFieldEnemyPut.setTextFormatter(formatterEnemyPut);
             textFieldEnemyPut.textProperty().addListener(change -> {
-                        if (textFieldEnemyPut.getText().length() > 5) {
-                            String s = textFieldEnemyPut.getText().substring(0, 5);
+                        if (textFieldEnemyPut.getText().length() > 6) {
+                            String s = textFieldEnemyPut.getText().substring(0, 6);
                             textFieldEnemyPut.setText(s);
                         }
                     }
@@ -270,7 +285,7 @@ public class StartMenuView extends VBox {
             Label labelComputerMove = new Label(labelTitles[i]);
             TextField textFieldComputerMove = new TextField();
             textFieldComputerMove.setTextFormatter(formatterComputerMove);
-            textFieldComputerMove.setPromptText(String.valueOf(defaultMovePoints[i]));
+            textFieldComputerMove.setPromptText(String.valueOf(movePoints.getValueByIndex(i)));
             textFieldComputerMove.textProperty().addListener(change -> {
                         if (textFieldComputerMove.getText().length() > 5) {
                             String s = textFieldComputerMove.getText().substring(0, 5);
@@ -283,10 +298,10 @@ public class StartMenuView extends VBox {
             Label labelEnemyMove = new Label(labelTitles[i]);
             TextField textFieldEnemyMove = new TextField();
             textFieldEnemyMove.setTextFormatter(formatterEnemyMove);
-            textFieldEnemyMove.setPromptText(String.valueOf(defaultMovePoints[i+6]));
+            textFieldEnemyMove.setPromptText(String.valueOf(movePoints.getValueByIndex(i+6)));
             textFieldEnemyMove.textProperty().addListener(change -> {
-                        if (textFieldEnemyMove.getText().length() > 5) {
-                            String s = textFieldEnemyMove.getText().substring(0, 5);
+                        if (textFieldEnemyMove.getText().length() > 6) {
+                            String s = textFieldEnemyMove.getText().substring(0, 6);
                             textFieldEnemyMove.setText(s);
                         }
                     }
@@ -310,20 +325,13 @@ public class StartMenuView extends VBox {
 
         scorePointsButton.setOnAction(click -> {
 
-
-
-
             popOver.setAutoHide(true);
             popOver.setDetachedTitle("Punkte für Ereignisse setzen:");
             popOver.setAutoFix(true);
             popOver.setHideOnEscape(true);
-            //popOver.setDetachable(true);
             popOver.setDetached(true);
             popOver.setArrowSize(0);
-            //popOver.setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
             popOver.show(viewManager.getMainStage());
-
-
         });
 
 
@@ -588,9 +596,58 @@ public class StartMenuView extends VBox {
                             new HumanPlayer(viewManager, namePlayer2Textfield.getText().toUpperCase(), true)));
                 }
                 else {
+
+                    int counterPut = 0;
+                    //computerPutpoints
+                    for (Node node : scoreVBoxComputerPut.getChildren()){
+                        if (node instanceof TextField){
+                            if (((TextField) node).getText().length()>0){
+                                putPoints.setValueByIndex(counterPut, Integer.parseInt(((TextField) node).getText()));
+                            }
+                            counterPut++;
+                        }
+                    }
+
+                    //enemyPutpoints
+                    for (Node node : scoreVBoxEnemyPut.getChildren()){
+                        if (node instanceof TextField){
+                            if (((TextField) node).getText().length()>0){
+                                putPoints.setValueByIndex(counterPut, Integer.parseInt(((TextField) node).getText()));
+                            }
+                            counterPut++;
+                        }
+                    }
+                    System.out.println(putPoints);
+
+                    int counterMove = 0;
+                    //computerPutpoints
+                    for (Node node : scoreVBoxComputerMove.getChildren()){
+                        if (node instanceof TextField){
+                            if (((TextField) node).getText().length()>0){
+                                movePoints.setValueByIndex(counterMove, Integer.parseInt(((TextField) node).getText()));
+                            }
+                            counterMove++;
+                        }
+                    }
+
+                    //enemyPutpoints
+                    for (Node node : scoreVBoxEnemyMove.getChildren()){
+                        if (node instanceof TextField){
+                            if (((TextField) node).getText().length()>0){
+                                movePoints.setValueByIndex(counterMove, Integer.parseInt(((TextField) node).getText()));
+                            }
+                            counterMove++;
+                        }
+                    }
+                    System.out.println(movePoints);
+
+
+
+
+
                     viewManager.setGame(new Game(viewManager,
                             new HumanPlayer(viewManager, namePlayer1Textfield.getText().toUpperCase(), true),
-                            beginnerSwitchButton.getState()));
+                            beginnerSwitchButton.getState(), putPoints, movePoints, Integer.parseInt(computerLevelChoiceBox.getValue().toString())));
                 }
 
 

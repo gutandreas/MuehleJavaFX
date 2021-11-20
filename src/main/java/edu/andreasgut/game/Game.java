@@ -56,10 +56,10 @@ public class Game {
     }
 
 
-    public Game(ViewManager viewManager, Player player0, boolean player2starts) {
+    public Game(ViewManager viewManager, Player player0, boolean player2starts, ScorePoints putPoints, ScorePoints movePoints, int levelLimit) {
         this.viewManager = viewManager;
         this.player0 = player0;
-        this.player1 = new ComputerPlayer(viewManager, "COMPUTER");
+        this.player1 = new ComputerPlayer(viewManager, "COMPUTER", putPoints, movePoints, levelLimit);
         this.player2starts = player2starts;
         playerArrayList.add(0, player0);
         playerArrayList.add(1, player1);
