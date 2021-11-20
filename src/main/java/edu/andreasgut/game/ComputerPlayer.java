@@ -29,9 +29,9 @@ public class ComputerPlayer extends Player {
 
         ScorePoints putScorePoints = new ScorePoints(4000, 1000,20, 200, 300,3, -2000, -1000, -30, -200, -100, -2);
 
-        recursivePutBfs(gameTree.getRoot(), putScorePoints, playerIndex, playerIndex, 3);
+        recursivePutBfs(gameTree.getRoot(), putScorePoints, playerIndex, playerIndex, 5);
 
-        System.out.println(gameTree);
+        //System.out.println(gameTree);
 
         Stack<GameTreeNode> winningPath = gameTree.getPathToBestLeaf();
         System.out.println("Gewinnerpfad:");
@@ -63,7 +63,7 @@ public class ComputerPlayer extends Player {
         }
 
         if (set.getLevel()%2 == 0){
-            gameTree.keepOnlyBestChildren(set, 5);}
+            gameTree.keepOnlyBestChildren(set, 10);}
         else {
             gameTree.keepOnlyWorstChildren(set, 1);
         }
@@ -116,7 +116,7 @@ public class ComputerPlayer extends Player {
 
         gameTree.initializeRoot(board);
 
-        ScorePoints moveScorePoints = new ScorePoints(100000, 300,400, 200, 30,3, -1000, -200, -30, -20, -50, -2);
+        ScorePoints moveScorePoints = new ScorePoints(1000, 300,300, 200, 30,3, -1000, -280, -300, -300, -300, -2);
 
         recursiveMoveBfs(gameTree.getRoot(), moveScorePoints, playerIndex, playerIndex, 5);
 
@@ -153,7 +153,7 @@ public class ComputerPlayer extends Player {
         }
 
         if (set.getLevel()%2 == 0){
-            gameTree.keepOnlyBestChildren(set, 5);}
+            gameTree.keepOnlyBestChildren(set, 3);}
         else {
             gameTree.keepOnlyWorstChildren(set, 1);
         }
@@ -249,7 +249,7 @@ public class ComputerPlayer extends Player {
     public void triggerMove(ViewManager viewManager){
         Game game = viewManager.getGame();
         boolean allowedToJump = game.getBoard().countPlayersStones(game.getCurrentPlayerIndex()) == 3;
-        Move move = move(game.getBoard(), game.getCurrentPlayerIndex(),allowedToJump);
+        Move move = move(game.getBoard(), game.getCurrentPlayerIndex(), allowedToJump);
         Messenger.sendMoveMessage(viewManager, move);
     }
 

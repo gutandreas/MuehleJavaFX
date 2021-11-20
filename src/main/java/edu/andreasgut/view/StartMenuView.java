@@ -8,11 +8,19 @@ import edu.andreasgut.sound.MUSIC;
 import edu.andreasgut.view.fxElements.BeginnerSwitchButton;
 import edu.andreasgut.view.fxElements.SelectColorButton;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import org.controlsfx.control.PopOver;
 
 import java.io.IOException;
 import java.net.URI;
@@ -20,6 +28,7 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import org.json.JSONException;
@@ -39,16 +48,17 @@ public class StartMenuView extends VBox {
     private final int STARTDIMENSION = 600;
     ViewManager viewManager;
     VBox offlineVBox, onlineVBox;
-    HBox hBoxRadioButtons, player1HBox, player2HBox, beginnerHBox, startGameHBox, computerBattleHBox;
+    HBox hBoxRadioButtons, player1HBox, player2HBox, computerHBox, beginnerHBox, startGameHBox, computerBattleHBox, computerSettingBox;
     ToggleGroup radioButtonGroup;
     RadioButton onePlayerRadioButton, twoPlayersRadioButton;
     TextField namePlayer1Textfield, namePlayer2Textfield, computerBattleTextfield, gameCodeTextfield;
-    Label offlineInformationLabel, offlineTitleLabel, onlineInformationLabel, onlineTitleLabel, stonesColorLabel1, stonesColorLabel2, beginnerLabel1, beginnerLabel2, stoneColorComputerLabel, startGameLabel, joinGameLabel;
-    Button startButton, computerOnlineButton;
+    Label offlineInformationLabel, offlineTitleLabel, onlineInformationLabel, onlineTitleLabel, stonesColorLabel1, stonesColorLabel2, beginnerLabel1, beginnerLabel2, levelLabel, stoneColorComputerLabel, startGameLabel, joinGameLabel;
+    Button startButton, computerOnlineButton, scorePointsButton;
     SelectColorButton stonesBlackButton1, stonesWhiteButton1, stonesBlackButton2, stonesWhiteButton2, computerBlackButton, computerWhiteButton;
     BeginnerSwitchButton beginnerSwitchButton, startOnlineGameSwitchButton;
     ImageView player1StonesImageView, player2StonesImageView;
     STONECOLOR player1Color, player2Color;
+    ChoiceBox computerLevelChoiceBox;
 
 
 
@@ -95,8 +105,12 @@ public class StartMenuView extends VBox {
         setupOnlineTitleAndWarning();
         setupStartGameSwitchButton();
         setupComputerBattleInformation();
+        setupComputerSettingBox();
 
-        offlineVBox.getChildren().addAll(offlineTitleLabel, hBoxRadioButtons, player1HBox, beginnerHBox, startButton, offlineInformationLabel);
+        computerHBox = new HBox();
+        computerHBox.getChildren().addAll(beginnerHBox, computerSettingBox);
+
+        offlineVBox.getChildren().addAll(offlineTitleLabel, hBoxRadioButtons, player1HBox, computerHBox, startButton, offlineInformationLabel);
         offlineVBox.setSpacing(20);
         offlineVBox.setStyle("-fx-padding: 5 0 0 0");
         onlineVBox.getChildren().addAll(onlineTitleLabel, gameCodeTextfield, startGameHBox, computerBattleHBox, computerOnlineButton, onlineInformationLabel);
@@ -141,12 +155,69 @@ public class StartMenuView extends VBox {
     private void setupBeginnerSwitch(){
         beginnerHBox = new HBox();
         beginnerSwitchButton = new BeginnerSwitchButton(viewManager);
-        beginnerLabel1 = new Label("Spieler 1 beginnt");
-        beginnerLabel2 = new Label("Computer beginnt");
+        beginnerLabel1 = new Label("Beginner: Spieler 1");
+        beginnerLabel2 = new Label("Computer");
         beginnerHBox.getChildren().addAll(beginnerLabel1, beginnerSwitchButton, beginnerLabel2);
         beginnerHBox.setAlignment(Pos.CENTER_LEFT);
         beginnerHBox.setSpacing(10);
         beginnerHBox.setPrefHeight(70);
+
+    }
+
+    private void setupComputerSettingBox(){
+        computerSettingBox = new HBox();
+        scorePointsButton = new Button("Score");
+        computerLevelChoiceBox = new ChoiceBox(FXCollections.observableArrayList("1","2","3","4","5"));
+        levelLabel = new Label("Level: ");
+        computerSettingBox.getChildren().addAll(levelLabel, computerLevelChoiceBox, scorePointsButton);
+
+        PopOver popOver = new PopOver();
+        Group root = new Group();
+        HBox hBox = new HBox();
+        VBox scoreVBoxComputer = new VBox();
+        Label computerTitle = new Label("Computer");
+        scoreVBoxComputer.getChildren().addAll(computerTitle);
+        VBox scoreVBoxEnemy = new VBox();
+        Label enemyTitle = new Label("Gegenspieler");
+        scoreVBoxEnemy.getChildren().addAll(enemyTitle);
+        String[] labelTitles = {"Meine Mühle", "Gegner"};
+
+        for (int i = 0; i < 10; i++){
+            Label labelComputer = new Label("Test");
+            TextField textFieldComputer = new TextField();
+            scoreVBoxComputer.getChildren().addAll(labelComputer, textFieldComputer);
+            Label labelEnemy = new Label(labelTitles[i%2]);
+            TextField textFieldEnemy = new TextField();
+            scoreVBoxEnemy.getChildren().addAll(labelEnemy, textFieldEnemy);
+
+        }
+
+        hBox.getChildren().addAll(scoreVBoxComputer, scoreVBoxEnemy);
+
+        root.getChildren().addAll(hBox);
+        popOver.setContentNode(root);
+
+        scorePointsButton.setOnAction(click -> {
+
+
+
+
+            popOver.setAutoHide(true);
+            popOver.setDetachedTitle("Punkte für Ereignisse setzen:");
+            popOver.setAutoFix(true);
+            popOver.setHideOnEscape(true);
+            //popOver.setDetachable(true);
+            popOver.setDetached(true);
+            popOver.setArrowSize(0);
+            //popOver.setArrowLocation(PopOver.ArrowLocation.TOP_CENTER);
+            popOver.show(viewManager.getMainStage());
+
+
+        });
+
+
+
+
 
     }
 

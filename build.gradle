@@ -20,6 +20,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-websocket:2.4.4") //Um Websockets zu verwenden
     implementation group: 'javax.websocket', name: 'javax.websocket-api', version: '1.1'
     implementation "org.java-websocket:Java-WebSocket:1.5.1"
+    // https://mvnrepository.com/artifact/org.controlsfx/controlsfx
+    implementation group: 'org.controlsfx', name: 'controlsfx', version: '8.0.5'
     //implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
 }
 
