@@ -151,7 +151,19 @@
 
 .scorePhaseHBox{
     -fx-spacing: 20px;
+    -fx-padding: 10px;
 
+}
+
+.computerSettingBox{
+    -fx-alignment: center;
+    -fx-padding: 20px;
+    -fx-spacing: 10px;
+}
+
+.choice-box {
+    -fx-pref-width: 50px;
+    -fx-background-color:#c2eafc;
 }
 
 

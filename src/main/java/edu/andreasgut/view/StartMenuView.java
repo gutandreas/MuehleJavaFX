@@ -171,6 +171,7 @@ public class StartMenuView extends VBox {
         computerLevelChoiceBox = new ChoiceBox(FXCollections.observableArrayList("1","2","3","4","5"));
         levelLabel = new Label("Level: ");
         computerSettingBox.getChildren().addAll(levelLabel, computerLevelChoiceBox, scorePointsButton);
+        computerSettingBox.getStyleClass().add("computerSettingBox");
 
         PopOver popOver = new PopOver();
         Group root = new Group();
@@ -556,12 +557,12 @@ public class StartMenuView extends VBox {
 
     private void setupRadioButtonAction(){
         onePlayerRadioButton.setOnAction(action -> {
-            offlineVBox.getChildren().add(3, beginnerHBox);
+            offlineVBox.getChildren().add(3, computerHBox);
             offlineVBox.getChildren().remove(player2HBox);
 
         });
         twoPlayersRadioButton.setOnAction(action -> {
-            offlineVBox.getChildren().remove(beginnerHBox);
+            offlineVBox.getChildren().remove(computerHBox);
             offlineVBox.getChildren().add(3, player2HBox);
 
         });
