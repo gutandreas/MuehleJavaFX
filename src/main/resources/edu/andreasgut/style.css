@@ -130,3 +130,30 @@
     -fx-background-color: #ffaaaa;
 }
 
+.popOver{
+    -fx-background-color: linear-gradient(to bottom, #383838, #303030);
+    -fx-padding: 4px;
+    -fx-spacing: 4px;
+    -fx-start-margin: 4px;
+    -fx-end-margin: 4px;
+
+    -fx-alignment: center;
+}
+
+.popOver .text-field{
+    -fx-pref-width: 100px;
+
+}
+
+.scoreTitles{
+    -fx-font-weight: bold;
+}
+
+.scorePhaseHBox{
+    -fx-spacing: 20px;
+
+}
+
+
+
+

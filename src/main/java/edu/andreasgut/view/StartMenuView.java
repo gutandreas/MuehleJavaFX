@@ -9,6 +9,7 @@ import edu.andreasgut.view.fxElements.BeginnerSwitchButton;
 import edu.andreasgut.view.fxElements.SelectColorButton;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.css.StyleClass;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -173,28 +174,132 @@ public class StartMenuView extends VBox {
 
         PopOver popOver = new PopOver();
         Group root = new Group();
-        HBox hBox = new HBox();
-        VBox scoreVBoxComputer = new VBox();
-        Label computerTitle = new Label("Computer");
-        scoreVBoxComputer.getChildren().addAll(computerTitle);
-        VBox scoreVBoxEnemy = new VBox();
-        Label enemyTitle = new Label("Gegenspieler");
-        scoreVBoxEnemy.getChildren().addAll(enemyTitle);
-        String[] labelTitles = {"Meine Mühle", "Gegner"};
+        HBox mainHBox = new HBox();
+        HBox putPhaseHBox = new HBox();
+        HBox movePhaseHBox = new HBox();
+        mainHBox.getStyleClass().add("popOver");
 
-        for (int i = 0; i < 10; i++){
-            Label labelComputer = new Label("Test");
-            TextField textFieldComputer = new TextField();
-            scoreVBoxComputer.getChildren().addAll(labelComputer, textFieldComputer);
-            Label labelEnemy = new Label(labelTitles[i%2]);
-            TextField textFieldEnemy = new TextField();
-            scoreVBoxEnemy.getChildren().addAll(labelEnemy, textFieldEnemy);
+        VBox scoreVBoxComputerPut = new VBox();
+        Label computerTitlePut = new Label("Computer");
+        computerTitlePut.getStyleClass().add("scoreTitles");
+        scoreVBoxComputerPut.getChildren().addAll(computerTitlePut);
+        VBox scoreVBoxEnemyPut = new VBox();
+        Label enemyTitlePut = new Label("Gegenspieler");
+        enemyTitlePut.getStyleClass().add("scoreTitles");
+        scoreVBoxEnemyPut.getChildren().addAll(enemyTitlePut);
+
+        VBox scoreVBoxComputerMove = new VBox();
+        Label computerTitleMove = new Label("Computer");
+        computerTitlePut.getStyleClass().add("scoreTitles");
+        scoreVBoxComputerMove.getChildren().addAll(computerTitleMove);
+        VBox scoreVBoxEnemyMove = new VBox();
+        Label enemyTitleMove = new Label("Gegenspieler");
+        enemyTitlePut.getStyleClass().add("scoreTitles");
+        scoreVBoxEnemyMove.getChildren().addAll(enemyTitleMove);
+
+
+
+        String[] labelTitles = {"Anzahl Steine:", "Geschlossene Mühle:", "Offene Mühle:", "2 nebeneinander:", "2 mit Lücke:", "Möglicher Zug:"};
+
+
+        for (int i = 0; i < 6; i++){
+
+            Pattern pattern = Pattern.compile("[0-9]*");
+            TextFormatter<?> formatterComputerPut = new TextFormatter<Object>(change -> {
+                if (pattern.matcher(change.getControlNewText()).matches()) {
+                    return change;
+                } else {
+                    //Verbotene Zeichen
+                    return null;
+                }
+            });
+            TextFormatter<?> formatterEnemyPut = new TextFormatter<Object>(change -> {
+                if (pattern.matcher(change.getControlNewText()).matches()) {
+                    return change;
+                } else {
+                    //Verbotene Zeichen
+                    return null;
+                }
+            });
+            TextFormatter<?> formatterComputerMove = new TextFormatter<Object>(change -> {
+                if (pattern.matcher(change.getControlNewText()).matches()) {
+                    return change;
+                } else {
+                    //Verbotene Zeichen
+                    return null;
+                }
+            });
+            TextFormatter<?> formatterEnemyMove = new TextFormatter<Object>(change -> {
+                if (pattern.matcher(change.getControlNewText()).matches()) {
+                    return change;
+                } else {
+                    //Verbotene Zeichen
+                    return null;
+                }
+            });
+
+
+            Label labelComputerPut = new Label(labelTitles[i]);
+            TextField textFieldComputerPut = new TextField();
+            textFieldComputerPut.setTextFormatter(formatterComputerPut);
+            textFieldComputerPut.textProperty().addListener(change -> {
+                        if (textFieldComputerPut.getText().length() > 5) {
+                            String s = textFieldComputerPut.getText().substring(0, 5);
+                            textFieldComputerPut.setText(s);
+                        }
+                    }
+            );
+            scoreVBoxComputerPut.getChildren().addAll(labelComputerPut, textFieldComputerPut);
+
+            Label labelEnemyPut = new Label(labelTitles[i]);
+            TextField textFieldEnemyPut = new TextField();
+            textFieldEnemyPut.setTextFormatter(formatterEnemyMove);
+            textFieldEnemyPut.textProperty().addListener(change -> {
+                        if (textFieldEnemyPut.getText().length() > 5) {
+                            String s = textFieldEnemyPut.getText().substring(0, 5);
+                            textFieldEnemyPut.setText(s);
+                        }
+                    }
+            );
+            scoreVBoxEnemyPut.getChildren().addAll(labelEnemyPut, textFieldEnemyPut);
+
+            Label labelComputerMove = new Label(labelTitles[i]);
+            TextField textFieldComputerMove = new TextField();
+            textFieldComputerMove.setTextFormatter(formatterComputerMove);
+            textFieldComputerMove.textProperty().addListener(change -> {
+                        if (textFieldComputerMove.getText().length() > 5) {
+                            String s = textFieldComputerMove.getText().substring(0, 5);
+                            textFieldComputerMove.setText(s);
+                        }
+                    }
+            );
+            scoreVBoxComputerMove.getChildren().addAll(labelComputerMove, textFieldComputerMove);
+
+            Label labelEnemyMove = new Label(labelTitles[i]);
+            TextField textFieldEnemyMove = new TextField();
+            textFieldEnemyMove.setTextFormatter(formatterEnemyPut);
+            textFieldEnemyMove.textProperty().addListener(change -> {
+                        if (textFieldEnemyMove.getText().length() > 5) {
+                            String s = textFieldEnemyMove.getText().substring(0, 5);
+                            textFieldEnemyMove.setText(s);
+                        }
+                    }
+            );
+            scoreVBoxEnemyMove.getChildren().addAll(labelEnemyMove, textFieldEnemyMove);
 
         }
 
-        hBox.getChildren().addAll(scoreVBoxComputer, scoreVBoxEnemy);
+        Label putPhaseTitleLabel = new Label("Setzphase");
+        putPhaseHBox.getChildren().addAll(putPhaseTitleLabel, scoreVBoxComputerPut, scoreVBoxEnemyPut);
+        putPhaseHBox.getStyleClass().add("scorePhaseHBox");
 
-        root.getChildren().addAll(hBox);
+        Label movePhaseTitleLabel = new Label("Zugphase");
+        movePhaseHBox.getChildren().addAll(movePhaseTitleLabel, scoreVBoxComputerMove, scoreVBoxEnemyMove);
+        movePhaseHBox.getStyleClass().add("scorePhaseHBox");
+
+        mainHBox.getChildren().addAll(putPhaseHBox, movePhaseHBox);
+
+        root.getChildren().addAll(mainHBox);
         popOver.setContentNode(root);
 
         scorePointsButton.setOnAction(click -> {
