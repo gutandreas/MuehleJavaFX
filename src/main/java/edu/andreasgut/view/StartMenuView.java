@@ -200,7 +200,8 @@ public class StartMenuView extends VBox {
 
 
         String[] labelTitles = {"Anzahl Steine:", "Geschlossene Mühle:", "Offene Mühle:", "2 nebeneinander:", "2 mit Lücke:", "Möglicher Zug:"};
-
+        int[] defaultPutPoints = {4000, 1000,20, 200, 300,3, 2000, 1000, 30, 200, 100, 2};
+        int[] defaultMovePoints = {1000, 300,300, 200, 30,3, 1000, 280, 300, 300, 300, 2};
 
         for (int i = 0; i < 6; i++){
 
@@ -241,6 +242,7 @@ public class StartMenuView extends VBox {
 
             Label labelComputerPut = new Label(labelTitles[i]);
             TextField textFieldComputerPut = new TextField();
+            textFieldComputerPut.setPromptText(String.valueOf(defaultPutPoints[i]));
             textFieldComputerPut.setTextFormatter(formatterComputerPut);
             textFieldComputerPut.textProperty().addListener(change -> {
                         if (textFieldComputerPut.getText().length() > 5) {
@@ -253,7 +255,8 @@ public class StartMenuView extends VBox {
 
             Label labelEnemyPut = new Label(labelTitles[i]);
             TextField textFieldEnemyPut = new TextField();
-            textFieldEnemyPut.setTextFormatter(formatterEnemyMove);
+            textFieldEnemyPut.setPromptText(String.valueOf(defaultPutPoints[i+6]));
+            textFieldEnemyPut.setTextFormatter(formatterEnemyPut);
             textFieldEnemyPut.textProperty().addListener(change -> {
                         if (textFieldEnemyPut.getText().length() > 5) {
                             String s = textFieldEnemyPut.getText().substring(0, 5);
@@ -266,6 +269,7 @@ public class StartMenuView extends VBox {
             Label labelComputerMove = new Label(labelTitles[i]);
             TextField textFieldComputerMove = new TextField();
             textFieldComputerMove.setTextFormatter(formatterComputerMove);
+            textFieldComputerMove.setPromptText(String.valueOf(defaultMovePoints[i]));
             textFieldComputerMove.textProperty().addListener(change -> {
                         if (textFieldComputerMove.getText().length() > 5) {
                             String s = textFieldComputerMove.getText().substring(0, 5);
@@ -277,7 +281,8 @@ public class StartMenuView extends VBox {
 
             Label labelEnemyMove = new Label(labelTitles[i]);
             TextField textFieldEnemyMove = new TextField();
-            textFieldEnemyMove.setTextFormatter(formatterEnemyPut);
+            textFieldEnemyMove.setTextFormatter(formatterEnemyMove);
+            textFieldEnemyMove.setPromptText(String.valueOf(defaultMovePoints[i+6]));
             textFieldEnemyMove.textProperty().addListener(change -> {
                         if (textFieldEnemyMove.getText().length() > 5) {
                             String s = textFieldEnemyMove.getText().substring(0, 5);
