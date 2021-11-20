@@ -77,6 +77,10 @@ public class Game {
         return joinExistingGame;
     }
 
+    public int getRound() {
+        return round;
+    }
+
     public Player getCurrentPlayer() {
         return currentPlayer;
     }

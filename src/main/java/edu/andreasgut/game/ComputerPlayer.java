@@ -33,9 +33,7 @@ public class ComputerPlayer extends Player {
 
         gameTree.initializeRoot(board);
 
-        //ScorePoints putScorePoints = new ScorePoints(4000, 1000,20, 200, 300,3, -2000, -1000, -30, -200, -100, -2);
-
-        recursivePutBfs(gameTree.getRoot(), putPoints, playerIndex, playerIndex, levelLimit);
+        recursivePutBfs(gameTree.getRoot(), putPoints, movePoints, playerIndex, playerIndex, levelLimit);
 
         System.out.println(gameTree);
 
@@ -49,7 +47,7 @@ public class ComputerPlayer extends Player {
         return gameTree.getBestPut();
     }
 
-    private void recursivePutBfs(GameTreeNode set, ScorePoints scorePoints, int scorePlayerIndex, int currentPlayerIndex, int levelLimit){
+    private void recursivePutBfs(GameTreeNode set, ScorePoints putPoints, ScorePoints movePoints, int scorePlayerIndex, int currentPlayerIndex, int levelLimit){
 
         if (set.getLevel()==levelLimit){
             return;
@@ -65,7 +63,7 @@ public class ComputerPlayer extends Player {
         }
 
         for (Position freeField : Advisor.getAllFreeFields(set.getBoard())){
-            pretendPut(set.getBoard(), freeField, scorePoints, set, scorePlayerIndex, tempCurrentPlayerIndex, set.getLevel()+1);
+            pretendPut(set.getBoard(), freeField, putPoints, set, scorePlayerIndex, tempCurrentPlayerIndex, set.getLevel()+1);
         }
 
         if (set.getLevel()%2 == 0){
@@ -74,9 +72,14 @@ public class ComputerPlayer extends Player {
             gameTree.keepOnlyWorstChildren(set, 1);
         }
 
-
         for (GameTreeNode child : set.getChildren()){
-            recursivePutBfs(child, scorePoints, scorePlayerIndex, tempCurrentPlayerIndex, levelLimit);
+            if (viewManager.getGame().getRound() + child.getLevel() < 18){
+                recursivePutBfs(child, putPoints, movePoints, scorePlayerIndex, tempCurrentPlayerIndex, levelLimit);
+            }
+            else {
+                recursiveMoveBfs(child, movePoints, scorePlayerIndex, tempCurrentPlayerIndex, levelLimit);
+            }
+
         }
     }
 
@@ -122,11 +125,9 @@ public class ComputerPlayer extends Player {
 
         gameTree.initializeRoot(board);
 
-        //ScorePoints moveScorePoints = new ScorePoints(1000, 300,300, 200, 30,3, -1000, -280, -300, -300, -300, -2);
-
         recursiveMoveBfs(gameTree.getRoot(), movePoints, playerIndex, playerIndex, levelLimit);
 
-        //System.out.println(gameTree);
+        System.out.println(gameTree);
 
         Stack<GameTreeNode> winningPath = gameTree.getPathToBestLeaf();
         System.out.println("Gewinnerpfad:");
