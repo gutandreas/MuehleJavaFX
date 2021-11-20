@@ -62,10 +62,8 @@ public class StartMenuView extends VBox {
     STONECOLOR player1Color, player2Color;
     ChoiceBox computerLevelChoiceBox;
 
-    ScorePoints putPoints = new ScorePoints(4000, 1000,20, 200, 300,3, -2000, -1000, -30, -200, -100, -2);
-    ScorePoints movePoints = new ScorePoints(1000, 300,300, 200, 30,3, 1000, 280, 300, 300, 300, 2);
-    /*int[] defaultPutPoints = {4000, 1000,20, 200, 300,3, 2000, 1000, 30, 200, 100, 2};
-    int[] defaultMovePoints = {1000, 300,300, 200, 30,3, 1000, 280, 300, 300, 300, 2};*/
+    ScorePoints putPoints = new ScorePoints(2000, 1000,30, 200, 300,3, -2000, -1000, -30, -200, -300, -3);
+    ScorePoints movePoints = new ScorePoints(2000, 300,250, 200, 300,3, -2000, -300, -250, -200, -300, -3);
 
 
 
@@ -333,10 +331,6 @@ public class StartMenuView extends VBox {
             popOver.setArrowSize(0);
             popOver.show(viewManager.getMainStage());
         });
-
-
-
-
 
     }
 
