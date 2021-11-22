@@ -15,6 +15,7 @@ public class ComputerPlayer extends Player {
     int levelLimit;
 
 
+    //Lokaler Computer
     public ComputerPlayer(ViewManager viewManager, String name, ScorePoints putPoints, ScorePoints movePoints, int levelLimit) {
         super(viewManager, name, true);
         automaticTrigger = true;
@@ -23,10 +24,16 @@ public class ComputerPlayer extends Player {
         this.levelLimit = levelLimit;
     }
 
-    public ComputerPlayer(ViewManager viewManager, String name, String uuid) {
+    //Online-Battle-Computer
+    public ComputerPlayer(ViewManager viewManager, String name, String uuid, ScorePoints putPoints, ScorePoints movePoints, int levelLimit) {
         super(viewManager, name, uuid);
         automaticTrigger = false;
+        this.putPoints = putPoints;
+        this.movePoints = movePoints;
+        this.levelLimit = levelLimit;
     }
+
+
 
 
     Position put(Board board, int playerIndex) {

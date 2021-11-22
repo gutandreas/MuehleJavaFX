@@ -591,53 +591,7 @@ public class StartMenuView extends VBox {
                 }
                 else {
 
-                    int counterPut = 0;
-                    //computerPutpoints
-                    for (Node node : scoreVBoxComputerPut.getChildren()){
-                        if (node instanceof TextField){
-                            if (((TextField) node).getText().length()>0){
-                                putPoints.setValueByIndex(counterPut, Integer.parseInt(((TextField) node).getText()));
-                            }
-                            counterPut++;
-                        }
-                    }
-
-                    //enemyPutpoints
-                    for (Node node : scoreVBoxEnemyPut.getChildren()){
-                        if (node instanceof TextField){
-                            if (((TextField) node).getText().length()>0){
-                                putPoints.setValueByIndex(counterPut, Integer.parseInt(((TextField) node).getText()));
-                            }
-                            counterPut++;
-                        }
-                    }
-                    System.out.println(putPoints);
-
-                    int counterMove = 0;
-                    //computerPutpoints
-                    for (Node node : scoreVBoxComputerMove.getChildren()){
-                        if (node instanceof TextField){
-                            if (((TextField) node).getText().length()>0){
-                                movePoints.setValueByIndex(counterMove, Integer.parseInt(((TextField) node).getText()));
-                            }
-                            counterMove++;
-                        }
-                    }
-
-                    //enemyPutpoints
-                    for (Node node : scoreVBoxEnemyMove.getChildren()){
-                        if (node instanceof TextField){
-                            if (((TextField) node).getText().length()>0){
-                                movePoints.setValueByIndex(counterMove, Integer.parseInt(((TextField) node).getText()));
-                            }
-                            counterMove++;
-                        }
-                    }
-                    System.out.println(movePoints);
-
-
-
-
+                    editScorePoints();
 
                     viewManager.setGame(new Game(viewManager,
                             new HumanPlayer(viewManager, namePlayer1Textfield.getText().toUpperCase(), true),
@@ -695,6 +649,9 @@ public class StartMenuView extends VBox {
 
             jsonObject.put("player1Color", computerColor.toString());
 
+            editScorePoints();
+
+
             String urlAsString;
 
             //join
@@ -741,7 +698,7 @@ public class StartMenuView extends VBox {
                     uuid = jsonResponseObject.getString("player1Uuid");
                 }
 
-                computerPlayer = new ComputerPlayer(viewManager, computerBattleTextfield.getText().toUpperCase(), uuid);
+                computerPlayer = new ComputerPlayer(viewManager, computerBattleTextfield.getText().toUpperCase(), uuid, putPoints, movePoints, Integer.parseInt(computerLevelChoiceBox.getValue().toString()));
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -796,5 +753,51 @@ public class StartMenuView extends VBox {
 
 
         });
+    }
+
+    private void editScorePoints(){
+        int counterPut = 0;
+        //computerPutpoints
+        for (Node node : scoreVBoxComputerPut.getChildren()){
+            if (node instanceof TextField){
+                if (((TextField) node).getText().length()>0){
+                    putPoints.setValueByIndex(counterPut, Integer.parseInt(((TextField) node).getText()));
+                }
+                counterPut++;
+            }
+        }
+
+        //enemyPutpoints
+        for (Node node : scoreVBoxEnemyPut.getChildren()){
+            if (node instanceof TextField){
+                if (((TextField) node).getText().length()>0){
+                    putPoints.setValueByIndex(counterPut, Integer.parseInt(((TextField) node).getText()));
+                }
+                counterPut++;
+            }
+        }
+        System.out.println(putPoints);
+
+        int counterMove = 0;
+        //computerPutpoints
+        for (Node node : scoreVBoxComputerMove.getChildren()){
+            if (node instanceof TextField){
+                if (((TextField) node).getText().length()>0){
+                    movePoints.setValueByIndex(counterMove, Integer.parseInt(((TextField) node).getText()));
+                }
+                counterMove++;
+            }
+        }
+
+        //enemyPutpoints
+        for (Node node : scoreVBoxEnemyMove.getChildren()){
+            if (node instanceof TextField){
+                if (((TextField) node).getText().length()>0){
+                    movePoints.setValueByIndex(counterMove, Integer.parseInt(((TextField) node).getText()));
+                }
+                counterMove++;
+            }
+        }
+        System.out.println(movePoints);
     }
 }
