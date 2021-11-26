@@ -8,10 +8,10 @@ import javafx.scene.control.Alert;
 import java.util.LinkedList;
 import java.util.Random;
 
-public class OwnComputerPlayer extends ComputerPlayer{
+public class CustomComputerPlayer extends ComputerPlayer{
 
 
-    public OwnComputerPlayer(ViewManager viewManager, String name, String uuid, ScorePoints putPoints, ScorePoints movePoints, int levelLimit) {
+    public CustomComputerPlayer(ViewManager viewManager, String name, String uuid, ScorePoints putPoints, ScorePoints movePoints, int levelLimit) {
         super(viewManager, name, uuid, putPoints, movePoints, levelLimit);
     }
 

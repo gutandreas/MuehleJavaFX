@@ -731,9 +731,9 @@ public class StartMenuView extends VBox {
                 if (ownComputerPlayerSwitchButton.getState()){
                     computerPlayer = new StandardComputerPlayer(viewManager, computerBattleTextfield.getText().toUpperCase(), uuid, putPoints, movePoints, Integer.parseInt(onlineComputerLevelChoiceBox.getValue().toString()));
                 }
-                //OwnComputerPlayer
+                //CustomComputerPlayer
                 else {
-                    computerPlayer = new OwnComputerPlayer(viewManager, computerBattleTextfield.getText().toUpperCase(), uuid, putPoints, movePoints, Integer.parseInt(onlineComputerLevelChoiceBox.getValue().toString()));
+                    computerPlayer = new CustomComputerPlayer(viewManager, computerBattleTextfield.getText().toUpperCase(), uuid, putPoints, movePoints, Integer.parseInt(onlineComputerLevelChoiceBox.getValue().toString()));
                 }
 
             } catch (IOException e) {
