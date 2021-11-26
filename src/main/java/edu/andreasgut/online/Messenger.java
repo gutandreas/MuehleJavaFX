@@ -28,6 +28,7 @@ public class Messenger {
         jsonObject.put("ring", position.getRing());
         jsonObject.put("field", position.getField());
         jsonObject.put("callComputer", false);
+        jsonObject.put("triggerAxidraw", true);
         jsonObject.put("playerIndex", viewManager.getGame().getCurrentPlayerIndex());
         sendMessage(viewManager, jsonObject.toString());
     }
@@ -46,6 +47,7 @@ public class Messenger {
         jsonObject.put("moveToRing", move.getTo().getRing());
         jsonObject.put("moveToField", move.getTo().getField());
         jsonObject.put("callComputer", false);
+        jsonObject.put("triggerAxidraw", true);
         jsonObject.put("playerIndex", viewManager.getGame().getCurrentPlayerIndex());
         sendMessage(viewManager, jsonObject.toString());
     }
@@ -62,6 +64,7 @@ public class Messenger {
         jsonObject.put("ring", position.getRing());
         jsonObject.put("field", position.getField());
         jsonObject.put("callComputer", false);
+        jsonObject.put("triggerAxidraw", true);
         jsonObject.put("playerIndex", viewManager.getGame().getCurrentPlayerIndex());
         sendMessage(viewManager, jsonObject.toString());
     }

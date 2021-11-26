@@ -1,27 +1,17 @@
 package edu.andreasgut.view;
 
-import edu.andreasgut.game.ComputerPlayer;
-import edu.andreasgut.game.Game;
-import edu.andreasgut.game.HumanPlayer;
-import edu.andreasgut.game.ScorePoints;
+import edu.andreasgut.game.*;
 import edu.andreasgut.online.WebsocketClient;
 import edu.andreasgut.sound.MUSIC;
 import edu.andreasgut.view.fxElements.BeginnerSwitchButton;
 import edu.andreasgut.view.fxElements.SelectColorButton;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.css.StyleClass;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import org.controlsfx.control.PopOver;
 
 import java.io.IOException;
@@ -30,13 +20,10 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import javax.swing.event.ChangeListener;
 
 public class StartMenuView extends VBox {
 
@@ -50,17 +37,18 @@ public class StartMenuView extends VBox {
     private final int STARTDIMENSION = 600;
     ViewManager viewManager;
     VBox offlineVBox, onlineVBox, scoreVBoxComputerPut, scoreVBoxComputerMove, scoreVBoxEnemyPut, scoreVBoxEnemyMove;
-    HBox hBoxRadioButtons, player1HBox, player2HBox, computerHBox, beginnerHBox, startGameHBox, computerBattleHBox, computerSettingBox, putPhaseHBox, movePhaseHBox, onlineButtonHBox, offlineButtonHBox;
+    HBox hBoxRadioButtons, player1HBox, player2HBox, computerHBox, beginnerHBox, startGameHBox, computerBattleHBox, computerSettingBox, putPhaseHBox, movePhaseHBox, onlineButtonHBox, offlineButtonHBox, onlineSettingsHBox;
     ToggleGroup radioButtonGroup;
     RadioButton onePlayerRadioButton, twoPlayersRadioButton;
     TextField namePlayer1Textfield, namePlayer2Textfield, computerBattleTextfield, gameCodeTextfield;
-    Label offlineInformationLabel, offlineTitleLabel, onlineInformationLabel, onlineTitleLabel, stonesColorLabel1, stonesColorLabel2, beginnerLabel1, beginnerLabel2, levelLabel, stoneColorComputerLabel, startGameLabel, joinGameLabel;
-    Button startButton, computerOnlineButton, scorePointsButton;
+    Label offlineInformationLabel, offlineTitleLabel, onlineInformationLabel, onlineTitleLabel, stonesColorLabel1, stonesColorLabel2, beginnerLabel1, beginnerLabel2, offlineLevelLabel, onlineLevelLabel, stoneColorComputerLabel, startGameLabel, joinGameLabel, ownComputerLabel, defaultComputerLabel;
+    Button startButton, computerOnlineButton, offlineScorePointsButton, onlineScorePointsButton;
     SelectColorButton stonesBlackButton1, stonesWhiteButton1, stonesBlackButton2, stonesWhiteButton2, computerBlackButton, computerWhiteButton;
-    BeginnerSwitchButton beginnerSwitchButton, startOnlineGameSwitchButton;
+    BeginnerSwitchButton beginnerSwitchButton, startOnlineGameSwitchButton, ownComputerPlayerSwitchButton;
     ImageView player1StonesImageView, player2StonesImageView;
     STONECOLOR player1Color, player2Color;
-    ChoiceBox computerLevelChoiceBox;
+    ChoiceBox offlineComputerLevelChoiceBox, onlineComputerLevelChoiceBox;
+    PopOver popOver;
 
     ScorePoints putPoints = new ScorePoints(2000, 1000,30, 200, 300,3, -2000, -1000, -30, -200, -300, -3);
     ScorePoints movePoints = new ScorePoints(2000, 300,250, 200, 300,3, -2000, -300, -250, -200, -300, -3);
@@ -71,16 +59,7 @@ public class StartMenuView extends VBox {
 
     public StartMenuView(ViewManager viewManager) {
 
-        Pattern pattern = Pattern.compile("[a-zA-Z0-9]*");
-        TextFormatter<?> formatter = new TextFormatter<Object>(change -> {
-            if (pattern.matcher(change.getControlNewText()).matches()) {
-                change.setText(change.getText().toUpperCase());
-                return change;
-            } else {
-                //Verbotene Zeichen
-                return null;
-            }
-        });
+
 
         this.viewManager = viewManager;
         this.setPrefWidth(STARTDIMENSION);
@@ -90,20 +69,11 @@ public class StartMenuView extends VBox {
         startButton.setPrefWidth(185);
         computerOnlineButton = new Button("Computerbattle starten");
         computerOnlineButton.setPrefWidth(185);
-        gameCodeTextfield = new TextField();
-        gameCodeTextfield.setPromptText("Gamecode");
-        gameCodeTextfield.setTextFormatter(formatter);
-        gameCodeTextfield.textProperty().addListener(change -> {
-                if (gameCodeTextfield.getText().length() > 10) {
-                    String s = gameCodeTextfield.getText().substring(0, 10);
-                    gameCodeTextfield.setText(s);
-                }
-            }
-        );
-        gameCodeTextfield.setMaxWidth(120);
+
 
 
         setupOfflineTitleAndWarning();
+        setupOnlineSettings();
         setupRadioButtons();
         setupBeginnerSwitch();
         setupPlayerInformations();
@@ -126,7 +96,7 @@ public class StartMenuView extends VBox {
         offlineVBox.getChildren().addAll(offlineTitleLabel, hBoxRadioButtons, player1HBox, computerHBox, offlineButtonHBox);
         offlineVBox.setSpacing(20);
         offlineVBox.setStyle("-fx-padding: 30 0 0 0");
-        onlineVBox.getChildren().addAll(onlineTitleLabel, gameCodeTextfield, startGameHBox, computerBattleHBox, onlineButtonHBox);
+        onlineVBox.getChildren().addAll(onlineTitleLabel, onlineSettingsHBox, startGameHBox, computerBattleHBox, onlineButtonHBox);
         onlineVBox.setSpacing(20);
         this.getChildren().addAll(onlineVBox, offlineVBox);
         this.setAlignment(Pos.CENTER);
@@ -137,6 +107,8 @@ public class StartMenuView extends VBox {
         setupStartButtonAction();
         setupComputerOnlineButtonAction();
         setupComputerBattleColorButtonAction();
+        setupOnlineScorePointsButton();
+        setupOwnComputerSwitchButton();
     }
 
     private void setupOfflineTitleAndWarning(){
@@ -151,6 +123,50 @@ public class StartMenuView extends VBox {
         onlineTitleLabel.getStyleClass().add("labelTitle");
         onlineInformationLabel = new Label();
         onlineInformationLabel.getStyleClass().add("labelWarning");
+    }
+
+    private void setupOnlineSettings(){
+
+        Pattern pattern = Pattern.compile("[a-zA-Z0-9]*");
+        TextFormatter<?> formatter = new TextFormatter<Object>(change -> {
+            if (pattern.matcher(change.getControlNewText()).matches()) {
+                change.setText(change.getText().toUpperCase());
+                return change;
+            } else {
+                //Verbotene Zeichen
+                return null;
+            }
+        });
+
+        onlineSettingsHBox = new HBox();
+        gameCodeTextfield = new TextField();
+        gameCodeTextfield.setPromptText("Gamecode");
+        gameCodeTextfield.setTextFormatter(formatter);
+        gameCodeTextfield.textProperty().addListener(change -> {
+                    if (gameCodeTextfield.getText().length() > 10) {
+                        String s = gameCodeTextfield.getText().substring(0, 10);
+                        gameCodeTextfield.setText(s);
+                    }
+                }
+        );
+        gameCodeTextfield.setMaxWidth(120);
+
+        ownComputerPlayerSwitchButton = new BeginnerSwitchButton(viewManager);
+        ownComputerLabel = new Label("Eigener Player");
+        defaultComputerLabel = new Label("Standard");
+        onlineLevelLabel = new Label("   Level: ");
+        onlineLevelLabel.setVisible(false);
+        onlineComputerLevelChoiceBox = new ChoiceBox(FXCollections.observableArrayList("1","2","3","4","5"));
+        onlineComputerLevelChoiceBox.setVisible(false);
+        onlineComputerLevelChoiceBox.getSelectionModel().select(2);
+        onlineScorePointsButton = new Button("Score");
+        onlineScorePointsButton.setVisible(false);
+
+
+
+        onlineSettingsHBox.getChildren().addAll(gameCodeTextfield, ownComputerLabel, ownComputerPlayerSwitchButton, defaultComputerLabel, onlineLevelLabel, onlineComputerLevelChoiceBox, onlineScorePointsButton);
+        onlineSettingsHBox.setAlignment(Pos.CENTER_LEFT);
+        onlineSettingsHBox.setSpacing(10);
     }
 
     private void setupRadioButtons(){
@@ -179,14 +195,14 @@ public class StartMenuView extends VBox {
 
     private void setupComputerSettingBox(){
         computerSettingBox = new HBox();
-        scorePointsButton = new Button("Score");
-        computerLevelChoiceBox = new ChoiceBox(FXCollections.observableArrayList("1","2","3","4","5"));
-        computerLevelChoiceBox.getSelectionModel().select(2);
-        levelLabel = new Label("Level: ");
-        computerSettingBox.getChildren().addAll(levelLabel, computerLevelChoiceBox, scorePointsButton);
+        offlineScorePointsButton = new Button("Score");
+        offlineComputerLevelChoiceBox = new ChoiceBox(FXCollections.observableArrayList("1","2","3","4","5"));
+        offlineComputerLevelChoiceBox.getSelectionModel().select(2);
+        offlineLevelLabel = new Label("Level: ");
+        computerSettingBox.getChildren().addAll(offlineLevelLabel, offlineComputerLevelChoiceBox, offlineScorePointsButton);
         computerSettingBox.getStyleClass().add("computerSettingBox");
 
-        PopOver popOver = new PopOver();
+        popOver = new PopOver();
         Group root = new Group();
         HBox mainHBox = new HBox();
         putPhaseHBox = new HBox();
@@ -321,7 +337,7 @@ public class StartMenuView extends VBox {
         root.getChildren().addAll(mainHBox);
         popOver.setContentNode(root);
 
-        scorePointsButton.setOnAction(click -> {
+        offlineScorePointsButton.setOnAction(click -> {
 
             popOver.setAutoHide(true);
             popOver.setDetachedTitle("Punkte für Ereignisse setzen:");
@@ -338,11 +354,12 @@ public class StartMenuView extends VBox {
         startGameHBox = new HBox();
         startOnlineGameSwitchButton = new BeginnerSwitchButton(viewManager);
         startGameLabel = new Label("Spiel eröffnen");
-        joinGameLabel = new Label("Einem Spiel beitreten");
+        joinGameLabel = new Label("beitreten");
         startGameHBox.getChildren().addAll(startGameLabel, startOnlineGameSwitchButton, joinGameLabel);
         startGameHBox.setAlignment(Pos.CENTER_LEFT);
         startGameHBox.setSpacing(10);
         startGameHBox.setPrefHeight(70);
+
     }
 
     private void setupComputerBattleInformation(){
@@ -535,6 +552,33 @@ public class StartMenuView extends VBox {
         });
     }
 
+    private void setupOwnComputerSwitchButton(){
+        ownComputerPlayerSwitchButton.setOnMousePressed(click -> {
+            if (!ownComputerPlayerSwitchButton.getState()){
+                onlineScorePointsButton.setVisible(true);
+                onlineLevelLabel.setVisible(true);
+                onlineComputerLevelChoiceBox.setVisible(true);
+            }
+            else {
+                onlineScorePointsButton.setVisible(false);
+                onlineLevelLabel.setVisible(false);
+                onlineComputerLevelChoiceBox.setVisible(false);
+            }
+        });
+    }
+
+    private void setupOnlineScorePointsButton(){
+        onlineScorePointsButton.setOnAction(click -> {
+            popOver.setAutoHide(true);
+            popOver.setDetachedTitle("Punkte für Ereignisse setzen:");
+            popOver.setAutoFix(true);
+            popOver.setHideOnEscape(true);
+            popOver.setDetached(true);
+            popOver.setArrowSize(0);
+            popOver.show(viewManager.getMainStage());
+        });
+    }
+
     private void setupComputerBattleColorButtonAction(){
         computerBlackButton.setOnAction(click -> {
             computerBlackButton.setSelected(true);
@@ -595,7 +639,7 @@ public class StartMenuView extends VBox {
 
                     viewManager.setGame(new Game(viewManager,
                             new HumanPlayer(viewManager, namePlayer1Textfield.getText().toUpperCase(), true),
-                            beginnerSwitchButton.getState(), putPoints, movePoints, Integer.parseInt(computerLevelChoiceBox.getValue().toString())));
+                            beginnerSwitchButton.getState(), putPoints, movePoints, Integer.parseInt(offlineComputerLevelChoiceBox.getValue().toString())));
                 }
 
 
@@ -670,7 +714,7 @@ public class StartMenuView extends VBox {
                     .build();
 
             HttpResponse<?> response = null;
-            ComputerPlayer computerPlayer = null;
+            Player computerPlayer = null;
             String onlinePlayerName = "---";
 
             try {
@@ -698,7 +742,16 @@ public class StartMenuView extends VBox {
                     uuid = jsonResponseObject.getString("player1Uuid");
                 }
 
-                computerPlayer = new ComputerPlayer(viewManager, computerBattleTextfield.getText().toUpperCase(), uuid, putPoints, movePoints, Integer.parseInt(computerLevelChoiceBox.getValue().toString()));
+
+                editScorePoints();
+                //StandardComputerPlayer
+                if (ownComputerPlayerSwitchButton.getState()){
+                    computerPlayer = new ComputerPlayer(viewManager, computerBattleTextfield.getText().toUpperCase(), uuid, putPoints, movePoints, Integer.parseInt(onlineComputerLevelChoiceBox.getValue().toString()));
+                }
+                //OwnComputerPlayer
+                else {
+                    computerPlayer = new OwnComputerPlayer(viewManager, computerBattleTextfield.getText().toUpperCase(), uuid, putPoints, movePoints, Integer.parseInt(onlineComputerLevelChoiceBox.getValue().toString()));
+                }
 
             } catch (IOException e) {
                 e.printStackTrace();
