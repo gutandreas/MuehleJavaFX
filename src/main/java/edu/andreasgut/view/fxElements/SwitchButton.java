@@ -12,7 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
-public class BeginnerSwitchButton extends StackPane {
+public class SwitchButton extends StackPane {
     private final Rectangle back = new Rectangle(40, 5, Color.RED);
     private final Button button = new Button();
     private String style = "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 0.2, 0.0, 0.0, 2); -fx-background-color: #90ccee;";
@@ -36,7 +36,7 @@ public class BeginnerSwitchButton extends StackPane {
         button.setStyle(style);
     }
 
-    public BeginnerSwitchButton(ViewManager viewManager) {
+    public SwitchButton(ViewManager viewManager) {
         init();
         EventHandler<Event> click = new EventHandler<Event>() {
             @Override

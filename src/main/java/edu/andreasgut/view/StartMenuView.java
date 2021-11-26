@@ -3,7 +3,7 @@ package edu.andreasgut.view;
 import edu.andreasgut.game.*;
 import edu.andreasgut.online.WebsocketClient;
 import edu.andreasgut.sound.MUSIC;
-import edu.andreasgut.view.fxElements.BeginnerSwitchButton;
+import edu.andreasgut.view.fxElements.SwitchButton;
 import edu.andreasgut.view.fxElements.SelectColorButton;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
@@ -44,7 +44,7 @@ public class StartMenuView extends VBox {
     Label offlineInformationLabel, offlineTitleLabel, onlineInformationLabel, onlineTitleLabel, stonesColorLabel1, stonesColorLabel2, beginnerLabel1, beginnerLabel2, offlineLevelLabel, onlineLevelLabel, stoneColorComputerLabel, startGameLabel, joinGameLabel, ownComputerLabel, defaultComputerLabel;
     Button startButton, computerOnlineButton, offlineScorePointsButton, onlineScorePointsButton;
     SelectColorButton stonesBlackButton1, stonesWhiteButton1, stonesBlackButton2, stonesWhiteButton2, computerBlackButton, computerWhiteButton;
-    BeginnerSwitchButton beginnerSwitchButton, startOnlineGameSwitchButton, ownComputerPlayerSwitchButton;
+    SwitchButton beginnerSwitchButton, startOnlineGameSwitchButton, ownComputerPlayerSwitchButton;
     ImageView player1StonesImageView, player2StonesImageView;
     STONECOLOR player1Color, player2Color;
     ChoiceBox offlineComputerLevelChoiceBox, onlineComputerLevelChoiceBox;
@@ -108,7 +108,6 @@ public class StartMenuView extends VBox {
         setupComputerOnlineButtonAction();
         setupComputerBattleColorButtonAction();
         setupOnlineScorePointsButton();
-        setupOwnComputerSwitchButton();
     }
 
     private void setupOfflineTitleAndWarning(){
@@ -151,16 +150,13 @@ public class StartMenuView extends VBox {
         );
         gameCodeTextfield.setMaxWidth(120);
 
-        ownComputerPlayerSwitchButton = new BeginnerSwitchButton(viewManager);
+        ownComputerPlayerSwitchButton = new SwitchButton(viewManager);
         ownComputerLabel = new Label("Eigener Player");
         defaultComputerLabel = new Label("Standard");
         onlineLevelLabel = new Label("   Level: ");
-        onlineLevelLabel.setVisible(false);
         onlineComputerLevelChoiceBox = new ChoiceBox(FXCollections.observableArrayList("1","2","3","4","5"));
-        onlineComputerLevelChoiceBox.setVisible(false);
         onlineComputerLevelChoiceBox.getSelectionModel().select(2);
         onlineScorePointsButton = new Button("Score");
-        onlineScorePointsButton.setVisible(false);
 
 
 
@@ -183,7 +179,7 @@ public class StartMenuView extends VBox {
 
     private void setupBeginnerSwitch(){
         beginnerHBox = new HBox();
-        beginnerSwitchButton = new BeginnerSwitchButton(viewManager);
+        beginnerSwitchButton = new SwitchButton(viewManager);
         beginnerLabel1 = new Label("Beginner: Spieler 1");
         beginnerLabel2 = new Label("Computer");
         beginnerHBox.getChildren().addAll(beginnerLabel1, beginnerSwitchButton, beginnerLabel2);
@@ -352,7 +348,7 @@ public class StartMenuView extends VBox {
 
     private void setupStartGameSwitchButton(){
         startGameHBox = new HBox();
-        startOnlineGameSwitchButton = new BeginnerSwitchButton(viewManager);
+        startOnlineGameSwitchButton = new SwitchButton(viewManager);
         startGameLabel = new Label("Spiel eröffnen");
         joinGameLabel = new Label("beitreten");
         startGameHBox.getChildren().addAll(startGameLabel, startOnlineGameSwitchButton, joinGameLabel);
@@ -552,20 +548,7 @@ public class StartMenuView extends VBox {
         });
     }
 
-    private void setupOwnComputerSwitchButton(){
-        ownComputerPlayerSwitchButton.setOnMousePressed(click -> {
-            if (!ownComputerPlayerSwitchButton.getState()){
-                onlineScorePointsButton.setVisible(true);
-                onlineLevelLabel.setVisible(true);
-                onlineComputerLevelChoiceBox.setVisible(true);
-            }
-            else {
-                onlineScorePointsButton.setVisible(false);
-                onlineLevelLabel.setVisible(false);
-                onlineComputerLevelChoiceBox.setVisible(false);
-            }
-        });
-    }
+
 
     private void setupOnlineScorePointsButton(){
         onlineScorePointsButton.setOnAction(click -> {
@@ -714,7 +697,7 @@ public class StartMenuView extends VBox {
                     .build();
 
             HttpResponse<?> response = null;
-            Player computerPlayer = null;
+            ComputerPlayer computerPlayer = null;
             String onlinePlayerName = "---";
 
             try {
@@ -746,7 +729,7 @@ public class StartMenuView extends VBox {
                 editScorePoints();
                 //StandardComputerPlayer
                 if (ownComputerPlayerSwitchButton.getState()){
-                    computerPlayer = new ComputerPlayer(viewManager, computerBattleTextfield.getText().toUpperCase(), uuid, putPoints, movePoints, Integer.parseInt(onlineComputerLevelChoiceBox.getValue().toString()));
+                    computerPlayer = new StandardComputerPlayer(viewManager, computerBattleTextfield.getText().toUpperCase(), uuid, putPoints, movePoints, Integer.parseInt(onlineComputerLevelChoiceBox.getValue().toString()));
                 }
                 //OwnComputerPlayer
                 else {

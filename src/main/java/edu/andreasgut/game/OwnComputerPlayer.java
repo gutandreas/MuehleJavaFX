@@ -1,7 +1,9 @@
 package edu.andreasgut.game;
 
 import edu.andreasgut.online.Messenger;
+import edu.andreasgut.sound.SOUNDEFFECT;
 import edu.andreasgut.view.ViewManager;
+import javafx.scene.control.Alert;
 
 import java.util.LinkedList;
 import java.util.Random;
@@ -13,20 +15,27 @@ public class OwnComputerPlayer extends ComputerPlayer{
         super(viewManager, name, uuid, putPoints, movePoints, levelLimit);
     }
 
+    //TODO: Implementieren Sie die Methode Put
     @Override
     Position put(Board board, int playerIndex){
+
         Position position = null;
 
         return position;
     }
 
+
+    //TODO: Implementieren Sie die Methode Move
     @Override
     Move move(Board board, int playerIndex, boolean allowedToJump) {
+
         Move move = null;
 
         return move;
     }
 
+
+    //TODO: Implementieren Sie die Methode Kill
     @Override
     Position kill(Board board, int ownPlayerIndex, int otherPlayerIndex) {
 
@@ -38,7 +47,7 @@ public class OwnComputerPlayer extends ComputerPlayer{
 
 
 
-    //NICHT VERÄNDERN!!!
+    //!!!NICHT VERÄNDERN!!!
     @Override
     public void prepareKill(ViewManager viewManager) {
         viewManager.getLogView().getNextComputerStepButton().setKill();
