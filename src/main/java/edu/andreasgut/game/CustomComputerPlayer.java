@@ -1,7 +1,6 @@
 package edu.andreasgut.game;
 
 import edu.andreasgut.online.Messenger;
-import edu.andreasgut.sound.SOUNDEFFECT;
 import edu.andreasgut.view.ViewManager;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -128,7 +127,7 @@ public class CustomComputerPlayer extends ComputerPlayer{
     private void showAlert(){
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setContentText("Der Computer wollte einen ungültigen Zug spielen. " +
-                "Um das Spiel trotzdem weiterspielen zu können wurde der Zug durch einen zufälligen Zug ersetzt.");
+                "Um das Spiel trotzdem weiterspielen zu können, wurde der Zug durch einen zufälligen Zug ersetzt.");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             alert.close();
