@@ -22,13 +22,13 @@ public class StandardComputerPlayer extends ComputerPlayer{
 
         recursivePutBfs(gameTree.getRoot(), putPoints, movePoints, playerIndex, playerIndex, levelLimit);
 
-        System.out.println(gameTree);
+        //System.out.println(gameTree);
 
-        Stack<GameTreeNode> winningPath = gameTree.getPathToBestLeaf();
+        /*Stack<GameTreeNode> winningPath = gameTree.getPathToBestLeaf();
         System.out.println("Gewinnerpfad:");
         while (!winningPath.isEmpty()){
             System.out.println(winningPath.pop());
-        }
+        }*/
 
         System.out.println("Gesetzter Stein: " + gameTree.getBestPut());
         return gameTree.getBestPut();
@@ -54,9 +54,9 @@ public class StandardComputerPlayer extends ComputerPlayer{
         }
 
         if (set.getLevel()%2 == 0){
-            gameTree.keepOnlyBestChildren(set, 10);}
+            gameTree.keepOnlyBestChildren(set, 5);}
         else {
-            gameTree.keepOnlyWorstChildren(set, 1);
+            gameTree.keepOnlyWorstChildren(set, 5);
         }
 
         for (GameTreeNode child : set.getChildren()){
@@ -147,9 +147,9 @@ public class StandardComputerPlayer extends ComputerPlayer{
         }
 
         if (set.getLevel()%2 == 0){
-            gameTree.keepOnlyBestChildren(set, 3);}
+            gameTree.keepOnlyBestChildren(set, 6);}
         else {
-            gameTree.keepOnlyWorstChildren(set, 1);
+            gameTree.keepOnlyWorstChildren(set, 6);
         }
 
 
@@ -202,6 +202,7 @@ public class StandardComputerPlayer extends ComputerPlayer{
     }
 
 
+    @Override
     public void prepareKill(ViewManager viewManager) {
         if (automaticTrigger){
             triggerKill(viewManager);
@@ -212,6 +213,7 @@ public class StandardComputerPlayer extends ComputerPlayer{
     }
 
 
+    @Override
     public void preparePutOrMove(ViewManager viewManager) {
 
         Game game = viewManager.getGame();

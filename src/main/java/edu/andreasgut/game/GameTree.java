@@ -60,36 +60,129 @@ public class GameTree {
         }
     }
 
-    public Position getBestPut(){
-        GameTreeNode currentNode = getLeafWithBestScore();
+    private GameTreeNode getBestChild(GameTreeNode node){
+        int max = Integer.MIN_VALUE;
+        GameTreeNode bestChild = null;
 
-        while (currentNode.getParent() != root){
-            currentNode = currentNode.getParent();
+        for (GameTreeNode child : node.getChildren()){
+            if (child.getScore() > max){
+                max = child.getScore();
+                bestChild = child;
+            }
+        }
+        return bestChild;
+    }
+
+    private GameTreeNode getWorstChild(GameTreeNode node){
+        int min = Integer.MAX_VALUE;
+        GameTreeNode worstChild = null;
+
+        for (GameTreeNode child : node.getChildren()){
+            if (child.getScore() < min){
+                min = child.getScore();
+                worstChild = child;
+            }
+        }
+        return worstChild;
+    }
+
+    public void evaluateGameTree(){
+
+        for (GameTreeNode node : getLeaves()){
+            evaluateGameTreeRecursive(node);
+
         }
 
-
-        return currentNode.getPut();
 
     }
 
-    public Move getBestMove(){
-        GameTreeNode currentNode = getLeafWithBestScore();
+    public void evaluateGameTreeRecursive(GameTreeNode node){
+
+        if (node.getParent() == null){
+            return;
+        }
+
+        for (GameTreeNode child : node.getParent().getChildren()){
+            GameTreeNode parent = child.getParent();
+            if (child.getLevel()%2==1){
+                parent.setScore(getBestChild(parent).getScore());
+            }
+            else {
+                parent.setScore(getWorstChild(parent).getScore());
+            }
+            evaluateGameTreeRecursive(parent);
+        }
+
+
+
+
+    }
+
+    public Position getBestPut(){
+
+        evaluateGameTree();
+
+        for (GameTreeNode node : root.getChildren()){
+            if (node.getScore() == root.getScore()){
+                return node.getPut();
+            }
+        }
+
+        return null;
+
+        /*GameTreeNode currentNode = getLeafWithBestScore();
 
         while (currentNode.getParent() != root){
             currentNode = currentNode.getParent();
         }
 
-        return currentNode.getMove();
+
+        return currentNode.getPut();*/
+
+    }
+
+
+
+    public Move getBestMove(){
+
+        evaluateGameTree();
+
+        for (GameTreeNode node : root.getChildren()){
+            if (node.getScore() == root.getScore()){
+                return node.getMove();
+            }
+        }
+
+        return null;
+
+        /*GameTreeNode currentNode = getLeafWithBestScore();
+
+        while (currentNode.getParent() != root){
+            currentNode = currentNode.getParent();
+        }
+
+        return currentNode.getMove();*/
     }
 
     public Position getBestKill(){
-        GameTreeNode currentNode = getLeafWithBestScore();
+
+        evaluateGameTree();
+
+        for (GameTreeNode node : root.getChildren()){
+            if (node.getScore() == root.getScore()){
+                return node.getKill();
+            }
+        }
+
+        return null;
+
+       /* GameTreeNode currentNode = getLeafWithBestScore();
 
         while (currentNode.getParent() != root){
             currentNode = currentNode.getParent();
         }
 
-        return currentNode.getKill();
+        return currentNode.getKill();*/
     }
 
     public void keepOnlyWorstChildren(GameTreeNode parent, int numberOfChildren){

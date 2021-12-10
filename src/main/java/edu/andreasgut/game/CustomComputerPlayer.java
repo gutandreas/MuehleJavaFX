@@ -16,7 +16,7 @@ public class CustomComputerPlayer extends ComputerPlayer{
         super(viewManager, name, uuid, putPoints, movePoints, levelLimit);
     }
 
-    //TODO: Implementieren Sie die Methode Put
+    //TODO: Implementieren Sie die Methode put
     @Override
     Position put(Board board, int playerIndex){
 
@@ -26,7 +26,7 @@ public class CustomComputerPlayer extends ComputerPlayer{
     }
 
 
-    //TODO: Implementieren Sie die Methode Move
+    //TODO: Implementieren Sie die Methode move
     @Override
     Move move(Board board, int playerIndex, boolean allowedToJump) {
 
@@ -36,7 +36,7 @@ public class CustomComputerPlayer extends ComputerPlayer{
     }
 
 
-    //TODO: Implementieren Sie die Methode Kill
+    //TODO: Implementieren Sie die Methode kill
     @Override
     Position kill(Board board, int ownPlayerIndex, int otherPlayerIndex) {
 

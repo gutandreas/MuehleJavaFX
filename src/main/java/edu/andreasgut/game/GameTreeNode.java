@@ -14,6 +14,7 @@ public class GameTreeNode {
     private GameTreeNode parent;
     private LinkedList<GameTreeNode> children = new LinkedList<>();
     private String scoreDetails;
+    private boolean visited = false;
 
     public Board getBoard() {
         return board;
@@ -69,6 +70,14 @@ public class GameTreeNode {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public void setVisited(boolean visited) {
+        this.visited = visited;
     }
 
     public LinkedList<GameTreeNode> getChildren() {
