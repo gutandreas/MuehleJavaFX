@@ -11,6 +11,7 @@ public class GameTreeNode {
     private Move move;
     private Position kill;
     private int score;
+    private int inheritedScore;
     private GameTreeNode parent;
     private LinkedList<GameTreeNode> children = new LinkedList<>();
     private String scoreDetails;
@@ -54,6 +55,14 @@ public class GameTreeNode {
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public int getInheritedScore() {
+        return inheritedScore;
+    }
+
+    public void setInheritedScore(int inheritedScore) {
+        this.inheritedScore = inheritedScore;
     }
 
     public GameTreeNode getParent() {

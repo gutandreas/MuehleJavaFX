@@ -97,11 +97,11 @@ public class StandardComputerPlayer extends ComputerPlayer{
 
                 gameTreeNode2.setBoard(clonedBoard2);
                 gameTreeNode2.setScore(Advisor.getScore(gameTreeNode2, scorePoints, scorePlayerIndex, false));
-                gameTree.addSet(parent, gameTreeNode2);
+                gameTree.addNode(parent, gameTreeNode2);
             }
         }
         else {
-            gameTree.addSet(parent, gameTreeNode1);
+            gameTree.addNode(parent, gameTreeNode1);
         }
 
     }
@@ -109,18 +109,12 @@ public class StandardComputerPlayer extends ComputerPlayer{
     @Override
     Move move(Board board, int playerIndex, boolean allowedToJump) {
 
-
         gameTree.initializeRoot(board);
 
         recursiveMoveBfs(gameTree.getRoot(), movePoints, playerIndex, playerIndex, levelLimit);
 
-        System.out.println(gameTree);
+        //System.out.println(gameTree);
 
-        Stack<GameTreeNode> winningPath = gameTree.getPathToBestLeaf();
-        System.out.println("Gewinnerpfad:");
-        while (!winningPath.isEmpty()){
-            System.out.println(winningPath.pop());
-        }
 
         System.out.println("Getätigter Zug: " + gameTree.getBestMove());
         return gameTree.getBestMove();
@@ -185,11 +179,11 @@ public class StandardComputerPlayer extends ComputerPlayer{
 
                 gameTreeNode2.setBoard(clonedBoard2);
                 gameTreeNode2.setScore(Advisor.getScore(gameTreeNode2, scorePoints, scorePlayerIndex, false));
-                gameTree.addSet(parent, gameTreeNode2);
+                gameTree.addNode(parent, gameTreeNode2);
             }
         }
         else {
-            gameTree.addSet(parent, gameTreeNode1);
+            gameTree.addNode(parent, gameTreeNode1);
         }
     }
 

@@ -50,11 +50,11 @@ public class GameTree {
 
     }
 
-    private void getLeavesRecursive(GameTreeNode currentSet, LinkedList<GameTreeNode> leaves){
-        if (currentSet.getChildren().isEmpty() && !leaves.contains(currentSet)) {
-            leaves.add(currentSet);
+    private void getLeavesRecursive(GameTreeNode currentNode, LinkedList<GameTreeNode> leaves){
+        if (currentNode.getChildren().isEmpty() && !leaves.contains(currentNode)) {
+            leaves.add(currentNode);
         } else {
-            for (GameTreeNode child : currentSet.getChildren()) {
+            for (GameTreeNode child : currentNode.getChildren()) {
                 getLeavesRecursive(child, leaves);
             }
         }
@@ -65,8 +65,8 @@ public class GameTree {
         GameTreeNode bestChild = null;
 
         for (GameTreeNode child : node.getChildren()){
-            if (child.getScore() > max){
-                max = child.getScore();
+            if (child.getInheritedScore() > max){
+                max = child.getInheritedScore();
                 bestChild = child;
             }
         }
@@ -78,8 +78,8 @@ public class GameTree {
         GameTreeNode worstChild = null;
 
         for (GameTreeNode child : node.getChildren()){
-            if (child.getScore() < min){
-                min = child.getScore();
+            if (child.getInheritedScore() < min){
+                min = child.getInheritedScore();
                 worstChild = child;
             }
         }
@@ -89,11 +89,9 @@ public class GameTree {
     public void evaluateGameTree(){
 
         for (GameTreeNode node : getLeaves()){
+            node.setInheritedScore(node.getScore());
             evaluateGameTreeRecursive(node);
-
         }
-
-
     }
 
     public void evaluateGameTreeRecursive(GameTreeNode node){
@@ -105,16 +103,13 @@ public class GameTree {
         for (GameTreeNode child : node.getParent().getChildren()){
             GameTreeNode parent = child.getParent();
             if (child.getLevel()%2==1){
-                parent.setScore(getBestChild(parent).getScore());
+                parent.setInheritedScore(getBestChild(parent).getInheritedScore());
             }
             else {
-                parent.setScore(getWorstChild(parent).getScore());
+                parent.setInheritedScore(getWorstChild(parent).getInheritedScore());
             }
             evaluateGameTreeRecursive(parent);
         }
-
-
-
 
     }
 
@@ -122,23 +117,16 @@ public class GameTree {
 
         evaluateGameTree();
 
+        LinkedList<GameTreeNode> bestList = new LinkedList<>();
+
         for (GameTreeNode node : root.getChildren()){
-            if (node.getScore() == root.getScore()){
-                return node.getPut();
+            if (node.getInheritedScore() == root.getInheritedScore()){
+                bestList.add(node);
             }
         }
 
-        return null;
-
-        /*GameTreeNode currentNode = getLeafWithBestScore();
-
-        while (currentNode.getParent() != root){
-            currentNode = currentNode.getParent();
-        }
-
-
-        return currentNode.getPut();*/
-
+        Random random = new Random();
+        return bestList.get(random.nextInt(bestList.size())).getPut();
     }
 
 
@@ -147,42 +135,32 @@ public class GameTree {
 
         evaluateGameTree();
 
+        LinkedList<GameTreeNode> bestList = new LinkedList<>();
+
         for (GameTreeNode node : root.getChildren()){
-            if (node.getScore() == root.getScore()){
-                return node.getMove();
+            if (node.getInheritedScore() == root.getInheritedScore()){
+                bestList.add(node);
             }
         }
 
-        return null;
-
-        /*GameTreeNode currentNode = getLeafWithBestScore();
-
-        while (currentNode.getParent() != root){
-            currentNode = currentNode.getParent();
-        }
-
-        return currentNode.getMove();*/
+        Random random = new Random();
+        return bestList.get(random.nextInt(bestList.size())).getMove();
     }
 
     public Position getBestKill(){
 
         evaluateGameTree();
 
+        LinkedList<GameTreeNode> bestList = new LinkedList<>();
+
         for (GameTreeNode node : root.getChildren()){
-            if (node.getScore() == root.getScore()){
-                return node.getKill();
+            if (node.getInheritedScore() == root.getInheritedScore()){
+                bestList.add(node);
             }
         }
 
-        return null;
-
-       /* GameTreeNode currentNode = getLeafWithBestScore();
-
-        while (currentNode.getParent() != root){
-            currentNode = currentNode.getParent();
-        }
-
-        return currentNode.getKill();*/
+        Random random = new Random();
+        return bestList.get(random.nextInt(bestList.size())).getKill();
     }
 
     public void keepOnlyWorstChildren(GameTreeNode parent, int numberOfChildren){
@@ -245,7 +223,7 @@ public class GameTree {
 
 
 
-    public void addSet(GameTreeNode parent, GameTreeNode child){
+    public void addNode(GameTreeNode parent, GameTreeNode child){
         parent.getChildren().add(child);
         child.setParent(parent);
     }
@@ -254,17 +232,6 @@ public class GameTree {
         return root;
     }
 
-
-    public Stack<GameTreeNode> getPathToBestLeaf(){
-        Stack<GameTreeNode> path = new Stack<>();
-        GameTreeNode set = getLeafWithBestScore();
-
-        while (set!=root){
-            path.push(set);
-            set = set.getParent();}
-
-        return path;
-    }
 
     @Override
     public String toString(){

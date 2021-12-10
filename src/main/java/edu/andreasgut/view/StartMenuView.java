@@ -50,7 +50,7 @@ public class StartMenuView extends VBox {
     ChoiceBox offlineComputerLevelChoiceBox, onlineComputerLevelChoiceBox;
     PopOver popOver;
 
-    ScorePoints putPoints = new ScorePoints(2000, 1000,30, 200, 300,3, -2000, -1000, -30, -200, -300, -3);
+    ScorePoints putPoints = new ScorePoints(5000, 1000,30, 200, 300,3, -5000, -1000, -30, -200, -300, -3);
     ScorePoints movePoints = new ScorePoints(2000, 300,250, 200, 300,3, -2000, -300, -250, -200, -300, -3);
 
 
@@ -154,7 +154,7 @@ public class StartMenuView extends VBox {
         ownComputerLabel = new Label("Eigener Player");
         defaultComputerLabel = new Label("Standard");
         onlineLevelLabel = new Label("   Level: ");
-        onlineComputerLevelChoiceBox = new ChoiceBox(FXCollections.observableArrayList("1","2","3","4","5"));
+        onlineComputerLevelChoiceBox = new ChoiceBox(FXCollections.observableArrayList("1","2","3","4"));
         onlineComputerLevelChoiceBox.getSelectionModel().select(2);
         onlineScorePointsButton = new Button("Score");
 
@@ -192,7 +192,7 @@ public class StartMenuView extends VBox {
     private void setupComputerSettingBox(){
         computerSettingBox = new HBox();
         offlineScorePointsButton = new Button("Score");
-        offlineComputerLevelChoiceBox = new ChoiceBox(FXCollections.observableArrayList("1","2","3","4","5"));
+        offlineComputerLevelChoiceBox = new ChoiceBox(FXCollections.observableArrayList("1","2","3","4"));
         offlineComputerLevelChoiceBox.getSelectionModel().select(2);
         offlineLevelLabel = new Label("Level: ");
         computerSettingBox.getChildren().addAll(offlineLevelLabel, offlineComputerLevelChoiceBox, offlineScorePointsButton);
