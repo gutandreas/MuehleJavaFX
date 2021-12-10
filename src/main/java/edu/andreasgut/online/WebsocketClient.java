@@ -31,6 +31,7 @@ public class WebsocketClient extends WebSocketClient {
             jsonObject.put("gameCode", viewManager.getGame().getGameCode());
             jsonObject.put("command", "join");
             jsonObject.put("player2Name", viewManager.getGame().getPlayer1().getName());
+            jsonObject.put("playerUuid", viewManager.getGame().getPlayer1().getUuid());
         }
         else {
             System.out.println("start");

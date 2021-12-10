@@ -4,8 +4,10 @@ import edu.andreasgut.online.Messenger;
 import edu.andreasgut.sound.SOUNDEFFECT;
 import edu.andreasgut.view.ViewManager;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 import java.util.LinkedList;
+import java.util.Optional;
 import java.util.Random;
 
 public class CustomComputerPlayer extends ComputerPlayer{
@@ -73,6 +75,7 @@ public class CustomComputerPlayer extends ComputerPlayer{
             Messenger.sendKillMessage(viewManager, position);}
         else {
             System.out.println("Ungültiger Kill wird durch zufälligen Kill ersetzt");
+            showAlert();
             LinkedList<Position> allPossibleKills = Advisor.getAllPossibleKills(game.getBoard(), game.getCurrentPlayerIndex());
             Random random = new Random();
             Position randomPosition = allPossibleKills.get(random.nextInt(allPossibleKills.size()));
@@ -93,6 +96,7 @@ public class CustomComputerPlayer extends ComputerPlayer{
         }
         else {
             System.out.println("Ungültiger Put wird durch zufälligen Put ersetzt");
+            showAlert();
             LinkedList<Position> allPossiblePuts = Advisor.getAllFreeFields(game.getBoard());
             Random random = new Random();
             Position randomPosition = allPossiblePuts.get(random.nextInt(allPossiblePuts.size()));
@@ -113,10 +117,21 @@ public class CustomComputerPlayer extends ComputerPlayer{
         }
         else {
             System.out.println("Ungültiger Move wurde durch zufälligen Move ersetzt");
+            showAlert();
             LinkedList<Move> allPossibleMoves = Advisor.getAllPossibleMoves(game.getBoard(), game.getCurrentPlayerIndex());
             Random random = new Random();
             Move randomMove = allPossibleMoves.get(random.nextInt(allPossibleMoves.size()));
             Messenger.sendMoveMessage(viewManager, randomMove);
+        }
+    }
+
+    private void showAlert(){
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setContentText("Der Computer wollte einen ungültigen Zug spielen. " +
+                "Um das Spiel trotzdem weiterspielen zu können wurde der Zug durch einen zufälligen Zug ersetzt.");
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            alert.close();
         }
     }
 }
