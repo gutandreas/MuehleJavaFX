@@ -30,7 +30,7 @@ public class StandardComputerPlayer extends ComputerPlayer{
             System.out.println(winningPath.pop());
         }*/
 
-        System.out.println("Gesetzter Stein: " + gameTree.getBestPut());
+        //System.out.println("Gesetzter Stein: " + gameTree.getBestPut());
         return gameTree.getBestPut();
     }
 
