@@ -232,7 +232,7 @@ public class StartMenuView extends VBox {
 
         for (int i = 0; i < 6; i++){
 
-            Pattern positivePattern = Pattern.compile("[0-9]*");
+            Pattern positivePattern = Pattern.compile("-?[0-9]*");
             Pattern negativePattern = Pattern.compile("-?[0-9]*");
             TextFormatter<?> formatterComputerPut = new TextFormatter<Object>(change -> {
                 if (positivePattern.matcher(change.getControlNewText()).matches()) {
@@ -273,8 +273,8 @@ public class StartMenuView extends VBox {
             textFieldComputerPut.setPromptText(String.valueOf(putPoints.getValueByIndex(i)));
             textFieldComputerPut.setTextFormatter(formatterComputerPut);
             textFieldComputerPut.textProperty().addListener(change -> {
-                        if (textFieldComputerPut.getText().length() > 5) {
-                            String s = textFieldComputerPut.getText().substring(0, 5);
+                        if (textFieldComputerPut.getText().length() > 6) {
+                            String s = textFieldComputerPut.getText().substring(0, 6);
                             textFieldComputerPut.setText(s);
                         }
                     }
@@ -302,8 +302,8 @@ public class StartMenuView extends VBox {
             textFieldComputerMove.setTextFormatter(formatterComputerMove);
             textFieldComputerMove.setPromptText(String.valueOf(movePoints.getValueByIndex(i)));
             textFieldComputerMove.textProperty().addListener(change -> {
-                        if (textFieldComputerMove.getText().length() > 5) {
-                            String s = textFieldComputerMove.getText().substring(0, 5);
+                        if (textFieldComputerMove.getText().length() > 6) {
+                            String s = textFieldComputerMove.getText().substring(0, 6);
                             textFieldComputerMove.setText(s);
                         }
                     }
@@ -800,7 +800,7 @@ public class StartMenuView extends VBox {
         //computerPutpoints
         for (Node node : scoreVBoxComputerPut.getChildren()){
             if (node instanceof TextField){
-                if (((TextField) node).getText().length()>0){
+                if (((TextField) node).getText().length()>0 && ((TextField) node).getText().charAt(((TextField) node).getText().length()-1) != '-'){
                     putPoints.setValueByIndex(counterPut, Integer.parseInt(((TextField) node).getText()));
                 }
                 counterPut++;
@@ -814,23 +814,25 @@ public class StartMenuView extends VBox {
                 if (((TextField) node).getText().length()>0 && ((TextField) node).getText().charAt(((TextField) node).getText().length()-1) != '-'){
                     putPoints.setValueByIndex(counterPut, Integer.parseInt(((TextField) node).getText()));
                 }
-
+                counterPut++;
             }
         }
+
         System.out.println(putPoints);
 
         int counterMove = 0;
-        //computerPutpoints
+
+        //computerMovePoints
         for (Node node : scoreVBoxComputerMove.getChildren()){
             if (node instanceof TextField){
-                if (((TextField) node).getText().length()>0){
+                if (((TextField) node).getText().length()>0 && ((TextField) node).getText().charAt(((TextField) node).getText().length()-1) != '-'){
                     movePoints.setValueByIndex(counterMove, Integer.parseInt(((TextField) node).getText()));
                 }
                 counterMove++;
             }
         }
 
-        //enemyPutpoints
+        //enemyMovePoints
         for (Node node : scoreVBoxEnemyMove.getChildren()){
             if (node instanceof TextField){
                 if (((TextField) node).getText().length()>0 && ((TextField) node).getText().charAt(((TextField) node).getText().length()-1) != '-'){

@@ -54,7 +54,7 @@ public class SwitchButton extends StackPane {
 
         button.setFocusTraversable(false);
         setOnMouseClicked(click);
-        button.setOnMouseClicked(click);
+        //button.setOnMouseClicked(click);
     }
 
     public boolean getState() {
