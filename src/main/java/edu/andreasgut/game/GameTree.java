@@ -149,7 +149,7 @@ public class GameTree {
 
     public Position getBestKill(){
 
-        //evaluateGameTree();
+        evaluateGameTree();
 
         LinkedList<GameTreeNode> bestList = new LinkedList<>();
 

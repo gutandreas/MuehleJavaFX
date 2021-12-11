@@ -116,7 +116,7 @@ public class StandardComputerPlayer extends ComputerPlayer{
         //System.out.println(gameTree);
 
 
-        System.out.println("Getätigter Zug: " + gameTree.getBestMove());
+        //System.out.println("Getätigter Zug: " + gameTree.getBestMove());
         return gameTree.getBestMove();
 
     }
