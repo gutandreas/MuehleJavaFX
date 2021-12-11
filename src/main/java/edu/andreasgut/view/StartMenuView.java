@@ -5,6 +5,8 @@ import edu.andreasgut.online.WebsocketClient;
 import edu.andreasgut.sound.MUSIC;
 import edu.andreasgut.view.fxElements.SwitchButton;
 import edu.andreasgut.view.fxElements.SelectColorButton;
+import javafx.beans.InvalidationListener;
+import javafx.beans.WeakInvalidationListener;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -50,7 +52,7 @@ public class StartMenuView extends VBox {
     ChoiceBox offlineComputerLevelChoiceBox, onlineComputerLevelChoiceBox;
     PopOver popOver;
 
-    ScorePoints putPoints = new ScorePoints(5000, 1000,30, 200, 300,3, -5000, -1000, -30, -200, -300, -3);
+    ScorePoints putPoints = new ScorePoints(3000, 1000,30, 200, 300,6, -3000, -1000, -30, -200, -300, -6);
     ScorePoints movePoints = new ScorePoints(2000, 300,250, 200, 300,3, -2000, -300, -250, -200, -300, -3);
 
 
@@ -231,7 +233,7 @@ public class StartMenuView extends VBox {
         for (int i = 0; i < 6; i++){
 
             Pattern positivePattern = Pattern.compile("[0-9]*");
-            Pattern negativePattern = Pattern.compile("-[0-9]*");
+            Pattern negativePattern = Pattern.compile("-?[0-9]*");
             TextFormatter<?> formatterComputerPut = new TextFormatter<Object>(change -> {
                 if (positivePattern.matcher(change.getControlNewText()).matches()) {
                     return change;
@@ -288,8 +290,11 @@ public class StartMenuView extends VBox {
                             String s = textFieldEnemyPut.getText().substring(0, 6);
                             textFieldEnemyPut.setText(s);
                         }
-                    }
-            );
+                        /*if (textFieldEnemyPut.getText().charAt(0) != '-'){
+                            textFieldEnemyPut.setText("-" + textFieldEnemyPut.getText());
+                        }*/
+                    });
+
             scoreVBoxEnemyPut.getChildren().addAll(labelEnemyPut, textFieldEnemyPut);
 
             Label labelComputerMove = new Label(labelTitles[i]);
@@ -314,8 +319,7 @@ public class StartMenuView extends VBox {
                             String s = textFieldEnemyMove.getText().substring(0, 6);
                             textFieldEnemyMove.setText(s);
                         }
-                    }
-            );
+                    });
             scoreVBoxEnemyMove.getChildren().addAll(labelEnemyMove, textFieldEnemyMove);
 
         }
@@ -806,10 +810,11 @@ public class StartMenuView extends VBox {
         //enemyPutpoints
         for (Node node : scoreVBoxEnemyPut.getChildren()){
             if (node instanceof TextField){
-                if (((TextField) node).getText().length()>0){
+
+                if (((TextField) node).getText().length()>0 && ((TextField) node).getText().charAt(((TextField) node).getText().length()-1) != '-'){
                     putPoints.setValueByIndex(counterPut, Integer.parseInt(((TextField) node).getText()));
                 }
-                counterPut++;
+
             }
         }
         System.out.println(putPoints);
@@ -828,7 +833,7 @@ public class StartMenuView extends VBox {
         //enemyPutpoints
         for (Node node : scoreVBoxEnemyMove.getChildren()){
             if (node instanceof TextField){
-                if (((TextField) node).getText().length()>0){
+                if (((TextField) node).getText().length()>0 && ((TextField) node).getText().charAt(((TextField) node).getText().length()-1) != '-'){
                     movePoints.setValueByIndex(counterMove, Integer.parseInt(((TextField) node).getText()));
                 }
                 counterMove++;
