@@ -111,19 +111,19 @@ public class GameTreeNode {
 
         if (put != null){
             if (kill == null){
-                return  "Level " + level + ", Put an " + put + ", Score: " + score + "\n" + board;
+                return  "Level " + level + ", Put an " + put + ", Score: " + score + ", Inherited Score: " + inheritedScore + "\n" + board;
                 }
             else {
-                return  "Level " + level + ", Put an " + put + " mit Kill an " + kill + ", Score: " + score + "\n" + board;
+                return  "Level " + level + ", Put an " + put + " mit Kill an " + kill + ", Score: " + score + ", Inherited Score: " + inheritedScore + "\n" + board;
             }
         }
 
         if (move != null){
             if (kill == null) {
-                return "Level " + level + ", " + move + ", Score: " + score + "\n" + board;
+                return "Level " + level + ", " + move + ", Score: " + score + ", Inherited Score: " + inheritedScore + "\n" + board;
             }
             else {
-                return  "Level " + level + ", Move an " + move + " mit Kill an " + kill + ", Score: " + score + "\n" + board;
+                return  "Level " + level + ", Move an " + move + " mit Kill an " + kill + ", Score: " + ", Inherited Score: " + inheritedScore + score + "\n" + board;
             }
         }
 
