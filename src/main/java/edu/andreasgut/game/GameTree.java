@@ -5,14 +5,11 @@ import java.util.*;
 
 public class GameTree {
     public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_BLACK = "\u001B[30m";
-    public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_YELLOW = "\u001B[33m";
     public static final String ANSI_BLUE = "\u001B[34m";
     public static final String ANSI_PURPLE = "\u001B[35m";
-    public static final String ANSI_CYAN = "\u001B[36m";
-    public static final String ANSI_WHITE = "\u001B[37m";
+
     private GameTreeNode root;
 
 
@@ -24,20 +21,6 @@ public class GameTree {
         root.setBoard(board);
         root.getChildren().clear();
         root.setVisited(false);
-    }
-
-    public GameTreeNode getLeafWithBestScore() {
-        int max = Integer.MIN_VALUE;
-        GameTreeNode bestLeaf = null;
-
-        for (GameTreeNode set : getLeaves()){
-            if (set.getScore() > max){
-                max = set.getScore();
-                bestLeaf = set;
-            }
-        }
-
-        return bestLeaf;
     }
 
 
@@ -71,8 +54,6 @@ public class GameTree {
                 bestChild = child;
             }
         }
-        //System.out.println(bestChild);
-        //System.out.println(bestChild.getPut());
         return bestChild;
     }
 
@@ -86,8 +67,6 @@ public class GameTree {
                 worstChild = child;
             }
         }
-        //System.out.println(worstChild);
-        //System.out.println(worstChild.getPut());
 
         return worstChild;
     }
@@ -135,9 +114,6 @@ public class GameTree {
 
         LinkedList<GameTreeNode> bestList = new LinkedList<>();
 
-        //System.out.println("Root Inherited Score: " + root.getInheritedScore());
-        //System.out.println("Anzahl Kinder: " + root.getChildren().size());
-
         for (GameTreeNode node : root.getChildren()){
             if (node.getInheritedScore() == root.getInheritedScore()){
                 bestList.add(node);
@@ -169,7 +145,7 @@ public class GameTree {
 
     public Position getBestKill(){
 
-        evaluateGameTree();
+        //evaluateGameTree();
 
         LinkedList<GameTreeNode> bestList = new LinkedList<>();
 
