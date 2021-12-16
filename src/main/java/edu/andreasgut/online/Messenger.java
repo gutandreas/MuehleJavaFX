@@ -143,7 +143,8 @@ public class Messenger {
                         //führt nicht zu Mühle
                         else {
                             game.updateGameState(false, false, true);
-                            game.getCurrentPlayer().preparePutOrMove(viewManager);
+                                if (!game.isGameOver()){
+                                game.getCurrentPlayer().preparePutOrMove(viewManager);}
                             }
                     }
                     else {
@@ -167,7 +168,9 @@ public class Messenger {
 
                         game.updateGameState(false, true, true);
                         game.setKillPhase(false);
-                        game.getCurrentPlayer().preparePutOrMove(viewManager);
+
+                        if (!game.isGameOver()){
+                            game.getCurrentPlayer().preparePutOrMove(viewManager);}
 
                     }
                     else {

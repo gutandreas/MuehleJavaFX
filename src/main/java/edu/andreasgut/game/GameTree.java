@@ -27,9 +27,7 @@ public class GameTree {
     public LinkedList<GameTreeNode> getLeaves() {
 
         LinkedList<GameTreeNode> leaves = new LinkedList<>();
-
         getLeavesRecursive(root, leaves);
-
         return leaves;
 
     }
@@ -325,9 +323,9 @@ public class GameTree {
         return string;
     }
 
-    private String toStringRecursive(GameTreeNode set, String string){
+    private String toStringRecursive(GameTreeNode node, String string){
 
-        for (GameTreeNode currentSet : set.getChildren()) {
+        for (GameTreeNode currentSet : node.getChildren()) {
             string += "Level: " + currentSet.getLevel() + "\n";
             string += currentSet.getBoard();
             string += "Resultierender Score: " + currentSet.getScore() + "\n \n";

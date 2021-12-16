@@ -19,6 +19,7 @@ public class Game {
     boolean movePhase = false;
     boolean movePhaseTake = true;
     boolean movePhaseRelease = false;
+    boolean gameOver = false;
     private boolean killPhase = false;
     private final ViewManager viewManager;
     private boolean player2starts;
@@ -154,6 +155,10 @@ public class Game {
 
     public String getGameCode() {
         return gameCode;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
     }
 
     public void increaseRound(){
@@ -302,6 +307,7 @@ public class Game {
                 || (movePhase && !board.checkIfAbleToMove(getCurrentPlayerIndex()));
 
         if (thereIsAWinner){
+            gameOver = true;
             winner = getOtherPlayer();
             viewManager.getLogView().setStatusLabel(winner.getName() + " hat das Spiel gewonnen");
             viewManager.getFieldView().setDisable(true);

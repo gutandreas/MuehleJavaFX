@@ -3,8 +3,6 @@ package edu.andreasgut.game;
 import edu.andreasgut.online.Messenger;
 import edu.andreasgut.view.ViewManager;
 
-import java.util.Stack;
-
 public class StandardComputerPlayer extends ComputerPlayer{
 
     public StandardComputerPlayer(ViewManager viewManager, String name, ScorePoints putPoints, ScorePoints movePoints, int levelLimit) {
