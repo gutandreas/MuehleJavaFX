@@ -5,8 +5,6 @@ import edu.andreasgut.online.WebsocketClient;
 import edu.andreasgut.sound.MUSIC;
 import edu.andreasgut.view.fxElements.SwitchButton;
 import edu.andreasgut.view.fxElements.SelectColorButton;
-import javafx.beans.InvalidationListener;
-import javafx.beans.WeakInvalidationListener;
 import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -232,10 +230,9 @@ public class StartMenuView extends VBox {
 
         for (int i = 0; i < 6; i++){
 
-            Pattern positivePattern = Pattern.compile("-?[0-9]*");
-            Pattern negativePattern = Pattern.compile("-?[0-9]*");
+            Pattern scorePattern = Pattern.compile("-?[0-9]*");
             TextFormatter<?> formatterComputerPut = new TextFormatter<Object>(change -> {
-                if (positivePattern.matcher(change.getControlNewText()).matches()) {
+                if (scorePattern.matcher(change.getControlNewText()).matches()) {
                     return change;
                 } else {
                     //Verbotene Zeichen
@@ -243,7 +240,7 @@ public class StartMenuView extends VBox {
                 }
             });
             TextFormatter<?> formatterEnemyPut = new TextFormatter<Object>(change -> {
-                if (negativePattern.matcher(change.getControlNewText()).matches()) {
+                if (scorePattern.matcher(change.getControlNewText()).matches()) {
                     return change;
                 } else {
                     //Verbotene Zeichen
@@ -251,7 +248,7 @@ public class StartMenuView extends VBox {
                 }
             });
             TextFormatter<?> formatterComputerMove = new TextFormatter<Object>(change -> {
-                if (positivePattern.matcher(change.getControlNewText()).matches()) {
+                if (scorePattern.matcher(change.getControlNewText()).matches()) {
                     return change;
                 } else {
                     //Verbotene Zeichen
@@ -259,7 +256,7 @@ public class StartMenuView extends VBox {
                 }
             });
             TextFormatter<?> formatterEnemyMove = new TextFormatter<Object>(change -> {
-                if (negativePattern.matcher(change.getControlNewText()).matches()) {
+                if (scorePattern.matcher(change.getControlNewText()).matches()) {
                     return change;
                 } else {
                     //Verbotene Zeichen
@@ -290,9 +287,6 @@ public class StartMenuView extends VBox {
                             String s = textFieldEnemyPut.getText().substring(0, 6);
                             textFieldEnemyPut.setText(s);
                         }
-                        /*if (textFieldEnemyPut.getText().charAt(0) != '-'){
-                            textFieldEnemyPut.setText("-" + textFieldEnemyPut.getText());
-                        }*/
                     });
 
             scoreVBoxEnemyPut.getChildren().addAll(labelEnemyPut, textFieldEnemyPut);
@@ -609,9 +603,9 @@ public class StartMenuView extends VBox {
                     || (radioButtonGroup.getSelectedToggle().equals(twoPlayersRadioButton) &&
                     namePlayer1Textfield.getText().length()>0 && namePlayer2Textfield.getText().length()>0)){
 
-                viewManager.getSoundManager().chooseSound(MUSIC.PLAY_SOUND);
+                viewManager.getAudioPlayer().chooseSound(MUSIC.PLAY_SOUND);
                 if (!viewManager.getOptionsView().getAudioOnOffSwitchButton().getState()){
-                    viewManager.getSoundManager().stopMusic();
+                    viewManager.getAudioPlayer().stopMusic();
                 }
 
 
@@ -637,6 +631,11 @@ public class StartMenuView extends VBox {
 
 
                 viewManager.changeToGameScene();
+                viewManager.getOptionsView().enableRestartButton();
+                viewManager.getMainMenuBar().enableNeuStarten();
+                viewManager.getLogView().setStatusLabel(viewManager.getGame().getPlayer0().getName() + " startet das Spiel");
+
+
                 if (beginnerSwitchButton.getState()){
                     viewManager.getGame().getCurrentPlayer().preparePutOrMove(viewManager);
                 }
@@ -752,9 +751,9 @@ public class StartMenuView extends VBox {
 
             if (response.statusCode() == 200){
 
-                viewManager.getSoundManager().chooseSound(MUSIC.PLAY_SOUND);
+                viewManager.getAudioPlayer().chooseSound(MUSIC.PLAY_SOUND);
                 if (!viewManager.getOptionsView().getAudioOnOffSwitchButton().getState()){
-                    viewManager.getSoundManager().stopMusic();
+                    viewManager.getAudioPlayer().stopMusic();
                 }
 
                 Game game;
@@ -777,6 +776,8 @@ public class StartMenuView extends VBox {
                 }
 
                 viewManager.changeToGameScene();
+                viewManager.getOptionsView().enableRestartButton();
+                viewManager.getMainMenuBar().enableNeuStarten();
                 viewManager.getLogView().setStatusLabel(viewManager.getGame().getPlayer0().getName() + " startet das Spiel");
                 viewManager.getScoreView().setGameCodeLabel(viewManager.getGame().getGameCode());
 

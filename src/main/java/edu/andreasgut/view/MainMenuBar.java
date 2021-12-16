@@ -1,7 +1,7 @@
 package edu.andreasgut.view;
 
+import edu.andreasgut.sound.MUSIC;
 import javafx.application.Platform;
-import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -26,10 +26,32 @@ public class MainMenuBar extends MenuBar {
         hilfe = new Menu("Hilfe");
         this.getMenus().addAll(datei,bearbeiten,hilfe);
         datei.getItems().addAll(neuStarten, spielBeenden);
+        neuStarten.setDisable(true);
         hilfe.getItems().addAll(ueberDiesesSpiel);
 
-        neuStarten.setOnAction(click ->  {
-              System.out.println("Spiel neu starten");});
+        neuStarten.setOnAction(action -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                    "Wollen Sie wirklich zum Hautpmenü zurückkehren?", ButtonType.CANCEL, ButtonType.YES);
+            alert.setAlertType(Alert.AlertType.NONE);
+            alert.setTitle("Zum Hauptmenü");
+            Optional<ButtonType> result = alert.showAndWait();
+            if(!result.isPresent()){}
+            else if(result.get() == ButtonType.YES){
+                StartMenuView startMenuView = new StartMenuView(viewManager);
+                startMenuView.getStyleClass().add("startMenuView");
+                viewManager.setStartMenuView(startMenuView);
+                viewManager.changeToStartScene();
+                viewManager.getAudioPlayer().chooseSound(MUSIC.MENU_SOUND);
+                if (!viewManager.getOptionsView().getAudioOnOffSwitchButton().getState()){
+                    viewManager.getAudioPlayer().stopMusic();
+                }
+                viewManager.getOptionsView().disableRestartButton();
+                disableNeuStarten();
+
+            }
+            else if(result.get() == ButtonType.CANCEL) {}
+
+        });
 
         spielBeenden.setOnAction(click ->{
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
@@ -39,7 +61,7 @@ public class MainMenuBar extends MenuBar {
                 Optional<ButtonType> result = alert.showAndWait();
                 if(!result.isPresent()){}
                     else if(result.get() == ButtonType.YES){
-                        viewManager.getSoundManager().stopMusic();
+                        viewManager.getAudioPlayer().stopMusic();
                         Platform.exit();}
                     else if(result.get() == ButtonType.CANCEL) {} });
 
@@ -57,4 +79,16 @@ public class MainMenuBar extends MenuBar {
                 stage.show();});
 
 
-}}
+
+        }
+
+        public void enableNeuStarten(){
+            neuStarten.setDisable(false);
+        }
+
+        public void disableNeuStarten(){
+            neuStarten.setDisable(true);
+        }
+
+
+}

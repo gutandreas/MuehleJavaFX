@@ -96,7 +96,7 @@ public class ViewManager {
         return gamePane;
     }
 
-    public AudioPlayer getSoundManager() {
+    public AudioPlayer getAudioPlayer() {
         return audioPlayer;
     }
 
@@ -129,6 +129,10 @@ public class ViewManager {
     }
 
     public LogView getLogView() { return logView; }
+
+    public void setStartMenuView(StartMenuView startMenuView) {
+        this.startMenuView = startMenuView;
+    }
 
     public Game getGame() {
         return game;

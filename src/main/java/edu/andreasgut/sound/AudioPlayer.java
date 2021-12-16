@@ -12,6 +12,7 @@ public class AudioPlayer {
     private URL menuSoundPath, playSoundPath, gameoverSoundPath;
     private URL putStonePath, killStonePath;
     private ViewManager viewManager;
+    private boolean musicOn = true;
 
 
     public AudioPlayer(ViewManager viewManager) {
@@ -56,6 +57,8 @@ public class AudioPlayer {
                 audioclipGAMEOVER.play();
                 break;
         }
+
+        musicOn = true;
     }
 
     public void continueMusic(){
@@ -66,6 +69,7 @@ public class AudioPlayer {
         audioclipMENU.stop();
         audioclipPLAY.stop();
         audioclipGAMEOVER.stop();
+        musicOn = false;
     }
 
     public void playSoundEffect(SOUNDEFFECT effectEnum){
@@ -81,5 +85,9 @@ public class AudioPlayer {
 
     public AudioClip getCurrentAudioclip() {
         return currentAudioclip;
+    }
+
+    public boolean isMusicOn() {
+        return musicOn;
     }
 }

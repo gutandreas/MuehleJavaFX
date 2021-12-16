@@ -47,14 +47,14 @@ public class MusicSwitchButton extends StackPane {
                     back.setFill(Color.valueOf("#F49090"));
                     setAlignment(button, Pos.CENTER_LEFT);
                     state = false;
-                    viewManager.getSoundManager().stopMusic();
+                    viewManager.getAudioPlayer().stopMusic();
 
                 } else {
                     button.setStyle(buttonStyleOn);
                     back.setFill(Color.valueOf("#80C49E"));
                     setAlignment(button, Pos.CENTER_RIGHT);
                     state = true;
-                    viewManager.getSoundManager().continueMusic();
+                    viewManager.getAudioPlayer().continueMusic();
                 }
             }
         };

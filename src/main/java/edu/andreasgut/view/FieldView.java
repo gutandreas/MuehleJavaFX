@@ -144,7 +144,7 @@ public class FieldView extends AnchorPane{
 
         Platform.runLater(() -> {
                 ((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(image);
-                viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
+                viewManager.getAudioPlayer().playSoundEffect(SOUNDEFFECT.PUT_STONE);
         });
 
 
@@ -165,7 +165,7 @@ public class FieldView extends AnchorPane{
         Platform.runLater(() -> {
             ((ImageView) fieldGridPane.getChildren().get(translateToIndex(move.getFrom()))).setImage(emptyField);
             ((ImageView) fieldGridPane.getChildren().get(translateToIndex(move.getTo()))).setImage(image);
-            viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.PUT_STONE);
+            viewManager.getAudioPlayer().playSoundEffect(SOUNDEFFECT.PUT_STONE);
         });
 
 
@@ -189,7 +189,7 @@ public class FieldView extends AnchorPane{
 
         Platform.runLater(() -> {
             ((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(emptyField);
-            viewManager.getSoundManager().playSoundEffect(SOUNDEFFECT.KILL_STONE);
+            viewManager.getAudioPlayer().playSoundEffect(SOUNDEFFECT.KILL_STONE);
         });
 
 

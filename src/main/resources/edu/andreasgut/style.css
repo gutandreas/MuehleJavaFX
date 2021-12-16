@@ -130,6 +130,10 @@
     -fx-background-color: #ffaaaa;
 }
 
+.restartButton{
+    -fx-background-color: #eebb55;
+}
+
 .popOver{
     -fx-background-color: linear-gradient(to bottom, #383838, #303030);
     -fx-padding: 4px;

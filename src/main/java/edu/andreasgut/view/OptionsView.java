@@ -1,5 +1,6 @@
 package edu.andreasgut.view;
 
+import edu.andreasgut.sound.MUSIC;
 import edu.andreasgut.view.fxElements.MusicSwitchButton;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -14,10 +15,9 @@ public class OptionsView extends HBox {
 
     private MusicSwitchButton audioOnOffMusicSwitchButton;
     private Label audioOnLabel, audioOffLabel;
-    private Button exitButton;
+    private Button exitButton, restartButton;
     private ViewManager viewManager;
     private HBox audioHBox;
-    private boolean musicOn = true;
 
     public OptionsView(ViewManager viewManager) {
         this.viewManager = viewManager;
@@ -40,7 +40,14 @@ public class OptionsView extends HBox {
         exitButton.setMinHeight(30);
         exitButton.getStyleClass().add("exitButton");
 
-        this.getChildren().addAll(audioHBox, exitButton);
+        restartButton = new Button();
+        restartButton.setGraphic(new ImageView(new Image("edu/andreasgut/images/RestartButton.png", 50, 25, true, true)));
+        restartButton.setMinWidth(60);
+        restartButton.setMinHeight(30);
+        restartButton.getStyleClass().add("restartButton");
+        restartButton.setDisable(true);
+
+        this.getChildren().addAll(audioHBox, restartButton, exitButton);
 
 
         /*audioStartStopToggleButton.setOnAction(action -> {
@@ -70,14 +77,50 @@ public class OptionsView extends HBox {
             Optional<ButtonType> result = alert.showAndWait();
             if(!result.isPresent()){}
             else if(result.get() == ButtonType.YES){
-                viewManager.getSoundManager().stopMusic();
+                viewManager.getAudioPlayer().stopMusic();
                 Platform.exit();}
             else if(result.get() == ButtonType.CANCEL) {} });
+
+
+        restartButton.setOnAction(action -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                    "Wollen Sie wirklich zum Hautpmenü zurückkehren?", ButtonType.CANCEL, ButtonType.YES);
+            alert.setAlertType(Alert.AlertType.NONE);
+            alert.setTitle("Zum Hauptmenü");
+            Optional<ButtonType> result = alert.showAndWait();
+            if(!result.isPresent()){}
+            else if(result.get() == ButtonType.YES){
+                StartMenuView startMenuView = new StartMenuView(viewManager);
+                startMenuView.getStyleClass().add("startMenuView");
+                viewManager.setStartMenuView(startMenuView);
+                viewManager.changeToStartScene();
+                viewManager.getAudioPlayer().chooseSound(MUSIC.MENU_SOUND);
+                if (!audioOnOffMusicSwitchButton.getState()){
+                    viewManager.getAudioPlayer().stopMusic();
+                }
+                viewManager.getOptionsView().disableRestartButton();
+                viewManager.getMainMenuBar().disableNeuStarten();
+
+            }
+            else if(result.get() == ButtonType.CANCEL) {}
+
+        });
 
     }
 
 
+
+
+
     public MusicSwitchButton getAudioOnOffSwitchButton() {
         return audioOnOffMusicSwitchButton;
+    }
+
+    public void enableRestartButton(){
+        restartButton.setDisable(false);
+    }
+
+    public void disableRestartButton(){
+        restartButton.setDisable(true);
     }
 }
