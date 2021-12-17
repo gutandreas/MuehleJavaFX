@@ -78,33 +78,30 @@ public class GameTree {
             queue.add(node);
         }
 
-        evaluateGameTreeRecursive(queue);
+        while (true){
 
+            GameTreeNode tempNode = queue.poll();
 
+            if (tempNode.getParent() == null){
+                return;
+            }
+
+            GameTreeNode parent = tempNode.getParent();
+
+            if (!parent.isVisited()){
+                if (tempNode.getLevel()%2==1){
+                    parent.setInheritedScore(getBestChild(parent).getInheritedScore());
+                }
+                else {
+                    parent.setInheritedScore(getWorstChild(parent).getInheritedScore());
+                }
+
+                parent.setVisited(true);
+                queue.add(parent);
+            }
+        }
     }
 
-    public void evaluateGameTreeRecursive(Queue<GameTreeNode> queue){
-
-        GameTreeNode tempNode = queue.poll();
-
-        if (tempNode.getParent() == null){
-            return;
-        }
-
-        GameTreeNode parent = tempNode.getParent();
-
-        if (!parent.isVisited() && tempNode.getLevel()%2==1){
-            parent.setInheritedScore(getBestChild(parent).getInheritedScore());
-        }
-        if (!parent.isVisited() && tempNode.getLevel()%2==0){
-            parent.setInheritedScore(getWorstChild(parent).getInheritedScore());
-        }
-
-        parent.setVisited(true);
-        queue.add(parent);
-        evaluateGameTreeRecursive(queue);
-
-    }
 
     public Position getBestPut(){
 
