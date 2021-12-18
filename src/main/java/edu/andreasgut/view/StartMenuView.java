@@ -659,12 +659,18 @@ public class StartMenuView extends VBox {
             }
             System.out.println("Startrunde: " + tempRound);
 
+
+            //Ungültige Ausgangslage abfangen
             boolean lessThen3StonesInMovePhase = tempRound > 18
                     && (startingPositionFieldView.getBoard().countPlayersStones(0) < 3
                     || startingPositionFieldView.getBoard().countPlayersStones(1) < 3);
 
+            boolean lessThen3StonesAfterPutPhase = tempRound <= 18
+                    && (startingPositionFieldView.getBoard().countPlayersStones(0) + (18-tempRound)/2 < 3
+                    || startingPositionFieldView.getBoard().countPlayersStones(1) + (18-tempRound)/2 < 3);
 
-            if (lessThen3StonesInMovePhase){
+
+            if (lessThen3StonesInMovePhase || lessThen3StonesAfterPutPhase){
                 offlineInformationLabel.setText("Ungültige Ausgangslage");
                 return;
             }

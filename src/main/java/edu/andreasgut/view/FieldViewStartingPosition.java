@@ -2,6 +2,7 @@ package edu.andreasgut.view;
 
 import edu.andreasgut.game.Board;
 import edu.andreasgut.game.Position;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
