@@ -184,7 +184,7 @@ public class StartMenuView extends VBox {
         startingPositionPopOver = new PopOver();
         Group root = new Group();
         HBox mainHBox = new HBox();
-        startingPositionFieldView = new FieldViewStartingPosition(viewManager, STONECOLOR.BLACK, STONECOLOR.WHITE, true);
+        startingPositionFieldView = new FieldViewStartingPosition(viewManager, STONECOLOR.BLACK, STONECOLOR.WHITE);
 
 
 
@@ -219,6 +219,7 @@ public class StartMenuView extends VBox {
             startingPositionPopOver.setDetached(true);
             startingPositionPopOver.setArrowSize(0);
             startingPositionPopOver.show(viewManager.getMainStage());
+            startingPositionFieldView.updateStoneColors();
         });
     }
 
@@ -520,6 +521,7 @@ public class StartMenuView extends VBox {
             stonesWhiteButton2.getStyleClass().add("selectColorButtonOn");
             player1Color = STONECOLOR.BLACK;
             player2Color = STONECOLOR.WHITE;
+            startingPositionFieldView.setStoneColors(STONECOLOR.BLACK);
 
         });
 
@@ -538,6 +540,7 @@ public class StartMenuView extends VBox {
             stonesWhiteButton1.getStyleClass().add("selectColorButtonOn");
             player2Color = STONECOLOR.BLACK;
             player1Color = STONECOLOR.WHITE;
+            startingPositionFieldView.setStoneColors(STONECOLOR.WHITE);
 
         });
 
@@ -556,6 +559,7 @@ public class StartMenuView extends VBox {
             stonesWhiteButton2.getStyleClass().add("selectColorButtonOff");
             player1Color = STONECOLOR.WHITE;
             player2Color = STONECOLOR.BLACK;
+            startingPositionFieldView.setStoneColors(STONECOLOR.WHITE);
         });
 
         stonesWhiteButton2.setOnAction(click -> {
@@ -573,6 +577,7 @@ public class StartMenuView extends VBox {
             stonesWhiteButton1.getStyleClass().add("selectColorButtonOff");
             player2Color = STONECOLOR.WHITE;
             player1Color = STONECOLOR.BLACK;
+            startingPositionFieldView.setStoneColors(STONECOLOR.BLACK);
         });
     }
 
@@ -643,7 +648,7 @@ public class StartMenuView extends VBox {
     }
 
     private void setupStartButtonAction(){
-        startButton.setOnAction( action -> {
+        startButton.setOnAction(action -> {
 
             int tempRound;
             if (roundTextField.getText().length() > 0){
@@ -876,6 +881,10 @@ public class StartMenuView extends VBox {
         });
     }
 
+    private void updateStartingPositionImages(){
+
+    }
+
     private void editScorePoints(){
         int counterPut = 0;
         //computerPutpoints
@@ -923,5 +932,9 @@ public class StartMenuView extends VBox {
             }
         }
         System.out.println(movePoints);
+    }
+
+    public STONECOLOR getPlayer1Color() {
+        return player1Color;
     }
 }

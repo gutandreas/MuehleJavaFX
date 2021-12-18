@@ -10,8 +10,8 @@ public class FieldViewStartingPosition extends FieldView {
 
     Board board;
 
-    public FieldViewStartingPosition(ViewManager viewManager, STONECOLOR player1Color, STONECOLOR player2Color, boolean activateBoardFunctions) {
-        super(viewManager, player1Color, player2Color, activateBoardFunctions);
+    public FieldViewStartingPosition(ViewManager viewManager, STONECOLOR player1Color, STONECOLOR player2Color) {
+        super(viewManager, player1Color, player2Color, true);
         setupFields();
         this.board = new Board();
     }
@@ -67,6 +67,16 @@ public class FieldViewStartingPosition extends FieldView {
 
                 });
             }
+        }
+    }
+
+    public void updateStoneColors(){
+        for (int i = 0; i < 3; i++){
+            for (int j = 0; j < 8; j++){
+                int index = board.getNumberOnPosition(i,j);
+                if (index == 0 || index == 1){
+                    graphicPut(new Position(i,j), index,0,false);}
+                }
         }
     }
 
