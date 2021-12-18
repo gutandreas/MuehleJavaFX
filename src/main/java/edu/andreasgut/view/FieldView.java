@@ -16,17 +16,20 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.robot.Robot;
 
 
-public class FieldView extends AnchorPane{
+abstract public class FieldView extends AnchorPane{
 
-    private ImageView imageView;
+    protected ImageView imageView;
     private Image image;
-    private ViewManager viewManager;
-    private STONECOLOR player1Color, player2Color;
-    private Image player1StoneImage, player2StoneImage, emptyField, forbiddenField, allowedField;
-    private ImageCursor player1StoneCursor, player2StoneCursor, player2HandCursor, player1HandCursor,
-            player2killCursor, player1killCursor;
-    private GridPane fieldGridPane;
-    private Position[][] translationArrayGraphicToRepresentation;
+    protected ViewManager viewManager;
+    protected STONECOLOR player1Color, player2Color;
+    private Image player1StoneImage;
+    private Image player2StoneImage;
+    protected Image emptyField;
+    protected Image forbiddenField;
+    private Image allowedField;
+
+    protected GridPane fieldGridPane;
+    protected Position[][] translationArrayGraphicToRepresentation;
     private int[][] translationArrayRepresentationToIndex;
     private final int COMPREACTIONTIME = 500;
     private boolean activateBoardFunctions;
@@ -53,7 +56,6 @@ public class FieldView extends AnchorPane{
         });
 
         setupPlayerImages(player1Color, player2Color);
-        setupFields(activateBoardFunctions);
 
         this.getChildren().addAll(imageView,fieldGridPane);
 
@@ -69,69 +71,14 @@ public class FieldView extends AnchorPane{
 
     }
 
-    private void setupPlayerPutCursors(STONECOLOR player1Color, STONECOLOR player2Color){
-        player1StoneCursor = new ImageCursor(new Image(player1Color.getPathStone(), 85, 85, true, true),42,42);
-        player2StoneCursor = new ImageCursor(new Image(player2Color.getPathStone(), 85, 85, true, true), 42,42);
-
-    }
-
-    private void setupPlayerMoveCursors(STONECOLOR player1Color, STONECOLOR player2Color){
-        player1HandCursor = new ImageCursor(new Image(player1Color.getPathMoveCursor(), 85, 85, true, true));
-        player2HandCursor = new ImageCursor(new Image(player2Color.getPathMoveCursor(), 85, 85, true, true));
-    }
-
-    private void setupPlayerKiillCursors(STONECOLOR player1Color, STONECOLOR player2Color){
-        player1killCursor = new ImageCursor(new Image(player1Color.getPathKillCursor(), 85, 85, true, true));
-        player2killCursor = new ImageCursor(new Image(player2Color.getPathKillCursor(), 85, 85, true, true));
-    }
-
-    private void setupFields(boolean activateBoardFunctions){
-
-        fieldGridPane.setGridLinesVisible(false);
-
-        for (int row = 0; row < 7; row++) {
-            fieldGridPane.addRow(row);
-        }
-        for (int column = 0; column < 7; column++) {
-            fieldGridPane.addRow(column);
-        }
-
-        //Füllt Felder mit emptyField wenn in Repräsentation vorhanden, sonst mit forbiddenField
-        for (int row = 0; row < 7; row++) {
-            for (int column = 0; column < 7; column++) {
-                if (translationArrayGraphicToRepresentation[row][column].getRing() != -1) {
-                    ImageView tempImageView = new ImageView(emptyField);
-                    fieldGridPane.add(tempImageView, row, column);
-                } else {
-                    ImageView tempImageView = new ImageView(forbiddenField);
-                    fieldGridPane.add(tempImageView, row, column);
-                }
-            }
-        }
-
-
-        if (activateBoardFunctions){
-
-            for (Node n : fieldGridPane.getChildren()) {
-                if (((ImageView) n).getImage().equals(emptyField)) {
-                    n.setOnMouseClicked(click -> {
-                        Position position = new Position(translateToRing(n), translateToField(n));
-
-                        System.out.println("Feld in Repräsentationsarray: " + position.getRing() + "/" + position.getField());
-                        System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
-                        System.out.println("Test");
-
-                        viewManager.getGame().nextStep(position);
-                    });
-                }
-            }
-        }
-    }
 
 
 
 
-    public void graphicPut(Position position, int playerIndex, int delay){
+
+
+
+    public void graphicPut(Position position, int playerIndex, int delay, boolean sound){
 
         Image image;
 
@@ -144,7 +91,8 @@ public class FieldView extends AnchorPane{
 
         Platform.runLater(() -> {
                 ((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(image);
-                viewManager.getAudioPlayer().playSoundEffect(SOUNDEFFECT.PUT_STONE);
+                if (sound){
+                    viewManager.getAudioPlayer().playSoundEffect(SOUNDEFFECT.PUT_STONE);}
         });
 
 
@@ -185,21 +133,19 @@ public class FieldView extends AnchorPane{
         ((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(emptyField);
     }
 
-    public void graphicKill(Position position){
+    public void graphicKill(Position position, boolean sound){
 
         Platform.runLater(() -> {
             ((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(emptyField);
-            viewManager.getAudioPlayer().playSoundEffect(SOUNDEFFECT.KILL_STONE);
+            if (sound){
+                viewManager.getAudioPlayer().playSoundEffect(SOUNDEFFECT.KILL_STONE);}
         });
 
 
 
     }
 
-    private void moveMouseposition(int dx, int dy){
-        Robot robot = new Robot();
-        robot.mouseMove(robot.getMouseX()+dx, robot.getMouseY()+dy);
-    }
+
 
     private Image getEnemysStoneImage(){
         return  viewManager.getGame().getCurrentPlayerIndex()==0 ? player2StoneImage : player1StoneImage;
@@ -209,64 +155,7 @@ public class FieldView extends AnchorPane{
         return viewManager.getGame().getCurrentPlayerIndex()==0 ? player1StoneImage : player2StoneImage;
     }
 
-    public void setPutCursor(){
-        setupPlayerPutCursors(player1Color,player2Color);
-        choosePutCursor();
-        fieldGridPane.setOnMouseEntered(enter ->{
-            choosePutCursor();
 
-        });
-        moveMouseposition(10,10);
-    }
-
-    private void choosePutCursor() {
-        switch (viewManager.getGame().getCurrentPlayerIndex()){
-            case 0:
-                imageView.getScene().setCursor(player1StoneCursor);
-                break;
-            case 1:
-                imageView.getScene().setCursor(player2StoneCursor);
-                break;}
-    }
-
-
-
-    public void setKillCursor(){
-           setupPlayerKiillCursors(player1Color,player2Color);
-           chooseKillCursor();
-            fieldGridPane.setOnMouseEntered(enter ->{
-                chooseKillCursor();
-            });
-    }
-
-    private void chooseKillCursor() {
-        switch (viewManager.getGame().getCurrentPlayerIndex()){
-            case 0:
-                imageView.getScene().setCursor(player1killCursor);
-                break;
-            case 1:
-                imageView.getScene().setCursor(player2killCursor);
-                break;}
-    }
-
-    synchronized public void setMoveCursor(){
-        setupPlayerMoveCursors(player1Color,player2Color);
-        chooseMoveCursor();
-            fieldGridPane.setOnMouseEntered(enter -> {
-                chooseMoveCursor();
-            });
-
-    }
-
-    synchronized private void chooseMoveCursor(){
-        switch (viewManager.getGame().getCurrentPlayerIndex()){
-            case 0:
-                imageView.getScene().setCursor(player1HandCursor);
-                break;
-            case 1:
-                imageView.getScene().setCursor(player2HandCursor);
-                break;}
-    }
 
     private void clearAllFieldFunctions(){
         for (Node n : fieldGridPane.getChildren()){
@@ -277,11 +166,11 @@ public class FieldView extends AnchorPane{
         return activateBoardFunctions;
     }
 
-    private int translateToRing(Node node){
+    protected int translateToRing(Node node){
         return translationArrayGraphicToRepresentation[GridPane.getRowIndex(node)][GridPane.getColumnIndex(node)].getRing();
     }
 
-    private int translateToField(Node node){
+    protected int translateToField(Node node){
         return translationArrayGraphicToRepresentation[GridPane.getRowIndex(node)][GridPane.getColumnIndex(node)].getField();
     }
 
@@ -289,7 +178,7 @@ public class FieldView extends AnchorPane{
         return translationArrayRepresentationToIndex[position.getRing()][position.getField()];
     }
 
-    private void initializeTranslationArray(){
+    protected void initializeTranslationArray(){
         translationArrayGraphicToRepresentation = new Position[7][7];
 
         //Koordinaten -1/-1 bedeuten, dass Feld in FieldArray nicht repräsentiert wird!

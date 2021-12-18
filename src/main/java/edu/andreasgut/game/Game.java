@@ -2,6 +2,7 @@ package edu.andreasgut.game;
 
 import edu.andreasgut.online.Messenger;
 import edu.andreasgut.online.WebsocketClient;
+import edu.andreasgut.view.FieldViewPlay;
 import edu.andreasgut.view.ViewManager;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class Game {
     private int round;
     private final int NUMBEROFSTONES = 9;
     private Player currentPlayer;
-    private final Board board;
+    private Board board;
     boolean putPhase = true;
     boolean movePhase = false;
     boolean movePhaseTake = true;
@@ -32,16 +33,37 @@ public class Game {
 
     ArrayList<Player> playerArrayList = new ArrayList<>();
 
-    public Game(ViewManager viewManager, Player player0, Player player1) {
+    public Game(ViewManager viewManager, Player player0, Player player1, Board board, int round) {
         this.viewManager = viewManager;
         this.player0 = player0;
         this.player1 = player1;
         playerArrayList.add(0, player0);
         playerArrayList.add(1, player1);
-        round = 0;
         currentPlayer=playerArrayList.get(0);
-        board = new Board(this);
+        this.board = new Board(this);
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (board.getNumberOnPosition(i, j) != 9) {
+                    Position tempPosition = new Position(i, j);
+                    this.board.putStone(tempPosition, board.getNumberOnPosition(i, j));
+                }
+            }
+        }
+        this.round = round;
+        if (round <=18){
+            putPhase = true;
+            movePhase = false;
+        }
+        else {
+            putPhase = false;
+            movePhase = true;
+            movePhaseTake = true;
+            movePhaseRelease = false;
+        }
+
     }
+
+
 
     public Game(ViewManager viewManager, Player player0, Player player1, String gameCode, boolean joinExistingGame) {
         this.viewManager = viewManager;
@@ -52,24 +74,42 @@ public class Game {
         round = 0;
         currentPlayer=playerArrayList.get(0);
         this.gameCode = gameCode;
-        board = new Board(this);
         this.joinExistingGame = joinExistingGame;
     }
 
 
-    public Game(ViewManager viewManager, Player player0, boolean player2starts, ScorePoints putPoints, ScorePoints movePoints, int levelLimit) {
+    public Game(ViewManager viewManager, Player player0, boolean player2starts, ScorePoints putPoints, ScorePoints movePoints, int levelLimit, Board board, int round) {
         this.viewManager = viewManager;
         this.player0 = player0;
         this.player1 = new StandardComputerPlayer(viewManager, "COMPUTER", putPoints, movePoints, levelLimit);
         this.player2starts = player2starts;
         playerArrayList.add(0, player0);
         playerArrayList.add(1, player1);
-        round = 0;
-        board = new Board(this);
+        this.board = new Board(this);
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (board.getNumberOnPosition(i, j) != 9) {
+                    Position tempPosition = new Position(i, j);
+                    this.board.putStone(tempPosition, board.getNumberOnPosition(i, j));
+                }
+            }
+        }
         if (player2starts){
             currentPlayer=playerArrayList.get(1);}
         else {
             currentPlayer=playerArrayList.get(0);}
+
+        this.round = round;
+        if (round <=18){
+            putPhase = true;
+            movePhase = false;
+        }
+        else {
+            putPhase = false;
+            movePhase = true;
+            movePhaseTake = true;
+            movePhaseRelease = false;
+        }
 
 
     }
@@ -210,7 +250,7 @@ public class Game {
             if (movePhase){
                 if (movePhaseTake){
                     if (board.isThisMyStone(clickedPosition, getCurrentPlayerIndex())){
-                        viewManager.getFieldView().setPutCursor();
+                        ((FieldViewPlay) viewManager.getFieldView()).setPutCursor();
                         viewManager.getFieldView().graphicTake(clickedPosition);
                         lastClickedPosition = clickedPosition;
                         clickOkay = true;
@@ -234,8 +274,8 @@ public class Game {
                     else {
                         System.out.println("Kein gültiger Move");
                         viewManager.getLogView().setStatusLabel("Das ist kein gültiger Zug");
-                        viewManager.getFieldView().graphicPut(lastClickedPosition, getCurrentPlayerIndex(), 0);
-                        viewManager.getFieldView().setMoveCursor();
+                        viewManager.getFieldView().graphicPut(lastClickedPosition, getCurrentPlayerIndex(), 0, true);
+                        ((FieldViewPlay) viewManager.getFieldView()).setMoveCursor();
                         clickOkay = true;
                         movePhaseRelease = false;
                         movePhaseTake = true;
@@ -250,6 +290,8 @@ public class Game {
         }
 
     }
+
+
 
     public void updateGameState(boolean put, boolean killHappend, boolean increaseRound){
         if (put){
@@ -272,14 +314,14 @@ public class Game {
             if (round < NUMBEROFSTONES * 2) {
                 putPhase = true;
                 if (viewManager.getFieldView().isActivateBoardFunctions()) {
-                    viewManager.getFieldView().setPutCursor();
+                    ((FieldViewPlay) viewManager.getFieldView()).setPutCursor();
                 }
             } else {
                 movePhase = true;
                 movePhaseTake = true;
                 movePhaseRelease = false;
                 if (viewManager.getFieldView().isActivateBoardFunctions()) {
-                    viewManager.getFieldView().setMoveCursor();
+                    ((FieldViewPlay) viewManager.getFieldView()).setMoveCursor();
                 }
             }
         }

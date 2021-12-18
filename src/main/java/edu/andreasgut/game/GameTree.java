@@ -155,18 +155,14 @@ public class GameTree {
     }
 
     public void keepOnlyWorstChildren(GameTreeNode parent, int numberOfChildren){
-        parent.getChildren().sort(new Comparator<GameTreeNode>() {
-            @Override
-            public int compare(GameTreeNode o1, GameTreeNode o2) {
+        parent.getChildren().sort((o1,o2) -> {
                 if (o1.getScore() > o2.getScore()){
                     return 1;
                 }
                 if (o1.getScore() == o2.getScore()){
                     return 0;
                 }
-                else return -1;
-            }
-        });
+                else return -1;});
 
         Iterator<GameTreeNode> iterator = parent.getChildren().iterator();
 
@@ -184,9 +180,7 @@ public class GameTree {
     }
 
     public void keepOnlyBestChildren(GameTreeNode parent, int numberOfChildren){
-        parent.getChildren().sort(new Comparator<GameTreeNode>() {
-            @Override
-            public int compare(GameTreeNode o1, GameTreeNode o2) {
+        parent.getChildren().sort((o1, o2) -> {
                 if (o1.getScore() > o2.getScore()){
                     return -1;
                 }
@@ -194,8 +188,7 @@ public class GameTree {
                     return 0;
                 }
                 else return 1;
-            }
-        });
+            });
 
         Iterator<GameTreeNode> iterator = parent.getChildren().iterator();
 

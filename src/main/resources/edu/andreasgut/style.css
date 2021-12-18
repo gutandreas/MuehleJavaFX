@@ -134,17 +134,25 @@
     -fx-background-color: #eebb55;
 }
 
-.popOver{
+.scorePopOver{
     -fx-background-color: linear-gradient(to bottom, #383838, #303030);
     -fx-padding: 4px;
     -fx-spacing: 4px;
     -fx-start-margin: 4px;
     -fx-end-margin: 4px;
-
     -fx-alignment: center;
 }
 
-.popOver .text-field{
+.startingPositionPopOver{
+    -fx-background-color: linear-gradient(to bottom, #383838, #303030);
+    -fx-padding: 4px;
+    -fx-spacing: 4px;
+    -fx-start-margin: 4px;
+    -fx-end-margin: 4px;
+    -fx-alignment: center;
+}
+
+.scorePopOver .text-field{
     -fx-pref-width: 100px;
 
 }

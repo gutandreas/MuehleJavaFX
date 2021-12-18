@@ -14,6 +14,15 @@ public class Board {
         this.game = game;
     }
 
+    public Board(){
+        array = new int[3][8];
+        for (int i = 0; i < 3; i++){
+            for (int j = 0; j < 8; j++){
+                array[i][j] = 9;}
+        }
+        game = null;
+    }
+
 
     protected Board(Board board){
         int[][] tempArray = new int[3][8];

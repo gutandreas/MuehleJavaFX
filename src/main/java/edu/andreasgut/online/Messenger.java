@@ -101,7 +101,7 @@ public class Messenger {
 
                     if (board.checkPut(position)){
                         board.putStone(position, playerIndex);
-                        viewManager.getFieldView().graphicPut(position, viewManager.getGame().getCurrentPlayerIndex(), 200);
+                        viewManager.getFieldView().graphicPut(position, viewManager.getGame().getCurrentPlayerIndex(), 200, true);
                         System.out.println(board);
                         //führt zu Mühle
                         if (board.checkMorris(position) && board.isThereStoneToKill(1-playerIndex)){
@@ -163,7 +163,7 @@ public class Messenger {
 
                     if (board.checkKill(position, playerIndex)){
                         board.clearStone(position);
-                        viewManager.getFieldView().graphicKill(position);
+                        viewManager.getFieldView().graphicKill(position, true);
                         System.out.println(board);
 
                         game.updateGameState(false, true, true);

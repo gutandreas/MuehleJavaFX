@@ -1,5 +1,6 @@
 package edu.andreasgut.view;
 
+import edu.andreasgut.game.Board;
 import edu.andreasgut.game.Player;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
@@ -48,6 +49,45 @@ public class ScoreView extends VBox {
         else {
             this.getChildren().addAll(titleLabel, phaseLabel, roundLabel, player1VBox, player2VBox);
         }
+
+        int round = viewManager.getGame().getRound();
+        setRound(round);
+
+        Board board = viewManager.getGame().getBoard();
+
+        int stonesPlayer1 = 0;
+        int stonesPlayer2 = 0;
+
+        for (int i = 0; i < 3; i++){
+            for (int j = 0; j < 8; j++){
+                if (board.getNumberOnPosition(i, j) == 0){
+                    stonesPlayer1++;
+                }
+                if (board.getNumberOnPosition(i, j) == 1){
+                    stonesPlayer2++;
+                }
+            }
+        }
+
+        if (round <= 18){
+            setStonesPut(0, round/2);
+            setStonesPut(1, round/2);
+            setStonesLost(0, round/2-stonesPlayer1);
+            setStonesLost(1, round/2-stonesPlayer2);
+            setStonesKilled(0, round/2-stonesPlayer2);
+            setStonesKilled(1, round/2-stonesPlayer1);
+        }
+        else {
+            setStonesPut(0, 9);
+            setStonesPut(1, 9);
+            setStonesLost(0, 9-stonesPlayer1);
+            setStonesLost(1, 9-stonesPlayer2);
+            setStonesKilled(0, 9-stonesPlayer2);
+            setStonesKilled(1, 9-stonesPlayer1);
+        }
+
+
+
 
     }
 
@@ -99,6 +139,20 @@ public class ScoreView extends VBox {
         phaseLabel.setText("Phase: " + phase));
     }
 
+    public void setStonesPut(int playerIndex, int number){
+        switch (playerIndex){
+            case 0:
+                stonesLost1 = number;
+                Platform.runLater(() ->
+                        stonesPutPlayer1Label.setText("Steine gesetzt: " + number));
+                break;
+            case 1:
+                stonesLost2 = number;
+                Platform.runLater(() ->
+                        stonesPutPlayer2Label.setText("Steine gesetzt: " + number));
+                break;}
+    }
+
     synchronized public void increaseStonesPut(){
 
         switch (viewManager.getGame().getCurrentPlayerIndex()){
@@ -110,8 +164,20 @@ public class ScoreView extends VBox {
                         Platform.runLater(() ->
                         stonesPutPlayer2Label.setText("Steine gesetzt: " + ++stonesPut2));
                         break;}
+    }
 
-
+    public void setStonesLost(int playerIndex, int number){
+        switch (playerIndex){
+            case 0:
+                stonesLost1 = number;
+                Platform.runLater(() ->
+                        stonesLostPlayer1Label.setText("Steine verloren: " + number));
+                break;
+            case 1:
+                stonesLost2 = number;
+                Platform.runLater(() ->
+                        stonesLostPlayer2Label.setText("Steine verloren: " + number));
+                break;}
     }
 
     synchronized public void increaseStonesLost(){
@@ -126,6 +192,20 @@ public class ScoreView extends VBox {
                     stonesLostPlayer2Label.setText("Steine verloren: " + ++stonesLost2));
                     break;
             }
+    }
+
+    public void setStonesKilled(int playerIndex, int number){
+        switch (playerIndex){
+            case 0:
+                stonesLost1 = number;
+                Platform.runLater(() ->
+                        stonesKilledPlayer1Label.setText("Steine gewonnen: " + number));
+                break;
+            case 1:
+                stonesLost2 = number;
+                Platform.runLater(() ->
+                        stonesKilledPlayer2Label.setText("Steine gewonnen: " + number));
+                break;}
     }
 
     synchronized public void increaseStonesKilled(){
@@ -144,6 +224,11 @@ public class ScoreView extends VBox {
     public void increaseRound(){
         Platform.runLater(()-> roundLabel.setText("Spielzug: " + ++round));
 
+    }
+
+    public void setRound(int round){
+        this.round = round;
+        Platform.runLater(()-> roundLabel.setText("Spielzug: " + round));
     }
 
 
