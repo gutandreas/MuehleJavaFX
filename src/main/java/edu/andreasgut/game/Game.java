@@ -39,7 +39,7 @@ public class Game {
         this.player1 = player1;
         playerArrayList.add(0, player0);
         playerArrayList.add(1, player1);
-        currentPlayer=playerArrayList.get(0);
+        currentPlayer=playerArrayList.get(round%2);
         this.board = new Board(this);
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 8; j++) {
@@ -95,9 +95,9 @@ public class Game {
             }
         }
         if (player2starts){
-            currentPlayer=playerArrayList.get(1);}
+            currentPlayer=playerArrayList.get((round%2+1)%2);}
         else {
-            currentPlayer=playerArrayList.get(0);}
+            currentPlayer=playerArrayList.get((round%2));}
 
         this.round = round;
         if (round <=18){

@@ -646,7 +646,6 @@ public class StartMenuView extends VBox {
         startButton.setOnAction( action -> {
 
             int tempRound;
-
             if (roundTextField.getText().length() > 0){
                 tempRound = Integer.parseInt(roundTextField.getText());
             }
@@ -654,6 +653,16 @@ public class StartMenuView extends VBox {
                 tempRound = 0;
             }
             System.out.println("Startrunde: " + tempRound);
+
+            boolean lessThen3StonesInMovePhase = tempRound > 18
+                    && (startingPositionFieldView.getBoard().countPlayersStones(0) < 3
+                    || startingPositionFieldView.getBoard().countPlayersStones(1) < 3);
+
+
+            if (lessThen3StonesInMovePhase){
+                offlineInformationLabel.setText("Ungültige Ausgangslage");
+                return;
+            }
 
 
             if ((radioButtonGroup.getSelectedToggle().equals(onePlayerRadioButton) &&
@@ -697,11 +706,21 @@ public class StartMenuView extends VBox {
                 viewManager.getLogView().setStatusLabel(viewManager.getGame().getPlayer0().getName() + " startet das Spiel");
 
 
-                if (beginnerSwitchButton.getState()){
+
+
+                if ((!beginnerSwitchButton.getState() && tempRound%2 == 0) || (beginnerSwitchButton.getState() && tempRound%2 == 1)) {
+                    if (tempRound <= 18) {
+                        ((FieldViewPlay) viewManager.getFieldView()).setPutCursor();
+                    } else {
+                        ((FieldViewPlay) viewManager.getFieldView()).setMoveCursor();
+                    }
+                }
+
+                else {
                     viewManager.getGame().getCurrentPlayer().preparePutOrMove(viewManager);
                 }
 
-                ((FieldViewPlay) viewManager.getFieldView()).setPutCursor();
+
 
 
 
