@@ -208,16 +208,19 @@ public class StartMenuView extends VBox {
         Label szenarioLabel = new Label("Szenario: ");
         ChoiceBox choiceBox = new ChoiceBox();
         Button loadButton = new Button("Laden");
-        choiceBox.setItems(FXCollections.observableArrayList(1,2,3,4,5));
+        choiceBox.setItems(FXCollections.observableArrayList(0,1,2,3,4,5));
         loadButton.setOnAction(click -> {
             System.out.println(choiceBox.getValue());
             StartSituation startSituation = StartSituation.produceStartSituations()[Integer.parseInt(choiceBox.getValue().toString())];
             startingPositionFieldView.setBoard(startSituation.getBoard());
+            roundTextField.setText("" + startSituation.getRound());
             for (int i = 0; i < 3; i++){
                 for (int j = 0; j < 8; j++){
                     if (startSituation.getBoard().getNumberOnPosition(i,j) != 9){
-                        startingPositionFieldView.graphicPut(new Position(i,j), startSituation.getBoard().getNumberOnPosition(i,j), 0, false);
-                        roundTextField.setText("" + startSituation.getRound());}
+                        startingPositionFieldView.graphicPut(new Position(i,j), startSituation.getBoard().getNumberOnPosition(i,j), 0, false);}
+                    else {
+                        startingPositionFieldView.graphicKill(new Position(i,j), false);
+                    }
                 }
             }
         });
@@ -684,16 +687,19 @@ public class StartMenuView extends VBox {
 
 
             //Ungültige Ausgangslage abfangen
-            boolean lessThen3StonesInMovePhase = tempRound > 18
+            boolean lessThan3StonesInMovePhase = tempRound > 18
                     && (startingPositionFieldView.getBoard().countPlayersStones(0) < 3
                     || startingPositionFieldView.getBoard().countPlayersStones(1) < 3);
 
-            boolean lessThen3StonesAfterPutPhase = tempRound <= 18
+            boolean lessThan3StonesAfterPutPhase = tempRound <= 18
                     && (startingPositionFieldView.getBoard().countPlayersStones(0) + (18-tempRound)/2 < 3
                     || startingPositionFieldView.getBoard().countPlayersStones(1) + (18-tempRound)/2 < 3);
 
+            boolean moreThan9Stones = startingPositionFieldView.getBoard().countPlayersStones(0) > 9
+                    || startingPositionFieldView.getBoard().countPlayersStones(1) > 9;
 
-            if (lessThen3StonesInMovePhase || lessThen3StonesAfterPutPhase){
+
+            if (lessThan3StonesInMovePhase || lessThan3StonesAfterPutPhase || moreThan9Stones){
                 offlineInformationLabel.setText("Ungültige Ausgangslage");
                 return;
             }
