@@ -10,7 +10,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import org.controlsfx.control.PopOver;
@@ -21,6 +20,7 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
 import org.json.JSONException;
@@ -113,6 +113,8 @@ public class StartMenuView extends VBox {
         setupOnlineScorePointsButton();
     }
 
+
+
     private void setupOfflineTitleAndWarning(){
         offlineTitleLabel = new Label( "Offline spielen");
         offlineTitleLabel.getStyleClass().add("labelTitle");
@@ -202,10 +204,31 @@ public class StartMenuView extends VBox {
                 return null;
             }
         });
+        HBox choiceHBox = new HBox();
+        Label szenarioLabel = new Label("Szenario: ");
+        ChoiceBox choiceBox = new ChoiceBox();
+        Button loadButton = new Button("Laden");
+        choiceBox.setItems(FXCollections.observableArrayList(1,2,3,4,5));
+        loadButton.setOnAction(click -> {
+            System.out.println(choiceBox.getValue());
+            StartSituation startSituation = StartSituation.produceStartSituations()[Integer.parseInt(choiceBox.getValue().toString())];
+            startingPositionFieldView.setBoard(startSituation.getBoard());
+            for (int i = 0; i < 3; i++){
+                for (int j = 0; j < 8; j++){
+                    if (startSituation.getBoard().getNumberOnPosition(i,j) != 9){
+                        startingPositionFieldView.graphicPut(new Position(i,j), startSituation.getBoard().getNumberOnPosition(i,j), 0, false);
+                        roundTextField.setText("" + startSituation.getRound());}
+                }
+            }
+        });
+
+
+        choiceHBox.getChildren().addAll(szenarioLabel, choiceBox, loadButton);
         roundTextField.setTextFormatter(formatterRound);
 
         roundHBox.getChildren().addAll(roundLabel, roundTextField);
-        mainHBox.getChildren().addAll(startingPositionFieldView, roundHBox);
+        startingVBox.getChildren().addAll(roundHBox, choiceHBox);
+        mainHBox.getChildren().addAll(startingPositionFieldView, startingVBox);
 
 
         root.getChildren().addAll(mainHBox);
@@ -717,8 +740,6 @@ public class StartMenuView extends VBox {
                 viewManager.getLogView().setStatusLabel(viewManager.getGame().getPlayer0().getName() + " startet das Spiel");
 
 
-
-
                 if ((!beginnerSwitchButton.getState() && tempRound%2 == 0) || (beginnerSwitchButton.getState() && tempRound%2 == 1)) {
                     if (tempRound <= 18) {
                         ((FieldViewPlay) viewManager.getFieldView()).setPutCursor();
@@ -730,11 +751,6 @@ public class StartMenuView extends VBox {
                 else {
                     viewManager.getGame().getCurrentPlayer().preparePutOrMove(viewManager);
                 }
-
-
-
-
-
 
 
 
@@ -887,9 +903,8 @@ public class StartMenuView extends VBox {
         });
     }
 
-    private void updateStartingPositionImages(){
 
-    }
+
 
     private void editScorePoints(){
         int counterPut = 0;
@@ -940,7 +955,4 @@ public class StartMenuView extends VBox {
         System.out.println(movePoints);
     }
 
-    public STONECOLOR getPlayer1Color() {
-        return player1Color;
-    }
 }

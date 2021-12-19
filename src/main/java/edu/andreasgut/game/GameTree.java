@@ -128,6 +128,9 @@ public class GameTree {
 
         LinkedList<GameTreeNode> bestList = new LinkedList<>();
 
+        int tempScore = root.getInheritedScore();
+        int tempChildern = root.getChildren().size();
+
         for (GameTreeNode node : root.getChildren()){
             if (node.getInheritedScore() == root.getInheritedScore()){
                 bestList.add(node);
