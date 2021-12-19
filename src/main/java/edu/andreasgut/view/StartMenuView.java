@@ -6,6 +6,7 @@ import edu.andreasgut.sound.MUSIC;
 import edu.andreasgut.view.fxElements.SwitchButton;
 import edu.andreasgut.view.fxElements.SelectColorButton;
 import javafx.collections.FXCollections;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -192,9 +193,12 @@ public class StartMenuView extends VBox {
 
         VBox startingVBox = new VBox();
         HBox roundHBox = new HBox();
+        roundHBox.setSpacing(10);
+        roundHBox.setAlignment(Pos.CENTER_LEFT);
         Label roundLabel = new Label("Runde:");
         roundTextField = new TextField();
         roundTextField.setPromptText("0");
+        roundTextField.getStyleClass().add("smallTextField");
         Pattern roundPattern = Pattern.compile("[0-9]?[0-9]?[0-9]?");
         TextFormatter<?> formatterRound = new TextFormatter<Object>(change -> {
             if (roundPattern.matcher(change.getControlNewText()).matches()) {
@@ -205,15 +209,24 @@ public class StartMenuView extends VBox {
             }
         });
         HBox choiceHBox = new HBox();
+        choiceHBox.setSpacing(10);
+        choiceHBox.setAlignment(Pos.CENTER_LEFT);
         Label szenarioLabel = new Label("Szenario: ");
         ChoiceBox choiceBox = new ChoiceBox();
         Button loadButton = new Button("Laden");
         choiceBox.setItems(FXCollections.observableArrayList(0,1,2,3,4,5));
+        choiceBox.getSelectionModel().select(0);
+        Label situationDescriptionLabel = new Label("Leeres Spielfeld");
+        situationDescriptionLabel.setWrapText(true);
+
+
         loadButton.setOnAction(click -> {
             System.out.println(choiceBox.getValue());
             StartSituation startSituation = StartSituation.produceStartSituations()[Integer.parseInt(choiceBox.getValue().toString())];
             startingPositionFieldView.setBoard(startSituation.getBoard());
             roundTextField.setText("" + startSituation.getRound());
+            situationDescriptionLabel.setText(startSituation.getDescription());
+
             for (int i = 0; i < 3; i++){
                 for (int j = 0; j < 8; j++){
                     if (startSituation.getBoard().getNumberOnPosition(i,j) != 9){
@@ -226,11 +239,15 @@ public class StartMenuView extends VBox {
         });
 
 
+
+
+
         choiceHBox.getChildren().addAll(szenarioLabel, choiceBox, loadButton);
         roundTextField.setTextFormatter(formatterRound);
 
         roundHBox.getChildren().addAll(roundLabel, roundTextField);
-        startingVBox.getChildren().addAll(roundHBox, choiceHBox);
+        startingVBox.getChildren().addAll(roundHBox, choiceHBox, situationDescriptionLabel);
+        startingVBox.getStyleClass().add("startingVBox");
         mainHBox.getChildren().addAll(startingPositionFieldView, startingVBox);
 
 

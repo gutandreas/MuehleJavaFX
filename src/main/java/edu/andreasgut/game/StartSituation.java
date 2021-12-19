@@ -6,10 +6,12 @@ public class StartSituation {
 
     private int round;
     private Board board;
+    private String description;
 
-    public StartSituation(int round, Board board) {
+    public StartSituation(int round, Board board, String description) {
         this.round = round;
         this.board = board;
+        this.description = description;
     }
 
     public int getRound() {
@@ -24,14 +26,16 @@ public class StartSituation {
         return board;
     }
 
-
+    public String getDescription() {
+        return description;
+    }
 
     public static StartSituation[] produceStartSituations(){
         StartSituation[] startSituations = new StartSituation[5];
 
         Board board0 = new Board();
 
-        StartSituation startSituation0 = new StartSituation(0, board0);
+        StartSituation startSituation0 = new StartSituation(0, board0, "Leeres Spielfeld");
 
         startSituations[0] = startSituation0;
 
@@ -51,7 +55,7 @@ public class StartSituation {
         board1.putStone(new Position(0, 7), 1);
 
 
-        StartSituation startSituation1 = new StartSituation(48, board1);
+        StartSituation startSituation1 = new StartSituation(48, board1, "Spielfeld, das zu einem Computerfehler führt...");
 
         startSituations[1] = startSituation1;
 

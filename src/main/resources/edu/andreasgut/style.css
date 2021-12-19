@@ -152,6 +152,17 @@
     -fx-alignment: center;
 }
 
+.startingVBox{
+    -fx-padding: 4px;
+    -fx-spacing: 20px;
+    -fx-pref-width: 250px;
+}
+
+
+.smallTextField{
+    -fx-pref-width: 50px;
+}
+
 .scorePopOver .text-field{
     -fx-pref-width: 100px;
 
