@@ -28,6 +28,18 @@ public class GameTree {
 
         LinkedList<GameTreeNode> leaves = new LinkedList<>();
         getLeavesRecursive(root, leaves);
+
+        leaves.sort((o1, o2) -> {
+            if (o1.getLevel() > o2.getLevel()){
+                return -1;
+            }
+            if (o1.getLevel() == o2.getLevel()){
+                return 0;
+            }
+            else return 1;
+
+        });
+
         return leaves;
 
     }
@@ -82,7 +94,7 @@ public class GameTree {
 
             GameTreeNode tempNode = queue.poll();
 
-            if (tempNode.getParent() == null){
+           if (tempNode == root){
                 return;
             }
 
@@ -90,10 +102,13 @@ public class GameTree {
 
             if (!parent.isVisited()){
                 if (tempNode.getLevel()%2==1){
-                    parent.setInheritedScore(getBestChild(parent).getInheritedScore());
+                    GameTreeNode bestChild = getBestChild(parent);
+                    parent.setInheritedScore(bestChild.getInheritedScore());
+
                 }
                 else {
-                    parent.setInheritedScore(getWorstChild(parent).getInheritedScore());
+                    GameTreeNode worstChild = getWorstChild(parent);
+                    parent.setInheritedScore(worstChild.getInheritedScore());
                 }
 
                 parent.setVisited(true);
@@ -132,6 +147,7 @@ public class GameTree {
         int tempChildern = root.getChildren().size();
 
         for (GameTreeNode node : root.getChildren()){
+            System.out.println(node);
             if (node.getInheritedScore() == root.getInheritedScore()){
                 bestList.add(node);
             }

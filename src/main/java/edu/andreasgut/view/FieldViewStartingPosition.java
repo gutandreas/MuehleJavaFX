@@ -64,7 +64,6 @@ public class FieldViewStartingPosition extends FieldView {
                             graphicKill(position, false);
                     }
 
-                    System.out.println(board);
 
                 });
             }
