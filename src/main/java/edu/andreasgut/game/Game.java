@@ -75,6 +75,7 @@ public class Game {
         currentPlayer=playerArrayList.get(0);
         this.gameCode = gameCode;
         this.joinExistingGame = joinExistingGame;
+        board = new Board(this);
     }
 
 
@@ -168,6 +169,10 @@ public class Game {
 
     public int getOtherPlayerIndex(){
         return currentPlayer.equals(playerArrayList.get(0)) ? 1 : 0;
+    }
+
+    public Player getPlayerByIndex(int index){
+        return playerArrayList.get(index);
     }
 
 
@@ -345,15 +350,24 @@ public class Game {
 
     private void checkWinner(){
 
-        boolean thereIsAWinner = (movePhase && board.countPlayersStones(getCurrentPlayerIndex()) < 3)
-                || (movePhase && !board.checkIfAbleToMove(getCurrentPlayerIndex()));
+        boolean lessThan3Stones = movePhase && board.countPlayersStones(getCurrentPlayerIndex()) < 3;
+        boolean unableToMove = movePhase && !board.checkIfAbleToMove(getCurrentPlayerIndex());
 
-        if (thereIsAWinner){
+        if (lessThan3Stones || unableToMove){
             gameOver = true;
-            winner = getOtherPlayer();
-            viewManager.getLogView().setStatusLabel(winner.getName() + " hat das Spiel gewonnen");
-            viewManager.getFieldView().setDisable(true);
-            System.out.println(winner.getName() + " hat das Spiel gewonnen!");
+        }
+
+        if (websocketClient == null) {
+
+
+            if (lessThan3Stones) {
+                Messenger.sendGameOverMessage(viewManager, "Weniger als 3 Steine");
+            }
+
+
+            if (unableToMove) {
+                Messenger.sendGameOverMessage(viewManager, "Keine möglichen Züge");
+            }
         }
     }
 }

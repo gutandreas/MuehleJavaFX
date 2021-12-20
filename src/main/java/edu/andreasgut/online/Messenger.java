@@ -69,6 +69,17 @@ public class Messenger {
         sendMessage(viewManager, jsonObject.toString());
     }
 
+    public static void sendGameOverMessage(ViewManager viewManager, String details){
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("gameCode", viewManager.getGame().getGameCode());
+        jsonObject.put("playerUuid", viewManager.getGame().getCurrentPlayer().getUuid());
+        jsonObject.put("playerIndex", viewManager.getGame().getCurrentPlayerIndex());
+        jsonObject.put("command", "gameOver");
+        jsonObject.put("details", details);
+        sendMessage(viewManager, jsonObject.toString());
+    }
+
 
     public static void receiveMessage(ViewManager viewManager, String message){
 
@@ -88,96 +99,104 @@ public class Messenger {
                 }
                 break;
 
+            case "gameOver":
+                int index = jsonObject.getInt("playerIndex");
+                String name = game.getPlayerByIndex(1-index).getName();
+                viewManager.getLogView().setStatusLabel(name + " hat das Spiel gewonnen!");
+                break;
+
             case "update":
 
-                if (jsonObject.getString("action").equals("put")){
+                if (!game.isGameOver()) {
 
-                    int ring = jsonObject.getInt("ring");
-                    int field = jsonObject.getInt("field");
-                    int playerIndex = jsonObject.getInt("playerIndex");
+                    if (jsonObject.getString("action").equals("put")) {
 
-                    Position position = new Position(ring, field);
-                    System.out.println(position);
+                        int ring = jsonObject.getInt("ring");
+                        int field = jsonObject.getInt("field");
+                        int playerIndex = jsonObject.getInt("playerIndex");
 
-                    if (board.checkPut(position)){
-                        board.putStone(position, playerIndex);
-                        viewManager.getFieldView().graphicPut(position, viewManager.getGame().getCurrentPlayerIndex(), 200, true);
-                        System.out.println(board);
-                        //führt zu Mühle
-                        if (board.checkMorris(position) && board.isThereStoneToKill(1-playerIndex)){
-                            game.updateGameState(true, false, false);
-                            viewManager.getGame().getCurrentPlayer().prepareKill(viewManager);
-                        }
-                        //führt nicht zu Mühle
-                        else {
-                            game.updateGameState(true, false, true);
-                            game.getCurrentPlayer().preparePutOrMove(viewManager);
-                        }
-                    }
-                    else {
-                        System.out.println("Es wurde ein ungültiger Put ausgeführt");
-                    }
-                }
+                        Position position = new Position(ring, field);
+                        System.out.println(position);
 
-                if (jsonObject.getString("action").equals("move")){
-
-                    int moveFromRing = jsonObject.getInt("moveFromRing");
-                    int moveFromField = jsonObject.getInt("moveFromField");
-                    int moveToRing = jsonObject.getInt("moveToRing");
-                    int moveToField = jsonObject.getInt("moveToField");
-                    int playerIndex = jsonObject.getInt("playerIndex");
-
-                    Move move = new Move(new Position(moveFromRing, moveFromField), new Position(moveToRing, moveToField));
-                    boolean jump = board.countPlayersStones(game.getCurrentPlayerIndex()) == 3;
-
-
-                    if (board.checkMove(move, jump)){
-                        board.move(move, playerIndex);
-                        viewManager.getFieldView().graphicMove(move, playerIndex);
-                        System.out.println(board);
-                        //führt zu Mühle
-                        if (board.checkMorris(move.getTo()) && board.isThereStoneToKill(1-playerIndex)){
-                            game.updateGameState(false, false, false);
-                            viewManager.getGame().getCurrentPlayer().prepareKill(viewManager);
-                        }
-                        //führt nicht zu Mühle
-                        else {
-                            game.updateGameState(false, false, true);
-                                if (!game.isGameOver()){
-                                game.getCurrentPlayer().preparePutOrMove(viewManager);}
+                        if (board.checkPut(position)) {
+                            board.putStone(position, playerIndex);
+                            viewManager.getFieldView().graphicPut(position, viewManager.getGame().getCurrentPlayerIndex(), 200, true);
+                            System.out.println(board);
+                            //führt zu Mühle
+                            if (board.checkMorris(position) && board.isThereStoneToKill(1 - playerIndex)) {
+                                game.updateGameState(true, false, false);
+                                viewManager.getGame().getCurrentPlayer().prepareKill(viewManager);
                             }
-                    }
-                    else {
-                        System.out.println("Es wurde ein ungültiger Move ausgeführt");
+                            //führt nicht zu Mühle
+                            else {
+                                game.updateGameState(true, false, true);
+                                game.getCurrentPlayer().preparePutOrMove(viewManager);
+                            }
+                        } else {
+                            System.out.println("Es wurde ein ungültiger Put ausgeführt");
+                        }
                     }
 
+                    if (jsonObject.getString("action").equals("move")) {
+
+                        int moveFromRing = jsonObject.getInt("moveFromRing");
+                        int moveFromField = jsonObject.getInt("moveFromField");
+                        int moveToRing = jsonObject.getInt("moveToRing");
+                        int moveToField = jsonObject.getInt("moveToField");
+                        int playerIndex = jsonObject.getInt("playerIndex");
+
+                        Move move = new Move(new Position(moveFromRing, moveFromField), new Position(moveToRing, moveToField));
+                        boolean jump = board.countPlayersStones(game.getCurrentPlayerIndex()) == 3;
+
+
+                        if (board.checkMove(move, jump)) {
+                            board.move(move, playerIndex);
+                            viewManager.getFieldView().graphicMove(move, playerIndex);
+                            System.out.println(board);
+                            //führt zu Mühle
+                            if (board.checkMorris(move.getTo()) && board.isThereStoneToKill(1 - playerIndex)) {
+                                game.updateGameState(false, false, false);
+                                viewManager.getGame().getCurrentPlayer().prepareKill(viewManager);
+                            }
+                            //führt nicht zu Mühle
+                            else {
+                                game.updateGameState(false, false, true);
+                                if (!game.isGameOver()) {
+                                    game.getCurrentPlayer().preparePutOrMove(viewManager);
+                                }
+                            }
+                        } else {
+                            System.out.println("Es wurde ein ungültiger Move ausgeführt");
+                        }
+
+                    }
+
+                    if (jsonObject.getString("action").equals("kill")) {
+
+                        int ring = jsonObject.getInt("ring");
+                        int field = jsonObject.getInt("field");
+
+                        int playerIndex = board.getNumberOnPosition(ring, field);
+                        Position position = new Position(ring, field);
+
+                        if (board.checkKill(position, playerIndex)) {
+                            board.clearStone(position);
+                            viewManager.getFieldView().graphicKill(position, true);
+                            System.out.println(board);
+
+                            game.updateGameState(false, true, true);
+                            game.setKillPhase(false);
+
+                            if (!game.isGameOver()) {
+                                game.getCurrentPlayer().preparePutOrMove(viewManager);
+                            }
+
+                        } else {
+                            System.out.println("Es wurde ein ungültiger Kill ausgeführt");
+                        }
+                    }
+                    break;
                 }
-
-                if (jsonObject.getString("action").equals("kill")){
-
-                    int ring = jsonObject.getInt("ring");
-                    int field = jsonObject.getInt("field");
-
-                    int playerIndex = board.getNumberOnPosition(ring, field);
-                    Position position = new Position(ring, field);
-
-                    if (board.checkKill(position, playerIndex)){
-                        board.clearStone(position);
-                        viewManager.getFieldView().graphicKill(position, true);
-                        System.out.println(board);
-
-                        game.updateGameState(false, true, true);
-                        game.setKillPhase(false);
-
-                        if (!game.isGameOver()){
-                            game.getCurrentPlayer().preparePutOrMove(viewManager);}
-
-                    }
-                    else {
-                        System.out.println("Es wurde ein ungültiger Kill ausgeführt");
-                    }
-                }
-                break;
         }
     }
 }
