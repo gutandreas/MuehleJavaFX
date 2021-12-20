@@ -28,13 +28,18 @@ public class ScoreView extends VBox {
     private int stonesKilled2 = 0;
 
 
-    public ScoreView(ViewManager viewManager, STONECOLOR player1Color, STONECOLOR player2Color) {
+    public ScoreView(ViewManager viewManager, STONECOLOR player1Color, STONECOLOR player2Color, int startRound) {
         this.viewManager = viewManager;
         this.getStyleClass().add("scoreview");
 
         titleLabel = new Label("Spielstand");
         titleLabel.getStyleClass().add("labelTitle");
-        phaseLabel = new Label("Phase: Steine setzen");
+        if (startRound <= 18){
+            phaseLabel = new Label("Phase: Steine setzen");
+        }
+        else {
+            phaseLabel = new Label("Phase: Steine verschieben");
+        }
         phaseLabel.getStyleClass().add("biglabel");
         roundLabel = new Label("Spielzug: " + round);
         roundLabel.getStyleClass().add("biglabel");
