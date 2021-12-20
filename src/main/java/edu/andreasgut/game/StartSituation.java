@@ -35,7 +35,7 @@ public class StartSituation {
 
         Board board0 = new Board();
 
-        StartSituation startSituation0 = new StartSituation(0, board0, "Leeres Spielfeld");
+        StartSituation startSituation0 = new StartSituation(0, board0, "Leeres Spielfeld:");
 
         startSituations[0] = startSituation0;
 

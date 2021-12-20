@@ -715,8 +715,12 @@ public class StartMenuView extends VBox {
             boolean moreThan9Stones = startingPositionFieldView.getBoard().countPlayersStones(0) > 9
                     || startingPositionFieldView.getBoard().countPlayersStones(1) > 9;
 
+            boolean moreThan9StonesAfterPutPhase = tempRound <= 18
+                    && (startingPositionFieldView.getBoard().countPlayersStones(0) + Math.round(((double) 18-tempRound)/2) > 9
+                    || startingPositionFieldView.getBoard().countPlayersStones(1) + Math.round(((double) 18-tempRound)/2) > 9);
 
-            if (lessThan3StonesInMovePhase || lessThan3StonesAfterPutPhase || moreThan9Stones){
+
+            if (lessThan3StonesInMovePhase || lessThan3StonesAfterPutPhase || moreThan9Stones || moreThan9StonesAfterPutPhase){
                 offlineInformationLabel.setText("Ungültige Ausgangslage");
                 return;
             }
