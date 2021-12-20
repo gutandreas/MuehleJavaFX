@@ -149,4 +149,5 @@ public class FieldViewPlay extends FieldView{
                 imageView.getScene().setCursor(player2HandCursor);
                 break;}
     }
+
 }

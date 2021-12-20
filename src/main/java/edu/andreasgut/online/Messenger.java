@@ -1,6 +1,7 @@
 package edu.andreasgut.online;
 
 import edu.andreasgut.game.*;
+import edu.andreasgut.view.FieldViewPlay;
 import edu.andreasgut.view.ViewManager;
 import javafx.application.Platform;
 import org.json.JSONObject;
@@ -103,6 +104,7 @@ public class Messenger {
                 int index = jsonObject.getInt("playerIndex");
                 String name = game.getPlayerByIndex(1-index).getName();
                 viewManager.getLogView().setStatusLabel(name + " hat das Spiel gewonnen!");
+                viewManager.getFieldView().setDisable(true);
                 break;
 
             case "update":
