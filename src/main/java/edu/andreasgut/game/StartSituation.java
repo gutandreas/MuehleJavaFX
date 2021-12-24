@@ -59,6 +59,27 @@ public class StartSituation {
 
         startSituations[1] = startSituation1;
 
+
+        Board board2 = new Board();
+        board2.putStone(new Position(1, 0), 0);
+        board2.putStone(new Position(1, 1), 0);
+        board2.putStone(new Position(2, 1), 0);
+        board2.putStone(new Position(2, 2), 0);
+        board2.putStone(new Position(1, 3), 0);
+        board2.putStone(new Position(1, 7), 0);
+
+
+        board2.putStone(new Position(0, 1), 1);
+        board2.putStone(new Position(1, 2), 1);
+        board2.putStone(new Position(2, 0), 1);
+        board2.putStone(new Position(1,4), 1);
+        board2.putStone(new Position(1,6), 1);
+
+
+        StartSituation startSituation2 = new StartSituation(15, board2, "Spielfeld, das zu einem Computerfehler führt...");
+
+        startSituations[2] = startSituation2;
+
         return startSituations;
     }
 

@@ -143,8 +143,6 @@ public class GameTree {
 
         LinkedList<GameTreeNode> bestList = new LinkedList<>();
 
-        int tempScore = root.getInheritedScore();
-        int tempChildern = root.getChildren().size();
 
         for (GameTreeNode node : root.getChildren()){
             System.out.println(node);
@@ -159,12 +157,11 @@ public class GameTree {
 
     public Position getBestKill(){
 
-        //evaluateGameTree();
-
         LinkedList<GameTreeNode> bestList = new LinkedList<>();
 
         for (GameTreeNode node : root.getChildren()){
-            if (node.getInheritedScore() == root.getInheritedScore()){
+            System.out.println(node);
+            if (node.getInheritedScore() == root.getInheritedScore() && node.getKill() != null){
                 bestList.add(node);
             }
         }
@@ -223,6 +220,7 @@ public class GameTree {
         }
 
     }
+
 
 
 
