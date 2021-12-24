@@ -13,21 +13,21 @@ import java.util.Optional;
 
 public class MainMenuBar extends MenuBar {
 
-    private Menu datei, bearbeiten, hilfe;
+    private Menu datei, hilfe;
     private MenuItem neuStarten = new MenuItem("Neu starten");
     private MenuItem spielBeenden = new MenuItem("Spiel beenden");
+    private MenuItem spielregeln = new MenuItem("Spielregeln");
     private MenuItem ueberDiesesSpiel = new MenuItem("Über dieses Spiel");
     private ViewManager viewManager;
 
     public MainMenuBar(ViewManager viewManager) {
         this.viewManager = viewManager;
         datei = new Menu("Datei");
-        bearbeiten = new Menu("Bearbeiten");
         hilfe = new Menu("Hilfe");
-        this.getMenus().addAll(datei,bearbeiten,hilfe);
+        this.getMenus().addAll(datei,hilfe);
         datei.getItems().addAll(neuStarten, spielBeenden);
         neuStarten.setDisable(true);
-        hilfe.getItems().addAll(ueberDiesesSpiel);
+        hilfe.getItems().addAll(spielregeln, ueberDiesesSpiel);
 
         neuStarten.setOnAction(action -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
@@ -65,18 +65,35 @@ public class MainMenuBar extends MenuBar {
                         Platform.exit();}
                     else if(result.get() == ButtonType.CANCEL) {} });
 
+        spielregeln.setOnAction(click ->{
+            Stage stage = new Stage();
+            stage.setTitle("Spielregeln");
+            AnchorPane anchorPane = new AnchorPane();
+            Scene scene = new Scene(anchorPane, 400, 600);
+            stage.setScene(scene);
+            TableView tableView = new TableView();
+            tableView.setPrefSize(400,600);
+            anchorPane.getChildren().add(tableView);
+            TableColumn column = new TableColumn();
+            tableView.getColumns().addAll(column);
+
+
+            stage.show();
+        });
+
         ueberDiesesSpiel.setOnAction(click ->{
-                Stage stage = new Stage();
-                AnchorPane anchorPane = new AnchorPane();
-                Scene scene = new Scene(anchorPane, 400, 300);
-                stage.setScene(scene);
-                Image image = new Image("edu/andreasgut/images/About.png");
-                ImageView imageView = new ImageView(image);
-                imageView.setFitWidth(400);
-                imageView.setFitHeight(300);
-                anchorPane.getChildren().add(imageView);
-                stage.setResizable(false);
-                stage.show();});
+            Stage stage = new Stage();
+            stage.setTitle("Über dieses Spiel");
+            AnchorPane anchorPane = new AnchorPane();
+            Scene scene = new Scene(anchorPane, 400, 300);
+            stage.setScene(scene);
+            Image image = new Image("edu/andreasgut/images/About.png");
+            ImageView imageView = new ImageView(image);
+            imageView.setFitWidth(400);
+            imageView.setFitHeight(300);
+            anchorPane.getChildren().add(imageView);
+            stage.setResizable(false);
+            stage.show();});
 
 
 
