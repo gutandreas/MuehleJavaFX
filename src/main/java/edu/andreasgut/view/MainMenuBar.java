@@ -2,13 +2,17 @@ package edu.andreasgut.view;
 
 import edu.andreasgut.sound.MUSIC;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import java.util.LinkedList;
 import java.util.Optional;
 
 public class MainMenuBar extends MenuBar {
@@ -74,9 +78,13 @@ public class MainMenuBar extends MenuBar {
             TableView tableView = new TableView();
             tableView.setPrefSize(400,600);
             anchorPane.getChildren().add(tableView);
-            TableColumn column = new TableColumn();
-            tableView.getColumns().addAll(column);
-
+            TableColumn title = new TableColumn();
+            TableColumn description = new TableColumn();
+            tableView.getColumns().addAll(title, description);
+            ObservableList<Rule> rulesList = FXCollections.observableArrayList(Rule.getRules());
+            title.setCellValueFactory(new PropertyValueFactory<Rule, String>("title"));
+            description.setCellValueFactory(new PropertyValueFactory<Rule, String>("description"));
+            tableView.setItems(rulesList);
 
             stage.show();
         });
