@@ -25,6 +25,5 @@ public class Rule {
         rules.add(new Rule("Ziel des Spiels", "Gewinnen..."));
 
         return rules;
-
     }
 }

@@ -25,32 +25,32 @@ public class StandardComputerPlayer extends ComputerPlayer{
         return gameTree.getBestPut();
     }
 
-    private void recursivePutBfs(GameTreeNode set, ScorePoints putPoints, ScorePoints movePoints, int scorePlayerIndex, int currentPlayerIndex, int levelLimit){
+    private void recursivePutBfs(GameTreeNode node, ScorePoints putPoints, ScorePoints movePoints, int scorePlayerIndex, int currentPlayerIndex, int levelLimit){
 
-        if (set.getLevel()==levelLimit){
+        if (node.getLevel()==levelLimit){
             return;
         }
 
         int tempCurrentPlayerIndex;
 
-        if (set.getLevel()%2 == 0){
+        if (node.getLevel()%2 == 0){
             tempCurrentPlayerIndex = scorePlayerIndex;
         }
         else {
             tempCurrentPlayerIndex = 1 - scorePlayerIndex;
         }
 
-        for (Position freeField : Advisor.getAllFreeFields(set.getBoard())){
-            pretendPut(set.getBoard(), freeField, putPoints, set, scorePlayerIndex, tempCurrentPlayerIndex, set.getLevel()+1);
+        for (Position freeField : Advisor.getAllFreeFields(node.getBoard())){
+            pretendPut(node.getBoard(), freeField, putPoints, node, scorePlayerIndex, tempCurrentPlayerIndex, node.getLevel()+1);
         }
 
-        if (set.getLevel()%2 == 0){
-            gameTree.keepOnlyBestChildren(set, 20);}
+        if (node.getLevel()%2 == 0){
+            gameTree.keepOnlyBestChildren(node, 20);}
         else {
-            gameTree.keepOnlyWorstChildren(set, 20);
+            gameTree.keepOnlyWorstChildren(node, 20);
         }
 
-        for (GameTreeNode child : set.getChildren()){
+        for (GameTreeNode child : node.getChildren()){
             if (viewManager.getGame().getRound() + child.getLevel() < 18){
                 recursivePutBfs(child, putPoints, movePoints, scorePlayerIndex, tempCurrentPlayerIndex, levelLimit);
             }
