@@ -30,6 +30,7 @@ public class Rule {
         LinkedList<Rule> rules = new LinkedList<>();
 
         rules.add(new Rule("Ziel des Spiels", "Gewinnen...", "Ziel, Erklärung"));
+        rules.add(new Rule("Ende des Spiels", "Das Spiel ist beendet, wenn ein Spieler in der Zugphase weniger als 3 Steine hat oder keinen Zug mehr tätigen kann", "Ende, eingeklemmt, verloren"));
 
         return rules;
     }

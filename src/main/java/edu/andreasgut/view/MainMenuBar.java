@@ -18,6 +18,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.awt.*;
@@ -80,6 +81,7 @@ public class MainMenuBar extends MenuBar {
 
         spielregeln.setOnAction(click ->{
             Stage stage = new Stage();
+            stage.setResizable(false);
             stage.setTitle("Spielregeln");
             AnchorPane anchorPane = new AnchorPane();
             Scene scene = new Scene(anchorPane, 600, 600);
@@ -99,9 +101,23 @@ public class MainMenuBar extends MenuBar {
             ObservableList<Rule> rulesList = FXCollections.observableArrayList(Rule.getRules());
             title.setCellValueFactory(new PropertyValueFactory<Rule, String>("title"));
             description.setCellValueFactory(new PropertyValueFactory<Rule, String>("description"));
+
+            for (Object tableColumn : tableView.getColumns()) {
+                ((TableColumn<Rule, String>) tableColumn).setSortable(false);
+                ((TableColumn<Rule, String>) tableColumn).setResizable(false);
+                ((TableColumn<Rule, String>) tableColumn).setCellFactory(tc -> {
+                    TableCell<Rule, String> cell = new TableCell<>();
+                    Text text = new Text();
+                    cell.setGraphic(text);
+                    cell.setPrefHeight(Control.USE_COMPUTED_SIZE);
+                    text.wrappingWidthProperty().bind(((TableColumn<Rule, String>) tableColumn).widthProperty());
+                    text.textProperty().bind(cell.itemProperty());
+                    return cell;
+                });
+            }
+
             tags.setCellValueFactory(new PropertyValueFactory<Rule, String>("tags"));
             tableView.setItems(rulesList);
-
             Label searchLabel = new Label("Regeln durchsuchen: ");
             TextField searchTextfield = new TextField();
             searchTextfield.setPromptText("Suchbegriff");
@@ -124,6 +140,7 @@ public class MainMenuBar extends MenuBar {
             VBox mainVBox = new VBox();
             mainVBox.getChildren().addAll(tableView, searchHBox);
             anchorPane.getChildren().addAll(mainVBox);
+
 
             stage.show();
         });
