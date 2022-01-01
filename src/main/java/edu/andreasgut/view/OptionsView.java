@@ -78,7 +78,7 @@ public class OptionsView extends HBox {
             Optional<ButtonType> result = alert.showAndWait();
             if(!result.isPresent()){}
             else if(result.get() == ButtonType.YES){
-                if (viewManager.getGame().getWebsocketClient() != null){
+                if (viewManager.getGame() != null && viewManager.getGame().getWebsocketClient() != null){
                     Messenger.sendGiveUpMessage(viewManager);
                 }
                 viewManager.getAudioPlayer().stopMusic();

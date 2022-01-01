@@ -26,7 +26,7 @@ public class Rule {
         return tags;
     }
 
-    static public LinkedList getRules(){
+    static public LinkedList<Rule> getRules(){
         LinkedList<Rule> rules = new LinkedList<>();
 
         rules.add(new Rule("Ziel des Spiels", "Gewinnen...", "Ziel, Erklärung"));

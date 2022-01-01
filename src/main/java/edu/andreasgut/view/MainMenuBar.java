@@ -4,14 +4,23 @@ import edu.andreasgut.sound.MUSIC;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.HPos;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.Optional;
 
@@ -73,17 +82,16 @@ public class MainMenuBar extends MenuBar {
             Stage stage = new Stage();
             stage.setTitle("Spielregeln");
             AnchorPane anchorPane = new AnchorPane();
-            Scene scene = new Scene(anchorPane, 400, 600);
+            Scene scene = new Scene(anchorPane, 600, 600);
             stage.setScene(scene);
             TableView tableView = new TableView();
-            tableView.setPrefSize(400,600);
-            anchorPane.getChildren().add(tableView);
+            tableView.setPrefSize(600,500);
             TableColumn title = new TableColumn();
             title.setText("Regel");
             title.setPrefWidth(100);
             TableColumn description = new TableColumn();
             description.setText("Beschreibung");
-            description.setPrefWidth(200);
+            description.setPrefWidth(395);
             TableColumn tags = new TableColumn();
             tags.setText("Stichworte");
             tags.setPrefWidth(100);
@@ -93,6 +101,29 @@ public class MainMenuBar extends MenuBar {
             description.setCellValueFactory(new PropertyValueFactory<Rule, String>("description"));
             tags.setCellValueFactory(new PropertyValueFactory<Rule, String>("tags"));
             tableView.setItems(rulesList);
+
+            Label searchLabel = new Label("Regeln durchsuchen: ");
+            TextField searchTextfield = new TextField();
+            searchTextfield.setPromptText("Suchbegriff");
+            HBox searchHBox = new HBox();
+            searchHBox.getChildren().addAll(searchLabel, searchTextfield);
+
+            searchTextfield.textProperty().addListener((observable, oldValue, newValue) -> {
+                String searchText = newValue;
+                ObservableList<Rule> filteredRuleList = FXCollections.observableArrayList();
+                for (Rule rule : Rule.getRules()){
+                    if (rule.getTags().contains(searchText)
+                            || rule.getTitle().contains(searchText)
+                            || rule.getDescription().contains(searchText)){
+                        filteredRuleList.add(rule);
+                    }
+                }
+                tableView.setItems(filteredRuleList);
+            });
+
+            VBox mainVBox = new VBox();
+            mainVBox.getChildren().addAll(tableView, searchHBox);
+            anchorPane.getChildren().addAll(mainVBox);
 
             stage.show();
         });
@@ -114,6 +145,7 @@ public class MainMenuBar extends MenuBar {
 
 
         }
+
 
         public void enableNeuStarten(){
             neuStarten.setDisable(false);
