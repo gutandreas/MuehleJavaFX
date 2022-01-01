@@ -90,13 +90,13 @@ public class MainMenuBar extends MenuBar {
             tableView.setPrefSize(600,500);
             TableColumn title = new TableColumn();
             title.setText("Regel");
-            title.setPrefWidth(100);
+            title.setPrefWidth(95);
             TableColumn description = new TableColumn();
             description.setText("Beschreibung");
             description.setPrefWidth(395);
             TableColumn tags = new TableColumn();
             tags.setText("Stichworte");
-            tags.setPrefWidth(100);
+            tags.setPrefWidth(90);
             tableView.getColumns().addAll(title, description, tags);
             ObservableList<Rule> rulesList = FXCollections.observableArrayList(Rule.getRules());
             title.setCellValueFactory(new PropertyValueFactory<Rule, String>("title"));
@@ -140,8 +140,6 @@ public class MainMenuBar extends MenuBar {
             VBox mainVBox = new VBox();
             mainVBox.getChildren().addAll(tableView, searchHBox);
             anchorPane.getChildren().addAll(mainVBox);
-
-
             stage.show();
         });
 
