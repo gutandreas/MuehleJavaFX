@@ -70,6 +70,18 @@ public class Messenger {
         sendMessage(viewManager, jsonObject.toString());
     }
 
+    public static void sendGiveUpMessage(ViewManager viewManager){
+
+        JSONObject jsonObject = new JSONObject();
+        Game game = viewManager.getGame();
+
+        jsonObject.put("gameCode", game.getGameCode());
+        jsonObject.put("command", "giveup");
+        jsonObject.put("name", game.getCurrentPlayer().getName());
+        jsonObject.put("playerUuid", game.getCurrentPlayer().getUuid());
+        sendMessage(viewManager, jsonObject.toString());
+    }
+
     public static void sendGameOverMessage(ViewManager viewManager, String details){
 
         JSONObject jsonObject = new JSONObject();

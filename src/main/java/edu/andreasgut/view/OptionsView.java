@@ -78,6 +78,9 @@ public class OptionsView extends HBox {
             Optional<ButtonType> result = alert.showAndWait();
             if(!result.isPresent()){}
             else if(result.get() == ButtonType.YES){
+                if (viewManager.getGame().getWebsocketClient() != null){
+                    Messenger.sendGiveUpMessage(viewManager);
+                }
                 viewManager.getAudioPlayer().stopMusic();
                 Platform.exit();}
             else if(result.get() == ButtonType.CANCEL) {} });
@@ -91,6 +94,9 @@ public class OptionsView extends HBox {
             Optional<ButtonType> result = alert.showAndWait();
             if(!result.isPresent()){}
             else if(result.get() == ButtonType.YES){
+                if (viewManager.getGame().getWebsocketClient() != null){
+                    Messenger.sendGiveUpMessage(viewManager);
+                }
                 StartMenuView startMenuView = new StartMenuView(viewManager);
                 startMenuView.getStyleClass().add("startMenuView");
                 viewManager.setStartMenuView(startMenuView);
