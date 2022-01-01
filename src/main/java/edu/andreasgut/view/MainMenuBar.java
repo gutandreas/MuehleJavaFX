@@ -23,6 +23,7 @@ import javafx.stage.Stage;
 
 import java.awt.*;
 import java.util.LinkedList;
+import java.util.Locale;
 import java.util.Optional;
 
 public class MainMenuBar extends MenuBar {
@@ -90,10 +91,10 @@ public class MainMenuBar extends MenuBar {
             tableView.setPrefSize(600,500);
             TableColumn title = new TableColumn();
             title.setText("Regel");
-            title.setPrefWidth(95);
+            title.setPrefWidth(100);
             TableColumn description = new TableColumn();
             description.setText("Beschreibung");
-            description.setPrefWidth(395);
+            description.setPrefWidth(390);
             TableColumn tags = new TableColumn();
             tags.setText("Stichworte");
             tags.setPrefWidth(90);
@@ -101,11 +102,16 @@ public class MainMenuBar extends MenuBar {
             ObservableList<Rule> rulesList = FXCollections.observableArrayList(Rule.getRules());
             title.setCellValueFactory(new PropertyValueFactory<Rule, String>("title"));
             description.setCellValueFactory(new PropertyValueFactory<Rule, String>("description"));
+            tags.setCellValueFactory(new PropertyValueFactory<Rule, String>("tags"));
+            tableView.setItems(rulesList);
 
             for (Object tableColumn : tableView.getColumns()) {
+
+
                 ((TableColumn<Rule, String>) tableColumn).setSortable(false);
                 ((TableColumn<Rule, String>) tableColumn).setResizable(false);
                 ((TableColumn<Rule, String>) tableColumn).setCellFactory(tc -> {
+
                     TableCell<Rule, String> cell = new TableCell<>();
                     Text text = new Text();
                     cell.setGraphic(text);
@@ -116,8 +122,7 @@ public class MainMenuBar extends MenuBar {
                 });
             }
 
-            tags.setCellValueFactory(new PropertyValueFactory<Rule, String>("tags"));
-            tableView.setItems(rulesList);
+            tableView.setSelectionModel(null);
             Label searchLabel = new Label("Regeln durchsuchen: ");
             TextField searchTextfield = new TextField();
             searchTextfield.setPromptText("Suchbegriff");
@@ -128,9 +133,9 @@ public class MainMenuBar extends MenuBar {
                 String searchText = newValue;
                 ObservableList<Rule> filteredRuleList = FXCollections.observableArrayList();
                 for (Rule rule : Rule.getRules()){
-                    if (rule.getTags().contains(searchText)
-                            || rule.getTitle().contains(searchText)
-                            || rule.getDescription().contains(searchText)){
+                    if (rule.getTags().toUpperCase().contains(searchText.toUpperCase())
+                            || rule.getTitle().toUpperCase(Locale.ROOT).contains(searchText.toUpperCase())
+                            || rule.getDescription().toUpperCase().contains(searchText.toUpperCase())){
                         filteredRuleList.add(rule);
                     }
                 }
