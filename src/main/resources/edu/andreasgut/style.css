@@ -158,6 +158,12 @@
     -fx-pref-width: 250px;
 }
 
+.chatVBox{
+    -fx-padding: 0px;
+    -fx-spacing: 20px;
+    -fx-pref-width: 250px;
+}
+
 
 
 .smallTextField{

@@ -70,6 +70,19 @@ public class Messenger {
         sendMessage(viewManager, jsonObject.toString());
     }
 
+    public static void sendChatMessage(ViewManager viewManager, String message){
+
+        JSONObject jsonObject = new JSONObject();
+        Game game = viewManager.getGame();
+
+        jsonObject.put("gameCode", game.getGameCode());
+        jsonObject.put("command", "chat");
+        jsonObject.put("name", game.getCurrentPlayer().getName());
+        jsonObject.put("playerUuid", game.getCurrentPlayer().getUuid());
+        jsonObject.put("message", message);
+        sendMessage(viewManager, jsonObject.toString());
+    }
+
     public static void sendGiveUpMessage(ViewManager viewManager){
 
         JSONObject jsonObject = new JSONObject();
@@ -111,6 +124,11 @@ public class Messenger {
                         Platform.runLater(()-> viewManager.getScoreView().getPlayer2Label().setText("Player 2: " + jsonObject.getString("player2Name")));
                 }
                 break;
+
+            case "chat":{
+                viewManager.getLogView().postChatMessage(jsonObject.getString("name"), jsonObject.getString("message"));
+                break;
+            }
 
             case "gameOver":
                 int index = jsonObject.getInt("playerIndex");
