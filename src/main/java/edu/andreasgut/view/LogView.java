@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import javax.swing.event.ChangeListener;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.Random;
 
 public class LogView extends VBox {
 
@@ -18,7 +19,7 @@ public class LogView extends VBox {
     private NextStepButton nextComputerStepButton;
     private TextArea chatTextArea;
     private TextField chatTextField;
-    private Button chatSendButton;
+    private Button chatSendButton, chatComplimentButton, chatOffendButton;
     private VBox chatVBox;
     private ViewManager viewManager;
 
@@ -58,7 +59,20 @@ public class LogView extends VBox {
                 });
 
             chatTextField = new TextField();
+            chatTextField.setPromptText("Chatnachricht...");
+            chatTextField.setDisable(true);
             chatSendButton = new Button("Senden");
+            chatSendButton.setDisable(true);
+            chatComplimentButton = new Button("Gegner loben");
+            chatComplimentButton.setDisable(true);
+            chatComplimentButton.setOnAction(click ->{
+                Messenger.sendChatMessage(viewManager, getRandomCompliment());
+            });
+            chatOffendButton = new Button("Gegner beleidigen");
+            chatOffendButton.setOnAction(click -> {
+                Messenger.sendChatMessage(viewManager, getRandomOffense());
+            });
+            chatOffendButton.setDisable(true);
             chatSendButton.setOnAction(click -> {
 
                 if (chatTextField.getText().length() == 0){
@@ -71,10 +85,14 @@ public class LogView extends VBox {
 
                 Messenger.sendChatMessage(viewManager, chatTextField.getText());
             });
+            if (viewManager.getGame().isJoinExistingGame()){
+                activateChatElements();
+            }
+
             chatVBox = new VBox();
             chatVBox.getStyleClass().add("chatVBox");
 
-            chatVBox.getChildren().addAll(chatTextArea, chatTextField, chatSendButton);
+            chatVBox.getChildren().addAll(chatTextArea, chatTextField, chatSendButton, chatComplimentButton, chatOffendButton);
 
             this.getChildren().add(chatVBox);
 
@@ -110,7 +128,57 @@ public class LogView extends VBox {
         nextComputerStepButton.setDisable(false);
     }
 
+    public void activateChatElements(){
+        chatTextField.setDisable(false);
+        chatSendButton.setDisable(false);
+        chatOffendButton.setDisable(false);
+        chatComplimentButton.setDisable(false);
+    }
+
     public void disableNextComputerStepButton(){
         nextComputerStepButton.setDisable(true);
     }
+
+    private String getRandomOffense(){
+        String[] offenses = {"Uuuuuh, das war blöd...",
+                "Mein Cousin spielt besser. ...und der ist 3.",
+                "Das war ja gar nix...",
+                "Und so willst du gewinnen?",
+                "Deine Strategie ist... ...speziell.",
+                "Effiziente Strategie, um zu verlieren.",
+                "Also so gewinnst du garantiert nicht!",
+                "Meine Grossmutter gewinnt gegen dich im Schlaf!",
+                "Meinst du diesen Zug wirklich ernst?",
+                "Hoffentlich gibt's Spiele, die du besser spielst!",
+                "Hoffentlich hast du ein anderes Talent!",
+                "Ist das wirklich alles, was du kannst?",
+                "Ist dein Gehirn schon an?",
+                "Weisst du wirklich, was das Ziel des Spiels ist?",
+                "Fährst du nebenbei noch Auto?",
+                "Du bist ein guter Egobooster für mich!",
+                "Soll ich dir das Ziel des Spiels nochmals erklären?"};
+        Random random = new Random();
+        int randomInt = random.nextInt(offenses.length);
+
+        return offenses[randomInt];
+    }
+
+    private String getRandomCompliment(){
+        String[] offenses = {"Cleverer Zug!",
+                "Du spielst beeindruckend!",
+                "Gute Strategie!",
+                "Du bist ein wirklich harter Gegner!",
+                "Wow, der war gut!",
+                "Echt stark gespielt!",
+                "Saubere Leistung!",
+                "Du spielst gut!",
+                "Du machst mir das Leben schwer!",
+                "Gut gespielt!"};
+        Random random = new Random();
+        int randomInt = random.nextInt(offenses.length);
+
+        return offenses[randomInt];
+    }
+
+
 }

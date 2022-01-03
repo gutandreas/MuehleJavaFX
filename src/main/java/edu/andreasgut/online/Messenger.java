@@ -120,6 +120,7 @@ public class Messenger {
                 if (!game.isJoinExistingGame()){
                         System.out.println("Spiel beigetreten");
                         viewManager.getLogView().activateNextComputerStepButton();
+                        viewManager.getLogView().activateChatElements();
                         game.getPlayer1().setName(jsonObject.getString("player2Name"));
                         Platform.runLater(()-> viewManager.getScoreView().getPlayer2Label().setText("Player 2: " + jsonObject.getString("player2Name")));
                 }
