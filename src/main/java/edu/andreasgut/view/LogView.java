@@ -64,11 +64,13 @@ public class LogView extends VBox {
             chatSendButton = new Button("Senden");
             chatSendButton.setDisable(true);
             chatComplimentButton = new Button("Gegner loben");
+            chatComplimentButton.getStyleClass().add("complimentButton");
             chatComplimentButton.setDisable(true);
             chatComplimentButton.setOnAction(click ->{
                 Messenger.sendChatMessage(viewManager, getRandomCompliment());
             });
             chatOffendButton = new Button("Gegner beleidigen");
+            chatOffendButton.getStyleClass().add("offendButton");
             chatOffendButton.setOnAction(click -> {
                 Messenger.sendChatMessage(viewManager, getRandomOffense());
             });

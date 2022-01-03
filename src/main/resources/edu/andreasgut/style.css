@@ -164,6 +164,14 @@
     -fx-pref-width: 250px;
 }
 
+.offendButton{
+    -fx-background-color: #ff5555;
+}
+
+.complimentButton{
+    -fx-background-color: #aaddaa;
+}
+
 
 
 .smallTextField{
