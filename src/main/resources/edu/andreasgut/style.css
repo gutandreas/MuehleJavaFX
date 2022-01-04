@@ -103,6 +103,10 @@
     -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.3) , 5, 0.0 , 0 , 1 );
 }
 
+.nextStepButton{
+    -fx-pref-width: 150px;
+}
+
 .toggleButtonOff{
     -fx-background-color: #ffaaaa;
     -fx-effect: dropshadow( three-pass-box , rgba(255,255,255,0.3) , 5, 0.0 , 0 , 1 );
@@ -162,6 +166,10 @@
     -fx-padding: 0px;
     -fx-spacing: 20px;
     -fx-pref-width: 250px;
+}
+
+.chatVBox .button{
+    -fx-pref-width: 150px;
 }
 
 .offendButton{

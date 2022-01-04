@@ -37,6 +37,7 @@ public class LogView extends VBox {
 
         if (computerOnlineBattle){
             nextComputerStepButton = new NextStepButton("Stein setzen");
+            nextComputerStepButton.getStyleClass().add("nextStepButton");
             nextComputerStepButton.setOnAction(click -> {
                 if (nextComputerStepButton.isPut()){
                     ((ComputerPlayer) viewManager.getGame().getCurrentPlayer()).triggerPut(viewManager);
