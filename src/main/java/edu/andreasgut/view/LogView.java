@@ -83,6 +83,7 @@ public class LogView extends VBox {
                 }
 
                 Messenger.sendChatMessage(viewManager, chatTextField.getText());
+                chatTextField.setText("");
             });
             if (viewManager.getGame().isJoinExistingGame()){
                 activateChatElements();
