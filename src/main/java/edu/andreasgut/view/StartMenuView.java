@@ -878,10 +878,15 @@ public class StartMenuView extends VBox {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (JSONException e){
-                onlineInformationLabel.setText("Ungültiger Gamecode");
+                e.printStackTrace();
             }
 
             System.out.println(response.statusCode());
+
+            if (response.statusCode() == 417) {
+                onlineInformationLabel.setText("Ungültiger Gamecode");
+            }
+
 
             if (response.statusCode() == 200){
 
