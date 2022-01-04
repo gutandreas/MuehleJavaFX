@@ -55,10 +55,6 @@ public class LogView extends VBox {
 
             chatTextArea = new TextArea();
             chatTextArea.setEditable(false);
-            chatTextArea.textProperty().addListener(change ->{
-                    chatTextArea.setScrollTop(Double.MAX_VALUE);
-                });
-
             chatTextField = new TextField();
             chatTextField.setPromptText("Chatnachricht...");
             chatTextField.setDisable(true);
@@ -113,14 +109,10 @@ public class LogView extends VBox {
 
     public void postChatMessage(String name, String message){
         chatTextArea.setWrapText(true);
-        String oldText;
         if(chatTextArea.getText().length() != 0){
-            oldText = chatTextArea.getText() + "\n";
+            chatTextArea.appendText("\n" );
         }
-        else {
-            oldText = chatTextArea.getText();
-        }
-        chatTextArea.setText(oldText + name + ": " + message);
+        chatTextArea.appendText(name + ": " + message);
     }
 
     public NextStepButton getNextComputerStepButton() {
