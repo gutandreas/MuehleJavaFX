@@ -60,7 +60,6 @@ public class NextStepButton extends Button {
         else {
             this.setDisable(false);
         }
-
     }
 
     public boolean isKill() {
