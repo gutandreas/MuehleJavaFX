@@ -138,6 +138,12 @@ public class Messenger {
                 viewManager.getFieldView().setDisable(true);
                 break;
 
+            case "roboterConnected":
+                viewManager.getScoreView().acitvateRoboterConnectedLabel(true);
+                game.setRoboterConnected(true);
+                game.setRoboterNeedsWaitingTime(jsonObject.getBoolean("roboterWaitingTime"));
+                break;
+
             case "update":
 
                 if (!game.isGameOver()) {

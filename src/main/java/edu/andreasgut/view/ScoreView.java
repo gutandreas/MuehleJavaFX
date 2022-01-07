@@ -14,7 +14,7 @@ public class ScoreView extends VBox {
 
     private Label titleLabel, player1Label, player2Label, stonesPutPlayer1Label, stonesPutPlayer2Label, roundLabel,
             phaseLabel, stonesLostPlayer1Label, stonesLostPlayer2Label, stonesKilledPlayer1Label, stonesKilledPlayer2Label,
-            gameCodeLabel;
+            gameCodeLabel, roboterConnectedLabel;
     private ViewManager viewManager;
     private VBox player1VBox, player2VBox, player1LabelsVBox, player2LabelsVBox;
     private HBox player1HBox, player2HBox;
@@ -28,7 +28,7 @@ public class ScoreView extends VBox {
     private int stonesKilled2 = 0;
 
 
-    public ScoreView(ViewManager viewManager, STONECOLOR player1Color, STONECOLOR player2Color, int startRound) {
+    public ScoreView(ViewManager viewManager, STONECOLOR player1Color, STONECOLOR player2Color, int startRound, boolean onlineGame) {
         this.viewManager = viewManager;
         this.getStyleClass().add("scoreview");
 
@@ -46,10 +46,13 @@ public class ScoreView extends VBox {
 
         setupPlayer1andPlayer2(player1Color, player2Color);
 
-        if (viewManager.getGame().getGameCode() != null){
+        if (onlineGame){
             gameCodeLabel = new Label();
             gameCodeLabel.getStyleClass().add("labelGamecode");
-            this.getChildren().addAll(titleLabel, phaseLabel, roundLabel, player1VBox, player2VBox, gameCodeLabel);
+            roboterConnectedLabel = new Label("Roboter verbunden");
+            roboterConnectedLabel.getStyleClass().add("roboterDisconnectedLabel");
+
+            this.getChildren().addAll(titleLabel, phaseLabel, roundLabel, player1VBox, player2VBox, gameCodeLabel, roboterConnectedLabel);
         }
         else {
             this.getChildren().addAll(titleLabel, phaseLabel, roundLabel, player1VBox, player2VBox);
@@ -298,5 +301,16 @@ public class ScoreView extends VBox {
 
     public Label getStonesKilledPlayer2Label() {
         return stonesKilledPlayer2Label;
+    }
+
+    public void acitvateRoboterConnectedLabel(boolean on){
+        if (on){
+            roboterConnectedLabel.getStyleClass().remove("roboterDisconnectedLabel");
+            roboterConnectedLabel.getStyleClass().add("roboterConnectedLabel");
+        }
+        else {
+            roboterConnectedLabel.getStyleClass().remove("roboterConnectedLabel");
+            roboterConnectedLabel.getStyleClass().add("roboterDisconnectedLabel");
+        }
     }
 }

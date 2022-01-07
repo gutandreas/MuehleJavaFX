@@ -51,16 +51,16 @@ public class CustomComputerPlayer extends ComputerPlayer{
     //!!!NICHT VERÄNDERN!!!
     @Override
     public void prepareKill(ViewManager viewManager) {
-        viewManager.getLogView().getNextComputerStepButton().setKill();
+        viewManager.getLogView().getNextComputerStepButton().setKill(viewManager);
     }
 
     @Override
     public void preparePutOrMove(ViewManager viewManager) {
         if (viewManager.getGame().isPutPhase()){
-            viewManager.getLogView().getNextComputerStepButton().setPut();
+            viewManager.getLogView().getNextComputerStepButton().setPut(viewManager);
         }
         else {
-            viewManager.getLogView().getNextComputerStepButton().setMove();
+            viewManager.getLogView().getNextComputerStepButton().setMove(viewManager);
         }
     }
 

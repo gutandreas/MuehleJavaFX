@@ -756,7 +756,7 @@ public class StartMenuView extends VBox {
 
 
                 viewManager.createGameScene(new FieldViewPlay(viewManager, player1Color, player2Color, true),
-                        new ScoreView(viewManager, player1Color, player2Color, viewManager.getGame().getRound()),
+                        new ScoreView(viewManager, player1Color, player2Color, viewManager.getGame().getRound(), false),
                         new LogView(viewManager, false));
 
 
@@ -902,7 +902,7 @@ public class StartMenuView extends VBox {
                     game = new Game(viewManager, new HumanPlayer(viewManager, onlinePlayerName, false), computerPlayer, gameCodeTextfield.getText(), startOnlineGameSwitchButton.getState());
                     viewManager.setGame(game);
                     viewManager.createGameScene(new FieldViewPlay(viewManager, onlinePlayerColor, computerColor, false),
-                            new ScoreView(viewManager, onlinePlayerColor, computerColor, game.getRound()),
+                            new ScoreView(viewManager, onlinePlayerColor, computerColor, game.getRound(), true),
                             new LogView(viewManager, true));
                 }
                 //start
@@ -910,7 +910,7 @@ public class StartMenuView extends VBox {
                     game = new Game(viewManager, computerPlayer, new HumanPlayer(viewManager, onlinePlayerName, false), gameCodeTextfield.getText(), startOnlineGameSwitchButton.getState());
                     viewManager.setGame(game);
                     viewManager.createGameScene(new FieldViewPlay(viewManager, computerColor, onlinePlayerColor, false),
-                            new ScoreView(viewManager, computerColor, onlinePlayerColor, game.getRound()),
+                            new ScoreView(viewManager, computerColor, onlinePlayerColor, game.getRound(), true),
                             new LogView(viewManager, true));
                 }
 

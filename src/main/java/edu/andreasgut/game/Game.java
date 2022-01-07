@@ -29,6 +29,8 @@ public class Game {
     private Position lastClickedPosition;
     private WebsocketClient websocketClient;
     private boolean joinExistingGame;
+    private boolean roboterConnected = false;
+    private boolean roboterNeedsWaitingTime = false;
 
 
     ArrayList<Player> playerArrayList = new ArrayList<>();
@@ -204,6 +206,22 @@ public class Game {
 
     public boolean isGameOver() {
         return gameOver;
+    }
+
+    public boolean isRoboterConnected() {
+        return roboterConnected;
+    }
+
+    public void setRoboterConnected(boolean roboterConnected) {
+        this.roboterConnected = roboterConnected;
+    }
+
+    public boolean isRoboterNeedsWaitingTime() {
+        return roboterNeedsWaitingTime;
+    }
+
+    public void setRoboterNeedsWaitingTime(boolean roboterNeedsWaitingTime) {
+        this.roboterNeedsWaitingTime = roboterNeedsWaitingTime;
     }
 
     public void increaseRound(){

@@ -190,7 +190,7 @@ public class StandardComputerPlayer extends ComputerPlayer{
             triggerKill(viewManager);
         }
         else {
-            viewManager.getLogView().getNextComputerStepButton().setKill();
+            viewManager.getLogView().getNextComputerStepButton().setKill(viewManager);
         }
     }
 
@@ -210,10 +210,10 @@ public class StandardComputerPlayer extends ComputerPlayer{
         }
         else {
             if (viewManager.getGame().isPutPhase()){
-                viewManager.getLogView().getNextComputerStepButton().setPut();
+                viewManager.getLogView().getNextComputerStepButton().setPut(viewManager);
             }
             else {
-                viewManager.getLogView().getNextComputerStepButton().setMove();
+                viewManager.getLogView().getNextComputerStepButton().setMove(viewManager);
             }
         }
     }
