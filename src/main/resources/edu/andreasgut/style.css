@@ -27,7 +27,7 @@
 .scoreview{
     -fx-pref-width: 300;
     -fx-padding: 20;
-    -fx-spacing: 40;
+    -fx-spacing: 30;
 }
 
 .logview{
@@ -150,6 +150,32 @@
 .restartButton{
     -fx-background-color: #eebb55;
 }
+
+/*
+.progressBar{
+    -fx-background-color: green;
+}
+*/
+
+.progress-bar {
+    -fx-accent: #ffff66;
+    -fx-pref-width: 130px;
+}
+
+.progress-bar .bar {
+    -fx-padding: 1px;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+}
+
+.progress-bar > .track {
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+    -fx-text-box-border: transparent;
+    -fx-control-inner-background: transparent;
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
 
 .scorePopOver{
     -fx-background-color: linear-gradient(to bottom, #383838, #303030);

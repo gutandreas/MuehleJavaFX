@@ -4,6 +4,7 @@ import edu.andreasgut.game.Board;
 import edu.andreasgut.game.Player;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -19,6 +20,7 @@ public class ScoreView extends VBox {
     private VBox player1VBox, player2VBox, player1LabelsVBox, player2LabelsVBox;
     private HBox player1HBox, player2HBox;
     private ImageView player1StonesImageView, player2StonesImageView;
+    private ProgressBar roboterProgressBar;
     private int round = 0;
     private int stonesPut1 = 0;
     private int stonesPut2 = 0;
@@ -51,8 +53,10 @@ public class ScoreView extends VBox {
             gameCodeLabel.getStyleClass().add("labelGamecode");
             roboterConnectedLabel = new Label("Roboter verbunden");
             roboterConnectedLabel.getStyleClass().add("roboterDisconnectedLabel");
-
-            this.getChildren().addAll(titleLabel, phaseLabel, roundLabel, player1VBox, player2VBox, gameCodeLabel, roboterConnectedLabel);
+            roboterProgressBar = new ProgressBar();
+            roboterProgressBar.getStyleClass().add("progressBar");
+            roboterProgressBar.setProgress(0);
+            this.getChildren().addAll(titleLabel, phaseLabel, roundLabel, player1VBox, player2VBox, gameCodeLabel, roboterConnectedLabel, roboterProgressBar);
         }
         else {
             this.getChildren().addAll(titleLabel, phaseLabel, roundLabel, player1VBox, player2VBox);
@@ -312,5 +316,9 @@ public class ScoreView extends VBox {
             roboterConnectedLabel.getStyleClass().remove("roboterConnectedLabel");
             roboterConnectedLabel.getStyleClass().add("roboterDisconnectedLabel");
         }
+    }
+
+    public void setRoboterProgressBarToValue(double value){
+        roboterProgressBar.setProgress(value);
     }
 }
