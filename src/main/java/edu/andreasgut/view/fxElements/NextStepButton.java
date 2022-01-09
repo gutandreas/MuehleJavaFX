@@ -4,13 +4,8 @@ import edu.andreasgut.view.ViewManager;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.util.Duration;
-
-import java.util.Date;
-import java.util.TimerTask;
 
 public class NextStepButton extends Button {
 
@@ -32,7 +27,7 @@ public class NextStepButton extends Button {
         changeTextTo("Stein setzen");
         move = false;
         kill = false;
-        if (viewManager.getGame().isRoboterNeedsWaitingTime()){
+        if (viewManager.getGame().isRoboterWatching()){
             final Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(10), actionEvent -> {
                 this.setDisable(false);}));
             timeline.play();
@@ -52,7 +47,7 @@ public class NextStepButton extends Button {
         changeTextTo("Stein bewegen");
         put = false;
         kill = false;
-        if (viewManager.getGame().isRoboterNeedsWaitingTime()){
+        if (viewManager.getGame().isRoboterWatching()){
             final Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(7), actionEvent ->
                     this.setDisable(false)));
             timeline.play();
@@ -71,7 +66,7 @@ public class NextStepButton extends Button {
         changeTextTo("Gegnerischen Stein entfernen");
         put = false;
         move = false;
-        if (viewManager.getGame().isRoboterNeedsWaitingTime()){
+        if (viewManager.getGame().isRoboterWatching() || viewManager.getGame().isRoboterPlaying()){
             final Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(10), actionEvent ->
                     this.setDisable(false)));
             timeline.play();

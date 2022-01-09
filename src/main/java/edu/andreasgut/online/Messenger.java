@@ -1,7 +1,6 @@
 package edu.andreasgut.online;
 
 import edu.andreasgut.game.*;
-import edu.andreasgut.view.FieldViewPlay;
 import edu.andreasgut.view.ViewManager;
 import javafx.application.Platform;
 import org.json.JSONObject;
@@ -138,10 +137,21 @@ public class Messenger {
                 viewManager.getFieldView().setDisable(true);
                 break;
 
-            case "roboterConnected":
-                viewManager.getScoreView().acitvateRoboterConnectedLabel(true);
-                game.setRoboterConnected(true);
-                game.setRoboterNeedsWaitingTime(jsonObject.getBoolean("roboterWaitingTime"));
+            case "roboterConnection":
+                if (jsonObject.getBoolean("connected")){
+                    viewManager.getScoreView().acitvateRoboterConnectedLabel(true);
+                    game.setRoboterConnected(true);
+                    game.setRoboterWatching(jsonObject.getBoolean("watching"));
+                    game.setRoboterPlaying(jsonObject.getBoolean("playing"));
+                }
+                else {
+                    viewManager.getScoreView().acitvateRoboterConnectedLabel(false);
+                    game.setRoboterConnected(false);
+                    game.setRoboterWatching(false);
+                    game.setRoboterPlaying(false);
+                    viewManager.getScoreView().acitvateRoboterConnectedLabel(false);
+                }
+
                 break;
 
             case "update":

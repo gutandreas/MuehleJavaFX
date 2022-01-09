@@ -30,7 +30,8 @@ public class Game {
     private WebsocketClient websocketClient;
     private boolean joinExistingGame;
     private boolean roboterConnected = false;
-    private boolean roboterNeedsWaitingTime = false;
+    private boolean roboterWatching = false;
+    private boolean roboterPlaying = false;
 
 
     ArrayList<Player> playerArrayList = new ArrayList<>();
@@ -216,12 +217,20 @@ public class Game {
         this.roboterConnected = roboterConnected;
     }
 
-    public boolean isRoboterNeedsWaitingTime() {
-        return roboterNeedsWaitingTime;
+    public boolean isRoboterWatching() {
+        return roboterWatching;
     }
 
-    public void setRoboterNeedsWaitingTime(boolean roboterNeedsWaitingTime) {
-        this.roboterNeedsWaitingTime = roboterNeedsWaitingTime;
+    public void setRoboterWatching(boolean roboterWatching) {
+        this.roboterWatching = roboterWatching;
+    }
+
+    public boolean isRoboterPlaying() {
+        return roboterPlaying;
+    }
+
+    public void setRoboterPlaying(boolean roboterPlaying) {
+        this.roboterPlaying = roboterPlaying;
     }
 
     public void increaseRound(){
