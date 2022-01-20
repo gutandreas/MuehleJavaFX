@@ -68,7 +68,7 @@ public class CustomComputerPlayer extends ComputerPlayer{
     public void triggerKill(ViewManager viewManager) {
         Game game = viewManager.getGame();
         Position position = kill(game.getBoard(), game.getCurrentPlayerIndex(), game.getOtherPlayerIndex());
-        boolean killOkay = position != null && game.getBoard().checkKill(position, game.getOtherPlayerIndex());
+        boolean killOkay = position != null && game.getBoard().isKillPossibleAt(position, game.getOtherPlayerIndex());
 
         if (killOkay){
             Messenger.sendKillMessage(viewManager, position);}
@@ -88,7 +88,7 @@ public class CustomComputerPlayer extends ComputerPlayer{
 
         Game game = viewManager.getGame();
         Position position = put(game.getBoard(), game.getCurrentPlayerIndex());
-        boolean putOkay = position != null && game.getBoard().checkPut(position);
+        boolean putOkay = position != null && game.getBoard().isValidPut(position);
 
         if (putOkay){
             Messenger.sendPutMessage(viewManager, position);
@@ -107,9 +107,9 @@ public class CustomComputerPlayer extends ComputerPlayer{
     public void triggerMove(ViewManager viewManager){
 
         Game game = viewManager.getGame();
-        boolean allowedToJump = game.getBoard().countPlayersStones(game.getCurrentPlayerIndex()) == 3;
+        boolean allowedToJump = game.getBoard().numberOfStonesOf(game.getCurrentPlayerIndex()) == 3;
         Move move = move(game.getBoard(), game.getCurrentPlayerIndex(), allowedToJump);
-        boolean moveOkay = move != null && game.getBoard().checkMove(move, allowedToJump);
+        boolean moveOkay = move != null && game.getBoard().isValidMove(move.getFrom(), move.getTo(), allowedToJump);
 
         if (moveOkay){
             Messenger.sendMoveMessage(viewManager, move);

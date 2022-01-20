@@ -10,7 +10,7 @@ public class ClosedMorris {
             throw new IllegalArgumentException();
         }
 
-        if (!(board.checkMorris(firstPosition) && board.checkMorris(secondPosition) && board.checkMorris(thirdPosition))){
+        if (!(board.isMorrisAt(firstPosition) && board.isMorrisAt(secondPosition) && board.isMorrisAt(thirdPosition))){
             throw new IllegalArgumentException();
         }
 

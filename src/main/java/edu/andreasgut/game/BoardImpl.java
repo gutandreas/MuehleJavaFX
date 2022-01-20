@@ -43,48 +43,48 @@ public class BoardImpl implements Board {
 
 
     @Override
-	public void move(Move move, int playerIndex) {
-        putStone(move.getTo(), playerIndex);
-        clearStone(move.getFrom());
+	public void moveStone(Position from, Position to, int playerIndex) {
+        putStone(to, playerIndex);
+        removeStone(from);
     }
 
 
     @Override
-	public boolean checkPut(Position position){
+	public boolean isValidPut(Position position){
         return isFieldFree(position);
     }
 
 
     @Override
-	public boolean checkMove(Move move, boolean allowedToJump){
+    public boolean isValidMove(Position from, Position to, boolean allowedToJump) {
 
-        boolean destinationFree = isFieldFree(move.getTo());
+        boolean destinationFree = isFieldFree(to);
 
-        boolean destinationInRing = (move.getFrom().getRing()==move.getTo().getRing() && Math.abs(move.getFrom().getField()-move.getTo().getField())==1)
-                || (move.getFrom().getRing()==move.getTo().getRing() && Math.abs(move.getFrom().getField()-move.getTo().getField())==7);
+        boolean destinationInRing = (from.getRing()==to.getRing() && Math.abs(from.getField()-to.getField())==1)
+                || (from.getRing()==to.getRing() && Math.abs(from.getField()-to.getField())==7);
 
-        boolean destinationBetweenRings = move.getFrom().getField()%2==1 && move.getFrom().getField()==move.getTo().getField()
-                && Math.abs(move.getFrom().getRing()-move.getTo().getRing())==1;
+        boolean destinationBetweenRings = from.getField()%2==1 && from.getField()==to.getField()
+                && Math.abs(from.getRing()-to.getRing())==1;
 
         return destinationFree && (destinationInRing || destinationBetweenRings || allowedToJump);
     }
 
 
     @Override
-	public boolean checkKill(Position position, int otherPlayerIndex){
+	public boolean isKillPossibleAt(Position position, int otherPlayerIndex){
         return array[position.getRing()][position.getField()] == otherPlayerIndex &&
-                (!checkMorris(position) || countPlayersStones(otherPlayerIndex)==3);
+                (!isMorrisAt(position) || numberOfStonesOf(otherPlayerIndex)==3);
     }
 
 
     @Override
-	public void clearStone(Position position) {
+	public void removeStone(Position position) {
         array[position.getRing()][position.getField()] = 9;
     }
 
 
     @Override
-	public boolean checkMorris(Position position){
+	public boolean isMorrisAt(Position position){
         boolean cornerField = position.getField()%2==0;
         boolean morris;
         int stone = array[position.getRing()][position.getField()];
@@ -124,9 +124,9 @@ public class BoardImpl implements Board {
 
 
     @Override
-	public boolean checkIfAbleToMove(int playerIndex){
+	public boolean canPlayerMove(int playerIndex){
         return checkMovePossibilityInRing(playerIndex) || checkMovePossibilityBetweenRings(playerIndex)
-                || countPlayersStones(playerIndex) == 3;
+                || numberOfStonesOf(playerIndex) == 3;
     }
 
 
@@ -165,15 +165,15 @@ public class BoardImpl implements Board {
 
 
     @Override
-	public boolean isThereStoneToKill(int otherPlayerIndex){
+	public boolean canPlayerKill(int otherPlayerIndex){
 
-        if (countPlayersStones(otherPlayerIndex) == 3 && game.movePhase){
+        if (numberOfStonesOf(otherPlayerIndex) == 3 && game.movePhase){
             return true;
         }
 
         for (int ring = 0; ring < 3; ring++){
             for (int field = 0; field < 8; field++){
-                if (array[ring][field] == otherPlayerIndex && !checkMorris(new Position(ring,field))){
+                if (array[ring][field] == otherPlayerIndex && !isMorrisAt(new Position(ring,field))){
                     return true;
                 }
             }
@@ -183,7 +183,7 @@ public class BoardImpl implements Board {
 
 
     @Override
-	public int countPlayersStones(int playerIndex){
+	public int numberOfStonesOf(int playerIndex){
         int counter = 0;
         for (int i = 0; i < 3; i++){
             for (int j = 0; j < 8; j++){

@@ -1,24 +1,20 @@
 package edu.andreasgut.online;
 
-import edu.andreasgut.game.Board;
-import edu.andreasgut.view.ViewManager;
+import java.net.URI;
+
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONObject;
 
-
-import java.net.URI;
+import edu.andreasgut.view.ViewManager;
 
 public class WebsocketClient extends WebSocketClient {
 
     private ViewManager viewManager;
-    private Board board;
-
 
     public WebsocketClient(URI serverUri, ViewManager viewManager) {
         super(serverUri);
         this.viewManager = viewManager;
-        this.board = viewManager.getGame().getBoard();
     }
 
     @Override

@@ -61,7 +61,7 @@ public class FieldViewStartingPosition extends FieldView {
                             graphicPut(position, 1, 0, false);
                             break;
                         case 1:
-                            board.clearStone(position);
+                            board.removeStone(position);
                             graphicKill(position, false);
                     }
 

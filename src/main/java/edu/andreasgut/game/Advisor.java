@@ -5,12 +5,12 @@ import java.util.*;
 public class Advisor {
 
     static public int countMyStones(Board board, int playerIndex){
-        return board.countPlayersStones(playerIndex);
+        return board.numberOfStonesOf(playerIndex);
     }
 
     static public int countMyEnemysStones(Board board, int ownPlayerIndex){
         int enemysIndex = 1 - ownPlayerIndex;
-        return board.countPlayersStones(enemysIndex);
+        return board.numberOfStonesOf(enemysIndex);
     }
 
     static public LinkedList<Line> getLinesWithoutEnemysStones(Board board, int ownPlayerIndex){
@@ -286,7 +286,6 @@ public class Advisor {
     }
 
     static public int numberOfMyTwoStonesWithGap(Board board, int ownPlayerIndex){
-        int enemyIndex = 1-ownPlayerIndex;
         int counter = 0;
 
         for (int ring = 0; ring < 3; ring++) {
@@ -424,7 +423,7 @@ public class Advisor {
             for (int field = 0; field < 8; field++) {
 
                 Position position = new Position(ring, field);
-                if (board.checkKill(position, enemysIndex)){
+                if (board.isKillPossibleAt(position, enemysIndex)){
                     killList.add(position);
                 }
 

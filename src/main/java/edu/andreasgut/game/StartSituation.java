@@ -1,7 +1,5 @@
 package edu.andreasgut.game;
 
-import java.util.LinkedList;
-
 public class StartSituation {
 
     private int round;

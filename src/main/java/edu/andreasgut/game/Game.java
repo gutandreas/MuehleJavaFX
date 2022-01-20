@@ -11,7 +11,6 @@ public class Game {
 
     private final Player player0;
     private final Player player1;
-    private Player winner;
     private int round;
     private final int NUMBEROFSTONES = 9;
     private Player currentPlayer;
@@ -253,7 +252,7 @@ public class Game {
 
 
             if (killPhase){
-                if (board.checkKill(clickedPosition, getOtherPlayerIndex())){
+                if (board.isKillPossibleAt(clickedPosition, getOtherPlayerIndex())){
                     Messenger.sendKillMessage(viewManager, clickedPosition);
                     return;
                    }
@@ -266,7 +265,7 @@ public class Game {
             }
 
             if (putPhase){
-                if (board.checkPut(clickedPosition)){
+                if (board.isValidPut(clickedPosition)){
                     Messenger.sendPutMessage(viewManager, clickedPosition);
                     return;
 
@@ -298,9 +297,9 @@ public class Game {
 
 
                 if (movePhaseRelease){
-                    boolean allowedToJump = board.countPlayersStones(getCurrentPlayerIndex()) == 3;
+                    boolean allowedToJump = board.numberOfStonesOf(getCurrentPlayerIndex()) == 3;
                     Move move = new Move(lastClickedPosition, clickedPosition);
-                    if (board.checkMove(move,allowedToJump)){
+                    if (board.isValidMove(move.getFrom(),move.getTo(),allowedToJump)){
                         Messenger.sendMoveMessage(viewManager, move);
                     }
                     else {
@@ -377,8 +376,8 @@ public class Game {
 
     private void checkWinner(){
 
-        boolean lessThan3Stones = movePhase && board.countPlayersStones(getCurrentPlayerIndex()) < 3;
-        boolean unableToMove = movePhase && !board.checkIfAbleToMove(getCurrentPlayerIndex());
+        boolean lessThan3Stones = movePhase && board.numberOfStonesOf(getCurrentPlayerIndex()) < 3;
+        boolean unableToMove = movePhase && !board.canPlayerMove(getCurrentPlayerIndex());
 
         if (lessThan3Stones || unableToMove){
             gameOver = true;

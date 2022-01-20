@@ -705,19 +705,19 @@ public class StartMenuView extends VBox {
 
             //Ungültige Ausgangslage abfangen
             boolean lessThan3StonesInMovePhase = tempRound > 18
-                    && (startingPositionFieldView.getBoard().countPlayersStones(0) < 3
-                    || startingPositionFieldView.getBoard().countPlayersStones(1) < 3);
+                    && (startingPositionFieldView.getBoard().numberOfStonesOf(0) < 3
+                    || startingPositionFieldView.getBoard().numberOfStonesOf(1) < 3);
 
             boolean lessThan3StonesAfterPutPhase = tempRound <= 18
-                    && (startingPositionFieldView.getBoard().countPlayersStones(0) + (18-tempRound)/2 < 3
-                    || startingPositionFieldView.getBoard().countPlayersStones(1) + (18-tempRound)/2 < 3);
+                    && (startingPositionFieldView.getBoard().numberOfStonesOf(0) + (18-tempRound)/2 < 3
+                    || startingPositionFieldView.getBoard().numberOfStonesOf(1) + (18-tempRound)/2 < 3);
 
-            boolean moreThan9Stones = startingPositionFieldView.getBoard().countPlayersStones(0) > 9
-                    || startingPositionFieldView.getBoard().countPlayersStones(1) > 9;
+            boolean moreThan9Stones = startingPositionFieldView.getBoard().numberOfStonesOf(0) > 9
+                    || startingPositionFieldView.getBoard().numberOfStonesOf(1) > 9;
 
             boolean moreThan9StonesAfterPutPhase = tempRound <= 18
-                    && (startingPositionFieldView.getBoard().countPlayersStones(0) + Math.round(((double) 18-tempRound)/2) > 9
-                    || startingPositionFieldView.getBoard().countPlayersStones(1) + Math.round(((double) 18-tempRound)/2) > 9);
+                    && (startingPositionFieldView.getBoard().numberOfStonesOf(0) + Math.round(((double) 18-tempRound)/2) > 9
+                    || startingPositionFieldView.getBoard().numberOfStonesOf(1) + Math.round(((double) 18-tempRound)/2) > 9);
 
 
             if (lessThan3StonesInMovePhase || lessThan3StonesAfterPutPhase || moreThan9Stones || moreThan9StonesAfterPutPhase){

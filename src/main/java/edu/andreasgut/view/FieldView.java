@@ -15,7 +15,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.robot.Robot;
 
-
 abstract public class FieldView extends AnchorPane{
 
     protected ImageView imageView;
