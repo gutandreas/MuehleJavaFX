@@ -48,7 +48,7 @@ public class FieldViewStartingPosition extends FieldView {
                 n.setOnMouseClicked(click -> {
                     Position position = new Position(translateToRing(n), translateToField(n));
 
-                    System.out.println("Feld in Repräsentationsarray: " + position.getRing() + "/" + position.getField());
+                    System.out.println("Feld in Repräsentationsarray: " + position);
                     System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
 
                     switch (board.getNumberOnPosition(position.getRing(), position.getField())){

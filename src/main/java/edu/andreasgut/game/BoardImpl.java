@@ -1,7 +1,6 @@
 package edu.andreasgut.game;
 
 public class BoardImpl implements Board {
-
     final private int[][] array;
     private final Game game;
 
@@ -304,4 +303,5 @@ public class BoardImpl implements Board {
 	public Board clone(){
         return new BoardImpl(this);
     }
+
 }
