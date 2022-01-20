@@ -38,6 +38,6 @@ public class Position implements Comparable<Position> {
 
     @Override
     public String toString(){
-        return "Position " + getRing() + "/" + getField();
+        return "" + ring + "/" + field;
     }
 }

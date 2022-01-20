@@ -20,9 +20,9 @@ public class FieldViewPlay extends FieldView{
         Board board = viewManager.getGame().getBoard();
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 8; j++) {
-                if (board.getNumberOnPosition(i, j) != 9) {
-                    Position tempPosition = new Position(i, j);
-                    graphicPut(tempPosition, board.getNumberOnPosition(i, j), 0, false);
+                Position tempPosition = new Position(i, j);
+                if (board.getNumberOnPosition(tempPosition) != 9) {
+                    graphicPut(tempPosition, board.getNumberOnPosition(tempPosition), 0, false);
                 }
             }
         }
@@ -60,7 +60,7 @@ public class FieldViewPlay extends FieldView{
                     n.setOnMouseClicked(click -> {
                         Position position = new Position(translateToRing(n), translateToField(n));
 
-                        System.out.println("Feld in Repräsentationsarray: " + position.getRing() + "/" + position.getField());
+                        System.out.println("Feld in Repräsentationsarray: " + position);
                         System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
 
                         viewManager.getGame().nextStep(position);

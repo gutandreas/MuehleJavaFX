@@ -45,9 +45,9 @@ public class Game {
         this.board = new BoardImpl(this);
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 8; j++) {
-                if (board.getNumberOnPosition(i, j) != 9) {
-                    Position tempPosition = new Position(i, j);
-                    this.board.putStone(tempPosition, board.getNumberOnPosition(i, j));
+            	Position tempPosition = new Position(i, j);
+                if (board.getNumberOnPosition(tempPosition) != 9) {
+                    this.board.putStone(tempPosition, board.getNumberOnPosition(tempPosition));
                 }
             }
         }
@@ -91,9 +91,9 @@ public class Game {
         this.board = new BoardImpl(this);
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 8; j++) {
-                if (board.getNumberOnPosition(i, j) != 9) {
-                    Position tempPosition = new Position(i, j);
-                    this.board.putStone(tempPosition, board.getNumberOnPosition(i, j));
+            	Position tempPosition = new Position(i, j);
+                if (board.getNumberOnPosition(tempPosition) != 9) {
+                    this.board.putStone(tempPosition, board.getNumberOnPosition(tempPosition));
                 }
             }
         }

@@ -225,8 +225,8 @@ public class Messenger {
                         int ring = jsonObject.getInt("ring");
                         int field = jsonObject.getInt("field");
 
-                        int playerIndex = board.getNumberOnPosition(ring, field);
                         Position position = new Position(ring, field);
+                        int playerIndex = board.getNumberOnPosition(position);
 
                         if (board.isKillPossibleAt(position, playerIndex)) {
                             board.removeStone(position);

@@ -24,7 +24,7 @@ public interface Board {
 	boolean isThisMyStone(Position position, int ownPlayerIndex);
 	boolean isThisMyEnemysStone(Position position, int ownPlayerIndex);
 
-	int getNumberOnPosition(int ring, int field);
+	int getNumberOnPosition(Position position);
 
 	String toString();
 	Board clone();

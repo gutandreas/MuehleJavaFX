@@ -2,6 +2,7 @@ package edu.andreasgut.view;
 
 import edu.andreasgut.game.Board;
 import edu.andreasgut.game.Player;
+import edu.andreasgut.game.Position;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -72,10 +73,11 @@ public class ScoreView extends VBox {
 
         for (int i = 0; i < 3; i++){
             for (int j = 0; j < 8; j++){
-                if (board.getNumberOnPosition(i, j) == 0){
+            	Position p = new Position(i, j);
+                if (board.getNumberOnPosition(p) == 0){
                     stonesPlayer1++;
                 }
-                if (board.getNumberOnPosition(i, j) == 1){
+                if (board.getNumberOnPosition(p) == 1){
                     stonesPlayer2++;
                 }
             }

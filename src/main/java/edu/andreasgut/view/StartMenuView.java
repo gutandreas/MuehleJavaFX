@@ -1,31 +1,43 @@
 package edu.andreasgut.view;
 
-import edu.andreasgut.game.*;
-import edu.andreasgut.online.WebsocketClient;
-import edu.andreasgut.sound.MUSIC;
-import edu.andreasgut.view.fxElements.SwitchButton;
-import edu.andreasgut.view.fxElements.SelectColorButton;
-import javafx.collections.FXCollections;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.control.*;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
-import org.controlsfx.control.PopOver;
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
+import org.controlsfx.control.PopOver;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import edu.andreasgut.game.ComputerPlayer;
+import edu.andreasgut.game.CustomComputerPlayer;
+import edu.andreasgut.game.Game;
+import edu.andreasgut.game.HumanPlayer;
+import edu.andreasgut.game.Position;
+import edu.andreasgut.game.ScorePoints;
+import edu.andreasgut.game.StandardComputerPlayer;
+import edu.andreasgut.game.StartSituation;
+import edu.andreasgut.online.WebsocketClient;
+import edu.andreasgut.sound.MUSIC;
+import edu.andreasgut.view.fxElements.SelectColorButton;
+import edu.andreasgut.view.fxElements.SwitchButton;
+import javafx.collections.FXCollections;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 public class StartMenuView extends VBox {
 
@@ -229,10 +241,11 @@ public class StartMenuView extends VBox {
 
             for (int i = 0; i < 3; i++){
                 for (int j = 0; j < 8; j++){
-                    if (startSituation.getBoard().getNumberOnPosition(i,j) != 9){
-                        startingPositionFieldView.graphicPut(new Position(i,j), startSituation.getBoard().getNumberOnPosition(i,j), 0, false);}
+                	Position p = new Position(i, j);
+                    if (startSituation.getBoard().getNumberOnPosition(p) != 9){
+                        startingPositionFieldView.graphicPut(p, startSituation.getBoard().getNumberOnPosition(p), 0, false);}
                     else {
-                        startingPositionFieldView.graphicKill(new Position(i,j), false);
+                        startingPositionFieldView.graphicKill(p, false);
                     }
                 }
             }

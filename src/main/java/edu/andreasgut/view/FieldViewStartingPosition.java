@@ -48,10 +48,10 @@ public class FieldViewStartingPosition extends FieldView {
                 n.setOnMouseClicked(click -> {
                     Position position = new Position(translateToRing(n), translateToField(n));
 
-                    System.out.println("Feld in Repräsentationsarray: " + position.getRing() + "/" + position.getField());
+                    System.out.println("Feld in Repräsentationsarray: " + position);
                     System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
 
-                    switch (board.getNumberOnPosition(position.getRing(), position.getField())){
+                    switch (board.getNumberOnPosition(position)){
                         case 9:
                             board.putStone(position, 0);
                             graphicPut(position, 0, 0, false);
@@ -71,15 +71,17 @@ public class FieldViewStartingPosition extends FieldView {
         }
     }
 
-    public void updateStoneColors(){
-        for (int i = 0; i < 3; i++){
-            for (int j = 0; j < 8; j++){
-                int index = board.getNumberOnPosition(i,j);
-                if (index == 0 || index == 1){
-                    graphicPut(new Position(i,j), index,0,false);}
-                }
-        }
-    }
+	public void updateStoneColors() {
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 8; j++) {
+				Position p = new Position(i, j);
+				int index = board.getNumberOnPosition(p);
+				if (index == 0 || index == 1) {
+					graphicPut(p, index, 0, false);
+				}
+			}
+		}
+	}
 
     public Board getBoard() {
         return board;

@@ -1,7 +1,6 @@
 package edu.andreasgut.game;
 
 public class BoardImpl implements Board {
-
     final private int[][] array;
     private final Game game;
 
@@ -220,8 +219,8 @@ public class BoardImpl implements Board {
     }
 
     @Override
-	public int getNumberOnPosition(int ring, int field){
-        return array[ring][field];
+	public int getNumberOnPosition(Position position) {
+        return array[position.getRing()][position.getField()];
     }
 
 
@@ -304,4 +303,5 @@ public class BoardImpl implements Board {
 	public Board clone(){
         return new BoardImpl(this);
     }
+
 }
