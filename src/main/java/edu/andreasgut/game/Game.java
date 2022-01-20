@@ -43,7 +43,7 @@ public class Game {
         playerArrayList.add(0, player0);
         playerArrayList.add(1, player1);
         currentPlayer=playerArrayList.get(round%2);
-        this.board = new Board(this);
+        this.board = new BoardImpl(this);
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 8; j++) {
                 if (board.getNumberOnPosition(i, j) != 9) {
@@ -78,7 +78,7 @@ public class Game {
         currentPlayer=playerArrayList.get(0);
         this.gameCode = gameCode;
         this.joinExistingGame = joinExistingGame;
-        board = new Board(this);
+        board = new BoardImpl(this);
     }
 
 
@@ -89,7 +89,7 @@ public class Game {
         this.player2starts = player2starts;
         playerArrayList.add(0, player0);
         playerArrayList.add(1, player1);
-        this.board = new Board(this);
+        this.board = new BoardImpl(this);
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 8; j++) {
                 if (board.getNumberOnPosition(i, j) != 9) {

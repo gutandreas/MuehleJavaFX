@@ -68,7 +68,7 @@ public class StandardComputerPlayer extends ComputerPlayer{
         gameTreeNode1.setPut(put);
         gameTreeNode1.setLevel(level);
 
-        Board clonedBoard1 = (Board) board.clone();
+        Board clonedBoard1 = board.clone();
         clonedBoard1.putStone(put, currentPlayerIndex);
 
         gameTreeNode1.setBoard(clonedBoard1);
@@ -83,7 +83,7 @@ public class StandardComputerPlayer extends ComputerPlayer{
                 gameTreeNode2.setLevel(level);
                 gameTreeNode2.setKill(killPosition);
 
-                Board clonedBoard2 = (Board) clonedBoard1.clone();
+                Board clonedBoard2 = clonedBoard1.clone();
                 clonedBoard2.clearStone(killPosition);
 
                 gameTreeNode2.setBoard(clonedBoard2);
@@ -147,7 +147,7 @@ public class StandardComputerPlayer extends ComputerPlayer{
         gameTreeNode1.setMove(move);
         gameTreeNode1.setLevel(level);
 
-        Board clonedBoard1 = (Board) board.clone();
+        Board clonedBoard1 = board.clone();
         clonedBoard1.move(move, currentPlayerIndex);
 
         gameTreeNode1.setBoard(clonedBoard1);
@@ -162,7 +162,7 @@ public class StandardComputerPlayer extends ComputerPlayer{
                 gameTreeNode2.setLevel(level);
                 gameTreeNode2.setKill(killPosition);
 
-                Board clonedBoard2 = (Board) clonedBoard1.clone();
+                Board clonedBoard2 = clonedBoard1.clone();
                 clonedBoard2.clearStone(killPosition);
 
                 gameTreeNode2.setBoard(clonedBoard2);

@@ -1,5 +1,6 @@
 package edu.andreasgut.view;
 
+import edu.andreasgut.game.BoardImpl;
 import edu.andreasgut.game.Board;
 import edu.andreasgut.game.Position;
 import javafx.scene.Cursor;
@@ -14,7 +15,7 @@ public class FieldViewStartingPosition extends FieldView {
     public FieldViewStartingPosition(ViewManager viewManager, STONECOLOR player1Color, STONECOLOR player2Color) {
         super(viewManager, player1Color, player2Color, true);
         setupFields();
-        this.board = new Board();
+        this.board = new BoardImpl();
     }
 
     private void setupFields(){

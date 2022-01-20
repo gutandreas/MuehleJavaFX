@@ -33,13 +33,13 @@ public class StartSituation {
     public static StartSituation[] produceStartSituations(){
         StartSituation[] startSituations = new StartSituation[5];
 
-        Board board0 = new Board();
+        Board board0 = new BoardImpl();
 
         StartSituation startSituation0 = new StartSituation(0, board0, "Leeres Spielfeld:");
 
         startSituations[0] = startSituation0;
 
-        Board board1 = new Board();
+        Board board1 = new BoardImpl();
         board1.putStone(new Position(0, 1), 0);
         board1.putStone(new Position(1, 1), 0);
         board1.putStone(new Position(2, 0), 0);
@@ -60,7 +60,7 @@ public class StartSituation {
         startSituations[1] = startSituation1;
 
 
-        Board board2 = new Board();
+        Board board2 = new BoardImpl();
         board2.putStone(new Position(1, 0), 0);
         board2.putStone(new Position(1, 1), 0);
         board2.putStone(new Position(2, 1), 0);
