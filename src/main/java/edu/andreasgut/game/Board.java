@@ -1,16 +1,13 @@
 package edu.andreasgut.game;
 
 public interface Board {
-	boolean isValidPut(Position position);
-	boolean isValidMove(Position from, Position to, boolean allowedToJump);
-	boolean isKillPossibleAt(Position position, int otherPlayerIndex);
-	boolean isMorrisAt(Position position);
+	boolean isPutPossibleAt(Position position);
+	boolean isMovePossibleAt(Position from, Position to, boolean allowedToJump);
+	boolean isKillPossibleAt(Position position, int enemysPlayerIndex);
+	boolean isPositionPartOfMorris(Position position);
 	
 	boolean canPlayerMove(int playerIndex);
-	boolean canPlayerKill(int otherPlayerIndex); // wenn man es jetzt so liest dann erscheinen die
-	                                             // erscheinen die beiden Methoden als unsymmetrisch.
-	                                             // Beim einen wird player als Parameter angegeben,
-	                                             // bei der anderen otherPlayer.
+	boolean canPlayerKill(int playerIndex);
 
 	void putStone(Position position, int playerIndex);
 	void moveStone(Position from, Position to, int playerIndex);

@@ -88,7 +88,7 @@ public class CustomComputerPlayer extends ComputerPlayer{
 
         Game game = viewManager.getGame();
         Position position = put(game.getBoard(), game.getCurrentPlayerIndex());
-        boolean putOkay = position != null && game.getBoard().isValidPut(position);
+        boolean putOkay = position != null && game.getBoard().isPutPossibleAt(position);
 
         if (putOkay){
             Messenger.sendPutMessage(viewManager, position);
@@ -109,7 +109,7 @@ public class CustomComputerPlayer extends ComputerPlayer{
         Game game = viewManager.getGame();
         boolean allowedToJump = game.getBoard().numberOfStonesOf(game.getCurrentPlayerIndex()) == 3;
         Move move = move(game.getBoard(), game.getCurrentPlayerIndex(), allowedToJump);
-        boolean moveOkay = move != null && game.getBoard().isValidMove(move.getFrom(), move.getTo(), allowedToJump);
+        boolean moveOkay = move != null && game.getBoard().isMovePossibleAt(move.getFrom(), move.getTo(), allowedToJump);
 
         if (moveOkay){
             Messenger.sendMoveMessage(viewManager, move);

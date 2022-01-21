@@ -167,12 +167,12 @@ public class Messenger {
                         Position position = new Position(ring, field);
                         System.out.println(position);
 
-                        if (board.isValidPut(position)) {
+                        if (board.isPutPossibleAt(position)) {
                             board.putStone(position, playerIndex);
                             viewManager.getFieldView().graphicPut(position, viewManager.getGame().getCurrentPlayerIndex(), 200, true);
                             System.out.println(board);
                             //führt zu Mühle
-                            if (board.isMorrisAt(position) && board.canPlayerKill(1 - playerIndex)) {
+                            if (board.isPositionPartOfMorris(position) && board.canPlayerKill(playerIndex)) {
                                 game.updateGameState(true, false, false);
                                 viewManager.getGame().getCurrentPlayer().prepareKill(viewManager);
                             }
@@ -198,12 +198,12 @@ public class Messenger {
                         boolean jump = board.numberOfStonesOf(game.getCurrentPlayerIndex()) == 3;
 
 
-                        if (board.isValidMove(move.getFrom(), move.getTo(), jump)) {
+                        if (board.isMovePossibleAt(move.getFrom(), move.getTo(), jump)) {
                             board.moveStone(move.getFrom(), move.getTo(), playerIndex);
                             viewManager.getFieldView().graphicMove(move, playerIndex);
                             System.out.println(board);
                             //führt zu Mühle
-                            if (board.isMorrisAt(move.getTo()) && board.canPlayerKill(1 - playerIndex)) {
+                            if (board.isPositionPartOfMorris(move.getTo()) && board.canPlayerKill(playerIndex)) {
                                 game.updateGameState(false, false, false);
                                 viewManager.getGame().getCurrentPlayer().prepareKill(viewManager);
                             }

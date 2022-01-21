@@ -76,7 +76,7 @@ public class StandardComputerPlayer extends ComputerPlayer{
 
 
 
-        if (gameTreeNode1.getBoard().isMorrisAt(gameTreeNode1.getPut())){
+        if (gameTreeNode1.getBoard().isPositionPartOfMorris(gameTreeNode1.getPut())){
             for (Position killPosition : Advisor.getAllPossibleKills(clonedBoard1,currentPlayerIndex)){
                 GameTreeNode gameTreeNode2 = new GameTreeNode();
                 gameTreeNode2.setPut(put);
@@ -155,7 +155,7 @@ public class StandardComputerPlayer extends ComputerPlayer{
 
 
 
-        if (gameTreeNode1.getBoard().isMorrisAt(gameTreeNode1.getMove().getTo())){
+        if (gameTreeNode1.getBoard().isPositionPartOfMorris(gameTreeNode1.getMove().getTo())){
             for (Position killPosition : Advisor.getAllPossibleKills(clonedBoard1,currentPlayerIndex)){
                 GameTreeNode gameTreeNode2 = new GameTreeNode();
                 gameTreeNode2.setMove(move);

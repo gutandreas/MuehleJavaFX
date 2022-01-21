@@ -1,10 +1,7 @@
 package edu.andreasgut.game;
 
 public class Move {
-    private Position from, to;
-
-    public Move() {
-    }
+    private final Position from, to;
 
     public Move(Position from, Position to) {
         this.from = from;
@@ -17,14 +14,6 @@ public class Move {
 
     public Position getTo() {
         return to;
-    }
-
-    public void setFrom(Position from) {
-        this.from = from;
-    }
-
-    public void setTo(Position to) {
-        this.to = to;
     }
 
 

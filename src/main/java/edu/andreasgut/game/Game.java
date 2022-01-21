@@ -265,7 +265,7 @@ public class Game {
             }
 
             if (putPhase){
-                if (board.isValidPut(clickedPosition)){
+                if (board.isPutPossibleAt(clickedPosition)){
                     Messenger.sendPutMessage(viewManager, clickedPosition);
                     return;
 
@@ -299,7 +299,7 @@ public class Game {
                 if (movePhaseRelease){
                     boolean allowedToJump = board.numberOfStonesOf(getCurrentPlayerIndex()) == 3;
                     Move move = new Move(lastClickedPosition, clickedPosition);
-                    if (board.isValidMove(move.getFrom(),move.getTo(),allowedToJump)){
+                    if (board.isMovePossibleAt(move.getFrom(),move.getTo(),allowedToJump)){
                         Messenger.sendMoveMessage(viewManager, move);
                     }
                     else {
