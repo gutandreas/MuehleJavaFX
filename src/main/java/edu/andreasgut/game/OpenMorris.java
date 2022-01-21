@@ -34,9 +34,9 @@ public class OpenMorris {
 
     @Override
     public String toString(){
-        return "Offene Mühle mit den Positionen " + firstPosition.getRing() + "/" + firstPosition.getField() +
-                ", " + secondPosition.getRing() + "/" + secondPosition.getField() +
-                ", " + thirdPosition.getRing() + "/" + thirdPosition.getField() +
-                " und der Lücke an der Position " + gapPosition.getRing() + "/" + gapPosition.getField();
+        return "Offene Mühle mit den Positionen " + firstPosition +
+                ", " + secondPosition +
+                ", " + thirdPosition +
+                " und der Lücke an der Position " + gapPosition;
     }
 }

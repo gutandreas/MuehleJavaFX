@@ -26,7 +26,7 @@ public class ViewManager {
 
     public ViewManager() {
 
-        audioPlayer = new AudioPlayer(this);
+        audioPlayer = new AudioPlayer();
 
         createStartScene();
 

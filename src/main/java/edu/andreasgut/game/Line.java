@@ -29,8 +29,8 @@ public class Line {
 
     @Override
     public String toString(){
-        return "Linie mit den Positionen " + firstPosition.getRing() + "/" + firstPosition.getField() +
-                ", " + secondPosition.getRing() + "/" + secondPosition.getField() +
-                ", " + thirdPosition.getRing() + "/" + thirdPosition.getField();
+        return "Linie mit den Positionen " + firstPosition +
+                ", " + secondPosition +
+                ", " + thirdPosition;
     }
 }

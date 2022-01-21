@@ -167,12 +167,12 @@ public class Messenger {
                         Position position = new Position(ring, field);
                         System.out.println(position);
 
-                        if (board.checkPut(position)) {
+                        if (board.isValidPut(position)) {
                             board.putStone(position, playerIndex);
                             viewManager.getFieldView().graphicPut(position, viewManager.getGame().getCurrentPlayerIndex(), 200, true);
                             System.out.println(board);
                             //führt zu Mühle
-                            if (board.checkMorris(position) && board.isThereStoneToKill(1 - playerIndex)) {
+                            if (board.isMorrisAt(position) && board.canPlayerKill(1 - playerIndex)) {
                                 game.updateGameState(true, false, false);
                                 viewManager.getGame().getCurrentPlayer().prepareKill(viewManager);
                             }
@@ -195,15 +195,15 @@ public class Messenger {
                         int playerIndex = jsonObject.getInt("playerIndex");
 
                         Move move = new Move(new Position(moveFromRing, moveFromField), new Position(moveToRing, moveToField));
-                        boolean jump = board.countPlayersStones(game.getCurrentPlayerIndex()) == 3;
+                        boolean jump = board.numberOfStonesOf(game.getCurrentPlayerIndex()) == 3;
 
 
-                        if (board.checkMove(move, jump)) {
-                            board.move(move, playerIndex);
+                        if (board.isValidMove(move.getFrom(), move.getTo(), jump)) {
+                            board.moveStone(move.getFrom(), move.getTo(), playerIndex);
                             viewManager.getFieldView().graphicMove(move, playerIndex);
                             System.out.println(board);
                             //führt zu Mühle
-                            if (board.checkMorris(move.getTo()) && board.isThereStoneToKill(1 - playerIndex)) {
+                            if (board.isMorrisAt(move.getTo()) && board.canPlayerKill(1 - playerIndex)) {
                                 game.updateGameState(false, false, false);
                                 viewManager.getGame().getCurrentPlayer().prepareKill(viewManager);
                             }
@@ -225,11 +225,11 @@ public class Messenger {
                         int ring = jsonObject.getInt("ring");
                         int field = jsonObject.getInt("field");
 
-                        int playerIndex = board.getNumberOnPosition(ring, field);
                         Position position = new Position(ring, field);
+                        int playerIndex = board.getNumberOnPosition(position);
 
-                        if (board.checkKill(position, playerIndex)) {
-                            board.clearStone(position);
+                        if (board.isKillPossibleAt(position, playerIndex)) {
+                            board.removeStone(position);
                             viewManager.getFieldView().graphicKill(position, true);
                             System.out.println(board);
 

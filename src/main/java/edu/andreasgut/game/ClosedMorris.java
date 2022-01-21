@@ -10,7 +10,7 @@ public class ClosedMorris {
             throw new IllegalArgumentException();
         }
 
-        if (!(board.checkMorris(firstPosition) && board.checkMorris(secondPosition) && board.checkMorris(thirdPosition))){
+        if (!(board.isMorrisAt(firstPosition) && board.isMorrisAt(secondPosition) && board.isMorrisAt(thirdPosition))){
             throw new IllegalArgumentException();
         }
 
@@ -33,8 +33,8 @@ public class ClosedMorris {
 
     @Override
     public String toString(){
-        return "Geschlossene Mühle mit den Positionen " + firstPosition.getRing() + "/" + firstPosition.getField() +
-                ", " + secondPosition.getRing() + "/" + secondPosition.getField() +
-                ", " + thirdPosition.getRing() + "/" + thirdPosition.getField();
+        return "Geschlossene Mühle mit den Positionen " + firstPosition +
+                ", " + secondPosition +
+                ", " + thirdPosition;
     }
 }

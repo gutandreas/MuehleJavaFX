@@ -1,9 +1,8 @@
 package edu.andreasgut.sound;
 
-import edu.andreasgut.view.ViewManager;
-import javafx.scene.media.AudioClip;
-
 import java.net.URL;
+
+import javafx.scene.media.AudioClip;
 
 public class AudioPlayer {
 
@@ -11,12 +10,10 @@ public class AudioPlayer {
     private AudioClip audioclipPUTSTONE, audioclipKILLSTONE;
     private URL menuSoundPath, playSoundPath, gameoverSoundPath;
     private URL putStonePath, killStonePath;
-    private ViewManager viewManager;
     private boolean musicOn = true;
 
 
-    public AudioPlayer(ViewManager viewManager) {
-        this.viewManager = viewManager;
+    public AudioPlayer() {
         menuSoundPath = getClass().getResource(MUSIC.MENU_SOUND.getPath());
         playSoundPath = getClass().getResource(MUSIC.PLAY_SOUND.getPath());
         gameoverSoundPath = getClass().getResource(MUSIC.GAMEOVER_SOUND.getPath());

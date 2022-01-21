@@ -1,5 +1,6 @@
 package edu.andreasgut.view;
 
+import edu.andreasgut.game.BoardImpl;
 import edu.andreasgut.game.Board;
 import edu.andreasgut.game.Position;
 import javafx.scene.Cursor;
@@ -14,7 +15,7 @@ public class FieldViewStartingPosition extends FieldView {
     public FieldViewStartingPosition(ViewManager viewManager, STONECOLOR player1Color, STONECOLOR player2Color) {
         super(viewManager, player1Color, player2Color, true);
         setupFields();
-        this.board = new Board();
+        this.board = new BoardImpl();
     }
 
     private void setupFields(){
@@ -47,10 +48,10 @@ public class FieldViewStartingPosition extends FieldView {
                 n.setOnMouseClicked(click -> {
                     Position position = new Position(translateToRing(n), translateToField(n));
 
-                    System.out.println("Feld in Repräsentationsarray: " + position.getRing() + "/" + position.getField());
+                    System.out.println("Feld in Repräsentationsarray: " + position);
                     System.out.println("Feld in Spielfeld: " + GridPane.getRowIndex(n) + "/" + GridPane.getColumnIndex(n));
 
-                    switch (board.getNumberOnPosition(position.getRing(), position.getField())){
+                    switch (board.getNumberOnPosition(position)){
                         case 9:
                             board.putStone(position, 0);
                             graphicPut(position, 0, 0, false);
@@ -60,7 +61,7 @@ public class FieldViewStartingPosition extends FieldView {
                             graphicPut(position, 1, 0, false);
                             break;
                         case 1:
-                            board.clearStone(position);
+                            board.removeStone(position);
                             graphicKill(position, false);
                     }
 
@@ -70,15 +71,17 @@ public class FieldViewStartingPosition extends FieldView {
         }
     }
 
-    public void updateStoneColors(){
-        for (int i = 0; i < 3; i++){
-            for (int j = 0; j < 8; j++){
-                int index = board.getNumberOnPosition(i,j);
-                if (index == 0 || index == 1){
-                    graphicPut(new Position(i,j), index,0,false);}
-                }
-        }
-    }
+	public void updateStoneColors() {
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 8; j++) {
+				Position p = new Position(i, j);
+				int index = board.getNumberOnPosition(p);
+				if (index == 0 || index == 1) {
+					graphicPut(p, index, 0, false);
+				}
+			}
+		}
+	}
 
     public Board getBoard() {
         return board;
