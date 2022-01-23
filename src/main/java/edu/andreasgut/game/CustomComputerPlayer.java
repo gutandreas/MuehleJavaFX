@@ -96,7 +96,7 @@ public class CustomComputerPlayer extends ComputerPlayer{
         else {
             System.out.println("Ungültiger Put wird durch zufälligen Put ersetzt");
             showAlert();
-            LinkedList<Position> allPossiblePuts = Advisor.getAllFreeFields(game.getBoard());
+            LinkedList<Position> allPossiblePuts = Advisor.getFreePositions(game.getBoard());
             Random random = new Random();
             Position randomPosition = allPossiblePuts.get(random.nextInt(allPossiblePuts.size()));
             Messenger.sendPutMessage(viewManager, randomPosition);

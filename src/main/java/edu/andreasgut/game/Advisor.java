@@ -68,7 +68,7 @@ public class Advisor {
 
         for (int quarter = 0; quarter < 4; quarter++) {
 
-            //Powerpoint rot
+            //Schriftliche Arbeit rot
             for (int startRing = 0; startRing < 2; startRing++) {
 
                 Position position1 = new Position(startRing, quarter * 2);
@@ -79,7 +79,7 @@ public class Advisor {
                 addConstellationToListIfOpenMorris(board, ownPlayerIndex, openMorrisLinkedList, position1, position2, position3, gapPosition, "Rot");
             }
 
-            //Powerpoint blau
+            //Schriftliche Arbeit blau
             for (int startRing = 1; startRing < 3; startRing++) {
 
                 Position position1 = new Position(startRing, quarter * 2);
@@ -90,7 +90,7 @@ public class Advisor {
                 addConstellationToListIfOpenMorris(board, ownPlayerIndex, openMorrisLinkedList, position1, position2, position3, gapPosition, "Blau");
             }
 
-            //Powerpoint gelb
+            //Schriftliche Arbeit gelb
             for (int startRing = 1; startRing < 3; startRing++) {
 
                 Position position1 = new Position(startRing, (quarter * 2 + 7) % 8);
@@ -101,7 +101,7 @@ public class Advisor {
                 addConstellationToListIfOpenMorris(board, ownPlayerIndex, openMorrisLinkedList, position1, position2, position3, gapPosition, "Gelb");
             }
 
-            //Powerpoint pink
+            //Schriftliche Arbeit pink
             for (int startRing = 1; startRing < 3; startRing++) {
 
                 Position position1 = new Position(startRing, (quarter * 2) % 8);
@@ -112,7 +112,7 @@ public class Advisor {
                 addConstellationToListIfOpenMorris(board, ownPlayerIndex, openMorrisLinkedList, position1, position2, position3, gapPosition, "Pink");
             }
 
-            //Powerpoint grün
+            //Schriftliche Arbeit grün
             for (int startRing = 0; startRing < 3; startRing++) {
 
                 Position position1 = new Position(startRing, (quarter * 2 + 2) % 8);
@@ -123,7 +123,7 @@ public class Advisor {
                 addConstellationToListIfOpenMorris(board, ownPlayerIndex, openMorrisLinkedList, position1, position2, position3, gapPosition, "Grün");
             }
 
-            //Powerpoint orange
+            //Schriftliche Arbeit orange
             for (int startRing = 0; startRing < 3; startRing++) {
 
                 Position position1 = new Position(startRing, (quarter * 2) % 8);
@@ -436,21 +436,21 @@ public class Advisor {
         return lines;
     }
 
-    static public LinkedList<Position> getAllFreeFields(Board board){
-        LinkedList<Position> freeFields = new LinkedList<>();
+    static public LinkedList<Position> getFreePositions(Board board){
+        LinkedList<Position> freePositions = new LinkedList<>();
 
         for (int ring = 0; ring < 3; ring++) {
             for (int field = 0; field < 8; field++) {
 
                 if (board.isFieldFree(new Position(ring, field))){
-                    freeFields.add(new Position(ring, field));
+                    freePositions.add(new Position(ring, field));
                 }
             }
         }
-        return freeFields;}
+        return freePositions;}
 
 
-    static public boolean isThisPositionTheGapOfMyOpenMorris(Board board, Position position, int playerIndex){
+    static public boolean isPositionGapOfMyOpenMorris(Board board, Position position, int playerIndex){
 
         LinkedList<OpenMorris> openMorrisLinkedList = getMyOpenMorrises(board, playerIndex);
 
@@ -462,28 +462,40 @@ public class Advisor {
         return false;
     }
 
+    static public boolean isPositionGapOfMyEnemysOpenMorris(Board board, Position position, int playerIndex){
 
-    static public boolean isThisStonePartOfMyEnemysOpenMorris(Board board, Position position, int ownPlayerIndex){
-        int enemysIndex = 1-ownPlayerIndex;
-        return isThisStonePartOfMyOpenMorris(board, position, enemysIndex);
+        LinkedList<OpenMorris> openMorrisLinkedList = getMyEnemysOpenMorrises(board, playerIndex);
+
+        for (OpenMorris openMorris : openMorrisLinkedList){
+            if (openMorris.getGapPosition().equals(position)){
+                return true;
+            }}
+
+        return false;
     }
 
 
-
-    static public boolean isThisStonePartOfMyOpenMorris(Board board, Position position, int playerIndex){
+    static public boolean isPositionPartOfMyOpenMorris(Board board, Position position, int playerIndex){
 
         LinkedList<OpenMorris> openMorrisLinkedList = getMyOpenMorrises(board, playerIndex);
 
         for (OpenMorris openMorris : openMorrisLinkedList){
             if (openMorris.getFirstPosition().equals(position)
-                || openMorris.getSecondPosition().equals(position)
-                || openMorris.getThirdPosition().equals(position)){
+                    || openMorris.getSecondPosition().equals(position)
+                    || openMorris.getThirdPosition().equals(position)){
                 return true;
             }
         }
 
         return false;
     }
+
+    static public boolean isPositionPartOfMyEnemysOpenMorris(Board board, Position position, int ownPlayerIndex){
+        int enemysIndex = 1-ownPlayerIndex;
+        return isPositionPartOfMyOpenMorris(board, position, enemysIndex);
+    }
+
+
 
 
     static public LinkedList<Position> getAllPossibleKills(Board board, int onwPlayerIndex){

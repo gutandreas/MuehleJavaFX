@@ -2,9 +2,15 @@ package edu.andreasgut.game;
 
 public class ScorePoints {
 
-    private int ownNumberOfStonesPoints, ownClosedMorrisPoints, ownOpenMorrisPoints, ownTwoStonesTogetherPoints, ownTwoStonesWithGapPoints, ownPossibleMovesPoints, enemyNumberOfStonesPoints, enemyClosedMorrisPoints, enemyOpenMorrisPoints, enemyTwoStonesTogetherPoints, enemyTwoStonesWithGapPoints, enemyPossibleMovesPoints;
+    private int ownNumberOfStonesPoints, ownClosedMorrisPoints, ownOpenMorrisPoints, ownTwoStonesTogetherPoints,
+            ownTwoStonesWithGapPoints, ownPossibleMovesPoints, enemyNumberOfStonesPoints, enemyClosedMorrisPoints,
+            enemyOpenMorrisPoints, enemyTwoStonesTogetherPoints, enemyTwoStonesWithGapPoints, enemyPossibleMovesPoints;
 
-    public ScorePoints(int ownNumberOfStonesPoints, int ownClosedMorrisPoints, int ownOpenMorrisPoints, int ownTwoStonesTogetherPoints, int ownTwoStonesWithGapPoints, int ownPossibleMovesPoints, int enemyNumberOfStonesPoints, int enemyClosedMorrisPoints, int enemyOpenMorrisPoints, int enemyTwoStonesTogetherPoints, int enemyTwoStonesWithGapPoints, int enemyPossibleMovesPoints) {
+    public ScorePoints(int ownNumberOfStonesPoints, int ownClosedMorrisPoints, int ownOpenMorrisPoints,
+                       int ownTwoStonesTogetherPoints, int ownTwoStonesWithGapPoints, int ownPossibleMovesPoints,
+                       int enemyNumberOfStonesPoints, int enemyClosedMorrisPoints, int enemyOpenMorrisPoints,
+                       int enemyTwoStonesTogetherPoints, int enemyTwoStonesWithGapPoints, int enemyPossibleMovesPoints){
+
         this.ownNumberOfStonesPoints = ownNumberOfStonesPoints;
         this.ownClosedMorrisPoints = ownClosedMorrisPoints;
         this.ownOpenMorrisPoints = ownOpenMorrisPoints;
