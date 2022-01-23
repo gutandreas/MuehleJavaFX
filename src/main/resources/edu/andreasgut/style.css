@@ -42,6 +42,14 @@
 }
 
 
+.ruleView .table-view .label {
+    -fx-text-fill: black;
+    -fx-effect: innershadow( three-pass-box , rgba(50,50,50,0.7) , 5, 0.0 , 0 , 1 );
+}
+
+
+
+
 /* Labels */
 
 .label{

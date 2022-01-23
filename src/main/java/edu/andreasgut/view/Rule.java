@@ -31,7 +31,7 @@ public class Rule {
 
         rules.add(new Rule("Ziel des Spiels", "Ziel des Spiels ist es, durch das Bilden von Mühlen, dem/der Gegenspieler(in) Steine wegzunehmen, bis er/sie weniger als 3 Steine hat und somit keine Mühlen mehr bauen kann.", "Ziel, Mühle, Steine"));
         rules.add(new Rule("Ende des Spiels", "Das Spiel ist beendet, wenn ein(e) Spieler(in) in der Zugphase weniger als 3 Steine hat oder keinen Zug mehr tätigen kann", "Ende, eingeklemmt, verloren"));
-        rules.add(new Rule("Anzahl Steine", "Jeder Spieler(in) hat 9 Steine, die er/sie setzen muss. Sind alle Steine gesetzt, so beginnt man abwechselnd die Steine entlang der Linien zu verschieben", "Anzahl, Steine, setzen"));
+        rules.add(new Rule("Anzahl Steine", "Jede(r) Spieler(in) hat 9 Steine, die er/sie setzen muss. Sind alle Steine gesetzt, so beginnt man abwechselnd die Steine entlang der Linien zu verschieben", "Anzahl, Steine, setzen"));
         rules.add(new Rule("Setzphase", "Das Spiel beginnt mit der Setzphase, in der alle Steine abwechselnd gesetzt werden", "setzen, abwechseln"));
         rules.add(new Rule("Zugphase", "Sind alle Steine gesetzt, so wird abwechselnd mit jeweils einem Stein entlang der Linien gezogen. Es darf jeweils nur 1 Feld weitergerückt werden, ausser man hat nur noch 3 Steine und befindet sich in der Springphase (siehe Springphase", "ziehen"));
         rules.add(new Rule("Springphase", "Hat ein(e) Spieler(in) nur noch 3 Steine, so darf er/sie mit jedem der 3 Steine auf ein beliebiges freies Feld hüpfen.", "springen, hüpfen"));

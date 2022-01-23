@@ -5,6 +5,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
@@ -18,6 +19,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -85,19 +87,22 @@ public class MainMenuBar extends MenuBar {
             stage.setResizable(false);
             stage.setTitle("Spielregeln");
             AnchorPane anchorPane = new AnchorPane();
-            Scene scene = new Scene(anchorPane, 600, 600);
+            anchorPane.getStyleClass().add("ruleView");
+            Scene scene = new Scene(anchorPane, 700, 550);
+            scene.getStylesheets().add("edu/andreasgut/style.css");
             stage.setScene(scene);
             TableView tableView = new TableView();
-            tableView.setPrefSize(600,500);
+            tableView.setPrefSize(690,500);
             TableColumn title = new TableColumn();
             title.setText("Regel");
-            title.setPrefWidth(100);
+            title.setPrefWidth(120);
+            title.getStyleClass().add("ruleTableView");
             TableColumn description = new TableColumn();
             description.setText("Beschreibung");
-            description.setPrefWidth(390);
+            description.setPrefWidth(450);
             TableColumn tags = new TableColumn();
             tags.setText("Stichworte");
-            tags.setPrefWidth(90);
+            tags.setPrefWidth(100);
             tableView.getColumns().addAll(title, description, tags);
             ObservableList<Rule> rulesList = FXCollections.observableArrayList(Rule.getRules());
             title.setCellValueFactory(new PropertyValueFactory<Rule, String>("title"));
@@ -127,6 +132,8 @@ public class MainMenuBar extends MenuBar {
             TextField searchTextfield = new TextField();
             searchTextfield.setPromptText("Suchbegriff");
             HBox searchHBox = new HBox();
+            searchHBox.setSpacing(15);
+            searchHBox.setAlignment(Pos.CENTER_LEFT);
             searchHBox.getChildren().addAll(searchLabel, searchTextfield);
 
             searchTextfield.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -144,6 +151,8 @@ public class MainMenuBar extends MenuBar {
 
             VBox mainVBox = new VBox();
             mainVBox.getChildren().addAll(tableView, searchHBox);
+            mainVBox.setPadding(new Insets(5,5,5,5));
+            mainVBox.setSpacing(5);
             anchorPane.getChildren().addAll(mainVBox);
             stage.show();
         });
