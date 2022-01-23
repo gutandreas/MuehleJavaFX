@@ -226,9 +226,9 @@ public class StartMenuView extends VBox {
         Label szenarioLabel = new Label("Szenario: ");
         ChoiceBox choiceBox = new ChoiceBox();
         Button loadButton = new Button("Laden");
-        choiceBox.setItems(FXCollections.observableArrayList(0,1,2,3,4,5));
+        choiceBox.setItems(FXCollections.observableArrayList(0,1,2,3));
         choiceBox.getSelectionModel().select(0);
-        Label situationDescriptionLabel = new Label("Leeres Spielfeld");
+        Label situationDescriptionLabel = new Label("Leeres Spielfeld: Die maximale Freiheit für Ihre Kreativität...");
         situationDescriptionLabel.setWrapText(true);
 
 

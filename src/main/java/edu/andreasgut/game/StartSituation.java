@@ -33,50 +33,69 @@ public class StartSituation {
 
         Board board0 = new BoardImpl();
 
-        StartSituation startSituation0 = new StartSituation(0, board0, "Leeres Spielfeld:");
+        StartSituation startSituation0 = new StartSituation(0, board0,
+                "Leeres Spielfeld: Die maximale Freiheit für Ihre Kreativität...");
 
         startSituations[0] = startSituation0;
 
         Board board1 = new BoardImpl();
-        board1.putStone(new Position(0, 1), 0);
-        board1.putStone(new Position(1, 1), 0);
-        board1.putStone(new Position(2, 0), 0);
-        board1.putStone(new Position(1, 7), 0);
-        board1.putStone(new Position(1, 6), 0);
-        board1.putStone(new Position(1, 5), 0);
-        board1.putStone(new Position(1, 4), 0);
-        board1.putStone(new Position(0, 6), 0);
-        board1.putStone(new Position(0, 4), 0);
 
-        board1.putStone(new Position(0, 3), 1);
-        board1.putStone(new Position(2, 1), 1);
-        board1.putStone(new Position(0, 7), 1);
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 5; j++) {
+                board1.putStone(new Position(i, (j+7)%8), j%2);
+            }
+        }
 
-
-        StartSituation startSituation1 = new StartSituation(48, board1, "Spielfeld, das zu einem Computerfehler führt...");
+        StartSituation startSituation1 = new StartSituation(48, board1,
+                "Sonnenuntergang: Der eine Spieler besitzt lauter Mühlen, die vom Gegenspieler aber " +
+                        "sofort geblockt werden können. Kann sich der Spieler mit den Mühlen tatsächlich durchsetzen?");
 
         startSituations[1] = startSituation1;
 
 
         Board board2 = new BoardImpl();
-        board2.putStone(new Position(1, 0), 0);
-        board2.putStone(new Position(1, 1), 0);
-        board2.putStone(new Position(2, 1), 0);
-        board2.putStone(new Position(2, 2), 0);
-        board2.putStone(new Position(1, 3), 0);
-        board2.putStone(new Position(1, 7), 0);
+
+        int counter = 0;
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 7; j++) {
+                int index = 1;
+                if (counter > 6){
+                    index = 0;
+                }
+                board2.putStone(new Position(i, j+1), index);
+                counter++;
+            }
+        }
 
 
-        board2.putStone(new Position(0, 1), 1);
-        board2.putStone(new Position(1, 2), 1);
-        board2.putStone(new Position(2, 0), 1);
-        board2.putStone(new Position(1,4), 1);
-        board2.putStone(new Position(1,6), 1);
 
 
-        StartSituation startSituation2 = new StartSituation(15, board2, "Spielfeld, das zu einem Computerfehler führt...");
+        StartSituation startSituation2 = new StartSituation(30, board2,
+                "Ring in Ring: Beide Spieler haben ihre Steine in der gleichen Anordnung. Es gibt nur einen" +
+                        " kleinen Unterschied... ...der eine kann nach innen ausweichen. Hilft ihm das?");
 
         startSituations[2] = startSituation2;
+
+
+        Board board3 = new BoardImpl();
+
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 8; j++) {
+                board3.putStone(new Position(i, j), j%2);
+                counter++;
+            }
+        }
+
+        board3.putStone(new Position(2, 1), 0);
+
+
+
+
+        StartSituation startSituation3 = new StartSituation(31, board3,
+                "Fast eingeklemmt: Ein Spieler ist fast blockiert, hat aber noch einen freien Stein in der " +
+                        "Mitte. Kann er sich aus dieser ungünstigen Lage befreien?");
+
+        startSituations[3] = startSituation3;
 
         return startSituations;
     }
