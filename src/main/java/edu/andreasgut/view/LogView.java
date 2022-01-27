@@ -86,7 +86,7 @@ public class LogView extends VBox {
                 chatTextField.setText("");
             });
             if (viewManager.getGame().isJoinExistingGame()){
-                activateChatElements();
+                activateChatElements(true);
             }
 
             chatVBox = new VBox();
@@ -124,11 +124,11 @@ public class LogView extends VBox {
         nextComputerStepButton.setDisable(false);
     }
 
-    public void activateChatElements(){
-        chatTextField.setDisable(false);
-        chatSendButton.setDisable(false);
-        chatOffendButton.setDisable(false);
-        chatComplimentButton.setDisable(false);
+    public void activateChatElements(boolean active){
+        chatTextField.setDisable(!active);
+        chatSendButton.setDisable(!active);
+        chatOffendButton.setDisable(!active);
+        chatComplimentButton.setDisable(!active);
     }
 
     public void disableNextComputerStepButton(){

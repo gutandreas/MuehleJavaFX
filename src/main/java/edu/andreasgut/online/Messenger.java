@@ -119,7 +119,7 @@ public class Messenger {
                 if (!game.isJoinExistingGame()){
                         System.out.println("Spiel beigetreten");
                         viewManager.getLogView().activateNextComputerStepButton();
-                        viewManager.getLogView().activateChatElements();
+                        viewManager.getLogView().activateChatElements(true);
                         game.getPlayer1().setName(jsonObject.getString("player2Name"));
                         Platform.runLater(()-> viewManager.getScoreView().getPlayer2Label().setText("Player 2: " + jsonObject.getString("player2Name")));
                 }
@@ -135,6 +135,7 @@ public class Messenger {
                 String name = game.getPlayerByIndex(1-index).getName();
                 viewManager.getLogView().setStatusLabel(name + " hat das Spiel gewonnen!");
                 viewManager.getFieldView().setDisable(true);
+                viewManager.getLogView().activateChatElements(false);
                 break;
 
             case "roboterConnection":

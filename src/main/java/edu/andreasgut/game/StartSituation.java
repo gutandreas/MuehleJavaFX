@@ -16,10 +16,6 @@ public class StartSituation {
         return round;
     }
 
-    public void setRound(int round) {
-        this.round = round;
-    }
-
     public Board getBoard() {
         return board;
     }
