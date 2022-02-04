@@ -135,7 +135,8 @@ public class Messenger {
                 String name = game.getPlayerByIndex(1-index).getName();
                 viewManager.getLogView().setStatusLabel(name + " hat das Spiel gewonnen!");
                 viewManager.getFieldView().setDisable(true);
-                viewManager.getLogView().activateChatElements(false);
+                if (game.getWebsocketClient() != null){
+                    viewManager.getLogView().activateChatElements(false);}
                 break;
 
             case "roboterConnection":
@@ -170,7 +171,7 @@ public class Messenger {
 
                         if (board.isPutPossibleAt(position)) {
                             board.putStone(position, playerIndex);
-                            viewManager.getFieldView().graphicPut(position, viewManager.getGame().getCurrentPlayerIndex(), 200, true);
+                            viewManager.getFieldView().graphicPut(position, viewManager.getGame().getCurrentPlayerIndex(), true);
                             System.out.println(board);
                             //führt zu Mühle
                             if (board.isPositionPartOfMorris(position) && board.canPlayerKill(playerIndex)) {

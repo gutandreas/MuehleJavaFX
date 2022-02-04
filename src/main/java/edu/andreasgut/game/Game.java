@@ -2,7 +2,7 @@ package edu.andreasgut.game;
 
 import edu.andreasgut.online.Messenger;
 import edu.andreasgut.online.WebsocketClient;
-import edu.andreasgut.view.FieldViewPlay;
+import edu.andreasgut.view.BoardViewPlay;
 import edu.andreasgut.view.ViewManager;
 
 import java.util.ArrayList;
@@ -281,8 +281,8 @@ public class Game {
             if (movePhase){
                 if (movePhaseTake){
                     if (board.isThisMyStone(clickedPosition, getCurrentPlayerIndex())){
-                        ((FieldViewPlay) viewManager.getFieldView()).setPutCursor();
-                        viewManager.getFieldView().graphicTake(clickedPosition);
+                        ((BoardViewPlay) viewManager.getFieldView()).setPutCursor();
+                        viewManager.getFieldView().graphicRemove(clickedPosition);
                         lastClickedPosition = clickedPosition;
                         clickOkay = true;
                         movePhaseRelease = true;
@@ -305,8 +305,8 @@ public class Game {
                     else {
                         System.out.println("Kein gültiger Move");
                         viewManager.getLogView().setStatusLabel("Das ist kein gültiger Zug");
-                        viewManager.getFieldView().graphicPut(lastClickedPosition, getCurrentPlayerIndex(), 0, true);
-                        ((FieldViewPlay) viewManager.getFieldView()).setMoveCursor();
+                        viewManager.getFieldView().graphicPut(lastClickedPosition, getCurrentPlayerIndex(), true);
+                        ((BoardViewPlay) viewManager.getFieldView()).setMoveCursor();
                         clickOkay = true;
                         movePhaseRelease = false;
                         movePhaseTake = true;
@@ -344,15 +344,15 @@ public class Game {
 
             if (round < NUMBEROFSTONES * 2) {
                 putPhase = true;
-                if (viewManager.getFieldView().isActivateBoardFunctions()) {
-                    ((FieldViewPlay) viewManager.getFieldView()).setPutCursor();
+                if (viewManager.getFieldView().areBoardFunctionsActive()) {
+                    ((BoardViewPlay) viewManager.getFieldView()).setPutCursor();
                 }
             } else {
                 movePhase = true;
                 movePhaseTake = true;
                 movePhaseRelease = false;
-                if (viewManager.getFieldView().isActivateBoardFunctions()) {
-                    ((FieldViewPlay) viewManager.getFieldView()).setMoveCursor();
+                if (viewManager.getFieldView().areBoardFunctionsActive()) {
+                    ((BoardViewPlay) viewManager.getFieldView()).setMoveCursor();
                 }
             }
         }

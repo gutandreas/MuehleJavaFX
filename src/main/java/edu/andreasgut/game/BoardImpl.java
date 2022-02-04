@@ -38,7 +38,6 @@ public class BoardImpl implements Board {
         return array[position.getRing()][position.getField()] == 9;
     }
 
-
     @Override
     public boolean isFieldOccupied(Position position){
         return !isFieldFree(position);

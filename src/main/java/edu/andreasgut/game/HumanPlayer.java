@@ -1,6 +1,6 @@
 package edu.andreasgut.game;
 
-import edu.andreasgut.view.FieldViewPlay;
+import edu.andreasgut.view.BoardViewPlay;
 import edu.andreasgut.view.ViewManager;
 
 public class HumanPlayer extends Player {
@@ -17,7 +17,7 @@ public class HumanPlayer extends Player {
         if (viewManager.getGame().getCurrentPlayer().isLocal()){
             viewManager.getGame().setClickOkay(true);
             viewManager.getGame().setKillPhase(true);
-            ((FieldViewPlay) viewManager.getFieldView()).setKillCursor();
+            ((BoardViewPlay) viewManager.getFieldView()).setKillCursor();
         }
         //nicht lokaler Spieler
         else {

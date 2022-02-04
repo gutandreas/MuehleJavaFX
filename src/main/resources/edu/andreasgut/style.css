@@ -36,7 +36,7 @@
     -fx-spacing: 30;
 }
 
-.fieldview{
+.boardview{
     -fx-alignment: center;
     -fx-pref-width: 600;
 }

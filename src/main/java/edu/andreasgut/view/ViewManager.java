@@ -19,7 +19,7 @@ public class ViewManager {
     private OptionsView optionsView;
     private MainMenuBar mainMenuBar;
     private LogView logView;
-    private FieldView fieldView;
+    private BoardView boardView;
     private ScoreView scoreView;
     private Game game;
 
@@ -62,9 +62,9 @@ public class ViewManager {
         mainStage.setScene(startScene);
     }
 
-    public void createGameScene(FieldView fieldView, ScoreView scoreView, LogView logView){
+    public void createGameScene(BoardView boardView, ScoreView scoreView, LogView logView){
 
-        this.fieldView = fieldView;
+        this.boardView = boardView;
         this.scoreView = scoreView;
         scoreView.getStyleClass().add("scoreview");
         this.logView = logView;
@@ -79,7 +79,7 @@ public class ViewManager {
 
     public void changeToGameScene(){
         gamePane.setTop(mainMenuBar);
-        gamePane.setCenter(fieldView);
+        gamePane.setCenter(boardView);
         gamePane.setLeft(scoreView);
         gamePane.setRight(logView);
         gamePane.setBottom(optionsView);
@@ -120,8 +120,8 @@ public class ViewManager {
         return mainMenuBar;
     }
 
-    public FieldView getFieldView() {
-        return fieldView;
+    public BoardView getFieldView() {
+        return boardView;
     }
 
     public ScoreView getScoreView() {
@@ -150,8 +150,8 @@ public class ViewManager {
         this.logView = logView;
     }
 
-    public void setFieldView(FieldView fieldView) {
-        this.fieldView = fieldView;
+    public void setFieldView(BoardView boardView) {
+        this.boardView = boardView;
     }
 
     public void setScoreView(ScoreView scoreView) {

@@ -61,7 +61,7 @@ public class StartMenuView extends VBox {
     SelectColorButton stonesBlackButton1, stonesWhiteButton1, stonesBlackButton2, stonesWhiteButton2, computerBlackButton, computerWhiteButton;
     SwitchButton beginnerSwitchButton, startOnlineGameSwitchButton, ownComputerPlayerSwitchButton;
     ImageView player1StonesImageView, player2StonesImageView;
-    FieldViewStartingPosition startingPositionFieldView;
+    BoardViewTemplates startingPositionBoardView;
     STONECOLOR player1Color, player2Color;
     ChoiceBox offlineComputerLevelChoiceBox, onlineComputerLevelChoiceBox;
     PopOver scorePopOver, startingPositionPopOver;
@@ -199,7 +199,7 @@ public class StartMenuView extends VBox {
         startingPositionPopOver = new PopOver();
         Group root = new Group();
         HBox mainHBox = new HBox();
-        startingPositionFieldView = new FieldViewStartingPosition(viewManager, STONECOLOR.BLACK, STONECOLOR.WHITE);
+        startingPositionBoardView = new BoardViewTemplates(viewManager, STONECOLOR.BLACK, STONECOLOR.WHITE);
 
 
 
@@ -235,7 +235,7 @@ public class StartMenuView extends VBox {
         loadButton.setOnAction(click -> {
             System.out.println(choiceBox.getValue());
             StartSituation startSituation = StartSituation.produceStartSituations()[Integer.parseInt(choiceBox.getValue().toString())];
-            startingPositionFieldView.setBoard(startSituation.getBoard());
+            startingPositionBoardView.setBoard(startSituation.getBoard());
             roundTextField.setText("" + startSituation.getRound());
             situationDescriptionLabel.setText(startSituation.getDescription());
 
@@ -243,9 +243,9 @@ public class StartMenuView extends VBox {
                 for (int j = 0; j < 8; j++){
                 	Position p = new Position(i, j);
                     if (startSituation.getBoard().getNumberOnPosition(p) != 9){
-                        startingPositionFieldView.graphicPut(p, startSituation.getBoard().getNumberOnPosition(p), 0, false);}
+                        startingPositionBoardView.graphicPut(p, startSituation.getBoard().getNumberOnPosition(p),  false);}
                     else {
-                        startingPositionFieldView.graphicKill(p, false);
+                        startingPositionBoardView.graphicKill(p, false);
                     }
                 }
             }
@@ -261,7 +261,7 @@ public class StartMenuView extends VBox {
         roundHBox.getChildren().addAll(roundLabel, roundTextField);
         startingVBox.getChildren().addAll(roundHBox, choiceHBox, situationDescriptionLabel);
         startingVBox.getStyleClass().add("startingVBox");
-        mainHBox.getChildren().addAll(startingPositionFieldView, startingVBox);
+        mainHBox.getChildren().addAll(startingPositionBoardView, startingVBox);
 
 
         root.getChildren().addAll(mainHBox);
@@ -275,7 +275,7 @@ public class StartMenuView extends VBox {
             startingPositionPopOver.setDetached(true);
             startingPositionPopOver.setArrowSize(0);
             startingPositionPopOver.show(viewManager.getMainStage());
-            startingPositionFieldView.updateStoneColors();
+            startingPositionBoardView.updateStoneColors();
         });
     }
 
@@ -577,7 +577,7 @@ public class StartMenuView extends VBox {
             stonesWhiteButton2.getStyleClass().add("selectColorButtonOn");
             player1Color = STONECOLOR.BLACK;
             player2Color = STONECOLOR.WHITE;
-            startingPositionFieldView.setStoneColors(STONECOLOR.BLACK);
+            startingPositionBoardView.setStoneColors(STONECOLOR.BLACK);
 
         });
 
@@ -596,7 +596,7 @@ public class StartMenuView extends VBox {
             stonesWhiteButton1.getStyleClass().add("selectColorButtonOn");
             player2Color = STONECOLOR.BLACK;
             player1Color = STONECOLOR.WHITE;
-            startingPositionFieldView.setStoneColors(STONECOLOR.WHITE);
+            startingPositionBoardView.setStoneColors(STONECOLOR.WHITE);
 
         });
 
@@ -615,7 +615,7 @@ public class StartMenuView extends VBox {
             stonesWhiteButton2.getStyleClass().add("selectColorButtonOff");
             player1Color = STONECOLOR.WHITE;
             player2Color = STONECOLOR.BLACK;
-            startingPositionFieldView.setStoneColors(STONECOLOR.WHITE);
+            startingPositionBoardView.setStoneColors(STONECOLOR.WHITE);
         });
 
         stonesWhiteButton2.setOnAction(click -> {
@@ -633,7 +633,7 @@ public class StartMenuView extends VBox {
             stonesWhiteButton1.getStyleClass().add("selectColorButtonOff");
             player2Color = STONECOLOR.WHITE;
             player1Color = STONECOLOR.BLACK;
-            startingPositionFieldView.setStoneColors(STONECOLOR.BLACK);
+            startingPositionBoardView.setStoneColors(STONECOLOR.BLACK);
         });
     }
 
@@ -718,19 +718,19 @@ public class StartMenuView extends VBox {
 
             //Ungültige Ausgangslage abfangen
             boolean lessThan3StonesInMovePhase = tempRound > 18
-                    && (startingPositionFieldView.getBoard().numberOfStonesOf(0) < 3
-                    || startingPositionFieldView.getBoard().numberOfStonesOf(1) < 3);
+                    && (startingPositionBoardView.getBoard().numberOfStonesOf(0) < 3
+                    || startingPositionBoardView.getBoard().numberOfStonesOf(1) < 3);
 
             boolean lessThan3StonesAfterPutPhase = tempRound <= 18
-                    && (startingPositionFieldView.getBoard().numberOfStonesOf(0) + (18-tempRound)/2 < 3
-                    || startingPositionFieldView.getBoard().numberOfStonesOf(1) + (18-tempRound)/2 < 3);
+                    && (startingPositionBoardView.getBoard().numberOfStonesOf(0) + (18-tempRound)/2 < 3
+                    || startingPositionBoardView.getBoard().numberOfStonesOf(1) + (18-tempRound)/2 < 3);
 
-            boolean moreThan9Stones = startingPositionFieldView.getBoard().numberOfStonesOf(0) > 9
-                    || startingPositionFieldView.getBoard().numberOfStonesOf(1) > 9;
+            boolean moreThan9Stones = startingPositionBoardView.getBoard().numberOfStonesOf(0) > 9
+                    || startingPositionBoardView.getBoard().numberOfStonesOf(1) > 9;
 
             boolean moreThan9StonesAfterPutPhase = tempRound <= 18
-                    && (startingPositionFieldView.getBoard().numberOfStonesOf(0) + Math.round(((double) 18-tempRound)/2) > 9
-                    || startingPositionFieldView.getBoard().numberOfStonesOf(1) + Math.round(((double) 18-tempRound)/2) > 9);
+                    && (startingPositionBoardView.getBoard().numberOfStonesOf(0) + Math.round(((double) 18-tempRound)/2) > 9
+                    || startingPositionBoardView.getBoard().numberOfStonesOf(1) + Math.round(((double) 18-tempRound)/2) > 9);
 
 
             if (lessThan3StonesInMovePhase || lessThan3StonesAfterPutPhase || moreThan9Stones || moreThan9StonesAfterPutPhase){
@@ -754,7 +754,7 @@ public class StartMenuView extends VBox {
                     viewManager.setGame(new Game(viewManager,
                             new HumanPlayer(viewManager, namePlayer1Textfield.getText().toUpperCase(), true),
                             new HumanPlayer(viewManager, namePlayer2Textfield.getText().toUpperCase(), true),
-                            startingPositionFieldView.getBoard(),
+                            startingPositionBoardView.getBoard(),
                             tempRound));
                 }
                 else {
@@ -764,11 +764,11 @@ public class StartMenuView extends VBox {
                     viewManager.setGame(new Game(viewManager,
                             new HumanPlayer(viewManager, namePlayer1Textfield.getText().toUpperCase(), true),
                             beginnerSwitchButton.getState(), putPoints, movePoints, Integer.parseInt(offlineComputerLevelChoiceBox.getValue().toString()),
-                            startingPositionFieldView.getBoard(), tempRound));
+                            startingPositionBoardView.getBoard(), tempRound));
                 }
 
 
-                viewManager.createGameScene(new FieldViewPlay(viewManager, player1Color, player2Color, true),
+                viewManager.createGameScene(new BoardViewPlay(viewManager, player1Color, player2Color, true),
                         new ScoreView(viewManager, player1Color, player2Color, viewManager.getGame().getRound(), false),
                         new LogView(viewManager, false));
 
@@ -782,9 +782,9 @@ public class StartMenuView extends VBox {
 
                 if ((!beginnerSwitchButton.getState() && tempRound%2 == 0) || (beginnerSwitchButton.getState() && tempRound%2 == 1)) {
                     if (tempRound <= 18) {
-                        ((FieldViewPlay) viewManager.getFieldView()).setPutCursor();
+                        ((BoardViewPlay) viewManager.getFieldView()).setPutCursor();
                     } else {
-                        ((FieldViewPlay) viewManager.getFieldView()).setMoveCursor();
+                        ((BoardViewPlay) viewManager.getFieldView()).setMoveCursor();
                     }
                 }
 
@@ -914,7 +914,7 @@ public class StartMenuView extends VBox {
                 if (startOnlineGameSwitchButton.getState()){
                     game = new Game(viewManager, new HumanPlayer(viewManager, onlinePlayerName, false), computerPlayer, gameCodeTextfield.getText(), startOnlineGameSwitchButton.getState());
                     viewManager.setGame(game);
-                    viewManager.createGameScene(new FieldViewPlay(viewManager, onlinePlayerColor, computerColor, false),
+                    viewManager.createGameScene(new BoardViewPlay(viewManager, onlinePlayerColor, computerColor, false),
                             new ScoreView(viewManager, onlinePlayerColor, computerColor, game.getRound(), true),
                             new LogView(viewManager, true));
                 }
@@ -922,7 +922,7 @@ public class StartMenuView extends VBox {
                 else {
                     game = new Game(viewManager, computerPlayer, new HumanPlayer(viewManager, onlinePlayerName, false), gameCodeTextfield.getText(), startOnlineGameSwitchButton.getState());
                     viewManager.setGame(game);
-                    viewManager.createGameScene(new FieldViewPlay(viewManager, computerColor, onlinePlayerColor, false),
+                    viewManager.createGameScene(new BoardViewPlay(viewManager, computerColor, onlinePlayerColor, false),
                             new ScoreView(viewManager, computerColor, onlinePlayerColor, game.getRound(), true),
                             new LogView(viewManager, true));
                 }
