@@ -70,6 +70,7 @@ abstract public class BoardView extends AnchorPane{
         for (int row = 0; row < 7; row++) {
             fieldGridPane.addRow(row);
         }
+
         for (int column = 0; column < 7; column++) {
             fieldGridPane.addRow(column);
         }
@@ -78,11 +79,9 @@ abstract public class BoardView extends AnchorPane{
         for (int row = 0; row < 7; row++) {
             for (int column = 0; column < 7; column++) {
                 if (GUICoordinatesToPositionArray[row][column].getRing() != -1) {
-                    ImageView tempImageView = new ImageView(emptyField);
-                    fieldGridPane.add(tempImageView, row, column);
+                    fieldGridPane.add(new ImageView(emptyField), row, column);
                 } else {
-                    ImageView tempImageView = new ImageView(forbiddenField);
-                    fieldGridPane.add(tempImageView, row, column);
+                    fieldGridPane.add(new ImageView(forbiddenField), row, column);
                 }
             }
         }
