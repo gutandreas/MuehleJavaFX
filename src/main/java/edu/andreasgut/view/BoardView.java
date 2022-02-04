@@ -38,21 +38,20 @@ abstract public class BoardView extends AnchorPane{
         this.player1Color = player1Color;
         this.player2Color = player2Color;
 
-        initializeTranslationArrays();
+
         imageView = new ImageView();
         image = new Image("edu/andreasgut/images/Spielfeld.png", 600, 600, true, true);
         imageView.setImage(image);
 
         setupPlayerImages(player1Color, player2Color);
 
+        initializeTranslationArrays();
         fieldGridPane = new GridPane();
         setupGridPane();
         fieldGridPane.setPadding(new Insets(3));
         fieldGridPane.setOnMouseExited (action ->{
             imageView.getScene().setCursor(Cursor.DEFAULT);
         });
-
-
 
         this.getChildren().addAll(imageView,fieldGridPane);
     }
@@ -88,22 +87,6 @@ abstract public class BoardView extends AnchorPane{
     }
 
 
-
-
-    public void setStoneColors(STONECOLOR player1Color){
-        if (player1Color == STONECOLOR.BLACK){
-            player1Color = STONECOLOR.BLACK;
-            player1StoneImage = new Image(player1Color.getPathStone(), 85, 85, true, true);
-            player2Color = STONECOLOR.WHITE;
-            player2StoneImage = new Image(player2Color.getPathStone(), 85, 85, true, true);
-        }
-        else {
-            player1Color = STONECOLOR.WHITE;
-            player1StoneImage = new Image(player1Color.getPathStone(), 85, 85, true, true);
-            player2Color = STONECOLOR.BLACK;
-            player2StoneImage = new Image(player2Color.getPathStone(), 85, 85, true, true);
-        }
-    }
 
     public void graphicPut(Position position, int playerIndex, boolean sound){
 
@@ -155,8 +138,6 @@ abstract public class BoardView extends AnchorPane{
         });
     }
 
-
-
     private Image getEnemysStoneImage(){
         return  viewManager.getGame().getCurrentPlayerIndex()==0 ? player2StoneImage : player1StoneImage;
     }
@@ -164,8 +145,6 @@ abstract public class BoardView extends AnchorPane{
     private Image getOwnStoneImage(){
         return viewManager.getGame().getCurrentPlayerIndex()==0 ? player1StoneImage : player2StoneImage;
     }
-
-
 
     private void clearAllFieldFunctions(){
         for (Node n : fieldGridPane.getChildren()){
@@ -249,5 +228,20 @@ abstract public class BoardView extends AnchorPane{
         PositionToGridPaneIndexArray[2][5] = 25;
         PositionToGridPaneIndexArray[2][6] = 18;
         PositionToGridPaneIndexArray[2][7] = 17;
+    }
+
+    public void setStoneColors(STONECOLOR player1Color){
+        if (player1Color == STONECOLOR.BLACK){
+            player1Color = STONECOLOR.BLACK;
+            player1StoneImage = new Image(player1Color.getPathStone(), 85, 85, true, true);
+            player2Color = STONECOLOR.WHITE;
+            player2StoneImage = new Image(player2Color.getPathStone(), 85, 85, true, true);
+        }
+        else {
+            player1Color = STONECOLOR.WHITE;
+            player1StoneImage = new Image(player1Color.getPathStone(), 85, 85, true, true);
+            player2Color = STONECOLOR.BLACK;
+            player2StoneImage = new Image(player2Color.getPathStone(), 85, 85, true, true);
+        }
     }
 }
