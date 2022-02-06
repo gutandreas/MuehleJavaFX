@@ -77,7 +77,7 @@ abstract public class BoardView extends AnchorPane{
         //Füllt Felder mit emptyField wenn in Repräsentation vorhanden, sonst mit forbiddenField
         for (int row = 0; row < 7; row++) {
             for (int column = 0; column < 7; column++) {
-                if (GUICoordinatesToPositionArray[row][column].getRing() != -1) {
+                if (GUICoordinatesToPositionArray[row][column] != null) {
                     fieldGridPane.add(new ImageView(emptyField), row, column);
                 } else {
                     fieldGridPane.add(new ImageView(forbiddenField), row, column);
@@ -170,14 +170,6 @@ abstract public class BoardView extends AnchorPane{
     protected void initializeTranslationArrays(){
         GUICoordinatesToPositionArray = new Position[7][7];
 
-        //Koordinaten -1/-1 bedeuten, dass Feld in FieldArray nicht repräsentiert wird!
-        //Führt bei Feldinitialisierung zu einem forbiddenField
-        for (int i = 0; i < 7; i++){
-            for (int j = 0; j < 7; j++){
-                GUICoordinatesToPositionArray[i][j] = new Position(-1,-1);
-            }
-        }
-
         GUICoordinatesToPositionArray[0][0] = new Position(0,0);
         GUICoordinatesToPositionArray[0][3] = new Position(0,1);
         GUICoordinatesToPositionArray[0][6] = new Position(0,2);
@@ -204,6 +196,7 @@ abstract public class BoardView extends AnchorPane{
         GUICoordinatesToPositionArray[3][2] = new Position(2,7);
 
         PositionToGridPaneIndexArray = new int[3][8];
+
         PositionToGridPaneIndexArray[0][0] = 0;
         PositionToGridPaneIndexArray[0][1] = 21;
         PositionToGridPaneIndexArray[0][2] = 42;

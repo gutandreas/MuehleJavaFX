@@ -41,8 +41,6 @@ public class BoardViewTemplates extends BoardView {
                             board.removeStone(position);
                             graphicKill(position, false);
                     }
-
-
                 });
             }
         }
