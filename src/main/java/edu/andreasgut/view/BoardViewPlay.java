@@ -31,9 +31,6 @@ public class BoardViewPlay extends BoardView {
 
     private void setupBoardPositions(boolean activateBoardFunctions){
 
-
-
-
         if (activateBoardFunctions){
 
             for (Node n : fieldGridPane.getChildren()) {

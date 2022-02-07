@@ -142,13 +142,13 @@ public class Messenger {
             case "roboterConnection":
                 if (jsonObject.getBoolean("connected")){
                     viewManager.getScoreView().acitvateRoboterConnectedLabel(true);
-                    game.setRoboterConnected(true);
+                    //game.setRoboterConnected(true);
                     game.setRoboterWatching(jsonObject.getBoolean("watching"));
                     game.setRoboterPlaying(jsonObject.getBoolean("playing"));
                 }
                 else {
                     viewManager.getScoreView().acitvateRoboterConnectedLabel(false);
-                    game.setRoboterConnected(false);
+                    //game.setRoboterConnected(false);
                     game.setRoboterWatching(false);
                     game.setRoboterPlaying(false);
                     viewManager.getScoreView().acitvateRoboterConnectedLabel(false);

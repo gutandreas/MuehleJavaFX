@@ -9,31 +9,28 @@ import java.util.ArrayList;
 
 public class Game {
 
+    private final ViewManager viewManager;
+    private String gameCode;
+    private WebsocketClient websocketClient;
     private final Player player0;
     private final Player player1;
     private int round;
     private final int NUMBEROFSTONES = 9;
     private Player currentPlayer;
     private Board board;
-    boolean putPhase = true;
-    boolean movePhase = false;
-    boolean movePhaseTake = true;
-    boolean movePhaseRelease = false;
-    boolean gameOver = false;
+    private boolean putPhase = true;
+    private boolean movePhase = false;
+    private boolean movePhaseTake = true;
+    private boolean movePhaseRelease = false;
+    private boolean gameOver = false;
     private boolean killPhase = false;
-    private final ViewManager viewManager;
     private boolean player2starts;
     private boolean clickOkay = true;
-    private String gameCode;
     private Position lastClickedPosition;
-    private WebsocketClient websocketClient;
     private boolean joinExistingGame;
-    private boolean roboterConnected = false;
     private boolean roboterWatching = false;
     private boolean roboterPlaying = false;
-
-
-    ArrayList<Player> playerArrayList = new ArrayList<>();
+    private ArrayList<Player> playerArrayList = new ArrayList<>();
 
     public Game(ViewManager viewManager, Player player0, Player player1, Board board, int round) {
         this.viewManager = viewManager;
@@ -62,9 +59,7 @@ public class Game {
             movePhaseTake = true;
             movePhaseRelease = false;
         }
-
     }
-
 
 
     public Game(ViewManager viewManager, Player player0, Player player1, String gameCode, boolean joinExistingGame) {
@@ -79,7 +74,6 @@ public class Game {
         this.joinExistingGame = joinExistingGame;
         board = new BoardImpl(this);
     }
-
 
     public Game(ViewManager viewManager, Player player0, boolean player2starts, ScorePoints putPoints, ScorePoints movePoints, int levelLimit, Board board, int round) {
         this.viewManager = viewManager;
@@ -103,6 +97,7 @@ public class Game {
             currentPlayer=playerArrayList.get((round%2));}
 
         this.round = round;
+
         if (round <=18){
             putPhase = true;
             movePhase = false;
@@ -113,8 +108,6 @@ public class Game {
             movePhaseTake = true;
             movePhaseRelease = false;
         }
-
-
     }
 
     public boolean isJoinExistingGame() {
@@ -208,13 +201,6 @@ public class Game {
         return gameOver;
     }
 
-    public boolean isRoboterConnected() {
-        return roboterConnected;
-    }
-
-    public void setRoboterConnected(boolean roboterConnected) {
-        this.roboterConnected = roboterConnected;
-    }
 
     public boolean isRoboterWatching() {
         return roboterWatching;
@@ -245,73 +231,23 @@ public class Game {
 
     public void nextStep(Position clickedPosition) {
 
-
         if (clickOkay){
 
             clickOkay = false;
 
-
             if (killPhase){
-                if (board.isKillPossibleAt(clickedPosition, getOtherPlayerIndex())){
-                    Messenger.sendKillMessage(viewManager, clickedPosition);
-                    return;
-                   }
-                else {
-                    System.out.println("Ungültiger Kill");
-                    viewManager.getLogView().setStatusLabel("Auf diesem Feld kann kein Stein entfernt werden.");
-                    clickOkay = true;
-                    return;
-                }
+                nextKillStep(clickedPosition);
+                return;
             }
 
             if (putPhase){
-                if (board.isPutPossibleAt(clickedPosition)){
-                    Messenger.sendPutMessage(viewManager, clickedPosition);
-                    return;
-
-                }
-                else {
-                    System.out.println("Ungültiger Put, Feld ist nicht frei");
-                    viewManager.getLogView().setStatusLabel("Dieses Feld ist nicht frei.");
-                    clickOkay = true;
-                    return;
-                }
+                nextPutStep(clickedPosition);
+                return;
             }
 
             if (movePhase){
-                if (movePhaseTake){
-                    if (board.isThisMyStone(clickedPosition, getCurrentPlayerIndex())){
-                        ((BoardViewPlay) viewManager.getFieldView()).setPutCursor();
-                        viewManager.getFieldView().graphicRemove(clickedPosition);
-                        lastClickedPosition = clickedPosition;
-                        clickOkay = true;
-                        movePhaseRelease = true;
-                        movePhaseTake = false;
-                        return;}
-                    else {
-                        clickOkay = true;
-                        return;
-                    }
-
-                }
-
-
-                if (movePhaseRelease){
-                    boolean allowedToJump = board.numberOfStonesOf(getCurrentPlayerIndex()) == 3;
-                    Move move = new Move(lastClickedPosition, clickedPosition);
-                    if (board.isMovePossibleAt(move.getFrom(),move.getTo(),allowedToJump)){
-                        Messenger.sendMoveMessage(viewManager, move);
-                    }
-                    else {
-                        System.out.println("Kein gültiger Move");
-                        viewManager.getLogView().setStatusLabel("Das ist kein gültiger Zug");
-                        viewManager.getFieldView().graphicPut(lastClickedPosition, getCurrentPlayerIndex(), true);
-                        ((BoardViewPlay) viewManager.getFieldView()).setMoveCursor();
-                        clickOkay = true;
-                        movePhaseRelease = false;
-                        movePhaseTake = true;
-                    }
-                }
+                nextMoveStep(clickedPosition);
+                return;
             }
 
         }
@@ -319,7 +255,64 @@ public class Game {
             System.out.println("Kein Klick möglich");
             viewManager.getLogView().setStatusLabel("Warten Sie, bis Sie an der Reihe sind.");
         }
+    }
 
+    private void nextPutStep(Position clickedPosition){
+        if (board.isPutPossibleAt(clickedPosition)){
+            Messenger.sendPutMessage(viewManager, clickedPosition);
+
+        }
+        else {
+            System.out.println("Ungültiger Put, Feld ist nicht frei");
+            viewManager.getLogView().setStatusLabel("Dieses Feld ist nicht frei.");
+            clickOkay = true;
+        }
+    }
+
+    private void nextKillStep(Position clickedPosition){
+        if (board.isKillPossibleAt(clickedPosition, getOtherPlayerIndex())){
+            Messenger.sendKillMessage(viewManager, clickedPosition);
+        }
+        else {
+            System.out.println("Ungültiger Kill");
+            viewManager.getLogView().setStatusLabel("Auf diesem Feld kann kein Stein entfernt werden.");
+            clickOkay = true;
+        }
+    }
+
+    private void nextMoveStep(Position clickedPosition){
+        if (movePhaseTake){
+            if (board.isThisMyStone(clickedPosition, getCurrentPlayerIndex())){
+                ((BoardViewPlay) viewManager.getFieldView()).setPutCursor();
+                viewManager.getFieldView().graphicRemove(clickedPosition);
+                lastClickedPosition = clickedPosition;
+                clickOkay = true;
+                movePhaseRelease = true;
+                movePhaseTake = false;
+                return;}
+            else {
+                clickOkay = true;
+                return;
+            }
+
+        }
+
+        if (movePhaseRelease){
+            boolean allowedToJump = board.numberOfStonesOf(getCurrentPlayerIndex()) == 3;
+            Move move = new Move(lastClickedPosition, clickedPosition);
+            if (board.isMovePossibleAt(move.getFrom(),move.getTo(),allowedToJump)){
+                Messenger.sendMoveMessage(viewManager, move);
+            }
+            else {
+                System.out.println("Ungültiger Move");
+                viewManager.getLogView().setStatusLabel("Das ist kein gültiger Zug");
+                viewManager.getFieldView().graphicPut(lastClickedPosition, getCurrentPlayerIndex(), true);
+                ((BoardViewPlay) viewManager.getFieldView()).setMoveCursor();
+                clickOkay = true;
+                movePhaseRelease = false;
+                movePhaseTake = true;
+            }
+        }
     }
 
 
@@ -356,9 +349,7 @@ public class Game {
                 }
             }
         }
-
         checkWinner();
-
     }
 
 
@@ -384,7 +375,6 @@ public class Game {
         }
 
         if (websocketClient == null) {
-
 
             if (lessThan3Stones) {
                 Messenger.sendGameOverMessage(viewManager, "Weniger als 3 Steine");

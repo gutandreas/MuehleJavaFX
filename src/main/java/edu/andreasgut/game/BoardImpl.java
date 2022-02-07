@@ -204,7 +204,7 @@ public class BoardImpl implements Board {
 
         int otherPlayerIndex = 1-playerIndex;
 
-        if (numberOfStonesOf(otherPlayerIndex) == 3 && game.movePhase){
+        if (numberOfStonesOf(otherPlayerIndex) == 3 && game.isMovePhase()){
             return true;
         }
 

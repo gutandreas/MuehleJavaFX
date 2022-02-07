@@ -225,14 +225,14 @@ abstract public class BoardView extends AnchorPane{
 
     public void setStoneColors(STONECOLOR player1Color){
         if (player1Color == STONECOLOR.BLACK){
-            player1Color = STONECOLOR.BLACK;
-            player1StoneImage = new Image(player1Color.getPathStone(), 85, 85, true, true);
+            this.player1Color = STONECOLOR.BLACK;
+            player1StoneImage = new Image(this.player1Color.getPathStone(), 85, 85, true, true);
             player2Color = STONECOLOR.WHITE;
             player2StoneImage = new Image(player2Color.getPathStone(), 85, 85, true, true);
         }
         else {
-            player1Color = STONECOLOR.WHITE;
-            player1StoneImage = new Image(player1Color.getPathStone(), 85, 85, true, true);
+            this.player1Color = STONECOLOR.WHITE;
+            player1StoneImage = new Image(this.player1Color.getPathStone(), 85, 85, true, true);
             player2Color = STONECOLOR.BLACK;
             player2StoneImage = new Image(player2Color.getPathStone(), 85, 85, true, true);
         }
