@@ -237,19 +237,15 @@ public class Game {
 
             if (killPhase){
                 nextKillStep(clickedPosition);
-                return;
-            }
+                return;}
 
             if (putPhase){
                 nextPutStep(clickedPosition);
-                return;
-            }
+                return;}
 
             if (movePhase){
                 nextMoveStep(clickedPosition);
-                return;
-            }
-
+                return;}
         }
         else {
             System.out.println("Kein Klick möglich");
@@ -294,7 +290,6 @@ public class Game {
                 clickOkay = true;
                 return;
             }
-
         }
 
         if (movePhaseRelease){

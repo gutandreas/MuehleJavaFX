@@ -31,15 +31,15 @@ import java.util.Optional;
 public class MainMenuBar extends MenuBar {
 
     private Menu datei, hilfe;
-    private MenuItem neuStarten = new MenuItem("Neu starten");
-    private MenuItem spielBeenden = new MenuItem("Spiel beenden");
+    private MenuItem neuStarten = new MenuItem("Neues Spiel starten");
+    private MenuItem spielBeenden = new MenuItem("Programm beenden");
     private MenuItem spielregeln = new MenuItem("Spielregeln");
     private MenuItem ueberDiesesSpiel = new MenuItem("Über dieses Spiel");
     private ViewManager viewManager;
 
     public MainMenuBar(ViewManager viewManager) {
         this.viewManager = viewManager;
-        datei = new Menu("Datei");
+        datei = new Menu("Spiel");
         hilfe = new Menu("Hilfe");
         this.getMenus().addAll(datei,hilfe);
         datei.getItems().addAll(neuStarten, spielBeenden);
