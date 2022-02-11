@@ -7,7 +7,7 @@ public class Rule {
     private final String title;
     private final String description;
     private final String tags;
-    static private LinkedList<Rule> rules = new LinkedList<>();
+    private static LinkedList<Rule> rules = new LinkedList<>();
 
     static {
         rules.add(new Rule("Ziel des Spiels", "Ziel des Spiels ist es, durch das Bilden von Mühlen, dem/der Gegenspieler(in) Steine wegzunehmen, bis er/sie weniger als 3 Steine hat und somit keine Mühlen mehr bauen kann.", "Ziel, Mühle, Steine"));
