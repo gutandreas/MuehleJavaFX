@@ -74,7 +74,7 @@ public class StandardComputerPlayer extends ComputerPlayer{
         Board clonedBoard1 = board.clone();
         clonedBoard1.putStone(put, currentPlayerIndex);
         gameTreeNode1.setBoard(clonedBoard1);
-        gameTreeNode1.setScore(Advisor.getScore(gameTreeNode1, scorePoints, scorePlayerIndex, false));
+        gameTreeNode1.setScore(Advisor.getScore(gameTreeNode1, scorePoints, scorePlayerIndex));
 
         if (gameTreeNode1.getBoard().isPositionPartOfMorris(gameTreeNode1.getPut())){
             for (Position killPosition : Advisor.getAllPossibleKills(clonedBoard1,currentPlayerIndex)){
@@ -87,7 +87,7 @@ public class StandardComputerPlayer extends ComputerPlayer{
                 clonedBoard2.removeStone(killPosition);
 
                 gameTreeNode2.setBoard(clonedBoard2);
-                gameTreeNode2.setScore(Advisor.getScore(gameTreeNode2, scorePoints, scorePlayerIndex, false));
+                gameTreeNode2.setScore(Advisor.getScore(gameTreeNode2, scorePoints, scorePlayerIndex));
                 gameTree.addNode(parent, gameTreeNode2);
             }
         }
@@ -151,7 +151,7 @@ public class StandardComputerPlayer extends ComputerPlayer{
         clonedBoard1.moveStone(move.getFrom(), move.getTo(), currentPlayerIndex);
 
         gameTreeNode1.setBoard(clonedBoard1);
-        gameTreeNode1.setScore(Advisor.getScore(gameTreeNode1, scorePoints, scorePlayerIndex, false));
+        gameTreeNode1.setScore(Advisor.getScore(gameTreeNode1, scorePoints, scorePlayerIndex));
 
 
 
@@ -166,7 +166,7 @@ public class StandardComputerPlayer extends ComputerPlayer{
                 clonedBoard2.removeStone(killPosition);
 
                 gameTreeNode2.setBoard(clonedBoard2);
-                gameTreeNode2.setScore(Advisor.getScore(gameTreeNode2, scorePoints, scorePlayerIndex, false));
+                gameTreeNode2.setScore(Advisor.getScore(gameTreeNode2, scorePoints, scorePlayerIndex));
                 gameTree.addNode(parent, gameTreeNode2);
             }
         }

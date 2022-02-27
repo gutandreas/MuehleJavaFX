@@ -42,7 +42,6 @@ public class CustomComputerPlayer extends ComputerPlayer{
 
         Position position = null;
 
-
         return position;
     }
 
@@ -126,7 +125,7 @@ public class CustomComputerPlayer extends ComputerPlayer{
 
     private void showAlert(){
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setContentText("Der Computer wollte einen ungültigen Zug spielen. " +
+        alert.setContentText("Der Computer hat einen ungültigen Zug berechnet. " +
                 "Um das Spiel trotzdem weiterspielen zu können, wurde der Zug durch einen zufälligen Zug ersetzt.");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {

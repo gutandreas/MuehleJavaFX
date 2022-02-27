@@ -8,10 +8,12 @@ public class Advisor {
         return board.numberOfStonesOf(playerIndex);
     }
 
+
     static public int numberOfEnemysStones(Board board, int ownPlayerIndex){
         int enemysIndex = 1 - ownPlayerIndex;
         return board.numberOfStonesOf(enemysIndex);
     }
+
 
     static public LinkedList<ClosedMorris> getMyClosedMorrises(Board board, int ownPlayerIndex) {
 
@@ -38,10 +40,12 @@ public class Advisor {
         return closedMorrisLinkedList;
     }
 
+
     static public LinkedList<ClosedMorris> getMyEnemysClosedMorrises(Board board, int ownPlayerIndex) {
         int enemysIndex = 1-ownPlayerIndex;
         return getMyClosedMorrises(board, enemysIndex);
     }
+
 
     static private void addConstellationToListIfClosedMorris(Board board, int playerIndex, LinkedList<ClosedMorris> closedMorrisLinkedList,
                                                              Position position1, Position position2, Position position3){
@@ -139,10 +143,12 @@ public class Advisor {
         return openMorrisLinkedList;
     }
 
+
     static public LinkedList<OpenMorris> getMyEnemysOpenMorrises(Board board, int ownPlayerIndex) {
         int enemysIndex = 1-ownPlayerIndex;
         return getMyOpenMorrises(board, enemysIndex);
     }
+
 
     static private void addConstellationToListIfOpenMorris(Board board, int playerIndex, LinkedList<OpenMorris> openMorrisLinkedList,
                                                            Position position1, Position position2, Position position3,
@@ -165,7 +171,6 @@ public class Advisor {
     }
 
 
-
     static public int numberOfMyTwoStonesTogetherWithFreeFieldBeside(Board board, int ownPlayerIndex){
         int counter = 0;
 
@@ -178,6 +183,7 @@ public class Advisor {
             }}
         return counter/2; // jedes 2er-Pack wird doppelt gezählt
     }
+
 
     static public int numberOfMyEnemysTwoStonesTogetherWithFreeFieldBeside(Board board, int ownPlayerIndex){
         int enemyIndex = 1-ownPlayerIndex;
@@ -192,6 +198,7 @@ public class Advisor {
             }}
         return counter/2; // jedes 2er-Pack wird doppelt gezählt
     }
+
 
     static public boolean positionBuildsTwoStonesTogetherWithFreeFieldBeside(Board board, Position position, int playerIndex){
         if (position.getField()%2==1){ // Ungerade Felder
@@ -265,7 +272,6 @@ public class Advisor {
     }
 
 
-
     static public int numberOfMyEnemysTwoStonesWithGap(Board board, int ownPlayerIndex){
         int enemyIndex = 1-ownPlayerIndex;
         int counter = 0;
@@ -279,6 +285,7 @@ public class Advisor {
             }}
         return counter/2; // jedes 2er-Pack wird doppelt gezählt
     }
+
 
     static private boolean positionBuildsTwoStonesWithGap(Board board, Position position, int playerIndex){
         if (position.getField()%2==1 && position.getRing()==0){
@@ -310,6 +317,7 @@ public class Advisor {
         return false;
 
     }
+
 
     static public LinkedList<Move> getAllPossibleMoves(Board board, int playerIndex) {
 
@@ -372,6 +380,23 @@ public class Advisor {
     }
 
 
+    static public LinkedList<Position> getAllPossibleKills(Board board, int onwPlayerIndex){
+        int enemysIndex = 1-onwPlayerIndex;
+        LinkedList<Position> killList = new LinkedList<>();
+
+        for (int ring = 0; ring < 3; ring++) {
+            for (int field = 0; field < 8; field++) {
+
+                Position position = new Position(ring, field);
+                if (board.isKillPossibleAt(position, enemysIndex)){
+                    killList.add(position);
+                }
+
+            }}
+        return killList;
+    }
+
+
     static public LinkedList<Line> getFreeLines(Board board){
         LinkedList<Line> lines = new LinkedList<>();
 
@@ -402,7 +427,6 @@ public class Advisor {
 
         return lines;
     }
-
 
 
     static public LinkedList<Line> getLinesWithoutEnemysStones(Board board, int ownPlayerIndex){
@@ -436,6 +460,7 @@ public class Advisor {
         return lines;
     }
 
+
     static public LinkedList<Position> getFreePositions(Board board){
         LinkedList<Position> freePositions = new LinkedList<>();
 
@@ -461,6 +486,7 @@ public class Advisor {
 
         return false;
     }
+
 
     static public boolean isPositionGapOfMyEnemysOpenMorris(Board board, Position position, int playerIndex){
 
@@ -490,33 +516,13 @@ public class Advisor {
         return false;
     }
 
+
     static public boolean isPositionPartOfMyEnemysOpenMorris(Board board, Position position, int ownPlayerIndex){
         int enemysIndex = 1-ownPlayerIndex;
         return isPositionPartOfMyOpenMorris(board, position, enemysIndex);
     }
 
-
-
-
-    static public LinkedList<Position> getAllPossibleKills(Board board, int onwPlayerIndex){
-        int enemysIndex = 1-onwPlayerIndex;
-        LinkedList<Position> killList = new LinkedList<>();
-
-        for (int ring = 0; ring < 3; ring++) {
-            for (int field = 0; field < 8; field++) {
-
-                Position position = new Position(ring, field);
-                if (board.isKillPossibleAt(position, enemysIndex)){
-                    killList.add(position);
-                }
-
-            }}
-        return killList;
-
-    }
-
-
-    static public int getScore(GameTreeNode node, ScorePoints scorePoints, int playerIndex, boolean printScore){
+    static public int getScore(GameTreeNode node, ScorePoints scorePoints, int playerIndex){
 
 
         Board board = node.getBoard();
@@ -579,15 +585,9 @@ public class Advisor {
         "Gegnerische Zugmöglichkeiten: " + myEnemysPossiblesMoves + " (" + myEnemysPossiblesMovesPoints + ")" + " \n" +
         "Score: " + score);
 
-        if (printScore) {
-            node.getScoreDetails();
-        }
 
         return score;
 
     }
-
-
-
 
 }

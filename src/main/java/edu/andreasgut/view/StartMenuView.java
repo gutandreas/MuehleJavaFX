@@ -42,11 +42,11 @@ import javafx.scene.layout.VBox;
 public class StartMenuView extends VBox {
 
 
-    /*String ipAdress = "217.160.10.113";
-    String port = "443";*/
-
-    String ipAdress = "localhost";
+    String ipAdress = "217.160.10.113";
     String port = "443";
+
+    //String ipAdress = "localhost";
+    //String port = "443";
 
     private final int STARTDIMENSION = 600;
     private int startRound = 0;
