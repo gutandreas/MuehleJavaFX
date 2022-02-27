@@ -27,9 +27,7 @@ public class ViewManager {
     public ViewManager() {
 
         audioPlayer = new AudioPlayer();
-
         createStartScene();
-
         mainStage = new Stage();
         mainStage.setResizable(false);
         changeToStartScene();
@@ -50,7 +48,6 @@ public class ViewManager {
         startPane = new BorderPane();
         startScene = new Scene(startPane, WIDTH, HEIGHT);
         startScene.getStylesheets().add("edu/andreasgut/style.css");
-
     }
 
     public void changeToStartScene(){
@@ -70,11 +67,9 @@ public class ViewManager {
         this.logView = logView;
         logView.getStyleClass().add("logview");
 
-
         gamePane = new BorderPane();
         gameScene = new Scene(gamePane, WIDTH, HEIGHT);
         gameScene.getStylesheets().add("edu/andreasgut/style.css");
-
     }
 
     public void changeToGameScene(){
@@ -128,7 +123,9 @@ public class ViewManager {
         return scoreView;
     }
 
-    public LogView getLogView() { return logView; }
+    public LogView getLogView() {
+        return logView;
+    }
 
     public void setStartMenuView(StartMenuView startMenuView) {
         this.startMenuView = startMenuView;

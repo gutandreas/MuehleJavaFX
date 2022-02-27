@@ -1,6 +1,6 @@
 package edu.andreasgut.view;
 
-import edu.andreasgut.online.Messenger;
+import edu.andreasgut.communication.Messenger;
 import edu.andreasgut.sound.MUSIC;
 import edu.andreasgut.view.fxElements.MusicSwitchButton;
 import javafx.application.Platform;

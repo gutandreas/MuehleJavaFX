@@ -1,6 +1,6 @@
 package edu.andreasgut.game;
 
-import edu.andreasgut.online.MessageHandler;
+import edu.andreasgut.communication.MessageHandler;
 import edu.andreasgut.view.ViewManager;
 
 public abstract class Player implements MessageHandler {

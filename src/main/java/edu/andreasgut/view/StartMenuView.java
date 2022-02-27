@@ -20,7 +20,7 @@ import edu.andreasgut.game.Position;
 import edu.andreasgut.game.ScorePoints;
 import edu.andreasgut.game.StandardComputerPlayer;
 import edu.andreasgut.game.StartSituation;
-import edu.andreasgut.online.WebsocketClient;
+import edu.andreasgut.communication.WebsocketClient;
 import edu.andreasgut.sound.MUSIC;
 import edu.andreasgut.view.fxElements.SelectColorButton;
 import edu.andreasgut.view.fxElements.SwitchButton;

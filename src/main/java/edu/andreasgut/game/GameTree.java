@@ -234,8 +234,6 @@ public class GameTree {
     public String toString(){
         String string = "Gametree: \n \n";
 
-        //return toStringRecursive(root, string);
-
         int counter1 = 0;
 
         for (GameTreeNode currentNode : root.getChildren()) {
@@ -325,19 +323,5 @@ public class GameTree {
             }}}}
         return string;
     }
-
-    private String toStringRecursive(GameTreeNode node, String string){
-
-        for (GameTreeNode currentSet : node.getChildren()) {
-            string += "Level: " + currentSet.getLevel() + "\n";
-            string += currentSet.getBoard();
-            string += "Resultierender Score: " + currentSet.getScore() + "\n \n";
-            toStringRecursive(currentSet, string);
-        }
-
-        return string;
-
-
-        }
 
 }

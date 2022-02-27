@@ -9,7 +9,6 @@ public class HumanPlayer extends Player {
         super(viewManager, name, local);
     }
 
-
     @Override
     public void prepareKill(ViewManager viewManager) {
 

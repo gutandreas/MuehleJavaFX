@@ -1,4 +1,4 @@
-package edu.andreasgut.online;
+package edu.andreasgut.communication;
 
 import java.net.URI;
 

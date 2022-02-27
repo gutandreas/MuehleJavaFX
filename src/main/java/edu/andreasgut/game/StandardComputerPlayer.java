@@ -1,6 +1,6 @@
 package edu.andreasgut.game;
 
-import edu.andreasgut.online.Messenger;
+import edu.andreasgut.communication.Messenger;
 import edu.andreasgut.view.ViewManager;
 
 public class StandardComputerPlayer extends ComputerPlayer{

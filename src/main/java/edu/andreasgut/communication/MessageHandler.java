@@ -1,4 +1,4 @@
-package edu.andreasgut.online;
+package edu.andreasgut.communication;
 
 import edu.andreasgut.view.ViewManager;
 

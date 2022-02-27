@@ -1,16 +1,12 @@
 package edu.andreasgut.view;
 
 import edu.andreasgut.game.ComputerPlayer;
-import edu.andreasgut.online.Messenger;
+import edu.andreasgut.communication.Messenger;
 import edu.andreasgut.view.fxElements.NextStepButton;
 import javafx.application.Platform;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 
-import javax.swing.event.ChangeListener;
-import java.util.Locale;
-import java.util.Optional;
 import java.util.Random;
 
 public class LogView extends VBox {

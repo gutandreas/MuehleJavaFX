@@ -16,7 +16,6 @@ public class Move {
         return to;
     }
 
-
     @Override
     public String toString(){
         return "Zug von Feld " + getFrom() + " nach " + getTo();

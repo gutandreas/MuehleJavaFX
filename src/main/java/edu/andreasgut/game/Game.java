@@ -1,7 +1,7 @@
 package edu.andreasgut.game;
 
-import edu.andreasgut.online.Messenger;
-import edu.andreasgut.online.WebsocketClient;
+import edu.andreasgut.communication.Messenger;
+import edu.andreasgut.communication.WebsocketClient;
 import edu.andreasgut.view.BoardViewPlay;
 import edu.andreasgut.view.ViewManager;
 
