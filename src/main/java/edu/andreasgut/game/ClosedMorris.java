@@ -5,7 +5,7 @@ public class ClosedMorris {
     private Position firstPosition, secondPosition, thirdPosition;
 
     public ClosedMorris(Board board, Position firstPosition, Position secondPosition, Position thirdPosition) {
-        if (firstPosition.compareTo(secondPosition) > 0 || firstPosition.compareTo(thirdPosition) >0
+        if (firstPosition.compareTo(secondPosition) > 0 || firstPosition.compareTo(thirdPosition) > 0
             || secondPosition.compareTo(thirdPosition) > 0){
             throw new IllegalArgumentException();
         }

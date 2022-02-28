@@ -16,12 +16,8 @@ public class StandardComputerPlayer extends ComputerPlayer{
     @Override
     Position put(Board board, int playerIndex) {
 
-        //gameTree.initializeRoot(board);
         gameTree = new GameTree(board);
-
         recursivePutBfs(gameTree.getRoot(), putPoints, movePoints, playerIndex, levelLimit);
-
-        //System.out.println(gameTree);
 
         return gameTree.getBestPut();
     }
@@ -99,12 +95,8 @@ public class StandardComputerPlayer extends ComputerPlayer{
     @Override
     Move move(Board board, int playerIndex, boolean allowedToJump) {
 
-        //gameTree.initializeRoot(board);
         gameTree = new GameTree(board);
-
         recursiveMoveBfs(gameTree.getRoot(), movePoints, playerIndex, levelLimit);
-
-        //System.out.println(gameTree);
 
         return gameTree.getBestMove();
 
@@ -152,8 +144,6 @@ public class StandardComputerPlayer extends ComputerPlayer{
 
         gameTreeNode1.setBoard(clonedBoard1);
         gameTreeNode1.setScore(Advisor.getScore(gameTreeNode1, scorePoints, scorePlayerIndex));
-
-
 
         if (gameTreeNode1.getBoard().isPositionPartOfMorris(gameTreeNode1.getMove().getTo())){
             for (Position killPosition : Advisor.getAllPossibleKills(clonedBoard1,currentPlayerIndex)){

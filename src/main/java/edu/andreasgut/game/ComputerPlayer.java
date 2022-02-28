@@ -4,7 +4,6 @@ import edu.andreasgut.view.ViewManager;
 
 abstract public class ComputerPlayer extends Player {
 
-    //protected GameTree gameTree = new GameTree();
     protected GameTree gameTree;
     protected boolean automaticTrigger;
     protected ScorePoints putPoints;

@@ -154,10 +154,6 @@ public class BoardImpl implements Board {
     }
 
 
-
-
-
-
     @Override
 	public boolean canPlayerMove(int playerIndex){
         return canPlayerMoveInRing(playerIndex) || canPlayerMoveBetweenRings(playerIndex)
@@ -219,7 +215,6 @@ public class BoardImpl implements Board {
     }
 
 
-
     @Override
     public String toString(){
         String board = "";
@@ -227,6 +222,7 @@ public class BoardImpl implements Board {
             board += printRow(i);}
         return board;
     }
+
 
     private String printRow(int row){
         String rowString ="";

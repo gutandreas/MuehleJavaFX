@@ -21,7 +21,6 @@ public class Advisor {
 
         for (int quarter = 0; quarter < 4; quarter++) {
 
-
             for (int startRing = 0; startRing < 2; startRing++) {
                 Position position1 = new Position(startRing, quarter * 2);
                 Position position2 = new Position(startRing, (quarter * 2 + 1) % 8);
@@ -386,13 +385,13 @@ public class Advisor {
 
         for (int ring = 0; ring < 3; ring++) {
             for (int field = 0; field < 8; field++) {
-
                 Position position = new Position(ring, field);
                 if (board.isKillPossibleAt(position, enemysIndex)){
                     killList.add(position);
                 }
+            }
+        }
 
-            }}
         return killList;
     }
 
