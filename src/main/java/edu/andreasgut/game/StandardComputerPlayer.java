@@ -122,9 +122,9 @@ public class StandardComputerPlayer extends ComputerPlayer{
         }
 
         if (set.getLevel()%2 == 0){
-            gameTree.keepOnlyBestChildren(set, 18);}
+            gameTree.keepOnlyBestChildren(set, 20);}
         else {
-            gameTree.keepOnlyWorstChildren(set, 18);}
+            gameTree.keepOnlyWorstChildren(set, 20);}
 
 
         for (GameTreeNode child : set.getChildren()){
