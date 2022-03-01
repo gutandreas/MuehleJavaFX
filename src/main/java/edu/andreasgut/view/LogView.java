@@ -120,15 +120,15 @@ public class LogView extends VBox {
         nextComputerStepButton.setDisable(false);
     }
 
+    public void disableNextComputerStepButton(){
+        nextComputerStepButton.setDisable(true);
+    }
+
     public void activateChatElements(boolean active){
         chatTextField.setDisable(!active);
         chatSendButton.setDisable(!active);
         chatOffendButton.setDisable(!active);
         chatComplimentButton.setDisable(!active);
-    }
-
-    public void disableNextComputerStepButton(){
-        nextComputerStepButton.setDisable(true);
     }
 
     private String getRandomOffense(){

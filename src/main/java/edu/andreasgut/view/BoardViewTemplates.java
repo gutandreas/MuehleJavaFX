@@ -17,7 +17,6 @@ public class BoardViewTemplates extends BoardView {
         this.board = new BoardImpl();
     }
 
-
     private void setupBoardPositions(){
 
         for (Node n : fieldGridPane.getChildren()) {

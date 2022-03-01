@@ -3,8 +3,6 @@ package edu.andreasgut.view;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-
-
 public class StartImageView extends ImageView {
 
     Image image;

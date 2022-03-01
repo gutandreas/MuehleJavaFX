@@ -1,6 +1,5 @@
 package edu.andreasgut.view;
 
-
 import edu.andreasgut.game.Move;
 import edu.andreasgut.game.Position;
 import edu.andreasgut.sound.SOUNDEFFECT;
@@ -44,7 +43,6 @@ abstract public class BoardView extends AnchorPane{
         imageView.setImage(image);
 
         setupPlayerImages(player1Color, player2Color);
-
         initializeTranslationArrays();
         fieldGridPane = new GridPane();
         setupGridPane();
@@ -136,19 +134,6 @@ abstract public class BoardView extends AnchorPane{
             if (sound){
                 viewManager.getAudioPlayer().playSoundEffect(SOUNDEFFECT.KILL_STONE);}
         });
-    }
-
-    private Image getEnemysStoneImage(){
-        return  viewManager.getGame().getCurrentPlayerIndex()==0 ? player2StoneImage : player1StoneImage;
-    }
-
-    private Image getOwnStoneImage(){
-        return viewManager.getGame().getCurrentPlayerIndex()==0 ? player1StoneImage : player2StoneImage;
-    }
-
-    private void clearAllFieldFunctions(){
-        for (Node n : fieldGridPane.getChildren()){
-            n.setOnMouseClicked(click -> {/* clear old function*/});}
     }
 
     public boolean areBoardFunctionsActive() {

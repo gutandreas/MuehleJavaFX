@@ -4,10 +4,8 @@ import edu.andreasgut.sound.MUSIC;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Label;
@@ -19,12 +17,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
-import java.awt.*;
-import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Optional;
 
@@ -170,11 +164,7 @@ public class MainMenuBar extends MenuBar {
             anchorPane.getChildren().add(imageView);
             stage.setResizable(false);
             stage.show();});
-
-
-
         }
-
 
         public void enableNeuStarten(){
             neuStarten.setDisable(false);

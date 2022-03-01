@@ -25,7 +25,6 @@ public class OptionsView extends HBox {
         this.getStyleClass().add("optionView");
         this.getStyleClass().add("w3schools/toggleSwitch.css");
 
-
         audioOnOffMusicSwitchButton = new MusicSwitchButton(this.viewManager);
         audioOnLabel = new Label("Musik an");
         audioOffLabel = new Label("Musik aus");
@@ -33,7 +32,6 @@ public class OptionsView extends HBox {
         audioHBox.getChildren().addAll(audioOffLabel, audioOnOffMusicSwitchButton, audioOnLabel);
         audioHBox.setAlignment(Pos.CENTER);
         audioHBox.setSpacing(5);
-
 
         exitButton = new Button();
         exitButton.setGraphic(new ImageView(new Image("edu/andreasgut/images/ExitButton.png", 50, 25, true, true)));
@@ -50,25 +48,6 @@ public class OptionsView extends HBox {
 
         this.getChildren().addAll(audioHBox, restartButton, exitButton);
 
-
-        /*audioStartStopToggleButton.setOnAction(action -> {
-                if (!audioStartStopToggleButton.isSelected()){
-                viewManager.getSoundManager().stopMusic();
-                System.out.println("Musik wird gestoppt");
-                audioStartStopToggleButton.setText("Musik Aus");
-                audioStartStopToggleButton.getStyleClass().removeAll("toggleButtonOn");
-                audioStartStopToggleButton.getStyleClass().add("toggleButtonOff");
-                musicOn = false;
-                }
-                else {
-                    viewManager.getSoundManager().getCurrentAudioclip().play();
-                    System.out.println("Musik wird gestartet");
-                    audioStartStopToggleButton.setText("Musik Ein");
-                    audioStartStopToggleButton.getStyleClass().removeAll("toggleButtonOff");
-                    audioStartStopToggleButton.getStyleClass().add("toggleButtonOn");
-                    musicOn = true;
-                }
-            });*/
 
         exitButton.setOnAction(action -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
@@ -114,10 +93,6 @@ public class OptionsView extends HBox {
         });
 
     }
-
-
-
-
 
     public MusicSwitchButton getAudioOnOffSwitchButton() {
         return audioOnOffMusicSwitchButton;

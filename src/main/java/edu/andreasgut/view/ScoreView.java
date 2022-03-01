@@ -1,7 +1,6 @@
 package edu.andreasgut.view;
 
 import edu.andreasgut.game.Board;
-import edu.andreasgut.game.Player;
 import edu.andreasgut.game.Position;
 import javafx.application.Platform;
 import javafx.scene.control.Label;
@@ -10,7 +9,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
 
 public class ScoreView extends VBox {
 
@@ -99,10 +97,6 @@ public class ScoreView extends VBox {
             setStonesKilled(0, 9-stonesPlayer2);
             setStonesKilled(1, 9-stonesPlayer1);
         }
-
-
-
-
     }
 
     private void setupPlayer1andPlayer2(STONECOLOR player1Color, STONECOLOR player2Color){
@@ -141,11 +135,6 @@ public class ScoreView extends VBox {
         player2HBox = new HBox();
         player2HBox.getChildren().addAll(player2StonesImageView, player2LabelsVBox);
         player2VBox.getChildren().addAll(player2Label, player2HBox);
-    }
-
-    public void updatePlayerNames(Player player1, Player player2){
-        player1Label.setText("Player 1: " + player1.getName());
-        player2Label.setText("Player 2: " + player2.getName());
     }
 
     public void updatePhase(String phase){
@@ -237,7 +226,6 @@ public class ScoreView extends VBox {
 
     public void increaseRound(){
         Platform.runLater(()-> roundLabel.setText("Spielzug: " + ++round));
-
     }
 
     public void setRound(int round){
@@ -245,68 +233,12 @@ public class ScoreView extends VBox {
         Platform.runLater(()-> roundLabel.setText("Spielzug: " + round));
     }
 
-
-    public void setPlayerLabelEffects(){
-        switch (viewManager.getGame().getCurrentPlayerIndex()){
-            case 0:
-                viewManager.getScoreView().getPlayer1Label().getStyleClass().add("labelCurrentPlayer");
-                viewManager.getScoreView().getStonesKilledPlayer1Label().getStyleClass().add("labelCurrentPlayer");
-                viewManager.getScoreView().getStonesLostPlayer1Label().getStyleClass().add("labelCurrentPlayer");
-                viewManager.getScoreView().getStonesPutPlayer1Label().getStyleClass().add("labelCurrentPlayer");
-
-                viewManager.getScoreView().getPlayer2Label().getStyleClass().add("labelOtherPlayer");
-                viewManager.getScoreView().getStonesKilledPlayer2Label().getStyleClass().add("labelOtherPlayer");
-                viewManager.getScoreView().getStonesLostPlayer2Label().getStyleClass().add("labelOtherPlayer");
-                viewManager.getScoreView().getStonesPutPlayer2Label().getStyleClass().add("labelOtherPlayer");
-                break;
-            case 1:
-                viewManager.getScoreView().getPlayer2Label().getStyleClass().add("labelCurrentPlayer");
-                viewManager.getScoreView().getStonesKilledPlayer2Label().getStyleClass().add("labelCurrentPlayer");
-                viewManager.getScoreView().getStonesLostPlayer2Label().getStyleClass().add("labelCurrentPlayer");
-                viewManager.getScoreView().getStonesPutPlayer2Label().getStyleClass().add("labelCurrentPlayer");
-
-                viewManager.getScoreView().getPlayer1Label().getStyleClass().add("labelOtherPlayer");
-                viewManager.getScoreView().getStonesKilledPlayer1Label().getStyleClass().add("labelOtherPlayer");
-                viewManager.getScoreView().getStonesLostPlayer1Label().getStyleClass().add("labelOtherPlayer");
-                viewManager.getScoreView().getStonesPutPlayer1Label().getStyleClass().add("labelOtherPlayer");
-                break;
-        }
-    }
-
     public void setGameCodeLabel(String text){
         gameCodeLabel.setText("Gamecode: " + text);
     }
 
-    public Label getPlayer1Label() {
-        return player1Label;
-    }
-
-    public Label getPlayer2Label() {
-        return player2Label;
-    }
-
-    public Label getStonesPutPlayer1Label() {
-        return stonesPutPlayer1Label;
-    }
-
-    public Label getStonesPutPlayer2Label() {
-        return stonesPutPlayer2Label;
-    }
-
-    public Label getStonesLostPlayer1Label() {
-        return stonesLostPlayer1Label;
-    }
-
-    public Label getStonesLostPlayer2Label() {
-        return stonesLostPlayer2Label;
-    }
-
-    public Label getStonesKilledPlayer1Label() {
-        return stonesKilledPlayer1Label;
-    }
-
-    public Label getStonesKilledPlayer2Label() {
-        return stonesKilledPlayer2Label;
+    public void updatePlayer2Label(String name){
+        player2Label.setText("Player 2: " + name);
     }
 
     public void acitvateRoboterConnectedLabel(boolean on){
@@ -323,4 +255,5 @@ public class ScoreView extends VBox {
     public void setRoboterProgressBarToValue(double value){
         roboterProgressBar.setProgress(value);
     }
+
 }

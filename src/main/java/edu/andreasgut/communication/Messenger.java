@@ -121,7 +121,7 @@ public class Messenger {
                         viewManager.getLogView().activateNextComputerStepButton();
                         viewManager.getLogView().activateChatElements(true);
                         game.getPlayer1().setName(jsonObject.getString("player2Name"));
-                        Platform.runLater(()-> viewManager.getScoreView().getPlayer2Label().setText("Player 2: " + jsonObject.getString("player2Name")));
+                        Platform.runLater(()-> viewManager.getScoreView().updatePlayer2Label(jsonObject.getString("player2Name")));
                 }
                 break;
 

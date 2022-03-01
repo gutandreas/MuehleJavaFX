@@ -12,8 +12,8 @@ public class ViewManager {
     private static final int WIDTH = 1200;
     private BorderPane gamePane, startPane;
     private Scene gameScene, startScene;
-    private Stage mainStage;
-    private AudioPlayer audioPlayer;
+    private final Stage mainStage;
+    private final AudioPlayer audioPlayer;
     private StartImageView startImageViewRight, startImageViewLeft;
     private StartMenuView startMenuView;
     private OptionsView optionsView;
@@ -44,7 +44,6 @@ public class ViewManager {
         optionsView = new OptionsView(this);
         optionsView.getStyleClass().add("optionsView");
         mainMenuBar = new MainMenuBar(this);
-
         startPane = new BorderPane();
         startScene = new Scene(startPane, WIDTH, HEIGHT);
         startScene.getStylesheets().add("edu/andreasgut/style.css");
@@ -80,8 +79,6 @@ public class ViewManager {
         gamePane.setBottom(optionsView);
         mainStage.setScene(gameScene);
     }
-
-
 
     public Stage getMainStage(){
         return mainStage;
