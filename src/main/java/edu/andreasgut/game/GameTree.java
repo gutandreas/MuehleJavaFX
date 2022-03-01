@@ -10,23 +10,14 @@ public class GameTree {
     public static final String ANSI_BLUE = "\u001B[34m";
     public static final String ANSI_PURPLE = "\u001B[35m";
 
-    private GameTreeNode root;
+    private final GameTreeNode root;
 
-
-    /*public GameTree() {
-        root = new GameTreeNode();
-    }*/
 
     public GameTree(Board board){
         root = new GameTreeNode();
         root.setBoard(board);
     }
 
-    /*public void initializeRoot(Board board){
-        root.setBoard(board);
-        root.getChildren().clear();
-        root.setVisited(false);
-    }*/
 
     public void addNode(GameTreeNode parent, GameTreeNode child){
         parent.getChildren().add(child);

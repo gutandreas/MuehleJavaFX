@@ -17,7 +17,7 @@ public class Game {
     private int round;
     private final int NUMBEROFSTONES = 9;
     private Player currentPlayer;
-    private Board board;
+    private final Board board;
     private boolean putPhase = true;
     private boolean movePhase = false;
     private boolean movePhaseTake = true;
@@ -30,7 +30,7 @@ public class Game {
     private boolean joinExistingGame;
     private boolean roboterWatching = false;
     private boolean roboterPlaying = false;
-    private ArrayList<Player> playerArrayList = new ArrayList<>();
+    private final ArrayList<Player> playerArrayList = new ArrayList<>();
 
     public Game(ViewManager viewManager, Player player0, Player player1, Board board, int round) {
         this.viewManager = viewManager;

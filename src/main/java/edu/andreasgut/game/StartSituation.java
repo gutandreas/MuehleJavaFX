@@ -2,9 +2,9 @@ package edu.andreasgut.game;
 
 public class StartSituation {
 
-    private int round;
-    private Board board;
-    private String description;
+    private final int round;
+    private final Board board;
+    private final String description;
 
     public StartSituation(int round, Board board, String description) {
         this.round = round;

@@ -9,6 +9,12 @@ import java.util.LinkedList;
 import java.util.Optional;
 import java.util.Random;
 
+/**
+ * Dieser Klasse soll zu einem funktionierenden ComputerPlayer ergänzt werden. Ein Computerplayer braucht die Methoden
+ * put (Steine setzen), move (Steine verschieben) und kill (Steine entfernen). Diese werden im Spielverlauf automatisch
+ * aufgerufen. Momentan liefern sie noch null zurück. Aufgabe ist es nun, die return-Werte dieser Methoden so zu
+ * ersetzen, dass der Computer gültige und clevere Spielzüge macht. Alle anderen Methoden dürfen NICHT verändert werden.
+ */
 public class CustomComputerPlayer extends ComputerPlayer{
 
 
@@ -16,6 +22,15 @@ public class CustomComputerPlayer extends ComputerPlayer{
         super(viewManager, name, uuid, putPoints, movePoints, levelLimit);
     }
 
+    /**
+     * Diese Methode soll auf der Grundlage des übergebenen Boards eine Position berechnen, die durch den Computer
+     * besetzt werden soll. Die Position wird der Variable "position" zugewiesen und zum Schluss retourniert.
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @param playerIndex Entspricht dem Index in der PlayerArrayList der Klasse Game. Die Positionen im Board können
+     *                    auf diesen Index abgefragt werden, um zu prüfen, ob ein eigener Stein auf der entsprechenden
+     *                    Position liegt
+     * @return Position, die besetzt werden soll
+     */
     //TODO: Implementieren Sie die Methode put
     @Override
     Position put(Board board, int playerIndex){
@@ -26,6 +41,18 @@ public class CustomComputerPlayer extends ComputerPlayer{
     }
 
 
+    /**
+     * Diese Methode soll auf der Grundlage des übergebenen Boards einen Move (Zug) berechnen, der durch den Computer
+     * getätigt werden soll. Der Move wird der Variable "move" zugewiesen und zum Schluss retourniert.
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @param playerIndex Entspricht dem Index in der PlayerArrayList der Klasse Game. Die Positionen im Board können
+     *                    auf diesen Index abgefragt werden, um zu prüfen, ob ein eigener Stein auf der entsprechenden
+     *                    Position liegt
+     * @param allowedToJump Gibt an, ob der Spieler sich in der Springphase befindet. Spieler in der Springphase
+     *                      dürfen einen Stein auf eine beliebige freie Position verschieben, ohne sich an die Wege
+     *                      auf dem Brett zu halten
+     * @return Move, der ausgeführt werden soll
+     */
     //TODO: Implementieren Sie die Methode move
     @Override
     Move move(Board board, int playerIndex, boolean allowedToJump) {
@@ -36,6 +63,15 @@ public class CustomComputerPlayer extends ComputerPlayer{
     }
 
 
+    /**
+     * Diese Methode soll auf der Grundlage des übergebenen Boards eine Position berechnen, auf der durch den Computer
+     * ein gegnerischer Stein entfernt werden soll. Die Position wird der Variable "position" zugewiesen und zum Schluss
+     * retourniert.
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @param ownPlayerIndex Entspricht dem eigenen Index in der PlayerArrayList der Klasse Game
+     * @param otherPlayerIndex Entspricht dem gegnerischen Index in der PlayerArrayList der Klasse Game
+     * @return Position, auf der ein gegnerischer Stein entfernt werden soll
+     */
     //TODO: Implementieren Sie die Methode kill
     @Override
     Position kill(Board board, int ownPlayerIndex, int otherPlayerIndex) {
@@ -44,6 +80,9 @@ public class CustomComputerPlayer extends ComputerPlayer{
 
         return position;
     }
+
+
+
 
 
 

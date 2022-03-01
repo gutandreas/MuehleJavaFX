@@ -2,7 +2,7 @@ package edu.andreasgut.game;
 
 public class Line {
 
-    private Position firstPosition, secondPosition, thirdPosition;
+    private final Position firstPosition, secondPosition, thirdPosition;
 
     public Line(Position firstPosition, Position secondPosition, Position thirdPosition) {
         if (firstPosition.compareTo(secondPosition) > 0 || firstPosition.compareTo(thirdPosition) > 0

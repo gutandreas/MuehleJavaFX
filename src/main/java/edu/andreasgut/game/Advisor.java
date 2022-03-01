@@ -2,19 +2,41 @@ package edu.andreasgut.game;
 
 import java.util.*;
 
+/**
+ * Der Advisor hilft dabei, Spielsituationen zu analysieren. Er bietet eine Reihe von Methoden, mit denen ein Board
+ * auf die gewünschten Kriterien untersucht werden kann.
+ */
 public class Advisor {
 
+    /**
+     * Gibt die Anzahl Steine eines Spielers zurück.
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @param playerIndex Entspricht dem Index in der PlayerArrayList der Klasse Game
+     * @return liefert die Anzahl als Integer
+     */
     static public int numberOfOwnStones(Board board, int playerIndex){
         return board.numberOfStonesOf(playerIndex);
     }
 
 
+    /**
+     * Gibt die Anzahl Steine eines Gegenspielers zurück.
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @param ownPlayerIndex Entspricht dem eigenen Index in der PlayerArrayList der Klasse Game
+     * @return liefert die Anzahl als Integer
+     */
     static public int numberOfEnemysStones(Board board, int ownPlayerIndex){
         int enemysIndex = 1 - ownPlayerIndex;
         return board.numberOfStonesOf(enemysIndex);
     }
 
 
+    /**
+     * Gibt eine Liste aller geschlossenen Mühlen des eigenen Spielers zurück.
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @param ownPlayerIndex Entspricht dem eigenen Index in der PlayerArrayList der Klasse Game
+     * @return Liefert die Resultate als LinkedList
+     */
     static public LinkedList<ClosedMorris> getMyClosedMorrises(Board board, int ownPlayerIndex) {
 
         LinkedList<ClosedMorris> closedMorrisLinkedList = new LinkedList<>();
@@ -40,12 +62,27 @@ public class Advisor {
     }
 
 
+    /**
+     * Gibt eine Liste aller geschlossenen Mühlen des Gegenspielers zurück.
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @param ownPlayerIndex Entspricht dem eigenen Index in der PlayerArrayList der Klasse Game
+     * @return Liefert die Resultate als LinkedList
+     */
     static public LinkedList<ClosedMorris> getMyEnemysClosedMorrises(Board board, int ownPlayerIndex) {
         int enemysIndex = 1-ownPlayerIndex;
         return getMyClosedMorrises(board, enemysIndex);
     }
 
 
+    /**
+     * Fügt eine Konstellation zur übergebenen Liste hinzu, falls es sich dabei um eine geschlossene Mühle handelt
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @param playerIndex Entspricht dem Index in der PlayerArrayList der Klasse Game
+     * @param closedMorrisLinkedList Liste, welche die Mühlen enthält
+     * @param position1 Teil der zu prüfenden Konstellation
+     * @param position2 Teil der zu prüfenden Konstellation
+     * @param position3 Teil der zu prüfenden Konstellation
+     */
     static private void addConstellationToListIfClosedMorris(Board board, int playerIndex, LinkedList<ClosedMorris> closedMorrisLinkedList,
                                                              Position position1, Position position2, Position position3){
 
@@ -65,6 +102,12 @@ public class Advisor {
     }
 
 
+    /**
+     * Gibt eine Liste aller offenen Mühlen des eigenen Spielers zurück.
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @param ownPlayerIndex Entspricht dem eigenen Index in der PlayerArrayList der Klasse Game
+     * @return Liefert die Resultate als LinkedList
+     */
     static public LinkedList<OpenMorris> getMyOpenMorrises(Board board, int ownPlayerIndex) {
 
         LinkedList<OpenMorris> openMorrisLinkedList = new LinkedList<>();
@@ -143,12 +186,27 @@ public class Advisor {
     }
 
 
+    /**
+     * Gibt eine Liste aller offenen Mühlen des Gegenpielers zurück.
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @param ownPlayerIndex Entspricht dem eigenen Index in der PlayerArrayList der Klasse Game
+     * @return Liefert die Resultate als LinkedList
+     */
     static public LinkedList<OpenMorris> getMyEnemysOpenMorrises(Board board, int ownPlayerIndex) {
         int enemysIndex = 1-ownPlayerIndex;
         return getMyOpenMorrises(board, enemysIndex);
     }
 
 
+    /**
+     * Fügt eine Konstellation zur übergebenen Liste hinzu, falls es sich dabei um eine offene Mühle handelt.
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @param playerIndex Entspricht dem Index in der PlayerArrayList der Klasse Game
+     * @param openMorrisLinkedList Liste, welche die offenen Mühlen enthält
+     * @param position1 Teil der zu prüfenden Konstellation
+     * @param position2 Teil der zu prüfenden Konstellation
+     * @param position3 Teil der zu prüfenden Konstellation
+     */
     static private void addConstellationToListIfOpenMorris(Board board, int playerIndex, LinkedList<OpenMorris> openMorrisLinkedList,
                                                            Position position1, Position position2, Position position3,
                                                            Position gapPosition, String morrisColor){
@@ -170,13 +228,20 @@ public class Advisor {
     }
 
 
-    static public int numberOfMyTwoStonesTogetherWithFreeFieldBeside(Board board, int ownPlayerIndex){
+    /**
+     * Gibt die Anzahl von zwei eigenen, nebeneinanderliegenden Steinen zurück, die an eine freie Position grenzen.
+     * Die nebeneinanderliegenden Steine können durch das Besetzen der freien Position zu einer Mühle ergänzt werden.
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @param ownPlayerIndex Entspricht dem Index in der PlayerArrayList der Klasse Game
+     * @return Gibt die Anzahl als Integer zurück.
+     */
+    static public int numberOfMyTwoStonesTogetherWithFreePositionBeside(Board board, int ownPlayerIndex){
         int counter = 0;
 
         for (int ring = 0; ring < 3; ring++) {
             for (int field = 0; field < 8; field++) {
                 if (board.isThisMyStone(new Position(ring, field), ownPlayerIndex)
-                        && positionBuildsTwoStonesTogetherWithFreeFieldBeside(board, new Position(ring, field), ownPlayerIndex)){
+                        && positionBuildsTwoStonesTogetherWithFreePositionBeside(board, new Position(ring, field), ownPlayerIndex)){
                     counter++;
                 }
             }}
@@ -184,14 +249,21 @@ public class Advisor {
     }
 
 
-    static public int numberOfMyEnemysTwoStonesTogetherWithFreeFieldBeside(Board board, int ownPlayerIndex){
+    /**
+     * Gibt die Anzahl von zwei fremden, nebeneinanderliegenden Steinen zurück, die an eine freie Position grenzen.
+     * Die nebeneinanderliegenden Steine können durch das Besetzen der freien Position zu einer Mühle ergänzt werden.
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @param ownPlayerIndex Entspricht dem Index in der PlayerArrayList der Klasse Game
+     * @return Gibt die Anzahl als Integer zurück.
+     */
+    static public int numberOfMyEnemysTwoStonesTogetherWithFreePositionBeside(Board board, int ownPlayerIndex){
         int enemyIndex = 1-ownPlayerIndex;
         int counter = 0;
 
         for (int ring = 0; ring < 3; ring++) {
             for (int field = 0; field < 8; field++) {
                 if (board.isThisMyEnemysStone(new Position(ring, field), ownPlayerIndex)
-                        && positionBuildsTwoStonesTogetherWithFreeFieldBeside(board, new Position(ring, field), enemyIndex)){
+                        && positionBuildsTwoStonesTogetherWithFreePositionBeside(board, new Position(ring, field), enemyIndex)){
                     counter++;
                 }
             }}
@@ -199,7 +271,14 @@ public class Advisor {
     }
 
 
-    static public boolean positionBuildsTwoStonesTogetherWithFreeFieldBeside(Board board, Position position, int playerIndex){
+    /**
+     * Prüft, ob eine Position Teil von zwei zusammengehörenden, nebeneinaderliegenden Steinen ist, die durch das Besetzen
+     * der angrenzenden, freien Position zu einer Müle ergänzt werden können.
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @param position Zu prüfende Position
+     * @return Gibt true zurück, wenn die Position Teil davon ist, sonst false
+     */
+    static public boolean positionBuildsTwoStonesTogetherWithFreePositionBeside(Board board, Position position, int playerIndex){
         if (position.getField()%2==1){ // Ungerade Felder
 
             // Über Ringe hinweg
@@ -257,6 +336,13 @@ public class Advisor {
     }
 
 
+    /**
+     * Gibt die Anzahl von zwei eigenen Steinen zurück, die eine freie Position umschliessen. Wird die freie Position
+     * mit einem dazugehörigen Stein ergänzt, bildet sich eine geschlossene Mühle.
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @param ownPlayerIndex Entspricht dem Index in der PlayerArrayList der Klasse Game
+     * @return Gibt die Anzahl als integer zurück
+     */
     static public int numberOfMyTwoStonesWithGap(Board board, int ownPlayerIndex){
         int counter = 0;
 
@@ -271,6 +357,13 @@ public class Advisor {
     }
 
 
+    /**
+     * Gibt die Anzahl von zwei fremden Steinen zurück, die eine freie Position umschliessen. Wird die freie Position
+     * mit einem dazugehörigen Stein ergänzt, bildet sich eine geschlossene Mühle.
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @param ownPlayerIndex Entspricht dem eigenen Index in der PlayerArrayList der Klasse Game
+     * @return Gibt die Anzahl als integer zurück
+     */
     static public int numberOfMyEnemysTwoStonesWithGap(Board board, int ownPlayerIndex){
         int enemyIndex = 1-ownPlayerIndex;
         int counter = 0;
@@ -286,6 +379,13 @@ public class Advisor {
     }
 
 
+    /**
+     * Prüft, ob eine Position Teil von zwei zusammengehörenden, eine freie Position umschliessenden Steinen ist,
+     * die durch das Besetzen der umschlossenen, freien Position zu einer Müle ergänzt werden können.
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @param position Zu prüfende Position
+     * @return Gibt true zurück, wenn die Position Teil davon ist, sonst false
+     */
     static private boolean positionBuildsTwoStonesWithGap(Board board, Position position, int playerIndex){
         if (position.getField()%2==1 && position.getRing()==0){
             if (board.isFieldFree(new Position(position.getRing()+1, position.getField()))
@@ -314,10 +414,16 @@ public class Advisor {
         }
 
         return false;
-
     }
 
 
+    /**
+     * Gibt eine Liste alle möglichen Moves zurück, die vom Spieler mit dem übergebenen Index ausgeführt werden können.
+     * Die Methode berücksichtigt selbstständig, ob der Spieler in der Zug- oder Sprungphase ist.
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @param playerIndex Entspricht dem Index in der PlayerArrayList der Klasse Game
+     * @return Gibt das Resultat als LinkedList zurück
+     */
     static public LinkedList<Move> getAllPossibleMoves(Board board, int playerIndex) {
 
         LinkedList<Move> moveList = new LinkedList<>();
@@ -379,6 +485,12 @@ public class Advisor {
     }
 
 
+    /**
+     * Gibt eine Liste mit allen Positionen zurück, auf denen ein gegnerischer Stein liegt, der entfernt werden darf.
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @param onwPlayerIndex Entspricht dem eigenen Index in der PlayerArrayList der Klasse Game
+     * @return Gibt die Resultate als LinkedList zurück
+     */
     static public LinkedList<Position> getAllPossibleKills(Board board, int onwPlayerIndex){
         int enemysIndex = 1-onwPlayerIndex;
         LinkedList<Position> killList = new LinkedList<>();
@@ -396,6 +508,12 @@ public class Advisor {
     }
 
 
+    /**
+     * Gibt eine Liste mit allen Linien zurück, die weder von eigenen, noch von fremden Steinen besetzt sind. Als
+     * Linien gelten solche Brettbereiche, die zu einer Mühle gemacht werden können.
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @return Gibt die Resultate als LinkedList zurück
+     */
     static public LinkedList<Line> getFreeLines(Board board){
         LinkedList<Line> lines = new LinkedList<>();
 
@@ -428,6 +546,13 @@ public class Advisor {
     }
 
 
+    /**
+     * Gibt eine Liste mit allen Linien zurück, die keine fremden Steine enthalten. Als Linien gelten solche
+     * Brettbereiche, die zu einer Mühle gemacht werden können.
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @param ownPlayerIndex Entspricht dem eigenen Index in der PlayerArrayList der Klasse Game
+     * @return Gibt die Resultate als LinkedList zurück
+     */
     static public LinkedList<Line> getLinesWithoutEnemysStones(Board board, int ownPlayerIndex){
         LinkedList<Line> lines = new LinkedList<>();
 
@@ -460,6 +585,11 @@ public class Advisor {
     }
 
 
+    /**
+     * Gibt eine Liste mit allen freien Positionen des Spielbretts zurück.
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @return Gibt die Resultate als LinkedList zurück
+     */
     static public LinkedList<Position> getFreePositions(Board board){
         LinkedList<Position> freePositions = new LinkedList<>();
 
@@ -474,6 +604,13 @@ public class Advisor {
         return freePositions;}
 
 
+    /**
+     * Prüft, ob eine Position die Lücke einer eigenen, offenen Mühle ist.
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @param position Zu prüfende Position
+     * @param playerIndex Entspricht dem Index in der PlayerArrayList der Klasse Game
+     * @return
+     */
     static public boolean isPositionGapOfMyOpenMorris(Board board, Position position, int playerIndex){
 
         LinkedList<OpenMorris> openMorrisLinkedList = getMyOpenMorrises(board, playerIndex);
@@ -487,9 +624,16 @@ public class Advisor {
     }
 
 
-    static public boolean isPositionGapOfMyEnemysOpenMorris(Board board, Position position, int playerIndex){
+    /**
+     * Prüft, ob eine Position die Lücke einer fremden, offenen Mühle ist.
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @param position Zu prüfende Position
+     * @param ownPlayerIndex Entspricht dem eigenen Index in der PlayerArrayList der Klasse Game
+     * @return
+     */
+    static public boolean isPositionGapOfMyEnemysOpenMorris(Board board, Position position, int ownPlayerIndex){
 
-        LinkedList<OpenMorris> openMorrisLinkedList = getMyEnemysOpenMorrises(board, playerIndex);
+        LinkedList<OpenMorris> openMorrisLinkedList = getMyEnemysOpenMorrises(board, ownPlayerIndex);
 
         for (OpenMorris openMorris : openMorrisLinkedList){
             if (openMorris.getGapPosition().equals(position)){
@@ -500,6 +644,13 @@ public class Advisor {
     }
 
 
+    /**
+     * Prüft, ob die übergebene Position Teil einer eigenen offenen Mühle ist.
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @param position Zu prüfende Position
+     * @param playerIndex Entspricht dem Index in der PlayerArrayList der Klasse Game
+     * @return
+     */
     static public boolean isPositionPartOfMyOpenMorris(Board board, Position position, int playerIndex){
 
         LinkedList<OpenMorris> openMorrisLinkedList = getMyOpenMorrises(board, playerIndex);
@@ -516,11 +667,26 @@ public class Advisor {
     }
 
 
+    /**
+     * Prüft, ob die übergebene Position Teil einer fremden offenen Mühle ist.
+     * @param board Enthält Methoden für den Zugriff auf das Brett und die Datenstruktur, die das Brett repräsentiert
+     * @param position Zu prüfende Position
+     * @param ownPlayerIndex Entspricht dem eigenen Index in der PlayerArrayList der Klasse Game
+     * @return
+     */
     static public boolean isPositionPartOfMyEnemysOpenMorris(Board board, Position position, int ownPlayerIndex){
         int enemysIndex = 1-ownPlayerIndex;
         return isPositionPartOfMyOpenMorris(board, position, enemysIndex);
     }
 
+
+    /**
+     * Berechnet die Punktzahl eines Knotens im Spielbaum auf der Grundlage der übergebenen Scorepoints
+     * @param node Knoten des Spielbaums
+     * @param scorePoints Gewichtung der Konstellationen, die gezählt werden sollen
+     * @param playerIndex Entspricht dem Index in der PlayerArrayList der Klasse Game
+     * @return Gibt das Resultat als Integer zurück, der sowohl positiv als auch negativ sein kann
+     */
     static public int getScore(GameTreeNode node, ScorePoints scorePoints, int playerIndex){
 
 
@@ -529,7 +695,7 @@ public class Advisor {
         int myOpenMorrises = getMyOpenMorrises(board, playerIndex).size();
         int myClosedMorrises = getMyClosedMorrises(board, playerIndex).size();
         int myNumberOfStones = numberOfOwnStones(board, playerIndex);
-        int myNumberOfTwoStonesTogether = numberOfMyTwoStonesTogetherWithFreeFieldBeside(board, playerIndex);
+        int myNumberOfTwoStonesTogether = numberOfMyTwoStonesTogetherWithFreePositionBeside(board, playerIndex);
         int myNumberOfTwoStonesWithGap = numberOfMyTwoStonesWithGap(board, playerIndex);
         int myPossibleMoves = getAllPossibleMoves(board, playerIndex).size();
 
@@ -543,7 +709,7 @@ public class Advisor {
         int myEnemysOpenMorrises = getMyEnemysOpenMorrises(board, playerIndex).size();
         int myEnemysClosedMorrises = getMyEnemysClosedMorrises(board, playerIndex).size();
         int myEnemysNumberOfStones = numberOfEnemysStones(board, playerIndex);
-        int myEnemysNumberOfTwoStonesTogether = numberOfMyEnemysTwoStonesTogetherWithFreeFieldBeside(board, playerIndex);
+        int myEnemysNumberOfTwoStonesTogether = numberOfMyEnemysTwoStonesTogetherWithFreePositionBeside(board, playerIndex);
         int myEnemysNumberOfTwoStonesWithGap = numberOfMyEnemysTwoStonesWithGap(board, playerIndex);
         int myEnemysPossiblesMoves = getAllPossibleMoves(board, playerIndex).size();
 
