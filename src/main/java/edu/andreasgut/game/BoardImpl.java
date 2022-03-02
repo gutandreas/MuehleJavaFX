@@ -66,21 +66,22 @@ public class BoardImpl implements Board {
         int stone = array[position.getRing()][position.getField()];
 
         if(isCornerField){
-            inMorris = isPositionPartOfMorrisInRingFromCornerField(position, stone);
+            inMorris = isPositionPartOfMorrisInRingFromCornerPosition(position, stone);
         }
         else {
-            inMorris = isPositionPartOfMorrisInRingFromCenterField(position, stone) || isPositionPartOfMorrisBetweenRings(position, stone);
+            inMorris = isPositionPartOfMorrisInRingFromCenterPosition(position, stone)
+                    || isPositionPartOfMorrisBetweenRings(position, stone);
         }
 
         return inMorris;
     }
 
-    private boolean isPositionPartOfMorrisInRingFromCenterField(Position position, int playerIndex){
+    private boolean isPositionPartOfMorrisInRingFromCenterPosition(Position position, int playerIndex){
         return playerIndex == array[position.getRing()][(position.getField()+1)%8]
                 && playerIndex == array[position.getRing()][(position.getField()+7)%8];
     }
 
-    private boolean isPositionPartOfMorrisInRingFromCornerField(Position position, int playerIndex){
+    private boolean isPositionPartOfMorrisInRingFromCornerPosition(Position position, int playerIndex){
 
         boolean morrisUpwards = playerIndex == array[position.getRing()][(position.getField()+1)%8]
                 && playerIndex == array[position.getRing()][(position.getField()+2)%8];

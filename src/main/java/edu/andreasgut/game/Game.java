@@ -61,7 +61,6 @@ public class Game {
         }
     }
 
-
     public Game(ViewManager viewManager, Player player0, Player player1, String gameCode, boolean joinExistingGame) {
         this.viewManager = viewManager;
         this.player0 = player0;
@@ -110,112 +109,12 @@ public class Game {
         }
     }
 
-    public boolean isJoinExistingGame() {
-        return joinExistingGame;
-    }
-
-    public int getRound() {
-        return round;
-    }
-
-    public Player getCurrentPlayer() {
-        return currentPlayer;
-    }
-
-
-    public Player getOtherPlayer() {
-        return playerArrayList.get(getOtherPlayerIndex());
-    }
-
-
-    public Player getPlayer0() {
-        return player0;
-    }
-
-
-    public Player getPlayer1() {
-        return player1;
-    }
-
-    public boolean isPutPhase() {
-        return putPhase;
-    }
-
-    public boolean isMovePhase() {
-        return movePhase;
-    }
-
-    public boolean isKillPhase() {
-        return killPhase;
-    }
-
-    public WebsocketClient getWebsocketClient() {
-        return websocketClient;
-    }
-
-    public void setWebsocketClient(WebsocketClient websocketClient) {
-        this.websocketClient = websocketClient;
-    }
-
-    public int getCurrentPlayerIndex(){
-        return currentPlayer.equals(playerArrayList.get(0)) ? 0 : 1;
-    }
-
-
-    public int getOtherPlayerIndex(){
-        return currentPlayer.equals(playerArrayList.get(0)) ? 1 : 0;
-    }
-
-    public Player getPlayerByIndex(int index){
-        return playerArrayList.get(index);
-    }
-
-
     public void updateCurrentPlayer(){
         if(player2starts){
             currentPlayer = playerArrayList.get((round+1)%2);}
         else {
             currentPlayer = playerArrayList.get(round%2);
         }
-    }
-
-
-    public Board getBoard() {
-        return board;
-    }
-
-    public void setClickOkay(boolean clickOkay) {
-        this.clickOkay = clickOkay;
-    }
-
-
-    public void setKillPhase(boolean killPhase) {
-        this.killPhase = killPhase;
-    }
-
-    public String getGameCode() {
-        return gameCode;
-    }
-
-    public boolean isGameOver() {
-        return gameOver;
-    }
-
-
-    public boolean isRoboterWatching() {
-        return roboterWatching;
-    }
-
-    public void setRoboterWatching(boolean roboterWatching) {
-        this.roboterWatching = roboterWatching;
-    }
-
-    public boolean isRoboterPlaying() {
-        return roboterPlaying;
-    }
-
-    public void setRoboterPlaying(boolean roboterPlaying) {
-        this.roboterPlaying = roboterPlaying;
     }
 
     public void increaseRound(){
@@ -321,7 +220,6 @@ public class Game {
             viewManager.getScoreView().increaseStonesLost();
         }
 
-
         if (increaseRound) {
 
             increaseRound();
@@ -346,9 +244,6 @@ public class Game {
         }
         checkWinner();
     }
-
-
-
 
 
     private void setGamesPhaseBooleans(){
@@ -380,5 +275,97 @@ public class Game {
                 Messenger.sendGameOverMessage(viewManager, "Keine möglichen Züge");
             }
         }
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setClickOkay(boolean clickOkay) {
+        this.clickOkay = clickOkay;
+    }
+
+    public void setKillPhase(boolean killPhase) {
+        this.killPhase = killPhase;
+    }
+
+    public String getGameCode() {
+        return gameCode;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public boolean isRoboterWatching() {
+        return roboterWatching;
+    }
+
+    public void setRoboterWatching(boolean roboterWatching) {
+        this.roboterWatching = roboterWatching;
+    }
+
+    public boolean isRoboterPlaying() {
+        return roboterPlaying;
+    }
+
+    public void setRoboterPlaying(boolean roboterPlaying) {
+        this.roboterPlaying = roboterPlaying;
+    }
+
+    public boolean isJoinExistingGame() {
+        return joinExistingGame;
+    }
+
+    public int getRound() {
+        return round;
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public Player getOtherPlayer() {
+        return playerArrayList.get(getOtherPlayerIndex());
+    }
+
+    public Player getPlayer0() {
+        return player0;
+    }
+
+    public Player getPlayer1() {
+        return player1;
+    }
+
+    public boolean isPutPhase() {
+        return putPhase;
+    }
+
+    public boolean isMovePhase() {
+        return movePhase;
+    }
+
+    public boolean isKillPhase() {
+        return killPhase;
+    }
+
+    public WebsocketClient getWebsocketClient() {
+        return websocketClient;
+    }
+
+    public void setWebsocketClient(WebsocketClient websocketClient) {
+        this.websocketClient = websocketClient;
+    }
+
+    public int getCurrentPlayerIndex(){
+        return currentPlayer.equals(playerArrayList.get(0)) ? 0 : 1;
+    }
+
+    public int getOtherPlayerIndex(){
+        return currentPlayer.equals(playerArrayList.get(0)) ? 1 : 0;
+    }
+
+    public Player getPlayerByIndex(int index){
+        return playerArrayList.get(index);
     }
 }
