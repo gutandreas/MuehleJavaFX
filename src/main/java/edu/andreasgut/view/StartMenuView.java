@@ -806,6 +806,7 @@ public class StartMenuView extends VBox {
 
             HttpResponse<?> response = null;
             ComputerPlayer computerPlayer = null;
+            JSONObject jsonResponseObject = null;
             String onlinePlayerName = "---";
 
             try {
@@ -813,7 +814,7 @@ public class StartMenuView extends VBox {
 
                 String body = (String) response.body();
                 System.out.println(body);
-                JSONObject jsonResponseObject = new JSONObject(body);
+                jsonResponseObject = new JSONObject(body);
 
                 String uuid;
 
@@ -869,6 +870,18 @@ public class StartMenuView extends VBox {
                     viewManager.createGameScene(new BoardViewPlay(viewManager, onlinePlayerColor, computerColor, false),
                             new ScoreView(viewManager, onlinePlayerColor, computerColor, game.getRound(), true),
                             new LogView(viewManager, true));
+
+                    if (jsonResponseObject.getBoolean("roboterConnected")){
+                        viewManager.getScoreView().acitvateRoboterConnectedLabel(true);
+                        game.setRoboterWatching(jsonResponseObject.getBoolean("roboterWatching"));
+                        game.setRoboterPlaying(jsonResponseObject.getBoolean("roboterPlaying"));
+                    }
+                    else {
+                        viewManager.getScoreView().acitvateRoboterConnectedLabel(false);
+                        game.setRoboterWatching(false);
+                        game.setRoboterPlaying(false);
+                        viewManager.getScoreView().acitvateRoboterConnectedLabel(false);
+                    }
                 }
                 //start
                 else {
