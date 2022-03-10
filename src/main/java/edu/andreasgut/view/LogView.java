@@ -71,7 +71,6 @@ public class LogView extends VBox {
             });
             chatOffendButton.setDisable(true);
             chatSendButton.setOnAction(click -> {
-
                 if (chatTextField.getText().length() == 0) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION,
                             "Es können keine leeren Nachrichten verschickt werden!", ButtonType.OK);
@@ -93,8 +92,6 @@ public class LogView extends VBox {
             chatVBox.getChildren().addAll(chatTextArea, chatTextField, chatSendButton, chatComplimentButton, chatOffendButton);
 
             this.getChildren().add(chatVBox);
-
-
         }
 
     }

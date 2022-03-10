@@ -1,9 +1,6 @@
 package edu.andreasgut.communication;
 
-import edu.andreasgut.game.Board;
-import edu.andreasgut.game.Game;
-import edu.andreasgut.game.Move;
-import edu.andreasgut.game.Position;
+import edu.andreasgut.game.*;
 import edu.andreasgut.view.ViewManager;
 import javafx.application.Platform;
 import org.json.JSONObject;
@@ -75,11 +72,17 @@ public class Messenger {
 
         JSONObject jsonObject = new JSONObject();
         Game game = viewManager.getGame();
+        Player ownPlayer;
+        if (game.isJoinExistingGame()) {
+            ownPlayer = game.getPlayerByIndex(1);
+        } else {
+            ownPlayer = game.getPlayerByIndex(0);
+        }
 
         jsonObject.put("gameCode", game.getGameCode());
         jsonObject.put("command", "chat");
-        jsonObject.put("name", game.getCurrentPlayer().getName());
-        jsonObject.put("playerUuid", game.getCurrentPlayer().getUuid());
+        jsonObject.put("name", ownPlayer.getName());
+        jsonObject.put("playerUuid", ownPlayer.getUuid());
         jsonObject.put("message", message);
         sendMessage(viewManager, jsonObject.toString());
     }
@@ -88,11 +91,17 @@ public class Messenger {
 
         JSONObject jsonObject = new JSONObject();
         Game game = viewManager.getGame();
+        Player ownPlayer;
+        if (game.isJoinExistingGame()) {
+            ownPlayer = game.getPlayerByIndex(1);
+        } else {
+            ownPlayer = game.getPlayerByIndex(0);
+        }
 
         jsonObject.put("gameCode", game.getGameCode());
         jsonObject.put("command", "giveup");
-        jsonObject.put("name", game.getCurrentPlayer().getName());
-        jsonObject.put("playerUuid", game.getCurrentPlayer().getUuid());
+        jsonObject.put("name", ownPlayer.getName());
+        jsonObject.put("playerUuid", ownPlayer.getUuid());
         sendMessage(viewManager, jsonObject.toString());
     }
 
