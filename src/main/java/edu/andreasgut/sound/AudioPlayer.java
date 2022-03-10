@@ -1,15 +1,22 @@
 package edu.andreasgut.sound;
 
-import java.net.URL;
-
 import javafx.scene.media.AudioClip;
+
+import java.net.URL;
 
 public class AudioPlayer {
 
-    private AudioClip audioclipMENU, audioclipPLAY, audioclipGAMEOVER, currentAudioclip;
-    private AudioClip audioclipPUTSTONE, audioclipKILLSTONE;
-    private URL menuSoundPath, playSoundPath, gameoverSoundPath;
-    private URL putStonePath, killStonePath;
+    private final AudioClip audioclipMENU;
+    private final AudioClip audioclipPLAY;
+    private final AudioClip audioclipGAMEOVER;
+    private AudioClip currentAudioclip;
+    private final AudioClip audioclipPUTSTONE;
+    private final AudioClip audioclipKILLSTONE;
+    private final URL menuSoundPath;
+    private final URL playSoundPath;
+    private final URL gameoverSoundPath;
+    private final URL putStonePath;
+    private final URL killStonePath;
     private boolean musicOn = true;
 
 
@@ -38,9 +45,9 @@ public class AudioPlayer {
         audioclipGAMEOVER.setCycleCount(AudioClip.INDEFINITE);
     }
 
-    public void chooseSound(MUSIC musicEnum){
+    public void chooseSound(MUSIC musicEnum) {
         stopMusic();
-        switch (musicEnum){
+        switch (musicEnum) {
             case MENU_SOUND:
                 currentAudioclip = audioclipMENU;
                 audioclipMENU.play();
@@ -58,18 +65,18 @@ public class AudioPlayer {
         musicOn = true;
     }
 
-    public void continueMusic(){
+    public void continueMusic() {
         currentAudioclip.play();
     }
 
-    public void stopMusic(){
+    public void stopMusic() {
         audioclipMENU.stop();
         audioclipPLAY.stop();
         audioclipGAMEOVER.stop();
         musicOn = false;
     }
 
-    public void playSoundEffect(SOUNDEFFECT effectEnum){
+    public void playSoundEffect(SOUNDEFFECT effectEnum) {
         switch (effectEnum) {
             case PUT_STONE:
                 audioclipPUTSTONE.play();

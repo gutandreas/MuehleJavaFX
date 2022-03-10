@@ -1,7 +1,7 @@
 package edu.andreasgut.view;
 
-import edu.andreasgut.game.ComputerPlayer;
 import edu.andreasgut.communication.Messenger;
+import edu.andreasgut.game.ComputerPlayer;
 import edu.andreasgut.view.fxElements.NextStepButton;
 import javafx.application.Platform;
 import javafx.scene.control.*;
@@ -11,13 +11,14 @@ import java.util.Random;
 
 public class LogView extends VBox {
 
-    private Label titleLabel, statusLabel;
+    private final Label titleLabel;
+    private final Label statusLabel;
     private NextStepButton nextComputerStepButton;
     private TextArea chatTextArea;
     private TextField chatTextField;
     private Button chatSendButton, chatComplimentButton, chatOffendButton;
     private VBox chatVBox;
-    private ViewManager viewManager;
+    private final ViewManager viewManager;
 
 
     public LogView(ViewManager viewManager, boolean computerOnlineBattle) {
@@ -31,21 +32,22 @@ public class LogView extends VBox {
 
         this.getChildren().addAll(titleLabel, statusLabel);
 
-        if (computerOnlineBattle){
+        if (computerOnlineBattle) {
             nextComputerStepButton = new NextStepButton("Stein setzen");
             nextComputerStepButton.getStyleClass().add("nextStepButton");
             nextComputerStepButton.setOnAction(click -> {
-                if (nextComputerStepButton.isPut()){
+                if (nextComputerStepButton.isPut()) {
                     ((ComputerPlayer) viewManager.getGame().getCurrentPlayer()).triggerPut(viewManager);
                 }
-                if (nextComputerStepButton.isMove()){
+                if (nextComputerStepButton.isMove()) {
                     ((ComputerPlayer) viewManager.getGame().getCurrentPlayer()).triggerMove(viewManager);
                 }
-                if (nextComputerStepButton.isKill()){
+                if (nextComputerStepButton.isKill()) {
                     ((ComputerPlayer) viewManager.getGame().getCurrentPlayer()).triggerKill(viewManager);
                 }
                 nextComputerStepButton.setDisable(true);
-                System.out.println("Computer next step Button pressed");});
+                System.out.println("Computer next step Button pressed");
+            });
             nextComputerStepButton.setDisable(true);
             this.getChildren().addAll(nextComputerStepButton);
 
@@ -59,7 +61,7 @@ public class LogView extends VBox {
             chatComplimentButton = new Button("Gegner loben");
             chatComplimentButton.getStyleClass().add("complimentButton");
             chatComplimentButton.setDisable(true);
-            chatComplimentButton.setOnAction(click ->{
+            chatComplimentButton.setOnAction(click -> {
                 Messenger.sendChatMessage(viewManager, getRandomCompliment());
             });
             chatOffendButton = new Button("Gegner beleidigen");
@@ -70,7 +72,7 @@ public class LogView extends VBox {
             chatOffendButton.setDisable(true);
             chatSendButton.setOnAction(click -> {
 
-                if (chatTextField.getText().length() == 0){
+                if (chatTextField.getText().length() == 0) {
                     Alert alert = new Alert(Alert.AlertType.INFORMATION,
                             "Es können keine leeren Nachrichten verschickt werden!", ButtonType.OK);
                     alert.setAlertType(Alert.AlertType.NONE);
@@ -81,7 +83,7 @@ public class LogView extends VBox {
                 Messenger.sendChatMessage(viewManager, chatTextField.getText());
                 chatTextField.setText("");
             });
-            if (viewManager.getGame().isJoinExistingGame()){
+            if (viewManager.getGame().isJoinExistingGame()) {
                 activateChatElements(true);
             }
 
@@ -98,16 +100,16 @@ public class LogView extends VBox {
     }
 
     public void setStatusLabel(String string) {
-        Platform.runLater(()-> {
+        Platform.runLater(() -> {
             statusLabel.setText(string);
         });
 
     }
 
-    public void postChatMessage(String name, String message){
+    public void postChatMessage(String name, String message) {
         chatTextArea.setWrapText(true);
-        if(chatTextArea.getText().length() != 0){
-            chatTextArea.appendText("\n" );
+        if (chatTextArea.getText().length() != 0) {
+            chatTextArea.appendText("\n");
         }
         chatTextArea.appendText(name + ": " + message);
     }
@@ -116,22 +118,22 @@ public class LogView extends VBox {
         return nextComputerStepButton;
     }
 
-    public void activateNextComputerStepButton(){
+    public void activateNextComputerStepButton() {
         nextComputerStepButton.setDisable(false);
     }
 
-    public void disableNextComputerStepButton(){
+    public void disableNextComputerStepButton() {
         nextComputerStepButton.setDisable(true);
     }
 
-    public void activateChatElements(boolean active){
+    public void activateChatElements(boolean active) {
         chatTextField.setDisable(!active);
         chatSendButton.setDisable(!active);
         chatOffendButton.setDisable(!active);
         chatComplimentButton.setDisable(!active);
     }
 
-    private String getRandomOffense(){
+    private String getRandomOffense() {
         String[] offenses = {"Uuuuuh, das war blöd...",
                 "Mein Cousin spielt besser. ...und der ist 3.",
                 "Das war ja gar nix...",
@@ -155,7 +157,7 @@ public class LogView extends VBox {
         return offenses[randomInt];
     }
 
-    private String getRandomCompliment(){
+    private String getRandomCompliment() {
         String[] offenses = {"Cleverer Zug!",
                 "Du spielst beeindruckend!",
                 "Gute Strategie!",

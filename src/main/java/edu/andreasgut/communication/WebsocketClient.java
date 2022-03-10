@@ -1,16 +1,15 @@
 package edu.andreasgut.communication;
 
-import java.net.URI;
-
+import edu.andreasgut.view.ViewManager;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONObject;
 
-import edu.andreasgut.view.ViewManager;
+import java.net.URI;
 
 public class WebsocketClient extends WebSocketClient {
 
-    private ViewManager viewManager;
+    private final ViewManager viewManager;
 
     public WebsocketClient(URI serverUri, ViewManager viewManager) {
         super(serverUri);
@@ -22,14 +21,13 @@ public class WebsocketClient extends WebSocketClient {
         System.out.println("Verbunden mit Server");
         JSONObject jsonObject = new JSONObject();
 
-        if (viewManager.getGame().isJoinExistingGame()){
+        if (viewManager.getGame().isJoinExistingGame()) {
             System.out.println("join");
             jsonObject.put("gameCode", viewManager.getGame().getGameCode());
             jsonObject.put("command", "join");
             jsonObject.put("player2Name", viewManager.getGame().getPlayer1().getName());
             jsonObject.put("playerUuid", viewManager.getGame().getPlayer1().getUuid());
-        }
-        else {
+        } else {
             System.out.println("start");
             jsonObject.put("gameCode", viewManager.getGame().getGameCode());
             jsonObject.put("command", "start");
@@ -55,7 +53,7 @@ public class WebsocketClient extends WebSocketClient {
 
     }
 
-    public void watchGame(String gameCode){
+    public void watchGame(String gameCode) {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("command", "watch");
         jsonObject.put("gameCode", gameCode);

@@ -24,7 +24,7 @@ public class StartSituation {
         return description;
     }
 
-    public static StartSituation[] produceStartSituations(){
+    public static StartSituation[] produceStartSituations() {
         StartSituation[] startSituations = new StartSituation[5];
 
         Board board0 = new BoardImpl();
@@ -38,7 +38,7 @@ public class StartSituation {
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 5; j++) {
-                board1.putStone(new Position(i, (j+7)%8), j%2);
+                board1.putStone(new Position(i, (j + 7) % 8), j % 2);
             }
         }
 
@@ -55,15 +55,13 @@ public class StartSituation {
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 7; j++) {
                 int index = 1;
-                if (counter > 6){
+                if (counter > 6) {
                     index = 0;
                 }
-                board2.putStone(new Position(i, j+1), index);
+                board2.putStone(new Position(i, j + 1), index);
                 counter++;
             }
         }
-
-
 
 
         StartSituation startSituation2 = new StartSituation(30, board2,
@@ -77,14 +75,12 @@ public class StartSituation {
 
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 8; j++) {
-                board3.putStone(new Position(i, j), j%2);
+                board3.putStone(new Position(i, j), j % 2);
                 counter++;
             }
         }
 
         board3.putStone(new Position(2, 1), 0);
-
-
 
 
         StartSituation startSituation3 = new StartSituation(31, board3,

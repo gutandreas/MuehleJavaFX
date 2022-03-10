@@ -13,7 +13,7 @@ public class HumanPlayer extends Player {
     public void prepareKill(ViewManager viewManager) {
 
         //lokaler Spieler
-        if (viewManager.getGame().getCurrentPlayer().isLocal()){
+        if (viewManager.getGame().getCurrentPlayer().isLocal()) {
             viewManager.getGame().setClickOkay(true);
             viewManager.getGame().setKillPhase(true);
             ((BoardViewPlay) viewManager.getFieldView()).setKillCursor();

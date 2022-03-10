@@ -15,8 +15,8 @@ import javafx.scene.shape.Rectangle;
 public class MusicSwitchButton extends StackPane {
     private final Rectangle back = new Rectangle(40, 5, Color.RED);
     private final Button button = new Button();
-    private String buttonStyleOff = "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 0.2, 0.0, 0.0, 2); -fx-background-color: #aa2020;";
-    private String buttonStyleOn = "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 0.2, 0.0, 0.0, 2); -fx-background-color: #00893d;";
+    private final String buttonStyleOff = "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 0.2, 0.0, 0.0, 2); -fx-background-color: #aa2020;";
+    private final String buttonStyleOn = "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 0.2, 0.0, 0.0, 2); -fx-background-color: #00893d;";
     private boolean state = true;
 
     private void init() {

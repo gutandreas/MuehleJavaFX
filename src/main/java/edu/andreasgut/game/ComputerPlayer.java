@@ -1,4 +1,5 @@
 package edu.andreasgut.game;
+
 import edu.andreasgut.view.ViewManager;
 
 
@@ -41,8 +42,6 @@ abstract public class ComputerPlayer extends Player {
     abstract public void triggerMove(ViewManager viewManager);
 
     abstract public void triggerKill(ViewManager viewManager);
-
-
 
 
 }

@@ -20,12 +20,12 @@ public class Position implements Comparable<Position> {
 
     @Override
     public boolean equals(Object o) {
-    	if(o instanceof Position) {
-    		Position position = (Position) o;
-    		return ring == position.getRing() && field == position.getField();
-    	} else {
-    		return false;
-    	}
+        if (o instanceof Position) {
+            Position position = (Position) o;
+            return ring == position.getRing() && field == position.getField();
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -37,7 +37,7 @@ public class Position implements Comparable<Position> {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "" + ring + "/" + field;
     }
 }

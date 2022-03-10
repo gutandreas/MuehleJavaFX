@@ -1,28 +1,35 @@
 package edu.andreasgut.game;
 
 public interface Board {
-	boolean isPutPossibleAt(Position position);
-	boolean isMovePossibleAt(Position from, Position to, boolean allowedToJump);
-	boolean isKillPossibleAt(Position position, int enemysPlayerIndex);
-	boolean isPositionPartOfMorris(Position position);
-	
-	boolean canPlayerMove(int playerIndex);
-	boolean canPlayerKill(int playerIndex);
+    boolean isPutPossibleAt(Position position);
 
-	void putStone(Position position, int playerIndex);
-	void moveStone(Position from, Position to, int playerIndex);
-	void removeStone(Position position);
+    boolean isMovePossibleAt(Position from, Position to, boolean allowedToJump);
 
-	int numberOfStonesOf(int playerIndex);
+    boolean isKillPossibleAt(Position position, int enemysPlayerIndex);
 
-	boolean isFieldFree(Position position);
-	boolean isFieldOccupied(Position position);
+    boolean isPositionPartOfMorris(Position position);
 
-	boolean isThisMyStone(Position position, int ownPlayerIndex);
-	boolean isThisMyEnemysStone(Position position, int ownPlayerIndex);
+    boolean canPlayerMove(int playerIndex);
 
-	int getNumberOnPosition(Position position);
+    boolean canPlayerKill(int playerIndex);
 
-	String toString();
-	Board clone();
+    void putStone(Position position, int playerIndex);
+
+    void moveStone(Position from, Position to, int playerIndex);
+
+    void removeStone(Position position);
+
+    int numberOfStonesOf(int playerIndex);
+
+    boolean isFieldFree(Position position);
+
+    boolean isFieldOccupied(Position position);
+
+    boolean isThisMyStone(Position position, int ownPlayerIndex);
+
+    boolean isThisMyEnemysStone(Position position, int ownPlayerIndex);
+
+    int getNumberOnPosition(Position position);
+
+    Board clone();
 }

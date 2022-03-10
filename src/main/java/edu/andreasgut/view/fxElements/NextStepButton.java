@@ -27,10 +27,9 @@ public class NextStepButton extends Button {
         changeTextTo("Stein setzen");
         move = false;
         kill = false;
-        if (viewManager.getGame().isRoboterWatching()){
+        if (viewManager.getGame().isRoboterWatching()) {
             waitForRoboter(viewManager);
-        }
-        else {
+        } else {
             this.setDisable(false);
         }
     }
@@ -45,10 +44,9 @@ public class NextStepButton extends Button {
         changeTextTo("Stein bewegen");
         put = false;
         kill = false;
-        if (viewManager.getGame().isRoboterWatching()){
+        if (viewManager.getGame().isRoboterWatching()) {
             waitForRoboter(viewManager);
-        }
-        else {
+        } else {
             this.setDisable(false);
         }
     }
@@ -62,15 +60,14 @@ public class NextStepButton extends Button {
         changeTextTo("Gegnerischen Stein entfernen");
         put = false;
         move = false;
-        if (viewManager.getGame().isRoboterWatching() || viewManager.getGame().isRoboterPlaying()){
+        if (viewManager.getGame().isRoboterWatching() || viewManager.getGame().isRoboterPlaying()) {
             waitForRoboter(viewManager);
-        }
-        else {
+        } else {
             this.setDisable(false);
         }
     }
 
-    private void waitForRoboter(ViewManager viewManager){
+    private void waitForRoboter(ViewManager viewManager) {
         final Timeline timeline = new Timeline(
                 new KeyFrame(Duration.seconds(2), actionEvent -> viewManager.getScoreView().setRoboterProgressBarToValue(0.2)),
                 new KeyFrame(Duration.seconds(4), actionEvent -> viewManager.getScoreView().setRoboterProgressBarToValue(0.4)),
@@ -79,13 +76,14 @@ public class NextStepButton extends Button {
 
                 new KeyFrame(Duration.seconds(10), actionEvent -> {
                     viewManager.getScoreView().setRoboterProgressBarToValue(1);
-                    this.setDisable(false);}),
+                    this.setDisable(false);
+                }),
                 new KeyFrame(Duration.seconds(11), actionEvent -> viewManager.getScoreView().setRoboterProgressBarToValue(0)));
 
         timeline.play();
     }
 
-    private void changeTextTo(String text){
+    private void changeTextTo(String text) {
         Platform.runLater(() -> this.setText(text));
     }
 }

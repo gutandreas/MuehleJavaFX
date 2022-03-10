@@ -41,7 +41,7 @@ public class Rule {
         return tags;
     }
 
-    static public LinkedList<Rule> getRules(){
+    static public LinkedList<Rule> getRules() {
         return rules;
     }
 }

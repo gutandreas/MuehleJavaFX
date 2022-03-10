@@ -12,10 +12,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
-abstract public class BoardView extends AnchorPane{
+abstract public class BoardView extends AnchorPane {
 
     protected ImageView imageView;
-    private Image image;
+    private final Image image;
     protected ViewManager viewManager;
     protected STONECOLOR player1Color, player2Color;
     private Image player1StoneImage;
@@ -26,8 +26,7 @@ abstract public class BoardView extends AnchorPane{
     protected GridPane fieldGridPane;
     protected Position[][] GUICoordinatesToPositionArray;
     private int[][] PositionToGridPaneIndexArray;
-    private boolean boardFunctionsActive;
-
+    private final boolean boardFunctionsActive;
 
 
     public BoardView(ViewManager viewManager, STONECOLOR player1Color, STONECOLOR player2Color, boolean boardFunctionsActive) {
@@ -47,21 +46,21 @@ abstract public class BoardView extends AnchorPane{
         fieldGridPane = new GridPane();
         setupGridPane();
         fieldGridPane.setPadding(new Insets(3));
-        fieldGridPane.setOnMouseExited (action ->{
+        fieldGridPane.setOnMouseExited(action -> {
             imageView.getScene().setCursor(Cursor.DEFAULT);
         });
 
-        this.getChildren().addAll(imageView,fieldGridPane);
+        this.getChildren().addAll(imageView, fieldGridPane);
     }
 
-    private void setupPlayerImages(STONECOLOR player1Color, STONECOLOR player2Color){
+    private void setupPlayerImages(STONECOLOR player1Color, STONECOLOR player2Color) {
         player1StoneImage = new Image(player1Color.getPathStone(), 85, 85, true, true);
         player2StoneImage = new Image(player2Color.getPathStone(), 85, 85, true, true);
         emptyField = new Image("edu/andreasgut/images/FullyTransparent.png");
         forbiddenField = new Image("edu/andreasgut/images/FullyTransparent.png");
     }
 
-    private void setupGridPane(){
+    private void setupGridPane() {
         fieldGridPane.setGridLinesVisible(false);
 
         for (int row = 0; row < 7; row++) {
@@ -85,33 +84,31 @@ abstract public class BoardView extends AnchorPane{
     }
 
 
-
-    public void graphicPut(Position position, int playerIndex, boolean sound){
+    public void graphicPut(Position position, int playerIndex, boolean sound) {
 
         Image image;
 
-        if (playerIndex == 0){
+        if (playerIndex == 0) {
             image = player1StoneImage;
-        }
-        else {
+        } else {
             image = player2StoneImage;
         }
 
         Platform.runLater(() -> {
-                ((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(image);
-                if (sound){
-                    viewManager.getAudioPlayer().playSoundEffect(SOUNDEFFECT.PUT_STONE);}
+            ((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(image);
+            if (sound) {
+                viewManager.getAudioPlayer().playSoundEffect(SOUNDEFFECT.PUT_STONE);
+            }
         });
     }
 
-    public void graphicMove(Move move, int playerIndex){
+    public void graphicMove(Move move, int playerIndex) {
 
         Image image;
 
-        if (playerIndex == 0){
+        if (playerIndex == 0) {
             image = player1StoneImage;
-        }
-        else {
+        } else {
             image = player2StoneImage;
         }
 
@@ -123,16 +120,17 @@ abstract public class BoardView extends AnchorPane{
 
     }
 
-    public void graphicRemove(Position position){
+    public void graphicRemove(Position position) {
         ((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(emptyField);
     }
 
-    public void graphicKill(Position position, boolean sound){
+    public void graphicKill(Position position, boolean sound) {
 
         Platform.runLater(() -> {
             ((ImageView) fieldGridPane.getChildren().get(translateToIndex(position))).setImage(emptyField);
-            if (sound){
-                viewManager.getAudioPlayer().playSoundEffect(SOUNDEFFECT.KILL_STONE);}
+            if (sound) {
+                viewManager.getAudioPlayer().playSoundEffect(SOUNDEFFECT.KILL_STONE);
+            }
         });
     }
 
@@ -140,45 +138,45 @@ abstract public class BoardView extends AnchorPane{
         return boardFunctionsActive;
     }
 
-    protected int translateToPositionRing(Node node){
+    protected int translateToPositionRing(Node node) {
         return GUICoordinatesToPositionArray[GridPane.getRowIndex(node)][GridPane.getColumnIndex(node)].getRing();
     }
 
-    protected int translateToPositionField(Node node){
+    protected int translateToPositionField(Node node) {
         return GUICoordinatesToPositionArray[GridPane.getRowIndex(node)][GridPane.getColumnIndex(node)].getField();
     }
 
-    private int translateToIndex(Position position){
+    private int translateToIndex(Position position) {
         return PositionToGridPaneIndexArray[position.getRing()][position.getField()];
     }
 
-    protected void initializeTranslationArrays(){
+    protected void initializeTranslationArrays() {
         GUICoordinatesToPositionArray = new Position[7][7];
 
-        GUICoordinatesToPositionArray[0][0] = new Position(0,0);
-        GUICoordinatesToPositionArray[0][3] = new Position(0,1);
-        GUICoordinatesToPositionArray[0][6] = new Position(0,2);
-        GUICoordinatesToPositionArray[3][6] = new Position(0,3);
-        GUICoordinatesToPositionArray[6][6] = new Position(0,4);
-        GUICoordinatesToPositionArray[6][3] = new Position(0,5);
-        GUICoordinatesToPositionArray[6][0] = new Position(0,6);
-        GUICoordinatesToPositionArray[3][0] = new Position(0,7);
-        GUICoordinatesToPositionArray[1][1] = new Position(1,0);
-        GUICoordinatesToPositionArray[1][3] = new Position(1,1);
-        GUICoordinatesToPositionArray[1][5] = new Position(1,2);
-        GUICoordinatesToPositionArray[3][5] = new Position(1,3);
-        GUICoordinatesToPositionArray[5][5] = new Position(1,4);
-        GUICoordinatesToPositionArray[5][3] = new Position(1,5);
-        GUICoordinatesToPositionArray[5][1] = new Position(1,6);
-        GUICoordinatesToPositionArray[3][1] = new Position(1,7);
-        GUICoordinatesToPositionArray[2][2] = new Position(2,0);
-        GUICoordinatesToPositionArray[2][3] = new Position(2,1);
-        GUICoordinatesToPositionArray[2][4] = new Position(2,2);
-        GUICoordinatesToPositionArray[3][4] = new Position(2,3);
-        GUICoordinatesToPositionArray[4][4] = new Position(2,4);
-        GUICoordinatesToPositionArray[4][3] = new Position(2,5);
-        GUICoordinatesToPositionArray[4][2] = new Position(2,6);
-        GUICoordinatesToPositionArray[3][2] = new Position(2,7);
+        GUICoordinatesToPositionArray[0][0] = new Position(0, 0);
+        GUICoordinatesToPositionArray[0][3] = new Position(0, 1);
+        GUICoordinatesToPositionArray[0][6] = new Position(0, 2);
+        GUICoordinatesToPositionArray[3][6] = new Position(0, 3);
+        GUICoordinatesToPositionArray[6][6] = new Position(0, 4);
+        GUICoordinatesToPositionArray[6][3] = new Position(0, 5);
+        GUICoordinatesToPositionArray[6][0] = new Position(0, 6);
+        GUICoordinatesToPositionArray[3][0] = new Position(0, 7);
+        GUICoordinatesToPositionArray[1][1] = new Position(1, 0);
+        GUICoordinatesToPositionArray[1][3] = new Position(1, 1);
+        GUICoordinatesToPositionArray[1][5] = new Position(1, 2);
+        GUICoordinatesToPositionArray[3][5] = new Position(1, 3);
+        GUICoordinatesToPositionArray[5][5] = new Position(1, 4);
+        GUICoordinatesToPositionArray[5][3] = new Position(1, 5);
+        GUICoordinatesToPositionArray[5][1] = new Position(1, 6);
+        GUICoordinatesToPositionArray[3][1] = new Position(1, 7);
+        GUICoordinatesToPositionArray[2][2] = new Position(2, 0);
+        GUICoordinatesToPositionArray[2][3] = new Position(2, 1);
+        GUICoordinatesToPositionArray[2][4] = new Position(2, 2);
+        GUICoordinatesToPositionArray[3][4] = new Position(2, 3);
+        GUICoordinatesToPositionArray[4][4] = new Position(2, 4);
+        GUICoordinatesToPositionArray[4][3] = new Position(2, 5);
+        GUICoordinatesToPositionArray[4][2] = new Position(2, 6);
+        GUICoordinatesToPositionArray[3][2] = new Position(2, 7);
 
         PositionToGridPaneIndexArray = new int[3][8];
 
@@ -208,14 +206,13 @@ abstract public class BoardView extends AnchorPane{
         PositionToGridPaneIndexArray[2][7] = 17;
     }
 
-    public void setStoneColors(STONECOLOR player1Color){
-        if (player1Color == STONECOLOR.BLACK){
+    public void setStoneColors(STONECOLOR player1Color) {
+        if (player1Color == STONECOLOR.BLACK) {
             this.player1Color = STONECOLOR.BLACK;
             player1StoneImage = new Image(this.player1Color.getPathStone(), 85, 85, true, true);
             player2Color = STONECOLOR.WHITE;
             player2StoneImage = new Image(player2Color.getPathStone(), 85, 85, true, true);
-        }
-        else {
+        } else {
             this.player1Color = STONECOLOR.WHITE;
             player1StoneImage = new Image(this.player1Color.getPathStone(), 85, 85, true, true);
             player2Color = STONECOLOR.BLACK;

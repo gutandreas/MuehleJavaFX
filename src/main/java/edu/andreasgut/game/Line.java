@@ -28,7 +28,7 @@ public class Line {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Linie mit den Positionen " + firstPosition +
                 ", " + secondPosition +
                 ", " + thirdPosition;

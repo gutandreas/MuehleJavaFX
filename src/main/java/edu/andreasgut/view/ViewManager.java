@@ -34,7 +34,7 @@ public class ViewManager {
         mainStage.show();
     }
 
-    public void createStartScene(){
+    public void createStartScene() {
         startImageViewLeft = new StartImageView(this, 1);
         startImageViewLeft.getStyleClass().add("startImageview");
         startImageViewRight = new StartImageView(this, 2);
@@ -49,7 +49,7 @@ public class ViewManager {
         startScene.getStylesheets().add("edu/andreasgut/style.css");
     }
 
-    public void changeToStartScene(){
+    public void changeToStartScene() {
         startPane.setTop(mainMenuBar);
         startPane.setCenter(startMenuView);
         startPane.setLeft(startImageViewLeft);
@@ -58,7 +58,7 @@ public class ViewManager {
         mainStage.setScene(startScene);
     }
 
-    public void createGameScene(BoardView boardView, ScoreView scoreView, LogView logView){
+    public void createGameScene(BoardView boardView, ScoreView scoreView, LogView logView) {
 
         this.boardView = boardView;
         this.scoreView = scoreView;
@@ -71,7 +71,7 @@ public class ViewManager {
         gameScene.getStylesheets().add("edu/andreasgut/style.css");
     }
 
-    public void changeToGameScene(){
+    public void changeToGameScene() {
         gamePane.setTop(mainMenuBar);
         gamePane.setCenter(boardView);
         gamePane.setLeft(scoreView);
@@ -80,11 +80,11 @@ public class ViewManager {
         mainStage.setScene(gameScene);
     }
 
-    public Stage getMainStage(){
+    public Stage getMainStage() {
         return mainStage;
     }
 
-    public BorderPane getGamePane(){
+    public BorderPane getGamePane() {
         return gamePane;
     }
 

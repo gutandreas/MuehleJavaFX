@@ -10,7 +10,7 @@ public class StartImageView extends ImageView {
 
     public StartImageView(ViewManager viewManager, int imageNumber) {
         this.viewManager = viewManager;
-        switch (imageNumber){
+        switch (imageNumber) {
             case 1:
                 image = new Image("edu/andreasgut/images/StartImage1.png");
                 break;

@@ -1,22 +1,24 @@
 package edu.andreasgut.communication;
 
-import edu.andreasgut.game.*;
+import edu.andreasgut.game.Board;
+import edu.andreasgut.game.Game;
+import edu.andreasgut.game.Move;
+import edu.andreasgut.game.Position;
 import edu.andreasgut.view.ViewManager;
 import javafx.application.Platform;
 import org.json.JSONObject;
 
 public class Messenger {
 
-    private static void sendMessage(ViewManager viewManager, String message){
-        if (viewManager.getGame().getWebsocketClient() == null){
+    private static void sendMessage(ViewManager viewManager, String message) {
+        if (viewManager.getGame().getWebsocketClient() == null) {
             receiveMessage(viewManager, message);
-        }
-        else {
+        } else {
             viewManager.getGame().getWebsocketClient().send(message);
         }
     }
 
-    public static void sendPutMessage(ViewManager viewManager, Position position){
+    public static void sendPutMessage(ViewManager viewManager, Position position) {
         JSONObject jsonObject = new JSONObject();
         System.out.println(viewManager.getGame().getCurrentPlayer().getUuid());
 
@@ -69,7 +71,7 @@ public class Messenger {
         sendMessage(viewManager, jsonObject.toString());
     }
 
-    public static void sendChatMessage(ViewManager viewManager, String message){
+    public static void sendChatMessage(ViewManager viewManager, String message) {
 
         JSONObject jsonObject = new JSONObject();
         Game game = viewManager.getGame();
@@ -82,7 +84,7 @@ public class Messenger {
         sendMessage(viewManager, jsonObject.toString());
     }
 
-    public static void sendGiveUpMessage(ViewManager viewManager){
+    public static void sendGiveUpMessage(ViewManager viewManager) {
 
         JSONObject jsonObject = new JSONObject();
         Game game = viewManager.getGame();
@@ -94,7 +96,7 @@ public class Messenger {
         sendMessage(viewManager, jsonObject.toString());
     }
 
-    public static void sendGameOverMessage(ViewManager viewManager, String details){
+    public static void sendGameOverMessage(ViewManager viewManager, String details) {
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("gameCode", viewManager.getGame().getGameCode());
@@ -106,7 +108,7 @@ public class Messenger {
     }
 
 
-    public static void receiveMessage(ViewManager viewManager, String message){
+    public static void receiveMessage(ViewManager viewManager, String message) {
 
         Board board = viewManager.getGame().getBoard();
         System.out.println(message);
@@ -114,38 +116,38 @@ public class Messenger {
         String command = jsonObject.getString("command");
         Game game = viewManager.getGame();
 
-        switch (command){
+        switch (command) {
             case "join":
-                if (!game.isJoinExistingGame()){
-                        System.out.println("Spiel beigetreten");
-                        viewManager.getLogView().activateNextComputerStepButton();
-                        viewManager.getLogView().activateChatElements(true);
-                        game.getPlayer1().setName(jsonObject.getString("player2Name"));
-                        Platform.runLater(()-> viewManager.getScoreView().updatePlayer2Label(jsonObject.getString("player2Name")));
+                if (!game.isJoinExistingGame()) {
+                    System.out.println("Spiel beigetreten");
+                    viewManager.getLogView().activateNextComputerStepButton();
+                    viewManager.getLogView().activateChatElements(true);
+                    game.getPlayer1().setName(jsonObject.getString("player2Name"));
+                    Platform.runLater(() -> viewManager.getScoreView().updatePlayer2Label(jsonObject.getString("player2Name")));
                 }
                 break;
 
-            case "chat":{
+            case "chat": {
                 viewManager.getLogView().postChatMessage(jsonObject.getString("name"), jsonObject.getString("message"));
                 break;
             }
 
             case "gameOver":
                 int index = jsonObject.getInt("playerIndex");
-                String name = game.getPlayerByIndex(1-index).getName();
+                String name = game.getPlayerByIndex(1 - index).getName();
                 viewManager.getLogView().setStatusLabel(name + " hat das Spiel gewonnen!");
                 viewManager.getFieldView().setDisable(true);
-                if (game.getWebsocketClient() != null){
-                    viewManager.getLogView().activateChatElements(false);}
+                if (game.getWebsocketClient() != null) {
+                    viewManager.getLogView().activateChatElements(false);
+                }
                 break;
 
             case "roboterConnection":
-                if (jsonObject.getBoolean("connected")){
+                if (jsonObject.getBoolean("connected")) {
                     viewManager.getScoreView().acitvateRoboterConnectedLabel(true);
                     game.setRoboterWatching(jsonObject.getBoolean("watching"));
                     game.setRoboterPlaying(jsonObject.getBoolean("playing"));
-                }
-                else {
+                } else {
                     viewManager.getScoreView().acitvateRoboterConnectedLabel(false);
                     game.setRoboterWatching(false);
                     game.setRoboterPlaying(false);

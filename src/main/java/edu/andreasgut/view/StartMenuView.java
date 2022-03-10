@@ -1,24 +1,7 @@
 package edu.andreasgut.view;
 
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.regex.Pattern;
-import org.controlsfx.control.PopOver;
-import org.json.JSONException;
-import org.json.JSONObject;
-import edu.andreasgut.game.ComputerPlayer;
-import edu.andreasgut.game.CustomComputerPlayer;
-import edu.andreasgut.game.Game;
-import edu.andreasgut.game.HumanPlayer;
-import edu.andreasgut.game.Position;
-import edu.andreasgut.game.ScorePoints;
-import edu.andreasgut.game.StandardComputerPlayer;
-import edu.andreasgut.game.StartSituation;
 import edu.andreasgut.communication.WebsocketClient;
+import edu.andreasgut.game.*;
 import edu.andreasgut.sound.MUSIC;
 import edu.andreasgut.view.fxElements.SelectColorButton;
 import edu.andreasgut.view.fxElements.SwitchButton;
@@ -26,15 +9,20 @@ import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.controlsfx.control.PopOver;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.regex.Pattern;
 
 public class StartMenuView extends VBox {
 
@@ -45,15 +33,36 @@ public class StartMenuView extends VBox {
     //String port = "443";
 
     private final int STARTDIMENSION = 600;
-    private int startRound = 0;
+    private final int startRound = 0;
     private final ViewManager viewManager;
-    private VBox offlineVBox, onlineVBox, scoreVBoxComputerPut, scoreVBoxComputerMove, scoreVBoxEnemyPut, scoreVBoxEnemyMove;
-    private HBox hBoxRadioButtons, player1HBox, player2HBox, computerHBox, beginnerHBox, startGameHBox, computerBattleHBox, computerSettingBox, putPhaseHBox, movePhaseHBox, onlineButtonHBox, offlineButtonHBox, onlineSettingsHBox;
+    private final VBox offlineVBox;
+    private final VBox onlineVBox;
+    private VBox scoreVBoxComputerPut;
+    private VBox scoreVBoxComputerMove;
+    private VBox scoreVBoxEnemyPut;
+    private VBox scoreVBoxEnemyMove;
+    private HBox hBoxRadioButtons;
+    private HBox player1HBox;
+    private HBox player2HBox;
+    private final HBox computerHBox;
+    private HBox beginnerHBox;
+    private HBox startGameHBox;
+    private HBox computerBattleHBox;
+    private HBox computerSettingBox;
+    private HBox putPhaseHBox;
+    private HBox movePhaseHBox;
+    private final HBox onlineButtonHBox;
+    private final HBox offlineButtonHBox;
+    private HBox onlineSettingsHBox;
     private ToggleGroup radioButtonGroup;
     private RadioButton onePlayerRadioButton, twoPlayersRadioButton;
     private TextField namePlayer1Textfield, namePlayer2Textfield, computerBattleTextfield, gameCodeTextfield, roundTextField;
     private Label offlineInformationLabel, offlineTitleLabel, onlineInformationLabel, onlineTitleLabel, stonesColorLabel1, stonesColorLabel2, beginnerLabel1, beginnerLabel2, offlineLevelLabel, onlineLevelLabel, stoneColorComputerLabel, startGameLabel, joinGameLabel, ownComputerLabel, defaultComputerLabel;
-    private Button startButton, computerOnlineButton, offlineScorePointsButton, onlineScorePointsButton, startingPositionButton;
+    private final Button startButton;
+    private final Button computerOnlineButton;
+    private Button offlineScorePointsButton;
+    private Button onlineScorePointsButton;
+    private Button startingPositionButton;
     private SelectColorButton stonesBlackButton1, stonesWhiteButton1, stonesBlackButton2, stonesWhiteButton2, computerBlackButton, computerWhiteButton;
     private SwitchButton beginnerSwitchButton, startOnlineGameSwitchButton, ownComputerPlayerSwitchButton;
     private BoardViewTemplates startingPositionBoardView;
@@ -61,8 +70,8 @@ public class StartMenuView extends VBox {
     private ChoiceBox offlineComputerLevelChoiceBox, onlineComputerLevelChoiceBox;
     private PopOver scorePopOver, startingPositionPopOver;
 
-    private ScorePoints putPoints = new ScorePoints(3000, 1000,30, 200, 300,6, -3000, -1000, -30, -200, -300, -6);
-    private ScorePoints movePoints = new ScorePoints(2000, 300,250, 200, 300,3, -2000, -300, -250, -200, -300, -3);
+    private final ScorePoints putPoints = new ScorePoints(3000, 1000, 30, 200, 300, 6, -3000, -1000, -30, -200, -300, -6);
+    private final ScorePoints movePoints = new ScorePoints(2000, 300, 250, 200, 300, 3, -2000, -300, -250, -200, -300, -3);
 
 
     public StartMenuView(ViewManager viewManager) {
@@ -115,14 +124,14 @@ public class StartMenuView extends VBox {
     }
 
 
-    private void setupOfflineTitleAndWarning(){
-        offlineTitleLabel = new Label( "Offline spielen");
+    private void setupOfflineTitleAndWarning() {
+        offlineTitleLabel = new Label("Offline spielen");
         offlineTitleLabel.getStyleClass().add("labelTitle");
         offlineInformationLabel = new Label();
         offlineInformationLabel.getStyleClass().add("labelWarning");
     }
 
-    private void setupOnlineTitleAndWarning(){
+    private void setupOnlineTitleAndWarning() {
         onlineTitleLabel = new Label("Computer Onlinebattle spielen");
         onlineTitleLabel.getStyleClass().add("labelTitle");
         onlineInformationLabel = new Label();
@@ -130,7 +139,7 @@ public class StartMenuView extends VBox {
     }
 
 
-    private void setupOnlineSettings(){
+    private void setupOnlineSettings() {
 
         Pattern pattern = Pattern.compile("[a-zA-Z0-9]*");
         TextFormatter<?> formatter = new TextFormatter<Object>(change -> {
@@ -160,10 +169,9 @@ public class StartMenuView extends VBox {
         ownComputerLabel = new Label("Eigener Player");
         defaultComputerLabel = new Label("Standard");
         onlineLevelLabel = new Label("   Level: ");
-        onlineComputerLevelChoiceBox = new ChoiceBox(FXCollections.observableArrayList("1","2","3"));
+        onlineComputerLevelChoiceBox = new ChoiceBox(FXCollections.observableArrayList("1", "2", "3"));
         onlineComputerLevelChoiceBox.getSelectionModel().select(2);
         onlineScorePointsButton = new Button("Score");
-
 
 
         onlineSettingsHBox.getChildren().addAll(gameCodeTextfield, ownComputerLabel, ownComputerPlayerSwitchButton, defaultComputerLabel, onlineLevelLabel, onlineComputerLevelChoiceBox, onlineScorePointsButton);
@@ -171,7 +179,7 @@ public class StartMenuView extends VBox {
         onlineSettingsHBox.setSpacing(10);
     }
 
-    private void setupRadioButtonsAndStartingPosition(){
+    private void setupRadioButtonsAndStartingPosition() {
         hBoxRadioButtons = new HBox();
         radioButtonGroup = new ToggleGroup();
         onePlayerRadioButton = new RadioButton("Ein Spieler");
@@ -212,7 +220,7 @@ public class StartMenuView extends VBox {
         Label szenarioLabel = new Label("Szenario: ");
         ChoiceBox choiceBox = new ChoiceBox();
         Button loadButton = new Button("Laden");
-        choiceBox.setItems(FXCollections.observableArrayList(0,1,2,3));
+        choiceBox.setItems(FXCollections.observableArrayList(0, 1, 2, 3));
         choiceBox.getSelectionModel().select(0);
         Label situationDescriptionLabel = new Label("Leeres Spielfeld: Die maximale Freiheit für Ihre Kreativität...");
         situationDescriptionLabel.setWrapText(true);
@@ -224,12 +232,12 @@ public class StartMenuView extends VBox {
             roundTextField.setText("" + startSituation.getRound());
             situationDescriptionLabel.setText(startSituation.getDescription());
 
-            for (int i = 0; i < 3; i++){
-                for (int j = 0; j < 8; j++){
-                	Position p = new Position(i, j);
-                    if (startSituation.getBoard().getNumberOnPosition(p) != 9){
-                        startingPositionBoardView.graphicPut(p, startSituation.getBoard().getNumberOnPosition(p),  false);}
-                    else {
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 8; j++) {
+                    Position p = new Position(i, j);
+                    if (startSituation.getBoard().getNumberOnPosition(p) != 9) {
+                        startingPositionBoardView.graphicPut(p, startSituation.getBoard().getNumberOnPosition(p), false);
+                    } else {
                         startingPositionBoardView.graphicKill(p, false);
                     }
                 }
@@ -260,8 +268,7 @@ public class StartMenuView extends VBox {
     }
 
 
-
-    private void setupBeginnerSwitch(){
+    private void setupBeginnerSwitch() {
         beginnerHBox = new HBox();
         beginnerSwitchButton = new SwitchButton(viewManager);
         beginnerLabel1 = new Label("Beginner: Spieler 1");
@@ -272,10 +279,10 @@ public class StartMenuView extends VBox {
         beginnerHBox.setPrefHeight(70);
     }
 
-    private void setupComputerSettingBox(){
+    private void setupComputerSettingBox() {
         computerSettingBox = new HBox();
         offlineScorePointsButton = new Button("Score");
-        offlineComputerLevelChoiceBox = new ChoiceBox(FXCollections.observableArrayList("1","2","3"));
+        offlineComputerLevelChoiceBox = new ChoiceBox(FXCollections.observableArrayList("1", "2", "3"));
         offlineComputerLevelChoiceBox.getSelectionModel().select(2);
         offlineLevelLabel = new Label("Level: ");
         computerSettingBox.getChildren().addAll(offlineLevelLabel, offlineComputerLevelChoiceBox, offlineScorePointsButton);
@@ -308,7 +315,7 @@ public class StartMenuView extends VBox {
 
         String[] labelTitles = {"Anzahl Steine:", "Geschlossene Mühle:", "Offene Mühle:", "2 nebeneinander:", "2 mit Lücke:", "Möglicher Zug:"};
 
-        for (int i = 0; i < 6; i++){
+        for (int i = 0; i < 6; i++) {
 
             Pattern scorePattern = Pattern.compile("-?[0-9]*");
             TextFormatter<?> formatterComputerPut = new TextFormatter<Object>(change -> {
@@ -360,14 +367,14 @@ public class StartMenuView extends VBox {
 
             Label labelEnemyPut = new Label(labelTitles[i]);
             TextField textFieldEnemyPut = new TextField();
-            textFieldEnemyPut.setPromptText(String.valueOf(putPoints.getValueByIndex(i+6)));
+            textFieldEnemyPut.setPromptText(String.valueOf(putPoints.getValueByIndex(i + 6)));
             textFieldEnemyPut.setTextFormatter(formatterEnemyPut);
             textFieldEnemyPut.textProperty().addListener(change -> {
-                        if (textFieldEnemyPut.getText().length() > 6) {
-                            String s = textFieldEnemyPut.getText().substring(0, 6);
-                            textFieldEnemyPut.setText(s);
-                        }
-                    });
+                if (textFieldEnemyPut.getText().length() > 6) {
+                    String s = textFieldEnemyPut.getText().substring(0, 6);
+                    textFieldEnemyPut.setText(s);
+                }
+            });
 
             scoreVBoxEnemyPut.getChildren().addAll(labelEnemyPut, textFieldEnemyPut);
 
@@ -388,13 +395,13 @@ public class StartMenuView extends VBox {
             Label labelEnemyMove = new Label(labelTitles[i]);
             TextField textFieldEnemyMove = new TextField();
             textFieldEnemyMove.setTextFormatter(formatterEnemyMove);
-            textFieldEnemyMove.setPromptText(String.valueOf(movePoints.getValueByIndex(i+6)));
+            textFieldEnemyMove.setPromptText(String.valueOf(movePoints.getValueByIndex(i + 6)));
             textFieldEnemyMove.textProperty().addListener(change -> {
-                        if (textFieldEnemyMove.getText().length() > 6) {
-                            String s = textFieldEnemyMove.getText().substring(0, 6);
-                            textFieldEnemyMove.setText(s);
-                        }
-                    });
+                if (textFieldEnemyMove.getText().length() > 6) {
+                    String s = textFieldEnemyMove.getText().substring(0, 6);
+                    textFieldEnemyMove.setText(s);
+                }
+            });
 
             scoreVBoxEnemyMove.getChildren().addAll(labelEnemyMove, textFieldEnemyMove);
 
@@ -426,7 +433,7 @@ public class StartMenuView extends VBox {
 
     }
 
-    private void setupStartGameSwitchButton(){
+    private void setupStartGameSwitchButton() {
         startGameHBox = new HBox();
         startOnlineGameSwitchButton = new SwitchButton(viewManager);
         startGameLabel = new Label("Spiel eröffnen");
@@ -437,7 +444,7 @@ public class StartMenuView extends VBox {
         startGameHBox.setPrefHeight(70);
     }
 
-    private void setupComputerBattleInformation(){
+    private void setupComputerBattleInformation() {
 
         Pattern pattern = Pattern.compile("[a-zA-Z0-9]*");
         TextFormatter<?> formatter = new TextFormatter<Object>(change -> {
@@ -471,7 +478,7 @@ public class StartMenuView extends VBox {
     }
 
 
-    private void setupPlayerInformations(){
+    private void setupPlayerInformations() {
 
         Pattern pattern = Pattern.compile("[a-zA-Z0-9]*");
         TextFormatter<?> formatter1 = new TextFormatter<Object>(change -> {
@@ -520,11 +527,11 @@ public class StartMenuView extends VBox {
         namePlayer2Textfield.setPromptText("Name Spieler 2");
         namePlayer2Textfield.setVisible(true);
         namePlayer2Textfield.textProperty().addListener(change -> {
-                    if (namePlayer2Textfield.getText().length() > 15) {
-                        String s = namePlayer2Textfield.getText().substring(0, 15);
-                        namePlayer2Textfield.setText(s);
-                    }
-                });
+            if (namePlayer2Textfield.getText().length() > 15) {
+                String s = namePlayer2Textfield.getText().substring(0, 15);
+                namePlayer2Textfield.setText(s);
+            }
+        });
 
         stonesColorLabel2 = new Label("Steinfarbe: ");
         stonesBlackButton2 = new SelectColorButton(null, STONECOLOR.BLACK, false);
@@ -538,7 +545,7 @@ public class StartMenuView extends VBox {
         player2HBox.setPrefHeight(70);
     }
 
-    private void setupColorButtonAction(){
+    private void setupColorButtonAction() {
         stonesBlackButton1.setOnAction(click -> {
             stonesBlackButton1.setSelected(true);
             stonesBlackButton1.getStyleClass().removeAll("selectColorButtonOff");
@@ -612,15 +619,14 @@ public class StartMenuView extends VBox {
         });
     }
 
-    private void setupStartOnlineGameSwitchButton(){
+    private void setupStartOnlineGameSwitchButton() {
         startOnlineGameSwitchButton.setOnMousePressed(click -> {
 
-            if (!startOnlineGameSwitchButton.getState()){
+            if (!startOnlineGameSwitchButton.getState()) {
                 stoneColorComputerLabel.setVisible(false);
                 computerBlackButton.setVisible(false);
                 computerWhiteButton.setVisible(false);
-            }
-            else {
+            } else {
                 stoneColorComputerLabel.setVisible(true);
                 computerBlackButton.setVisible(true);
                 computerWhiteButton.setVisible(true);
@@ -629,7 +635,7 @@ public class StartMenuView extends VBox {
         });
     }
 
-    private void setupOnlineScorePointsButton(){
+    private void setupOnlineScorePointsButton() {
         onlineScorePointsButton.setOnAction(click -> {
             scorePopOver.setAutoHide(true);
             scorePopOver.setDetachedTitle("Punkte für Ereignisse setzen:");
@@ -641,7 +647,7 @@ public class StartMenuView extends VBox {
         });
     }
 
-    private void setupComputerBattleColorButtonAction(){
+    private void setupComputerBattleColorButtonAction() {
         computerBlackButton.setOnAction(click -> {
             computerBlackButton.setSelected(true);
             computerBlackButton.getStyleClass().removeAll("selectColorButtonOff");
@@ -661,7 +667,7 @@ public class StartMenuView extends VBox {
         });
     }
 
-    private void setupRadioButtonAction(){
+    private void setupRadioButtonAction() {
         onePlayerRadioButton.setOnAction(action -> {
             offlineVBox.getChildren().add(3, computerHBox);
             offlineVBox.getChildren().remove(player2HBox);
@@ -674,14 +680,13 @@ public class StartMenuView extends VBox {
         });
     }
 
-    private void setupStartButtonAction(){
+    private void setupStartButtonAction() {
         startButton.setOnAction(action -> {
 
             int tempRound;
-            if (roundTextField.getText().length() > 0){
+            if (roundTextField.getText().length() > 0) {
                 tempRound = Integer.parseInt(roundTextField.getText());
-            }
-            else {
+            } else {
                 tempRound = 0;
             }
             System.out.println("Startrunde: " + tempRound);
@@ -692,41 +697,40 @@ public class StartMenuView extends VBox {
                     || startingPositionBoardView.getBoard().numberOfStonesOf(1) < 3);
 
             boolean lessThan3StonesAfterPutPhase = tempRound <= 18
-                    && (startingPositionBoardView.getBoard().numberOfStonesOf(0) + (18-tempRound)/2 < 3
-                    || startingPositionBoardView.getBoard().numberOfStonesOf(1) + (18-tempRound)/2 < 3);
+                    && (startingPositionBoardView.getBoard().numberOfStonesOf(0) + (18 - tempRound) / 2 < 3
+                    || startingPositionBoardView.getBoard().numberOfStonesOf(1) + (18 - tempRound) / 2 < 3);
 
             boolean moreThan9Stones = startingPositionBoardView.getBoard().numberOfStonesOf(0) > 9
                     || startingPositionBoardView.getBoard().numberOfStonesOf(1) > 9;
 
             boolean moreThan9StonesAfterPutPhase = tempRound <= 18
-                    && (startingPositionBoardView.getBoard().numberOfStonesOf(0) + Math.round(((double) 18-tempRound)/2) > 9
-                    || startingPositionBoardView.getBoard().numberOfStonesOf(1) + Math.round(((double) 18-tempRound)/2) > 9);
+                    && (startingPositionBoardView.getBoard().numberOfStonesOf(0) + Math.round(((double) 18 - tempRound) / 2) > 9
+                    || startingPositionBoardView.getBoard().numberOfStonesOf(1) + Math.round(((double) 18 - tempRound) / 2) > 9);
 
 
-            if (lessThan3StonesInMovePhase || lessThan3StonesAfterPutPhase || moreThan9Stones || moreThan9StonesAfterPutPhase){
+            if (lessThan3StonesInMovePhase || lessThan3StonesAfterPutPhase || moreThan9Stones || moreThan9StonesAfterPutPhase) {
                 offlineInformationLabel.setText("Ungültige Ausgangslage");
                 return;
             }
 
             if ((radioButtonGroup.getSelectedToggle().equals(onePlayerRadioButton) &&
-                    namePlayer1Textfield.getText().length()>0)
+                    namePlayer1Textfield.getText().length() > 0)
                     || (radioButtonGroup.getSelectedToggle().equals(twoPlayersRadioButton) &&
-                    namePlayer1Textfield.getText().length()>0 && namePlayer2Textfield.getText().length()>0)){
+                    namePlayer1Textfield.getText().length() > 0 && namePlayer2Textfield.getText().length() > 0)) {
 
                 viewManager.getAudioPlayer().chooseSound(MUSIC.PLAY_SOUND);
-                if (!viewManager.getOptionsView().getAudioOnOffSwitchButton().getState()){
+                if (!viewManager.getOptionsView().getAudioOnOffSwitchButton().getState()) {
                     viewManager.getAudioPlayer().stopMusic();
                 }
 
 
-                if (twoPlayersRadioButton.isSelected()){
+                if (twoPlayersRadioButton.isSelected()) {
                     viewManager.setGame(new Game(viewManager,
                             new HumanPlayer(viewManager, namePlayer1Textfield.getText().toUpperCase(), true),
                             new HumanPlayer(viewManager, namePlayer2Textfield.getText().toUpperCase(), true),
                             startingPositionBoardView.getBoard(),
                             tempRound));
-                }
-                else {
+                } else {
                     editScorePoints();
                     viewManager.setGame(new Game(viewManager,
                             new HumanPlayer(viewManager, namePlayer1Textfield.getText().toUpperCase(), true),
@@ -744,55 +748,59 @@ public class StartMenuView extends VBox {
                 viewManager.getLogView().setStatusLabel(viewManager.getGame().getPlayer0().getName() + " startet das Spiel");
 
 
-                if ((!beginnerSwitchButton.getState() && tempRound%2 == 0) || (beginnerSwitchButton.getState() && tempRound%2 == 1)) {
+                if ((!beginnerSwitchButton.getState() && tempRound % 2 == 0) || (beginnerSwitchButton.getState() && tempRound % 2 == 1)) {
                     if (tempRound <= 18) {
                         ((BoardViewPlay) viewManager.getFieldView()).setPutCursor();
                     } else {
                         ((BoardViewPlay) viewManager.getFieldView()).setMoveCursor();
                     }
-                }
-                else {
+                } else {
                     viewManager.getGame().getCurrentPlayer().preparePutOrMove(viewManager);
                 }
 
+            } else {
+                offlineInformationLabel.setText("Es fehlen Eingaben, um das Spiel zu starten");
             }
-            else {
-                offlineInformationLabel.setText("Es fehlen Eingaben, um das Spiel zu starten");}});
+        });
     }
 
 
-    private void setupComputerOnlineButtonAction(){
-        computerOnlineButton.setOnAction( action -> {
+    private void setupComputerOnlineButtonAction() {
+        computerOnlineButton.setOnAction(action -> {
 
             HttpClient client = HttpClient.newBuilder().build();
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("gameCode", gameCodeTextfield.getText());
 
-            if (gameCodeTextfield.getText().length() == 0){
+            if (gameCodeTextfield.getText().length() == 0) {
                 onlineInformationLabel.setText("Der Gamecode fehlt");
-                return;}
+                return;
+            }
 
-            if (computerBattleTextfield.getText().length() == 0){
+            if (computerBattleTextfield.getText().length() == 0) {
                 onlineInformationLabel.setText("Der Computername fehlt");
-                return;}
+                return;
+            }
 
             STONECOLOR computerColor;
             STONECOLOR onlinePlayerColor;
-            if (computerBlackButton.isSelected()){
+            if (computerBlackButton.isSelected()) {
                 computerColor = STONECOLOR.BLACK;
-                onlinePlayerColor = STONECOLOR.WHITE;}
-            else {
+                onlinePlayerColor = STONECOLOR.WHITE;
+            } else {
                 computerColor = STONECOLOR.WHITE;
-                onlinePlayerColor = STONECOLOR.BLACK;}
+                onlinePlayerColor = STONECOLOR.BLACK;
+            }
 
             jsonObject.put("player1Color", computerColor.toString());
             editScorePoints();
             String urlAsString;
 
             //join
-            if (startOnlineGameSwitchButton.getState()){
+            if (startOnlineGameSwitchButton.getState()) {
                 urlAsString = "http://" + ipAdress + ":" + port + "/index/controller/menschVsMensch/join";
-                jsonObject.put("player2Name", computerBattleTextfield.getText());}
+                jsonObject.put("player2Name", computerBattleTextfield.getText());
+            }
             //start
             else {
                 urlAsString = "http://" + ipAdress + ":" + port + "/index/controller/menschVsMensch/start";
@@ -810,7 +818,7 @@ public class StartMenuView extends VBox {
             String onlinePlayerName = "---";
 
             try {
-                response = client.send(request,HttpResponse.BodyHandlers.ofString());
+                response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
                 String body = (String) response.body();
                 System.out.println(body);
@@ -819,7 +827,7 @@ public class StartMenuView extends VBox {
                 String uuid;
 
                 //join
-                if (startOnlineGameSwitchButton.getState()){
+                if (startOnlineGameSwitchButton.getState()) {
                     uuid = jsonResponseObject.getString("player2Uuid");
                     computerColor = STONECOLOR.valueOf(jsonResponseObject.getString("player2Color"));
                     onlinePlayerColor = computerColor == STONECOLOR.BLACK ? STONECOLOR.WHITE : STONECOLOR.BLACK;
@@ -832,7 +840,7 @@ public class StartMenuView extends VBox {
 
                 editScorePoints();
                 //StandardComputerPlayer
-                if (ownComputerPlayerSwitchButton.getState()){
+                if (ownComputerPlayerSwitchButton.getState()) {
                     computerPlayer = new StandardComputerPlayer(viewManager, computerBattleTextfield.getText().toUpperCase(), uuid, putPoints, movePoints, Integer.parseInt(onlineComputerLevelChoiceBox.getValue().toString()));
                 }
                 //CustomComputerPlayer
@@ -844,7 +852,7 @@ public class StartMenuView extends VBox {
                 e.printStackTrace();
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            } catch (JSONException e){
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
 
@@ -854,29 +862,28 @@ public class StartMenuView extends VBox {
                 onlineInformationLabel.setText("Ungültiger Gamecode");
             }
 
-            if (response.statusCode() == 200){
+            if (response.statusCode() == 200) {
 
                 viewManager.getAudioPlayer().chooseSound(MUSIC.PLAY_SOUND);
-                if (!viewManager.getOptionsView().getAudioOnOffSwitchButton().getState()){
+                if (!viewManager.getOptionsView().getAudioOnOffSwitchButton().getState()) {
                     viewManager.getAudioPlayer().stopMusic();
                 }
 
                 Game game;
 
                 //join
-                if (startOnlineGameSwitchButton.getState()){
+                if (startOnlineGameSwitchButton.getState()) {
                     game = new Game(viewManager, new HumanPlayer(viewManager, onlinePlayerName, false), computerPlayer, gameCodeTextfield.getText(), startOnlineGameSwitchButton.getState());
                     viewManager.setGame(game);
                     viewManager.createGameScene(new BoardViewPlay(viewManager, onlinePlayerColor, computerColor, false),
                             new ScoreView(viewManager, onlinePlayerColor, computerColor, game.getRound(), true),
                             new LogView(viewManager, true));
 
-                    if (jsonResponseObject.getBoolean("roboterConnected")){
+                    if (jsonResponseObject.getBoolean("roboterConnected")) {
                         viewManager.getScoreView().acitvateRoboterConnectedLabel(true);
                         game.setRoboterWatching(jsonResponseObject.getBoolean("roboterWatching"));
                         game.setRoboterPlaying(jsonResponseObject.getBoolean("roboterPlaying"));
-                    }
-                    else {
+                    } else {
                         viewManager.getScoreView().acitvateRoboterConnectedLabel(false);
                         game.setRoboterWatching(false);
                         game.setRoboterPlaying(false);
@@ -905,21 +912,20 @@ public class StartMenuView extends VBox {
                     game.setWebsocketClient(websocketClient);
 
                 } catch (URISyntaxException e) {
-                    e.printStackTrace();}
+                    e.printStackTrace();
+                }
             }
         });
     }
 
 
-
-
-    private void editScorePoints(){
+    private void editScorePoints() {
         int counterPut = 0;
 
         //computerPutpoints
-        for (Node node : scoreVBoxComputerPut.getChildren()){
-            if (node instanceof TextField){
-                if (((TextField) node).getText().length()>0 && ((TextField) node).getText().charAt(((TextField) node).getText().length()-1) != '-'){
+        for (Node node : scoreVBoxComputerPut.getChildren()) {
+            if (node instanceof TextField) {
+                if (((TextField) node).getText().length() > 0 && ((TextField) node).getText().charAt(((TextField) node).getText().length() - 1) != '-') {
                     putPoints.setValueByIndex(counterPut, Integer.parseInt(((TextField) node).getText()));
                 }
                 counterPut++;
@@ -927,10 +933,10 @@ public class StartMenuView extends VBox {
         }
 
         //enemyPutpoints
-        for (Node node : scoreVBoxEnemyPut.getChildren()){
-            if (node instanceof TextField){
+        for (Node node : scoreVBoxEnemyPut.getChildren()) {
+            if (node instanceof TextField) {
 
-                if (((TextField) node).getText().length()>0 && ((TextField) node).getText().charAt(((TextField) node).getText().length()-1) != '-'){
+                if (((TextField) node).getText().length() > 0 && ((TextField) node).getText().charAt(((TextField) node).getText().length() - 1) != '-') {
                     putPoints.setValueByIndex(counterPut, Integer.parseInt(((TextField) node).getText()));
                 }
                 counterPut++;
@@ -942,9 +948,9 @@ public class StartMenuView extends VBox {
         int counterMove = 0;
 
         //computerMovePoints
-        for (Node node : scoreVBoxComputerMove.getChildren()){
-            if (node instanceof TextField){
-                if (((TextField) node).getText().length()>0 && ((TextField) node).getText().charAt(((TextField) node).getText().length()-1) != '-'){
+        for (Node node : scoreVBoxComputerMove.getChildren()) {
+            if (node instanceof TextField) {
+                if (((TextField) node).getText().length() > 0 && ((TextField) node).getText().charAt(((TextField) node).getText().length() - 1) != '-') {
                     movePoints.setValueByIndex(counterMove, Integer.parseInt(((TextField) node).getText()));
                 }
                 counterMove++;
@@ -952,9 +958,9 @@ public class StartMenuView extends VBox {
         }
 
         //enemyMovePoints
-        for (Node node : scoreVBoxEnemyMove.getChildren()){
-            if (node instanceof TextField){
-                if (((TextField) node).getText().length()>0 && ((TextField) node).getText().charAt(((TextField) node).getText().length()-1) != '-'){
+        for (Node node : scoreVBoxEnemyMove.getChildren()) {
+            if (node instanceof TextField) {
+                if (((TextField) node).getText().length() > 0 && ((TextField) node).getText().charAt(((TextField) node).getText().length() - 1) != '-') {
                     movePoints.setValueByIndex(counterMove, Integer.parseInt(((TextField) node).getText()));
                 }
                 counterMove++;

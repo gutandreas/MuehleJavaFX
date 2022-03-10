@@ -38,22 +38,21 @@ public class Game {
         this.player1 = player1;
         playerArrayList.add(0, player0);
         playerArrayList.add(1, player1);
-        currentPlayer=playerArrayList.get(round%2);
+        currentPlayer = playerArrayList.get(round % 2);
         this.board = new BoardImpl(this);
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 8; j++) {
-            	Position tempPosition = new Position(i, j);
+                Position tempPosition = new Position(i, j);
                 if (board.getNumberOnPosition(tempPosition) != 9) {
                     this.board.putStone(tempPosition, board.getNumberOnPosition(tempPosition));
                 }
             }
         }
         this.round = round;
-        if (round <=18){
+        if (round <= 18) {
             putPhase = true;
             movePhase = false;
-        }
-        else {
+        } else {
             putPhase = false;
             movePhase = true;
             movePhaseTake = true;
@@ -68,7 +67,7 @@ public class Game {
         playerArrayList.add(0, player0);
         playerArrayList.add(1, player1);
         round = 0;
-        currentPlayer=playerArrayList.get(0);
+        currentPlayer = playerArrayList.get(0);
         this.gameCode = gameCode;
         this.joinExistingGame = joinExistingGame;
         board = new BoardImpl(this);
@@ -84,24 +83,24 @@ public class Game {
         this.board = new BoardImpl(this);
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 8; j++) {
-            	Position tempPosition = new Position(i, j);
+                Position tempPosition = new Position(i, j);
                 if (board.getNumberOnPosition(tempPosition) != 9) {
                     this.board.putStone(tempPosition, board.getNumberOnPosition(tempPosition));
                 }
             }
         }
-        if (player2starts){
-            currentPlayer=playerArrayList.get((round%2+1)%2);}
-        else {
-            currentPlayer=playerArrayList.get((round%2));}
+        if (player2starts) {
+            currentPlayer = playerArrayList.get((round % 2 + 1) % 2);
+        } else {
+            currentPlayer = playerArrayList.get((round % 2));
+        }
 
         this.round = round;
 
-        if (round <=18){
+        if (round <= 18) {
             putPhase = true;
             movePhase = false;
-        }
-        else {
+        } else {
             putPhase = false;
             movePhase = true;
             movePhaseTake = true;
@@ -109,15 +108,15 @@ public class Game {
         }
     }
 
-    public void updateCurrentPlayer(){
-        if(player2starts){
-            currentPlayer = playerArrayList.get((round+1)%2);}
-        else {
-            currentPlayer = playerArrayList.get(round%2);
+    public void updateCurrentPlayer() {
+        if (player2starts) {
+            currentPlayer = playerArrayList.get((round + 1) % 2);
+        } else {
+            currentPlayer = playerArrayList.get(round % 2);
         }
     }
 
-    public void increaseRound(){
+    public void increaseRound() {
         round++;
         viewManager.getScoreView().increaseRound();
     }
@@ -130,74 +129,73 @@ public class Game {
 
     public void nextStep(Position clickedPosition) {
 
-        if (clickOkay){
+        if (clickOkay) {
 
             clickOkay = false;
 
-            if (killPhase){
+            if (killPhase) {
                 nextKillStep(clickedPosition);
-                return;}
+                return;
+            }
 
-            if (putPhase){
+            if (putPhase) {
                 nextPutStep(clickedPosition);
-                return;}
+                return;
+            }
 
-            if (movePhase){
+            if (movePhase) {
                 nextMoveStep(clickedPosition);
-                return;}
-        }
-        else {
+                return;
+            }
+        } else {
             System.out.println("Kein Klick möglich");
             viewManager.getLogView().setStatusLabel("Warten Sie, bis Sie an der Reihe sind.");
         }
     }
 
-    private void nextPutStep(Position clickedPosition){
-        if (board.isPutPossibleAt(clickedPosition)){
+    private void nextPutStep(Position clickedPosition) {
+        if (board.isPutPossibleAt(clickedPosition)) {
             Messenger.sendPutMessage(viewManager, clickedPosition);
 
-        }
-        else {
+        } else {
             System.out.println("Ungültiger Put, Feld ist nicht frei");
             viewManager.getLogView().setStatusLabel("Dieses Feld ist nicht frei.");
             clickOkay = true;
         }
     }
 
-    private void nextKillStep(Position clickedPosition){
-        if (board.isKillPossibleAt(clickedPosition, getOtherPlayerIndex())){
+    private void nextKillStep(Position clickedPosition) {
+        if (board.isKillPossibleAt(clickedPosition, getOtherPlayerIndex())) {
             Messenger.sendKillMessage(viewManager, clickedPosition);
-        }
-        else {
+        } else {
             System.out.println("Ungültiger Kill");
             viewManager.getLogView().setStatusLabel("Auf diesem Feld kann kein Stein entfernt werden.");
             clickOkay = true;
         }
     }
 
-    private void nextMoveStep(Position clickedPosition){
-        if (movePhaseTake){
-            if (board.isThisMyStone(clickedPosition, getCurrentPlayerIndex())){
+    private void nextMoveStep(Position clickedPosition) {
+        if (movePhaseTake) {
+            if (board.isThisMyStone(clickedPosition, getCurrentPlayerIndex())) {
                 ((BoardViewPlay) viewManager.getFieldView()).setPutCursor();
                 viewManager.getFieldView().graphicRemove(clickedPosition);
                 lastClickedPosition = clickedPosition;
                 clickOkay = true;
                 movePhaseRelease = true;
                 movePhaseTake = false;
-                return;}
-            else {
+                return;
+            } else {
                 clickOkay = true;
                 return;
             }
         }
 
-        if (movePhaseRelease){
+        if (movePhaseRelease) {
             boolean allowedToJump = board.numberOfStonesOf(getCurrentPlayerIndex()) == 3;
             Move move = new Move(lastClickedPosition, clickedPosition);
-            if (board.isMovePossibleAt(move.getFrom(),move.getTo(),allowedToJump)){
+            if (board.isMovePossibleAt(move.getFrom(), move.getTo(), allowedToJump)) {
                 Messenger.sendMoveMessage(viewManager, move);
-            }
-            else {
+            } else {
                 System.out.println("Ungültiger Move");
                 viewManager.getLogView().setStatusLabel("Das ist kein gültiger Zug");
                 viewManager.getFieldView().graphicPut(lastClickedPosition, getCurrentPlayerIndex(), true);
@@ -210,12 +208,11 @@ public class Game {
     }
 
 
-
-    public void updateGameState(boolean put, boolean killHappend, boolean increaseRound){
-        if (put){
+    public void updateGameState(boolean put, boolean killHappend, boolean increaseRound) {
+        if (put) {
             viewManager.getScoreView().increaseStonesPut();
         }
-        if (killHappend){
+        if (killHappend) {
             viewManager.getScoreView().increaseStonesKilled();
             viewManager.getScoreView().increaseStonesLost();
         }
@@ -246,8 +243,8 @@ public class Game {
     }
 
 
-    private void setGamesPhaseBooleans(){
-        if (round >= NUMBEROFSTONES*2){
+    private void setGamesPhaseBooleans() {
+        if (round >= NUMBEROFSTONES * 2) {
             putPhase = false;
             movePhase = true;
             viewManager.getScoreView().updatePhase("Steine verschieben");
@@ -255,12 +252,12 @@ public class Game {
     }
 
 
-    private void checkWinner(){
+    private void checkWinner() {
 
         boolean lessThan3Stones = movePhase && board.numberOfStonesOf(getCurrentPlayerIndex()) < 3;
         boolean unableToMove = movePhase && !board.canPlayerMove(getCurrentPlayerIndex());
 
-        if (lessThan3Stones || unableToMove){
+        if (lessThan3Stones || unableToMove) {
             gameOver = true;
         }
 
@@ -357,15 +354,15 @@ public class Game {
         this.websocketClient = websocketClient;
     }
 
-    public int getCurrentPlayerIndex(){
+    public int getCurrentPlayerIndex() {
         return currentPlayer.equals(playerArrayList.get(0)) ? 0 : 1;
     }
 
-    public int getOtherPlayerIndex(){
+    public int getOtherPlayerIndex() {
         return currentPlayer.equals(playerArrayList.get(0)) ? 1 : 0;
     }
 
-    public Player getPlayerByIndex(int index){
+    public Player getPlayerByIndex(int index) {
         return playerArrayList.get(index);
     }
 }

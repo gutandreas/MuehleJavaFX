@@ -6,11 +6,11 @@ public class ClosedMorris {
 
     public ClosedMorris(Board board, Position firstPosition, Position secondPosition, Position thirdPosition) {
         if (firstPosition.compareTo(secondPosition) > 0 || firstPosition.compareTo(thirdPosition) > 0
-            || secondPosition.compareTo(thirdPosition) > 0){
+                || secondPosition.compareTo(thirdPosition) > 0) {
             throw new IllegalArgumentException();
         }
 
-        if (!(board.isPositionPartOfMorris(firstPosition) && board.isPositionPartOfMorris(secondPosition) && board.isPositionPartOfMorris(thirdPosition))){
+        if (!(board.isPositionPartOfMorris(firstPosition) && board.isPositionPartOfMorris(secondPosition) && board.isPositionPartOfMorris(thirdPosition))) {
             throw new IllegalArgumentException();
         }
 
@@ -32,7 +32,7 @@ public class ClosedMorris {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "Geschlossene Mühle mit den Positionen " + firstPosition +
                 ", " + secondPosition +
                 ", " + thirdPosition;

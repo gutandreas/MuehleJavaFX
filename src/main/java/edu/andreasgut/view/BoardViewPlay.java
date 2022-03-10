@@ -29,9 +29,9 @@ public class BoardViewPlay extends BoardView {
     }
 
 
-    private void setupBoardPositions(boolean activateBoardFunctions){
+    private void setupBoardPositions(boolean activateBoardFunctions) {
 
-        if (activateBoardFunctions){
+        if (activateBoardFunctions) {
 
             for (Node n : fieldGridPane.getChildren()) {
                 if (((ImageView) n).getImage().equals(emptyField)) {
@@ -48,68 +48,69 @@ public class BoardViewPlay extends BoardView {
         }
     }
 
-    private void setupPlayerPutCursors(STONECOLOR player1Color, STONECOLOR player2Color){
-        player1StoneCursor = new ImageCursor(new Image(player1Color.getPathStone(), 85, 85, true, true),42,42);
-        player2StoneCursor = new ImageCursor(new Image(player2Color.getPathStone(), 85, 85, true, true), 42,42);
+    private void setupPlayerPutCursors(STONECOLOR player1Color, STONECOLOR player2Color) {
+        player1StoneCursor = new ImageCursor(new Image(player1Color.getPathStone(), 85, 85, true, true), 42, 42);
+        player2StoneCursor = new ImageCursor(new Image(player2Color.getPathStone(), 85, 85, true, true), 42, 42);
     }
 
-    private void setupPlayerMoveCursors(STONECOLOR player1Color, STONECOLOR player2Color){
+    private void setupPlayerMoveCursors(STONECOLOR player1Color, STONECOLOR player2Color) {
         player1HandCursor = new ImageCursor(new Image(player1Color.getPathMoveCursor(), 85, 85, true, true));
         player2HandCursor = new ImageCursor(new Image(player2Color.getPathMoveCursor(), 85, 85, true, true));
     }
 
-    private void setupPlayerKillCursors(STONECOLOR player1Color, STONECOLOR player2Color){
+    private void setupPlayerKillCursors(STONECOLOR player1Color, STONECOLOR player2Color) {
         player1killCursor = new ImageCursor(new Image(player1Color.getPathKillCursor(), 85, 85, true, true));
         player2killCursor = new ImageCursor(new Image(player2Color.getPathKillCursor(), 85, 85, true, true));
     }
 
-    public void setPutCursor(){
-        setupPlayerPutCursors(player1Color,player2Color);
+    public void setPutCursor() {
+        setupPlayerPutCursors(player1Color, player2Color);
         choosePutCursor();
-        fieldGridPane.setOnMouseEntered(enter ->{
+        fieldGridPane.setOnMouseEntered(enter -> {
             choosePutCursor();
 
         });
-        moveMouseposition(10,10);
+        moveMouseposition(10, 10);
     }
 
-    private void moveMouseposition(int dx, int dy){
+    private void moveMouseposition(int dx, int dy) {
         Robot robot = new Robot();
-        robot.mouseMove(robot.getMouseX()+dx, robot.getMouseY()+dy);
+        robot.mouseMove(robot.getMouseX() + dx, robot.getMouseY() + dy);
     }
 
     private void choosePutCursor() {
-        switch (viewManager.getGame().getCurrentPlayerIndex()){
+        switch (viewManager.getGame().getCurrentPlayerIndex()) {
             case 0:
                 imageView.getScene().setCursor(player1StoneCursor);
                 break;
             case 1:
                 imageView.getScene().setCursor(player2StoneCursor);
-                break;}
+                break;
+        }
     }
 
 
-
-    public void setKillCursor(){
-        setupPlayerKillCursors(player1Color,player2Color);
+    public void setKillCursor() {
+        setupPlayerKillCursors(player1Color, player2Color);
         chooseKillCursor();
-        fieldGridPane.setOnMouseEntered(enter ->{
+        fieldGridPane.setOnMouseEntered(enter -> {
             chooseKillCursor();
         });
     }
 
     private void chooseKillCursor() {
-        switch (viewManager.getGame().getCurrentPlayerIndex()){
+        switch (viewManager.getGame().getCurrentPlayerIndex()) {
             case 0:
                 imageView.getScene().setCursor(player1killCursor);
                 break;
             case 1:
                 imageView.getScene().setCursor(player2killCursor);
-                break;}
+                break;
+        }
     }
 
-    synchronized public void setMoveCursor(){
-        setupPlayerMoveCursors(player1Color,player2Color);
+    synchronized public void setMoveCursor() {
+        setupPlayerMoveCursors(player1Color, player2Color);
         chooseMoveCursor();
         fieldGridPane.setOnMouseEntered(enter -> {
             chooseMoveCursor();
@@ -117,14 +118,15 @@ public class BoardViewPlay extends BoardView {
 
     }
 
-    synchronized private void chooseMoveCursor(){
-        switch (viewManager.getGame().getCurrentPlayerIndex()){
+    synchronized private void chooseMoveCursor() {
+        switch (viewManager.getGame().getCurrentPlayerIndex()) {
             case 0:
                 imageView.getScene().setCursor(player1HandCursor);
                 break;
             case 1:
                 imageView.getScene().setCursor(player2HandCursor);
-                break;}
+                break;
+        }
     }
 
 }

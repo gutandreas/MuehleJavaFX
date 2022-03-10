@@ -8,34 +8,33 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 import java.util.Locale;
 import java.util.Optional;
 
 public class MainMenuBar extends MenuBar {
 
-    private Menu datei, hilfe;
-    private MenuItem neuStarten = new MenuItem("Neues Spiel starten");
-    private MenuItem spielBeenden = new MenuItem("Programm beenden");
-    private MenuItem spielregeln = new MenuItem("Spielregeln");
-    private MenuItem ueberDiesesSpiel = new MenuItem("Über dieses Spiel");
-    private ViewManager viewManager;
+    private final Menu datei;
+    private final Menu hilfe;
+    private final MenuItem neuStarten = new MenuItem("Neues Spiel starten");
+    private final MenuItem spielBeenden = new MenuItem("Programm beenden");
+    private final MenuItem spielregeln = new MenuItem("Spielregeln");
+    private final MenuItem ueberDiesesSpiel = new MenuItem("Über dieses Spiel");
+    private final ViewManager viewManager;
 
     public MainMenuBar(ViewManager viewManager) {
         this.viewManager = viewManager;
         datei = new Menu("Spiel");
         hilfe = new Menu("Hilfe");
-        this.getMenus().addAll(datei,hilfe);
+        this.getMenus().addAll(datei, hilfe);
         datei.getItems().addAll(neuStarten, spielBeenden);
         neuStarten.setDisable(true);
         hilfe.getItems().addAll(spielregeln, ueberDiesesSpiel);
@@ -46,37 +45,39 @@ public class MainMenuBar extends MenuBar {
             alert.setAlertType(Alert.AlertType.NONE);
             alert.setTitle("Zum Hauptmenü");
             Optional<ButtonType> result = alert.showAndWait();
-            if(!result.isPresent()){}
-            else if(result.get() == ButtonType.YES){
+            if (!result.isPresent()) {
+            } else if (result.get() == ButtonType.YES) {
                 StartMenuView startMenuView = new StartMenuView(viewManager);
                 startMenuView.getStyleClass().add("startMenuView");
                 viewManager.setStartMenuView(startMenuView);
                 viewManager.changeToStartScene();
                 viewManager.getAudioPlayer().chooseSound(MUSIC.MENU_SOUND);
-                if (!viewManager.getOptionsView().getAudioOnOffSwitchButton().getState()){
+                if (!viewManager.getOptionsView().getAudioOnOffSwitchButton().getState()) {
                     viewManager.getAudioPlayer().stopMusic();
                 }
                 viewManager.getOptionsView().disableRestartButton();
                 disableNeuStarten();
 
+            } else if (result.get() == ButtonType.CANCEL) {
             }
-            else if(result.get() == ButtonType.CANCEL) {}
 
         });
 
-        spielBeenden.setOnAction(click ->{
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-                        "Wollen Sie das Spiel wirklich beenden?", ButtonType.CANCEL, ButtonType.YES);
-                alert.setAlertType(Alert.AlertType.NONE);
-                alert.setTitle("Spiel beenden");
-                Optional<ButtonType> result = alert.showAndWait();
-                if(!result.isPresent()){}
-                    else if(result.get() == ButtonType.YES){
-                        viewManager.getAudioPlayer().stopMusic();
-                        Platform.exit();}
-                    else if(result.get() == ButtonType.CANCEL) {} });
+        spielBeenden.setOnAction(click -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+                    "Wollen Sie das Spiel wirklich beenden?", ButtonType.CANCEL, ButtonType.YES);
+            alert.setAlertType(Alert.AlertType.NONE);
+            alert.setTitle("Spiel beenden");
+            Optional<ButtonType> result = alert.showAndWait();
+            if (!result.isPresent()) {
+            } else if (result.get() == ButtonType.YES) {
+                viewManager.getAudioPlayer().stopMusic();
+                Platform.exit();
+            } else if (result.get() == ButtonType.CANCEL) {
+            }
+        });
 
-        spielregeln.setOnAction(click ->{
+        spielregeln.setOnAction(click -> {
             Stage stage = new Stage();
             stage.setResizable(false);
             stage.setTitle("Spielregeln");
@@ -86,7 +87,7 @@ public class MainMenuBar extends MenuBar {
             scene.getStylesheets().add("edu/andreasgut/style.css");
             stage.setScene(scene);
             TableView tableView = new TableView();
-            tableView.setPrefSize(690,500);
+            tableView.setPrefSize(690, 500);
             TableColumn title = new TableColumn();
             title.setText("Regel");
             title.setPrefWidth(120);
@@ -133,10 +134,10 @@ public class MainMenuBar extends MenuBar {
             searchTextfield.textProperty().addListener((observable, oldValue, newValue) -> {
                 String searchText = newValue;
                 ObservableList<Rule> filteredRuleList = FXCollections.observableArrayList();
-                for (Rule rule : Rule.getRules()){
+                for (Rule rule : Rule.getRules()) {
                     if (rule.getTags().toUpperCase().contains(searchText.toUpperCase())
                             || rule.getTitle().toUpperCase(Locale.ROOT).contains(searchText.toUpperCase())
-                            || rule.getDescription().toUpperCase().contains(searchText.toUpperCase())){
+                            || rule.getDescription().toUpperCase().contains(searchText.toUpperCase())) {
                         filteredRuleList.add(rule);
                     }
                 }
@@ -145,13 +146,13 @@ public class MainMenuBar extends MenuBar {
 
             VBox mainVBox = new VBox();
             mainVBox.getChildren().addAll(tableView, searchHBox);
-            mainVBox.setPadding(new Insets(5,5,5,5));
+            mainVBox.setPadding(new Insets(5, 5, 5, 5));
             mainVBox.setSpacing(5);
             anchorPane.getChildren().addAll(mainVBox);
             stage.show();
         });
 
-        ueberDiesesSpiel.setOnAction(click ->{
+        ueberDiesesSpiel.setOnAction(click -> {
             Stage stage = new Stage();
             stage.setTitle("Über dieses Spiel");
             AnchorPane anchorPane = new AnchorPane();
@@ -163,16 +164,17 @@ public class MainMenuBar extends MenuBar {
             imageView.setFitHeight(300);
             anchorPane.getChildren().add(imageView);
             stage.setResizable(false);
-            stage.show();});
-        }
+            stage.show();
+        });
+    }
 
-        public void enableNeuStarten(){
-            neuStarten.setDisable(false);
-        }
+    public void enableNeuStarten() {
+        neuStarten.setDisable(false);
+    }
 
-        public void disableNeuStarten(){
-            neuStarten.setDisable(true);
-        }
+    public void disableNeuStarten() {
+        neuStarten.setDisable(true);
+    }
 
 
 }

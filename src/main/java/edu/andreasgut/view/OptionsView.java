@@ -5,7 +5,10 @@ import edu.andreasgut.sound.MUSIC;
 import edu.andreasgut.view.fxElements.MusicSwitchButton;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -14,11 +17,13 @@ import java.util.Optional;
 
 public class OptionsView extends HBox {
 
-    private MusicSwitchButton audioOnOffMusicSwitchButton;
-    private Label audioOnLabel, audioOffLabel;
-    private Button exitButton, restartButton;
-    private ViewManager viewManager;
-    private HBox audioHBox;
+    private final MusicSwitchButton audioOnOffMusicSwitchButton;
+    private final Label audioOnLabel;
+    private final Label audioOffLabel;
+    private final Button exitButton;
+    private final Button restartButton;
+    private final ViewManager viewManager;
+    private final HBox audioHBox;
 
     public OptionsView(ViewManager viewManager) {
         this.viewManager = viewManager;
@@ -55,14 +60,16 @@ public class OptionsView extends HBox {
             alert.setAlertType(Alert.AlertType.NONE);
             alert.setTitle("Spiel beenden");
             Optional<ButtonType> result = alert.showAndWait();
-            if(!result.isPresent()){}
-            else if(result.get() == ButtonType.YES){
-                if (viewManager.getGame() != null && viewManager.getGame().getWebsocketClient() != null){
+            if (!result.isPresent()) {
+            } else if (result.get() == ButtonType.YES) {
+                if (viewManager.getGame() != null && viewManager.getGame().getWebsocketClient() != null) {
                     Messenger.sendGiveUpMessage(viewManager);
                 }
                 viewManager.getAudioPlayer().stopMusic();
-                Platform.exit();}
-            else if(result.get() == ButtonType.CANCEL) {} });
+                Platform.exit();
+            } else if (result.get() == ButtonType.CANCEL) {
+            }
+        });
 
 
         restartButton.setOnAction(action -> {
@@ -71,9 +78,9 @@ public class OptionsView extends HBox {
             alert.setAlertType(Alert.AlertType.NONE);
             alert.setTitle("Zum Hauptmenü");
             Optional<ButtonType> result = alert.showAndWait();
-            if(!result.isPresent()){}
-            else if(result.get() == ButtonType.YES){
-                if (viewManager.getGame().getWebsocketClient() != null){
+            if (!result.isPresent()) {
+            } else if (result.get() == ButtonType.YES) {
+                if (viewManager.getGame().getWebsocketClient() != null) {
                     Messenger.sendGiveUpMessage(viewManager);
                 }
                 StartMenuView startMenuView = new StartMenuView(viewManager);
@@ -81,14 +88,14 @@ public class OptionsView extends HBox {
                 viewManager.setStartMenuView(startMenuView);
                 viewManager.changeToStartScene();
                 viewManager.getAudioPlayer().chooseSound(MUSIC.MENU_SOUND);
-                if (!audioOnOffMusicSwitchButton.getState()){
+                if (!audioOnOffMusicSwitchButton.getState()) {
                     viewManager.getAudioPlayer().stopMusic();
                 }
                 viewManager.getOptionsView().disableRestartButton();
                 viewManager.getMainMenuBar().disableNeuStarten();
 
+            } else if (result.get() == ButtonType.CANCEL) {
             }
-            else if(result.get() == ButtonType.CANCEL) {}
 
         });
 
@@ -98,11 +105,11 @@ public class OptionsView extends HBox {
         return audioOnOffMusicSwitchButton;
     }
 
-    public void enableRestartButton(){
+    public void enableRestartButton() {
         restartButton.setDisable(false);
     }
 
-    public void disableRestartButton(){
+    public void disableRestartButton() {
         restartButton.setDisable(true);
     }
 }

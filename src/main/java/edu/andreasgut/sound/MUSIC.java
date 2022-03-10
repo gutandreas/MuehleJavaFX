@@ -6,9 +6,9 @@ public enum MUSIC {
     PLAY_SOUND("PLAY_SOUND.mp3"),
     GAMEOVER_SOUND("MENU_SOUND.mp3");
 
-    private String path;
+    private final String path;
 
-    MUSIC(String path){
+    MUSIC(String path) {
         this.path = path;
     }
 

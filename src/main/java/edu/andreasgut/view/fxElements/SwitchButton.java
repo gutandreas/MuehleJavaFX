@@ -15,7 +15,7 @@ import javafx.scene.shape.Rectangle;
 public class SwitchButton extends StackPane {
     private final Rectangle back = new Rectangle(40, 5, Color.RED);
     private final Button button = new Button();
-    private String style = "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 0.2, 0.0, 0.0, 2); -fx-background-color: #90ccee;";
+    private final String style = "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 0.2, 0.0, 0.0, 2); -fx-background-color: #90ccee;";
     private boolean state = false;
 
     private void init() {
