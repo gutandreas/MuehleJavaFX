@@ -38,7 +38,8 @@ public class StandardComputerPlayer extends ComputerPlayer {
         }
 
         for (Position freeField : Advisor.getFreePositions(node.getBoard())) {
-            pretendPut(node.getBoard(), freeField, putPoints, node, scorePlayerIndex, tempCurrentPlayerIndex, node.getLevel() + 1);
+            pretendPut(node.getBoard(), freeField, putPoints, node, scorePlayerIndex,
+                    tempCurrentPlayerIndex, node.getLevel() + 1);
         }
 
         if (node.getLevel() % 2 == 0) {
@@ -53,7 +54,6 @@ public class StandardComputerPlayer extends ComputerPlayer {
             } else {
                 recursiveMoveBfs(child, movePoints, scorePlayerIndex, levelLimit);
             }
-
         }
     }
 

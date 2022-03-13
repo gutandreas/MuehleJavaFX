@@ -55,7 +55,6 @@ public class BoardImpl implements Board {
         return array[position.getRing()][position.getField()] == ownPlayerIndex;
     }
 
-
     @Override
     public boolean isThisMyEnemysStone(Position position, int ownPlayerIndex) {
         return isFieldOccupied(position) && !isThisMyStone(position, ownPlayerIndex);

@@ -722,7 +722,6 @@ public class Advisor {
      */
     static public int getScore(GameTreeNode node, ScorePoints scorePoints, int playerIndex) {
 
-
         Board board = node.getBoard();
 
         int myOpenMorrises = getMyOpenMorrises(board, playerIndex).size();
@@ -767,7 +766,6 @@ public class Advisor {
                 + myEnemysNumberOfTwoStonesWithGapPoints
                 + myEnemysPossiblesMovesPoints;
 
-
         node.setScoreDetails(
                 "Eigene offene Mühlen: " + myOpenMorrises + " (" + myOpenMorrisesPoints + ")" + " \n" +
                         "Eigene geschlossene Mühlen: " + myClosedMorrises + " (" + myClosedMorrisesPoints + ")" + " \n" +
@@ -783,9 +781,7 @@ public class Advisor {
                         "Gegnerische Zugmöglichkeiten: " + myEnemysPossiblesMoves + " (" + myEnemysPossiblesMovesPoints + ")" + " \n" +
                         "Score: " + score);
 
-
         return score;
-
     }
 
 }
