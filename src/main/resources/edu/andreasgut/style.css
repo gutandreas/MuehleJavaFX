@@ -105,7 +105,6 @@
 
 .roboterDisconnectedLabel{
     -fx-text-fill: GREY;
-    -fx-border-width: MEDIUM;
     -fx-border-color: GREY;
     -fx-padding: 5px;
 }
