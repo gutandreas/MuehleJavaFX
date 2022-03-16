@@ -89,7 +89,6 @@ public class BoardViewPlay extends BoardView {
         }
     }
 
-
     public void setKillCursor() {
         setupPlayerKillCursors(player1Color, player2Color);
         chooseKillCursor();
