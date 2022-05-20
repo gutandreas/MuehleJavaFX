@@ -39,13 +39,13 @@ public class OptionsView extends HBox {
         audioHBox.setSpacing(5);
 
         exitButton = new Button();
-        exitButton.setGraphic(new ImageView(new Image("edu/andreasgut/images/ExitButton.png", 50, 25, true, true)));
+        exitButton.setGraphic(new ImageView(new Image(getClass().getResource("/edu/andreasgut/Images/ExitButton.png").toString(), 50, 25, true, true)));
         exitButton.setMinWidth(60);
         exitButton.setMinHeight(30);
         exitButton.getStyleClass().add("exitButton");
 
         restartButton = new Button();
-        restartButton.setGraphic(new ImageView(new Image("edu/andreasgut/images/RestartButton.png", 50, 25, true, true)));
+        restartButton.setGraphic(new ImageView(new Image(getClass().getResource("/edu/andreasgut/Images/RestartButton.png").toString(), 50, 25, true, true)));
         restartButton.setMinWidth(60);
         restartButton.setMinHeight(30);
         restartButton.getStyleClass().add("restartButton");

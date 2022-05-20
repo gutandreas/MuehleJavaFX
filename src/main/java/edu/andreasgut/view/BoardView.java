@@ -38,7 +38,7 @@ abstract public class BoardView extends AnchorPane {
 
 
         imageView = new ImageView();
-        image = new Image("edu/andreasgut/images/Spielfeld.png", 600, 600, true, true);
+        image = new Image(getClass().getResource("/edu/andreasgut/Images/Spielfeld.png").toString(), 600, 600, true, true);
         imageView.setImage(image);
 
         setupPlayerImages(player1Color, player2Color);
@@ -56,8 +56,8 @@ abstract public class BoardView extends AnchorPane {
     private void setupPlayerImages(STONECOLOR player1Color, STONECOLOR player2Color) {
         player1StoneImage = new Image(player1Color.getPathStone(), 85, 85, true, true);
         player2StoneImage = new Image(player2Color.getPathStone(), 85, 85, true, true);
-        emptyField = new Image("edu/andreasgut/images/FullyTransparent.png");
-        forbiddenField = new Image("edu/andreasgut/images/FullyTransparent.png");
+        emptyField = new Image(getClass().getResource("/edu/andreasgut/Images/FullyTransparent.png").toString());
+        forbiddenField = new Image(getClass().getResource("/edu/andreasgut/Images/FullyTransparent.png").toString());
     }
 
     private void setupGridPane() {

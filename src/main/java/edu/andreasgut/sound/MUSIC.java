@@ -2,9 +2,9 @@ package edu.andreasgut.sound;
 
 public enum MUSIC {
 
-    MENU_SOUND("MENU_SOUND.mp3"),
-    PLAY_SOUND("PLAY_SOUND.mp3"),
-    GAMEOVER_SOUND("MENU_SOUND.mp3");
+    MENU_SOUND("/edu/andreasgut/Sound/MENU_SOUND.mp3"),
+    PLAY_SOUND("/edu/andreasgut/Sound/PLAY_SOUND.mp3"),
+    GAMEOVER_SOUND("/edu/andreasgut/Sound/MENU_SOUND.mp3");
 
     private final String path;
 

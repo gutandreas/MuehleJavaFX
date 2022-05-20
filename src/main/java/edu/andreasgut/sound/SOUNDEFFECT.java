@@ -2,8 +2,8 @@ package edu.andreasgut.sound;
 
 public enum SOUNDEFFECT {
 
-    PUT_STONE("PUT_STONE.mp3"),
-    KILL_STONE("KILL_STONE.mp3");
+    PUT_STONE("/edu/andreasgut/Sound/PUT_STONE.mp3"),
+    KILL_STONE("/edu/andreasgut/Sound/KILL_STONE.mp3");
 
     private final String path;
 
