@@ -1,8 +1,8 @@
 import edu.andreasgut.exercises.NumberOfStones;
 import edu.andreasgut.game.BoardImpl;
 import edu.andreasgut.game.Position;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
 
 public class NumberOfStonesTest {
 
