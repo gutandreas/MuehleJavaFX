@@ -48,5 +48,8 @@ public class Repetition {
 
     }
 
+    //TODO (freiwillig): Überlege dir weitere Methoden, die man im Zusammenhang mit dem Projekt implementieren könnte
+    //                   und füge sie hier an.
+
 
 }
