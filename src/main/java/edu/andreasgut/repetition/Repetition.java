@@ -31,6 +31,7 @@ public class Repetition {
         return false;
     }
 
+
     // TODO: Implementiere die folgende Methode so, dass sie ein Array von Positions als Parameter aufnimmt und eine
     //       LinkedList<Position> mit demselben Inhalt zurückgibt
     public static LinkedList<Position> convertArrayToLinkedList(Position[] positions) {
@@ -39,6 +40,7 @@ public class Repetition {
 
         return positionLinkedList;
     }
+
 
     // TODO: Immplementiere die folgende Methode so, dass sie eine LinkedList<Position> aufnimmt und ebenfalls eine
     //       LinkedList<Position> zurückgibt, in der alle Elemente umgekehrt angeordnert sind. Hinweis: Du brauchst dazu
@@ -51,7 +53,6 @@ public class Repetition {
     }
 
 
-
     // TODO: Implementiere die folgende Methode so, dass sie eine LinkedList<Position> zurückgibt, die alle Positionen
     //       enthält, die vom übergebenen Playerindex besetzt sind.
     public static LinkedList<Position> getAllPositionsOfPlayerWithIndex(int playerIndex, Board board){
@@ -61,12 +62,16 @@ public class Repetition {
         return myPositions;
     }
 
+
     // TODO: Implementiere die folgende Methode so, dass die Positionen zweier Knoten im Baum getauscht werden,
     //       sodass sowohl die Eltern- wie auch die Kindknoten angepasst werden. Hinweis: Verwende dazu die Methode
     //       replaceChildren, die auf einem TreeNode aufgerufen werden kann.
     public static void swapTwoNodes(TreeNode node1, TreeNode node2){
 
     }
+
+
+    // TODO (freiwillig): Implementiere eigene Methoden, die ausgeführt werden können und schreibe einen Test dazu.
 
 
 }

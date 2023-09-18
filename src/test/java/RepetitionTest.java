@@ -11,6 +11,73 @@ import java.util.LinkedList;
 public class RepetitionTest {
 
     @Test
+    public void testMirrorPositionAtTheCenter(){
+        Position position1 = new Position(1, 3);
+        Position position2 = new Position(1, 6);
+        Position position3 = new Position(2, 4);
+
+        Assertions.assertEquals(1, Repetition.mirrorPositionAtTheCenter(position1).getRing());
+        Assertions.assertEquals(1, Repetition.mirrorPositionAtTheCenter(position2).getRing());
+        Assertions.assertEquals(2, Repetition.mirrorPositionAtTheCenter(position3).getRing());
+
+        Assertions.assertEquals(7, Repetition.mirrorPositionAtTheCenter(position1).getField());
+        Assertions.assertEquals(2, Repetition.mirrorPositionAtTheCenter(position2).getField());
+        Assertions.assertEquals(0, Repetition.mirrorPositionAtTheCenter(position3).getField());
+    }
+
+    @Test
+    public void testIsThisAMorrisOfPlayerWithIndex(){
+        BoardImpl board = new BoardImpl();
+
+        Position position1 = new Position(0, 1);
+        Position position2 = new Position(0, 2);
+        Position position3 = new Position(0, 3);
+
+        board.putStone(position1, 0);
+        board.putStone(position2, 0);
+        board.putStone(position3, 0);
+
+        Assertions.assertEquals(false, Repetition.isThisAMorrisOfPlayerWithIndex(0, position1, position2, position3, board));
+
+        board = new BoardImpl();
+
+        position1 = new Position(0, 0);
+        position2 = new Position(0, 1);
+        position3 = new Position(0, 2);
+
+        board.putStone(position1, 0);
+        board.putStone(position2, 0);
+        board.putStone(position3, 0);
+
+        Assertions.assertEquals(true, Repetition.isThisAMorrisOfPlayerWithIndex(0, position1, position2, position3, board));
+
+        board = new BoardImpl();
+
+        position1 = new Position(0, 0);
+        position2 = new Position(1, 0);
+        position3 = new Position(2, 0);
+
+        board.putStone(position1, 0);
+        board.putStone(position2, 0);
+        board.putStone(position3, 0);
+
+        Assertions.assertEquals(false, Repetition.isThisAMorrisOfPlayerWithIndex(0, position1, position2, position3, board));
+
+        board = new BoardImpl();
+
+        position1 = new Position(0, 0);
+        position2 = new Position(0, 1);
+        position3 = new Position(0, 2);
+
+        board.putStone(position1, 0);
+        board.putStone(position2, 1);
+        board.putStone(position3, 0);
+
+        Assertions.assertEquals(false, Repetition.isThisAMorrisOfPlayerWithIndex(0, position1, position2, position3, board));
+
+    }
+
+    @Test
     public void testConvertArrayToLinkedList(){
 
         Position[] positions = new Position[4];
@@ -37,20 +104,7 @@ public class RepetitionTest {
         Assertions.assertEquals(0, reversedList.getLast().getRing());
     }
 
-    @Test
-    public void testMirrorPositionAtTheCenter(){
-        Position position1 = new Position(1, 3);
-        Position position2 = new Position(1, 6);
-        Position position3 = new Position(2, 4);
 
-        Assertions.assertEquals(1, Repetition.mirrorPositionAtTheCenter(position1).getRing());
-        Assertions.assertEquals(1, Repetition.mirrorPositionAtTheCenter(position2).getRing());
-        Assertions.assertEquals(2, Repetition.mirrorPositionAtTheCenter(position3).getRing());
-
-        Assertions.assertEquals(7, Repetition.mirrorPositionAtTheCenter(position1).getField());
-        Assertions.assertEquals(2, Repetition.mirrorPositionAtTheCenter(position2).getField());
-        Assertions.assertEquals(0, Repetition.mirrorPositionAtTheCenter(position3).getField());
-    }
 
     @Test
     public void testGetAllPositionsOfPlayerWithIndex() {
