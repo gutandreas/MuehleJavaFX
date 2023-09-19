@@ -18,13 +18,7 @@ public class NumberOfStones {
     public int numberOfStonesOf(int playerIndex){
 
         int counter = 0;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 8; j++) {
-                if (board.isThisMyStone(new Position(i, j), playerIndex)) {
-                    counter++;
-                }
-            }
-        }
+
         return counter;
     }
 }
